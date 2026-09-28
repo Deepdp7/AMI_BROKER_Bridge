@@ -129,7 +129,7 @@ class BackfillQueueService extends EventEmitter {
           retryCount: 0,
         })
 
-        console.log(`[BackfillQueue] Enqueued backfill for ${ticker} (${brokerId}), depth=${depthDays}d`)
+        console.log(`[Backfill] ${ticker} : Queued for backfill (${depthDays} days)`)
         this.emit('backfill_progress', { ticker, ...backfillStatusMap.get(ticker) })
         this.processNext()
       } catch (err) {
@@ -571,7 +571,7 @@ class BackfillQueueService extends EventEmitter {
     if (!this.queue.some(t => t.ticker === task.ticker)) {
       this.activeTickers.delete(task.ticker)
     }
-    console.error(`[BackfillQueue] Task FAILED for ${task.ticker}: ${error}`)
+    console.error(`[Error] ${task.ticker} : Failed to fetch data. Reason: ${error}`)
   }
 }
 

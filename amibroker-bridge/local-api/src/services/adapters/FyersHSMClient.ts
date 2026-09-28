@@ -108,9 +108,9 @@ export class FyersHSMClient extends EventEmitter {
         }
       }
       
-      console.log(`[HSM_SYMBOL_STATS] subscribed=${subbed.length} receiving=${receiving.length} notReceiving=${notReceiving.length}`)
+      console.log(`[System Status] Total Symbols Active: ${subbed.length} | Receiving Live Ticks: ${receiving.length}`)
       if (notReceiving.length > 0) {
-        console.log(`[HSM_SYMBOL_STATS] notReceivingList: ${notReceiving.slice(0, 10).join(',')}...`)
+        console.log(`[Warning] No Live Data for: ${notReceiving.slice(0, 10).join(',')}...`)
       }
 
     }, 30000)
@@ -613,10 +613,11 @@ export class FyersHSMClient extends EventEmitter {
       this.emit('tick', tick)
       
       const now = Date.now()
-      if (tick.updateType === 'live' && now - this.lastTickLogTime > 2000) {
+      if (tick.updateType === 'live' && now - this.lastTickLogTime > 1000) {
         this.lastTickLogTime = now
+        const dateStr = new Date(tick.timestamp).toISOString().split('T')[0]
         const timeStr = new Date(tick.timestamp).toISOString().split('T')[1].split('.')[0]
-        console.log(`[LIVE_TICK] ${tick.instrumentId.padEnd(20)} ---- ${timeStr} ----- ₹${tick.lastPrice.toFixed(2)}`)
+        console.log(`[Live Tick] ${dateStr} ${timeStr} | ${tick.instrumentId} | ₹ ${tick.lastPrice.toFixed(2)} | Vol: ${tick.volume}`)
       }
     }
 
