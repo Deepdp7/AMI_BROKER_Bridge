@@ -1,0 +1,8 @@
+LIBRARY DataBridgePro
+EXPORTS
+    GetPluginInfo
+    Init
+    Release
+    Configure
+    GetQuotesEx
+    SetTimeBase

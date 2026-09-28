@@ -1,0 +1,47 @@
+==================================================
+DataBridge Pro - Installation & Usage Guide
+==================================================
+
+Welcome to DataBridge Pro! This software bridges real-time and historical market data from Fyers directly into your AmiBroker software.
+
+--- STEP 1: INSTALL THE SOFTWARE ---
+1. Double click on "DataBridge_Pro_Setup.exe" to install the software.
+2. Once installed, the DataBridge Pro dashboard will open along with a black terminal window (DO NOT close the terminal window, it runs the backend data server).
+
+--- STEP 2: CONNECT TO FYERS BROKER ---
+1. On the DataBridge Pro dashboard, go to the "Broker Connection" tab.
+2. Ensure Fyers is selected.
+3. Click on "Connect / Login".
+4. Log in with your Fyers credentials. Once successful, the status will show as "Connected" with a green indicator.
+
+--- STEP 3: INSTALL AMIBROKER PLUGIN ---
+1. In this folder, you will find a file named "DataBridgePro.dll".
+2. Right-click and "Copy" the "DataBridgePro.dll" file.
+3. Go to your AmiBroker installation folder (Usually: C:\Program Files\AmiBroker\Plugins  OR  C:\Program Files (x86)\AmiBroker\Plugins).
+4. "Paste" the DLL file inside the Plugins folder.
+
+--- STEP 4: CONFIGURE AMIBROKER DATABASE ---
+1. Open AmiBroker.
+2. Click on "File" -> "New" -> "Database".
+3. Provide a name for the folder (e.g., "DataBridge_Pro_DB") and click "Create".
+4. In the "Data source" dropdown menu, look for and select "DataBridge Pro".
+5. Set "Local data storage" to "Enable" (This is highly recommended so that it saves historical data and loads instantly next time).
+6. Set "Base time interval" to "1 Minute".
+7. Click "OK".
+
+--- STEP 5: VIEWING CHARTS & LIVE DATA ---
+1. In AmiBroker, type a valid Fyers symbol to open its chart.
+   (Examples: MARUTI, BAJFINANCE, NIFTY 50, BANKNIFTY)
+   NOTE: Ensure the spelling matches Fyers precisely (e.g., "NIFTY 50" instead of "NEFT 50").
+2. The software will instantly fetch up to 1500 previous 1-minute historical candles (backfill).
+3. Once backfill is complete, real-time live data will start ticking automatically.
+4. If a chart is stuck or you want to force a refresh, simply Right-Click on the AmiBroker chart and select "Force Backfill".
+
+--- TROUBLESHOOTING ---
+- Blank Chart: Right-click the chart and click "Force Backfill".
+- Invalid Symbol: Check the terminal window to see if it says "Invalid symbol provided". If so, correct the spelling in AmiBroker.
+- Connection Drop: Check the DataBridge Pro dashboard. If Fyers is disconnected, log in again.
+
+==================================================
+Developed for seamless AmiBroker Integration.
+==================================================

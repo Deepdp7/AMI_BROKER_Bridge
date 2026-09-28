@@ -1,0 +1,41 @@
+DataBridge Pro - Software Usage Guide
+======================================
+
+Welcome to DataBridge Pro! This software acts as a real-time bridge between your trading broker (Fyers) and AmiBroker. 
+It supports live ticks, 1-minute historical data fetching (up to 1 year backfill), and automatic WebSocket reconnections.
+
+--- FOLDER CONTENTS ---
+1. databridge-pro.exe (The main desktop application)
+2. DataBridgePro.dll (The AmiBroker plugin DLL, if you use the C++ ADK version)
+3. software usage.txt (This guide)
+
+--- HOW TO USE ---
+
+STEP 1: Start DataBridge Pro
+1. Double click on `databridge-pro.exe` to launch the application.
+2. The application will start both the User Interface and the local API background service.
+3. If this is your first time, go to "Broker Connection" and add your Fyers API details. Follow the login process.
+
+STEP 2: Add Symbols
+1. Go to "Symbol Setup" in the DataBridge Pro app.
+2. Click "Add Symbol". Enter the ticker symbol (e.g., "MARUTI").
+3. The system will automatically fetch 30 days of data immediately, and queue a background task to fetch 1 year of data.
+
+STEP 3: Connect to AmiBroker
+If you are using the AFL method (InternetOpenUrl):
+1. Simply drag your DataBridge AFL script into an AmiBroker chart.
+2. The AFL will request data from the DataBridge local API on port 7890.
+3. Data will load instantly.
+
+If you are using the DLL method:
+1. Copy `DataBridgePro.dll` to your AmiBroker's `Plugins` folder (e.g., `C:\Program Files\AmiBroker\Plugins\`).
+2. Restart AmiBroker.
+3. Go to AmiBroker Database Settings -> Select "DataBridge Pro" as your Data Source.
+4. Set "Base Time Interval" to 1 Minute.
+5. Click OK. Your charts will now automatically update with live data.
+
+--- TROUBLESHOOTING ---
+- "0 bars" or "Not enough data" in AmiBroker: Right-click on the AmiBroker chart and select "Refresh" (or click the green Refresh All button). AmiBroker caches empty data when a symbol is first opened before the backfill finishes.
+- Missing Symbols: If a symbol is completely deleted from the database but AmiBroker still asks for it, ensure you re-add it via the "Symbol Setup" page in the UI.
+
+Enjoy lightning-fast real-time data with DataBridge Pro!

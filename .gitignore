@@ -1,0 +1,24 @@
+# Node.js
+node_modules/
+dist/
+build/
+.env
+
+# Builds and EXEs
+*.exe
+*.dll
+*.obj
+*.lib
+*.exp
+*.pdb
+*.zip
+*.msi
+*.mp4
+
+# Databases
+*.sqlite
+*.db
+
+# OS Files
+.DS_Store
+Thumbs.db
