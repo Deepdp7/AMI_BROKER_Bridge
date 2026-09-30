@@ -6,3 +6,6 @@ EXPORTS
     Configure
     GetQuotesEx
     SetTimeBase
+    Notify
+    SetSiteInterface
+    GetRecentInfo

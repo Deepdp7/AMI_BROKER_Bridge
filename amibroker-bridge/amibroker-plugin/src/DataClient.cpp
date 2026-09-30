@@ -1,17 +1,11 @@
 #define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
 #include <ws2tcpip.h>
-/**
- * DataClient.cpp
- * Connects to the DataBridge Pro local Node.js API (127.0.0.1:7891)
- * and fetches real OHLCV bar data for AmiBroker using WinHTTP.
- */
 #include <windows.h>
 #include <winhttp.h>
 #include <string>
 #include <vector>
 #include <sstream>
-
 #pragma comment(lib, "winhttp.lib")
 #pragma comment(lib, "ws2_32.lib")
 
@@ -22,146 +16,130 @@
 #include <map>
 #include <chrono>
 
-// ---- Background Live Update Poller ----
-static std::thread g_pollerThread;
-static std::mutex g_pollerMutex;
-static bool g_bShutdown = false;
-static std::map<std::string, double> g_activeSymbols; 
-static std::map<std::string, Bar> g_lastKnownBars; 
-static HWND g_hAmiBrokerWnd = NULL;
-
-void UpdateActiveSymbol(const std::string& ticker) {
-    std::lock_guard<std::mutex> lock(g_pollerMutex);
-    g_activeSymbols[ticker] = std::chrono::duration_cast<std::chrono::seconds>(
-        std::chrono::system_clock::now().time_since_epoch()).count();
-}
-
-void SetAmiBrokerWindow(HWND hWnd) {
-    g_hAmiBrokerWnd = hWnd;
-}
-
-// Export the live bar getter so Plugin.cpp can use it
-bool GetCachedLiveBar(const std::string& ticker, Bar& outBar) {
-    std::lock_guard<std::mutex> lock(g_pollerMutex);
-    auto it = g_lastKnownBars.find(ticker);
-    if (it != g_lastKnownBars.end()) {
-        outBar = it->second;
-        return true;
-    }
-    return false;
-}
+static std::thread   g_pollerThread;
+static std::mutex    g_pollerMutex;
+static bool          g_bShutdown = false;
+static std::map<std::string, Bar>    g_lastKnownBars;
+static HWND          g_hAmiBrokerWnd = NULL;
 
 static void LogDebug(const char* msg) {
     FILE* fp;
-    if (fopen_s(&fp, "C:\\\\DataBridgePro_plugin_debug.log", "a") == 0) {
+    if (fopen_s(&fp, "C:\\Users\\Public\\DataBridgePro_plugin.log", "a") == 0) {
         fprintf(fp, "%s\n", msg);
         fclose(fp);
     }
 }
 
+void UpdateActiveSymbol(const std::string& ticker) {}   // no-op (kept for ABI compat)
+
+void SetAmiBrokerWindow(HWND hWnd) {
+    g_hAmiBrokerWnd = hWnd;
+    char buf[128];
+    sprintf_s(buf, "[HWND] %p IsWindow=%d", hWnd, IsWindow(hWnd));
+    LogDebug(buf);
+}
+
+bool GetCachedLiveBar(const std::string& ticker, Bar& outBar) {
+    std::lock_guard<std::mutex> lk(g_pollerMutex);
+    auto it = g_lastKnownBars.find(ticker);
+    if (it != g_lastKnownBars.end()) { outBar = it->second; return true; }
+    return false;
+}
+
+// Background thread: listens on TCP 7891 for LIVE_BAR messages
 static void PollerThreadProc() {
-    WSADATA wsaData;
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) return;
+    WSADATA wd;
+    if (WSAStartup(MAKEWORD(2,2), &wd) != 0) return;
 
     while (!g_bShutdown) {
-        SOCKET ConnectSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-        if (ConnectSocket == INVALID_SOCKET) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        SOCKET s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (s == INVALID_SOCKET) { std::this_thread::sleep_for(std::chrono::seconds(1)); continue; }
+
+        sockaddr_in sa{}; sa.sin_family = AF_INET; sa.sin_port = htons(7891);
+        inet_pton(AF_INET, "127.0.0.1", &sa.sin_addr);
+
+        if (connect(s, (SOCKADDR*)&sa, sizeof(sa)) == SOCKET_ERROR) {
+            closesocket(s);
+            std::this_thread::sleep_for(std::chrono::seconds(1));
             continue;
         }
+        LogDebug("[IPC] Connected to 7891");
 
-        sockaddr_in clientService;
-        clientService.sin_family = AF_INET;
-        inet_pton(AF_INET, "127.0.0.1", &clientService.sin_addr.s_addr);
-        clientService.sin_port = htons(7891);
-
-        if (connect(ConnectSocket, (SOCKADDR*)&clientService, sizeof(clientService)) == SOCKET_ERROR) {
-            closesocket(ConnectSocket);
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-            continue;
-        }
-
-        LogDebug("[IPC_CONNECT] Connected to backend on port 7891");
-
-        char recvbuf[4096];
-        int recvbuflen = 4096;
-        std::string buffer;
-
+        char buf[4096]; std::string acc;
         while (!g_bShutdown) {
-            int iResult = recv(ConnectSocket, recvbuf, recvbuflen - 1, 0);
-            if (iResult > 0) {
-                recvbuf[iResult] = '\0';
-                buffer += recvbuf;
+            int n = recv(s, buf, sizeof(buf)-1, 0);
+            if (n <= 0) break;
+            buf[n] = '\0'; acc += buf;
 
-                size_t pos = 0;
-                while ((pos = buffer.find('\n')) != std::string::npos) {
-                    std::string line = buffer.substr(0, pos);
-                    buffer.erase(0, pos + 1);
+            size_t p;
+            while ((p = acc.find('\n')) != std::string::npos) {
+                std::string line = acc.substr(0, p);
+                acc.erase(0, p+1);
+                if (line.rfind("LIVE_BAR|", 0) != 0) continue;
 
-                    if (line.rfind("LIVE_BAR|", 0) == 0) {
-                        size_t p1 = line.find('|', 9);
-                        if (p1 != std::string::npos) {
-                            std::string ticker = line.substr(9, p1 - 9);
-                            size_t p2 = line.find('|', p1 + 1);
-                            size_t p3 = line.find('|', p2 + 1);
-                            size_t p4 = line.find('|', p3 + 1);
-                            size_t p5 = line.find('|', p4 + 1);
-                            size_t p6 = line.find('|', p5 + 1);
-                            size_t p7 = line.find('|', p6 + 1);
+                // LIVE_BAR|TICKER|ts|open|high|low|close|volume
+                // Format: 7 pipes total, volume is LAST field (no trailing pipe)
+                size_t p1=line.find('|',9);               if(p1==std::string::npos) continue; // after LIVE_BAR|
+                size_t p2=line.find('|',p1+1);            if(p2==std::string::npos) continue; // after ticker
+                size_t p3=line.find('|',p2+1);            if(p3==std::string::npos) continue; // after ts
+                size_t p4=line.find('|',p3+1);            if(p4==std::string::npos) continue; // after open
+                size_t p5=line.find('|',p4+1);            if(p5==std::string::npos) continue; // after high
+                size_t p6=line.find('|',p5+1);            if(p6==std::string::npos) continue; // after low
+                // p6+1 to p7 = close, p7+1 to end = volume (no p7 needed)
+                size_t p7=line.find('|',p6+1);            // after close (optional trailing pipe)
 
-                            if (p7 != std::string::npos) {
-                                Bar b;
-                                b.timestamp = std::stod(line.substr(p1 + 1, p2 - p1 - 1));
-                                b.open = std::stof(line.substr(p2 + 1, p3 - p2 - 1));
-                                b.high = std::stof(line.substr(p3 + 1, p4 - p3 - 1));
-                                b.low = std::stof(line.substr(p4 + 1, p5 - p4 - 1));
-                                b.close = std::stof(line.substr(p5 + 1, p6 - p5 - 1));
-                                b.volume = std::stof(line.substr(p6 + 1, p7 - p6 - 1));
+                std::string ticker = line.substr(9, p1-9);
 
-                                bool changed = false;
-                                {
-                                    std::lock_guard<std::mutex> lock(g_pollerMutex);
-                                    g_lastKnownBars[ticker] = b;
-                                    changed = true; // Always trigger on push
-                                }
+                Bar b{};
+                try {
+                    b.timestamp = std::stod(line.substr(p1+1, p2-p1-1));
+                    b.open  = std::stof(line.substr(p2+1, p3-p2-1));
+                    b.high  = std::stof(line.substr(p3+1, p4-p3-1));
+                    b.low   = std::stof(line.substr(p4+1, p5-p4-1));
+                    b.close = std::stof(line.substr(p5+1, p6-p5-1));
+                    // volume: from p6+1 to p7 (or end of string)
+                    std::string volStr = (p7!=std::string::npos) 
+                        ? line.substr(p6+1, p7-p6-1) 
+                        : line.substr(p6+1);
+                    // trim CR if any
+                    if (!volStr.empty() && volStr.back()=='\r') volStr.pop_back();
+                    b.volume = std::stof(volStr);
+                } catch(...) { continue; }
 
-                                if (ticker == "BDL") {
-                                    static DWORD lastLog = 0;
-                                    DWORD now = GetTickCount();
-                                    if (now - lastLog > 2000) {
-                                        lastLog = now;
-                                        char logBuf[256];
-                                        sprintf_s(logBuf, "[IPC_LIVE_BAR] BDL ts=%d\n[PLUGIN_CACHE_UPDATE] BDL\n[AMIBROKER_UPDATE] BDL", (int)b.timestamp);
-                                        LogDebug(logBuf);
-                                    }
-                                }
+                { std::lock_guard<std::mutex> lk(g_pollerMutex); g_lastKnownBars[ticker] = b; }
 
-                                if (g_hAmiBrokerWnd && IsWindow(g_hAmiBrokerWnd)) {
-                                    RecentInfo* ri = new RecentInfo;
-                                    memset(ri, 0, sizeof(RecentInfo));
-                                    ri->nStructSize = sizeof(RecentInfo);
-                                    strncpy_s(ri->Name, ticker.c_str(), sizeof(ri->Name) - 1);
-                                    ri->nStatus = 1;
-                                    ri->nBitmap = 0xFFFF;
-                                    PostMessage(g_hAmiBrokerWnd, WM_USER_STREAMING_UPDATE, (WPARAM)ri->Name, (LPARAM)ri);
-                                }
-                            }
-                        }
+                if (g_hAmiBrokerWnd && IsWindow(g_hAmiBrokerWnd)) {
+                    RecentInfo ri{};
+                    ri.nStructSize = sizeof(RecentInfo);
+                    strncpy_s(ri.Name, ticker.c_str(), sizeof(ri.Name)-1);
+                    ri.fOpen=b.open; ri.fHigh=b.high; ri.fLow=b.low; ri.fLast=b.close;
+                    ri.iTotalVol=(int)b.volume; ri.iTradeVol=(int)b.volume;
+                    time_t t=(time_t)b.timestamp; struct tm ti; localtime_s(&ti,&t);
+                    ri.nDateUpdate=((ti.tm_year+1900)*10000)+((ti.tm_mon+1)*100)+ti.tm_mday;
+                    ri.nTimeUpdate=(ti.tm_hour*10000)+(ti.tm_min*100)+ti.tm_sec;
+                    ri.nBitmap  = 0xFFFF;
+                    ri.nStatus  = RI_STATUS_UPDATE|RI_STATUS_TRADE|RI_STATUS_BARSREADY|RI_STATUS_INCOMPLETE;
+
+                    LRESULT res = SendMessage(g_hAmiBrokerWnd, WM_USER_STREAMING_UPDATE, 0, (LPARAM)&ri);
+
+                    static DWORD lastLog2 = 0; DWORD now2 = GetTickCount();
+                    if (now2 - lastLog2 > 5000) {
+                        lastLog2 = now2;
+                        char lb[256];
+                        sprintf_s(lb,"[TICK] %s %.2f ts=%d res=%d",ticker.c_str(),b.close,(int)b.timestamp,(int)res);
+                        LogDebug(lb);
                     }
                 }
-            } else if (iResult == 0) {
-                break;
-            } else {
-                break;
             }
         }
-        closesocket(ConnectSocket);
+        closesocket(s);
+        LogDebug("[IPC] Disconnected, reconnecting...");
     }
     WSACleanup();
 }
 
 void StartPollingThread() {
-    std::lock_guard<std::mutex> lock(g_pollerMutex);
+    std::lock_guard<std::mutex> lk(g_pollerMutex);
     if (!g_pollerThread.joinable()) {
         g_bShutdown = false;
         g_pollerThread = std::thread(PollerThreadProc);
@@ -170,107 +148,63 @@ void StartPollingThread() {
 
 void StopPollingThread() {
     g_bShutdown = true;
-    if (g_pollerThread.joinable()) {
-        g_pollerThread.join();
-    }
+    if (g_pollerThread.joinable()) g_pollerThread.join();
 }
 
+// ---- HTTP historical bars ----
+int FetchBarsFromAPI(const std::string& ticker, int limit, double since, std::vector<Bar>& out) {
+    out.clear();
+    HINTERNET hS = WinHttpOpen(L"DataBridgePro/1.0", WINHTTP_ACCESS_TYPE_NO_PROXY,
+                               WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
+    if (!hS) return 0;
+    HINTERNET hC = WinHttpConnect(hS, L"127.0.0.1", 7890, 0);
+    if (!hC) { WinHttpCloseHandle(hS); return 0; }
 
-// ---- Fetch bars from local API ----
-int FetchBarsFromAPI(const std::string& ticker, int limit, double since, std::vector<Bar>& outBars) {
-    outBars.clear();
-
-    HINTERNET hSession = WinHttpOpen(
-        L"DataBridgePro/1.0",
-        WINHTTP_ACCESS_TYPE_NO_PROXY,
-        WINHTTP_NO_PROXY_NAME,
-        WINHTTP_NO_PROXY_BYPASS,
-        0
-    );
-    if (!hSession) return 0;
-
-    HINTERNET hConnect = WinHttpConnect(hSession, L"127.0.0.1", 7890, 0);
-    if (!hConnect) {
-        WinHttpCloseHandle(hSession);
-        return 0;
+    wchar_t path[512];
+    swprintf_s(path, L"/api/feed/bars?ticker=%hs", ticker.c_str());
+    if (limit > 0) {
+        wchar_t tmp[64]; swprintf_s(tmp, L"&limit=%d", limit);
+        wcscat_s(path, tmp);
+    }
+    if (since > 0) {
+        wchar_t tmp[64]; swprintf_s(tmp, L"&since=%lld", (long long)since);
+        wcscat_s(path, tmp);
     }
 
-    std::wstring wTicker = std::wstring(ticker.begin(), ticker.end());
-    std::wstringstream wss;
-    wss << L"/api/feed/bars?ticker=" << wTicker;
-    if (limit > 0) wss << L"&limit=" << limit;
-    if (since > 0) wss << L"&since=" << (long long)since;
-    std::wstring wPath = wss.str();
+    HINTERNET hR = WinHttpOpenRequest(hC, L"GET", path, NULL, WINHTTP_NO_REFERER,
+                                      WINHTTP_DEFAULT_ACCEPT_TYPES, 0);
+    if (!hR) { WinHttpCloseHandle(hC); WinHttpCloseHandle(hS); return 0; }
 
-    HINTERNET hRequest = WinHttpOpenRequest(
-        hConnect,
-        L"GET",
-        wPath.c_str(),
-        NULL, WINHTTP_NO_REFERER,
-        WINHTTP_DEFAULT_ACCEPT_TYPES,
-        0
-    );
+    BOOL ok = WinHttpSendRequest(hR, WINHTTP_NO_ADDITIONAL_HEADERS, 0,
+                                 WINHTTP_NO_REQUEST_DATA, 0, 0, 0);
+    if (ok) ok = WinHttpReceiveResponse(hR, NULL);
 
-    if (!hRequest) {
-        WinHttpCloseHandle(hConnect);
-        WinHttpCloseHandle(hSession);
-        return 0;
-    }
-
-    BOOL bResults = WinHttpSendRequest(
-        hRequest,
-        WINHTTP_NO_ADDITIONAL_HEADERS, 0,
-        WINHTTP_NO_REQUEST_DATA, 0,
-        0, 0
-    );
-
-    if (bResults) {
-        bResults = WinHttpReceiveResponse(hRequest, NULL);
-    }
-
-    std::string responseData;
-    if (bResults) {
-        DWORD dwSize = 0;
-        DWORD dwDownloaded = 0;
+    std::string resp;
+    if (ok) {
+        DWORD sz=0, dl=0;
         do {
-            dwSize = 0;
-            if (!WinHttpQueryDataAvailable(hRequest, &dwSize)) {
-                break;
-            }
-            if (dwSize == 0) break;
-
-            char* pszOutBuffer = new char[dwSize + 1];
-            if (WinHttpReadData(hRequest, (LPVOID)pszOutBuffer, dwSize, &dwDownloaded)) {
-                pszOutBuffer[dwDownloaded] = 0;
-                responseData += pszOutBuffer;
-            }
-            delete[] pszOutBuffer;
-        } while (dwSize > 0);
+            if (!WinHttpQueryDataAvailable(hR,&sz)||sz==0) break;
+            char* p=new char[sz+1];
+            if (WinHttpReadData(hR,(LPVOID)p,sz,&dl)) { p[dl]=0; resp+=p; }
+            delete[] p;
+        } while (sz>0);
     }
+    WinHttpCloseHandle(hR); WinHttpCloseHandle(hC); WinHttpCloseHandle(hS);
 
-    WinHttpCloseHandle(hRequest);
-    WinHttpCloseHandle(hConnect);
-    WinHttpCloseHandle(hSession);
-
-    // Parse CSV
-    if (responseData.empty()) return 0;
-    std::istringstream stream(responseData);
-    std::string line;
-    while (std::getline(stream, line)) {
-        if (line.empty() || line == "END" || line == "END\r") continue;
-        std::istringstream ls(line);
-        std::string token;
-        Bar b;
-        if (std::getline(ls, token, ',')) b.timestamp = std::stod(token); else continue;
-        if (std::getline(ls, token, ',')) b.open = std::stof(token); else continue;
-        if (std::getline(ls, token, ',')) b.high = std::stof(token); else continue;
-        if (std::getline(ls, token, ',')) b.low = std::stof(token); else continue;
-        if (std::getline(ls, token, ',')) b.close = std::stof(token); else continue;
-        if (std::getline(ls, token, ',')) b.volume = std::stof(token); else continue;
-        outBars.push_back(b);
+    if (resp.empty()) return 0;
+    std::istringstream ss(resp); std::string line;
+    while (std::getline(ss,line)) {
+        if (line.empty()||line=="END"||line=="END\r") continue;
+        std::istringstream ls(line); std::string tok; Bar b{};
+        try {
+            if (std::getline(ls,tok,',')) b.timestamp=std::stod(tok); else continue;
+            if (std::getline(ls,tok,',')) b.open =std::stof(tok); else continue;
+            if (std::getline(ls,tok,',')) b.high =std::stof(tok); else continue;
+            if (std::getline(ls,tok,',')) b.low  =std::stof(tok); else continue;
+            if (std::getline(ls,tok,',')) b.close=std::stof(tok); else continue;
+            if (std::getline(ls,tok,',')) b.volume=std::stof(tok); else continue;
+        } catch(...) { continue; }
+        out.push_back(b);
     }
-
-    return (int)outBars.size();
+    return (int)out.size();
 }
-
-

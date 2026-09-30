@@ -123,7 +123,7 @@ export class FeedSimulator extends EventEmitter {
     const key = `${inst.brokerId}:${inst.brokerToken}`
     this.instruments.set(key, inst)
     const now = Date.now()
-    const bucket = Math.floor(now / 1000) * 1000
+    const bucket = Math.floor(now / 60000) * 60000  // 1-minute bucket
     this.liveBars.set(key, {
       open: inst.basePrice, high: inst.basePrice, low: inst.basePrice,
       close: inst.basePrice, volume: 0, bucketMs: bucket,
@@ -167,10 +167,10 @@ export class FeedSimulator extends EventEmitter {
     this.tickInterval = setInterval(() => {
       const now = Date.now()
       
-      // Sweep for stale feeds
+      // Sweep for stale feeds - 60s threshold for low-liquidity stocks
       for (const status of this.feedStatuses.values()) {
         if (status.status === 'RECEIVING' && status.lastTickUtcMs) {
-           if (now - status.lastTickUtcMs > 15000) {
+           if (now - status.lastTickUtcMs > 60000) {
              status.status = 'STALE' as any
            }
         }
@@ -249,7 +249,9 @@ export class FeedSimulator extends EventEmitter {
 
     const ticker = inst.ticker
     const now = tick.timestamp || Date.now()
-    const bucket = Math.floor(now / 1000) * 1000
+    // Use 1-minute buckets so OHLCV accumulates properly within each candle
+    // (matches Fyers 1-min chart aggregation)
+    const bucket = Math.floor(now / 60000) * 60000
 
     const bar = this.liveBars.get(key)
     if (!bar) return

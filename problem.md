@@ -1,1052 +1,12 @@
-[INFO] [FeedSimulator] Symbol added: IDEA-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: IDFCFIRSTB-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: IEX-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: INDHOTEL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: INDIANB-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: INDIGO-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: INDUSINDBK-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: INDUSTOWER-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: INFY-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: INOXWIND-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: IOC-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: IREDA-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: IRFC-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: ITC-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: JINDALSTEL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: JIOFIN-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: JSWENERGY-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: JSWSTEEL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: JUBLFOOD-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: KALYANKJIL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: KAYNES-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: KEI-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: KFINTECH-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: KOTAKBANK-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: KPITTECH-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: LAURUSLABS-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: LICHSGFIN-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: LICI-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: LODHA-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: LT-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: LTF-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: LTM-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: LUPIN-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: M&M-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MANAPPURAM-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MANKIND-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MARICO-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MARUTI-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MAXHEALTH-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MAZDOCK-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MCX-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MFSL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MIDCPNIFTY-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MOTHERSON-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MOTILALOFS-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MPHASIS-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: MUTHOOTFIN-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NAM-INDIA-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NATIONALUM-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NAUKRI-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NBCC-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NESTLEIND-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NHPC-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NIFTY-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NIFTYFPI-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NIFTYNXT50-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NMDC-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NTPC-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: NYKAA-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: OBEROIRLTY-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: OFSS-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: OIL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: ONGC-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PAGEIND-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PATANJALI-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PAYTM-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PERSISTENT-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PETRONET-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PFC-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PGEL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PHOENIXLTD-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PIDILITIND-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PIIND-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PNB-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PNBHOUSING-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: POLICYBZR-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: POLYCAB-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: POWERGRID-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: POWERINDIA-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PREMIERENE-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: PRESTIGE-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: RADICO-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: RBLBANK-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: RECLTD-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: RELIANCE-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: RVNL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SAIL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SBICARD-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SBILIFE-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SBIN-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SHREECEM-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SHRIRAMFIN-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SIEMENS-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SOLARINDS-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SONACOMS-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SRF-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SUNPHARMA-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SUPREMEIND-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SUZLON-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: SWIGGY-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TATACONSUM-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TATAELXSI-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TATAPOWER-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TATASTEEL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TCS-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TECHM-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TIINDIA-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TITAN-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TMPV-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TORNTPHARM-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TRENT-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: TVSMOTOR-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: ULTRACEMCO-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: UNIONBANK-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: UNITDSPR-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: UNOMINDA-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: UPL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: VBL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: VEDL-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: VMM-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: VOLTAS-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: WAAREEENER-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: WIPRO-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: YESBANK-FUT (NFO)
-[INFO] [FeedSimulator] Symbol added: ZYDUSLIFE-FUT (NFO)
-[BackfillQueue] Saved 7501 bars for SRF (2026-07-03 to 2026-08-02)
-{"ts":"2026-09-28T19:47:08.584Z","method":"GET","path":"/api/settings","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:08.586Z","event":"ws_disconnected","clients":0}
-{"ts":"2026-09-28T19:47:08.861Z","method":"GET","path":"/api/brokers/fyers-edf11f90/master/status","ip":"127.0.0.1"}
-[BackfillQueue] Fetching SRF (NSE:SRF26SEPFUT) [507 in queue] from 2026-08-02 to 2026-09-01...
-{"ts":"2026-09-28T19:47:09.202Z","method":"GET","path":"/api/settings","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:10.225Z","method":"GET","path":"/api/brokers","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:11.135Z","method":"GET","path":"/api/status/feed","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:12.279Z","method":"GET","path":"/api/logs","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:13.188Z","method":"GET","path":"/api/brokers/fyers-edf11f90/master/status","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:13.190Z","method":"GET","path":"/api/settings","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:13.852Z","method":"GET","path":"/api/settings","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:14.148Z","method":"GET","path":"/api/brokers","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:14.705Z","method":"GET","path":"/api/status/feed","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:15.236Z","method":"GET","path":"/api/logs","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:18.632Z","method":"GET","path":"/api/backfill/status","ip":"127.0.0.1"}
-{"ts":"2026-09-28T19:47:19.443Z","event":"ws_connected","clients":1}
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 8439 bars for SRF (2026-08-02 to 2026-09-01)
-[BackfillQueue] Fetching SRF (NSE:SRF26SEPFUT) [507 in queue] from 2026-09-01 to 2026-09-28...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7697 bars for SRF (2026-09-01 to 2026-09-28)
-[BackfillQueue] Gap-fill for SRF completed successfully!
-[BackfillQueue] Fetching MUTHOOTFIN (NSE:MUTHOOTFIN26SEPFUT) [506 in queue] from 2026-07-02 to 2026-08-01...
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:360ONE-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ABCAPITAL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ABB-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ADANIENSOL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ADANIENT-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ADANIPORTS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ADANIGREEN-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ALKEM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:AMBER-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ADANIPOWER-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:AMBUJACEM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:APLAPOLLO-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ANGELONE-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ASHOKLEY-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:APOLLOHOSP-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ASIANPAINT-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ASTRAL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:AUROPHARMA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:AXISBANK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:AUBANK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BAJAJ-AUTO-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BAJAJHLDNG-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BANDHANBNK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BAJFINANCE-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BAJAJFINSV-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BANKBARODA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BANKINDIA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BANKNIFTY-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BEL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BDL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BHARATFORG-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BHARTIARTL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BHEL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BLUESTARCO-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BIOCON-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BSE-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BOSCHLTD-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BPCL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:BRITANNIA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:CAMS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:CANBK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:CDSL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:CGPOWER-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:CIPLA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:CHOLAFIN-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:COCHINSHIP-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:COALINDIA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:COFORGE-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:COLPAL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:CUMMINSIND-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:CONCOR-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:CROMPTON-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:DABUR-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:DALBHARAT-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:DLF-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:DIVISLAB-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:DELHIVERY-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:DIXON-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:DMART-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:FEDERALBNK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:DRREDDY-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ETERNAL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:EICHERMOT-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:GAIL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:FINNIFTY-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:GLENMARK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:FORCEMOT-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:GODFRYPHLP-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:GMRAIRPORT-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:FORTIS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:GODREJPROP-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:GODREJCP-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HAL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:GVT&D-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:GRASIM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HAVELLS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HCLTECH-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HDFCAMC-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HDFCBANK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HINDALCO-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HDFCLIFE-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HINDPETRO-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HEROMOTOCO-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HINDUNILVR-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HYUNDAI-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ICICIBANK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ICICIPRULI-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:HINDZINC-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ICICIGI-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:IDEA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:IDFCFIRSTB-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:IEX-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:INDHOTEL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:INDIANB-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:INDIGO-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:INDUSTOWER-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:INFY-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:IOC-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:INDUSINDBK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:IRFC-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:INOXWIND-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ITC-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:IREDA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:JIOFIN-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:JINDALSTEL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:JSWSTEEL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:JSWENERGY-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:JUBLFOOD-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:KAYNES-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:KEI-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:KALYANKJIL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:KFINTECH-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:KOTAKBANK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:KPITTECH-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:LODHA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:LAURUSLABS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:LICHSGFIN-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:LT-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:LICI-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:LTF-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:LTM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:LUPIN-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:M&M-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MARICO-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MANAPPURAM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MANKIND-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MARUTI-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MAZDOCK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MAXHEALTH-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MCX-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MOTHERSON-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MOTILALOFS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MPHASIS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MFSL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MIDCPNIFTY-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NATIONALUM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:MUTHOOTFIN-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NAM-INDIA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NBCC-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NAUKRI-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NHPC-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NESTLEIND-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NIFTYFPI-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NIFTY-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NIFTYNXT50-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NMDC-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NTPC-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:NYKAA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:OFSS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:OBEROIRLTY-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:OIL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ONGC-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PATANJALI-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PAGEIND-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PAYTM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PERSISTENT-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PETRONET-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PFC-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PGEL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PIDILITIND-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PHOENIXLTD-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PNB-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PNBHOUSING-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:POLICYBZR-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PIIND-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:POLYCAB-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:POWERGRID-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:POWERINDIA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PRESTIGE-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:PREMIERENE-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:RECLTD-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:RADICO-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:RBLBANK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:RVNL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SAIL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:RELIANCE-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SBILIFE-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SHREECEM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SBICARD-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SBIN-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SIEMENS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SHRIRAMFIN-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SOLARINDS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SRF-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SONACOMS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SUNPHARMA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SUZLON-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SUPREMEIND-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:SWIGGY-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TATACONSUM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TATAELXSI-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TATAPOWER-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TATASTEEL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TCS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TECHM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TITAN-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TIINDIA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TORNTPHARM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TMPV-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TRENT-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ULTRACEMCO-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:UNITDSPR-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:UNIONBANK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:TVSMOTOR-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:UNOMINDA-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:UPL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:VBL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:VMM-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:VEDL-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:WAAREEENER-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:VOLTAS-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:YESBANK-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:ZYDUSLIFE-FUT).
-[HSM_MAPPING] 1 symbols could not be mapped to HSM tokens (e.g. NSE:WIPRO-FUT).
-[BackfillQueue] Enqueued backfill for 360ONE-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ABB-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ABCAPITAL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ADANIENT-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ADANIGREEN-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ADANIENSOL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ADANIPOWER-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ALKEM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for AMBER-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for AMBUJACEM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ADANIPORTS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ANGELONE-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for APLAPOLLO-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ASIANPAINT-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for APOLLOHOSP-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for AUBANK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ASHOKLEY-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ASTRAL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for AUROPHARMA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for AXISBANK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BAJAJ-AUTO-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BAJAJHLDNG-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BAJAJFINSV-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BAJFINANCE-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BANKBARODA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BANDHANBNK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BANKINDIA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BANKNIFTY-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BHARTIARTL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BDL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BHARATFORG-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BEL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BHEL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BIOCON-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BLUESTARCO-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BOSCHLTD-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BRITANNIA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BPCL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for BSE-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for CAMS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for CDSL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for CANBK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for CGPOWER-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for CHOLAFIN-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for CIPLA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for COALINDIA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for COCHINSHIP-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for COLPAL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for COFORGE-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for CROMPTON-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for CUMMINSIND-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for CONCOR-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for DELHIVERY-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for DABUR-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for DALBHARAT-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for DIVISLAB-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for DIXON-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for DLF-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for DMART-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for DRREDDY-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for EICHERMOT-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ETERNAL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for FEDERALBNK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for FORCEMOT-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for FINNIFTY-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for FORTIS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for GLENMARK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for GAIL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for GMRAIRPORT-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for GODREJCP-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for GODFRYPHLP-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for GODREJPROP-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for GRASIM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for GVT&D-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HAL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HAVELLS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HDFCAMC-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HDFCLIFE-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HDFCBANK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HEROMOTOCO-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HCLTECH-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HINDALCO-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HINDUNILVR-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HINDZINC-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HINDPETRO-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ICICIBANK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ICICIPRULI-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for HYUNDAI-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for IDFCFIRSTB-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for IDEA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ICICIGI-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for INDHOTEL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for IEX-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for INDIANB-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for INDIGO-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for INDUSINDBK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for INFY-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for INDUSTOWER-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for INOXWIND-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for IOC-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for IREDA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ITC-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for JINDALSTEL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for IRFC-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for JIOFIN-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for JSWSTEEL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for JSWENERGY-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for KALYANKJIL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for JUBLFOOD-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for KAYNES-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for KEI-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for KOTAKBANK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for KFINTECH-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for KPITTECH-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for LAURUSLABS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for LICI-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for LICHSGFIN-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for LODHA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for LT-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for LTF-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for LTM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MANAPPURAM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for LUPIN-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for M&M-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MARICO-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MANKIND-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MAXHEALTH-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MCX-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MARUTI-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MFSL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MAZDOCK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MIDCPNIFTY-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MOTHERSON-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MOTILALOFS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MPHASIS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for MUTHOOTFIN-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NAM-INDIA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NATIONALUM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NAUKRI-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NBCC-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NESTLEIND-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NIFTYFPI-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NHPC-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NIFTYNXT50-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NIFTY-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NMDC-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NTPC-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for NYKAA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for OIL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for OBEROIRLTY-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ONGC-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for OFSS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PATANJALI-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PAGEIND-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PAYTM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PETRONET-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PFC-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PERSISTENT-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PGEL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PHOENIXLTD-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PNB-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PIIND-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PIDILITIND-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PNBHOUSING-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for POWERGRID-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for POLICYBZR-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for POWERINDIA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for POLYCAB-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PREMIERENE-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for RADICO-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for PRESTIGE-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for RECLTD-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for RELIANCE-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SAIL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SBILIFE-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for RBLBANK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for RVNL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SBICARD-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SBIN-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SIEMENS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SOLARINDS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SHREECEM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SHRIRAMFIN-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SONACOMS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SRF-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SUNPHARMA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SWIGGY-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SUZLON-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for SUPREMEIND-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TATAELXSI-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TATACONSUM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TATAPOWER-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TATASTEEL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TCS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TIINDIA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TECHM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TMPV-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TORNTPHARM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TITAN-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ULTRACEMCO-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TVSMOTOR-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for TRENT-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for UNIONBANK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for UNITDSPR-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for UNOMINDA-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for UPL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for VEDL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for VOLTAS-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for VMM-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for VBL-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for WAAREEENER-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for ZYDUSLIFE-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for YESBANK-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Enqueued backfill for WIPRO-FUT (fyers-edf11f90), depth=365d
-[BackfillQueue] Saved 8028 bars for MUTHOOTFIN (2026-07-02 to 2026-08-01)
-[BackfillQueue] Fetching MUTHOOTFIN (NSE:MUTHOOTFIN26SEPFUT) [720 in queue] from 2026-08-01 to 2026-08-31...
-[BackfillQueue] Saved 8083 bars for MUTHOOTFIN (2026-08-01 to 2026-08-31)
-[BackfillQueue] Fetching MUTHOOTFIN (NSE:MUTHOOTFIN26SEPFUT) [720 in queue] from 2026-08-31 to 2026-09-14...
-[BackfillQueue] Saved 3850 bars for MUTHOOTFIN (2026-08-31 to 2026-09-14)
-[BackfillQueue] Gap-fill for MUTHOOTFIN completed successfully!
-[BackfillQueue] Fetching TCS (NSE:TCS26SEPFUT) [719 in queue] from 2026-07-03 to 2026-08-02...
-[BackfillQueue] Saved 7869 bars for TCS (2026-07-03 to 2026-08-02)
-[BackfillQueue] Fetching TCS (NSE:TCS26SEPFUT) [719 in queue] from 2026-08-02 to 2026-09-01...
-[BackfillQueue] Saved 8469 bars for TCS (2026-08-02 to 2026-09-01)
-[BackfillQueue] Fetching TCS (NSE:TCS26SEPFUT) [719 in queue] from 2026-09-01 to 2026-09-14...
-[BackfillQueue] Saved 3465 bars for TCS (2026-09-01 to 2026-09-14)
-[BackfillQueue] Gap-fill for TCS completed successfully!
-[BackfillQueue] Fetching PFC (NSE:PFC26SEPFUT) [718 in queue] from 2026-07-02 to 2026-08-01...
-[BackfillQueue] Saved 8146 bars for PFC (2026-07-02 to 2026-08-01)
-[BackfillQueue] Fetching PFC (NSE:PFC26SEPFUT) [718 in queue] from 2026-08-01 to 2026-08-31...
-[BackfillQueue] Saved 8082 bars for PFC (2026-08-01 to 2026-08-31)
-[BackfillQueue] Fetching PFC (NSE:PFC26SEPFUT) [718 in queue] from 2026-08-31 to 2026-09-14...
-[BackfillQueue] Saved 3850 bars for PFC (2026-08-31 to 2026-09-14)
-[BackfillQueue] Gap-fill for PFC completed successfully!
-[BackfillQueue] Fetching PGEL (NSE:PGEL26SEPFUT) [717 in queue] from 2026-07-03 to 2026-08-02...
-[BackfillQueue] Saved 7220 bars for PGEL (2026-07-03 to 2026-08-02)
-[BackfillQueue] Fetching PGEL (NSE:PGEL26SEPFUT) [717 in queue] from 2026-08-02 to 2026-09-01...
-[BackfillQueue] Saved 8436 bars for PGEL (2026-08-02 to 2026-09-01)
-[BackfillQueue] Fetching PGEL (NSE:PGEL26SEPFUT) [717 in queue] from 2026-09-01 to 2026-09-22...
-[BackfillQueue] Saved 5771 bars for PGEL (2026-09-01 to 2026-09-22)
-[BackfillQueue] Gap-fill for PGEL completed successfully!
-[BackfillQueue] Fetching OIL (NSE:OIL26SEPFUT) [716 in queue] from 2026-07-02 to 2026-08-01...
-[BackfillQueue] Saved 7774 bars for OIL (2026-07-02 to 2026-08-01)
-[BackfillQueue] Fetching OIL (NSE:OIL26SEPFUT) [716 in queue] from 2026-08-01 to 2026-08-31...
-[BackfillQueue] Saved 8058 bars for OIL (2026-08-01 to 2026-08-31)
-[BackfillQueue] Fetching OIL (NSE:OIL26SEPFUT) [716 in queue] from 2026-08-31 to 2026-09-14...
-[FYERS_HSM_CONNECT] Disconnected. Scheduling reconnect...
-[BackfillQueue] Saved 3850 bars for OIL (2026-08-31 to 2026-09-14)
-[BackfillQueue] Gap-fill for OIL completed successfully!
-[BackfillQueue] Fetching ULTRACEMCO (NSE:ULTRACEMCO26SEPFUT) [715 in queue] from 2026-07-02 to 2026-08-01...
-[BackfillQueue] Saved 7767 bars for ULTRACEMCO (2026-07-02 to 2026-08-01)
-[BackfillQueue] Fetching ULTRACEMCO (NSE:ULTRACEMCO26SEPFUT) [715 in queue] from 2026-08-01 to 2026-08-31...
-[BackfillQueue] Saved 8073 bars for ULTRACEMCO (2026-08-01 to 2026-08-31)
-[BackfillQueue] Fetching ULTRACEMCO (NSE:ULTRACEMCO26SEPFUT) [715 in queue] from 2026-08-31 to 2026-09-17...
-[BackfillQueue] Skipped 1 invalid bars for ULTRACEMCO
-[BackfillQueue] Saved 5004 bars for ULTRACEMCO (2026-08-31 to 2026-09-17)
-[BackfillQueue] Gap-fill for ULTRACEMCO completed successfully!
-[BackfillQueue] Fetching TATAELXSI (NSE:TATAELXSI26SEPFUT) [714 in queue] from 2026-07-02 to 2026-08-01...
-[BackfillQueue] Saved 8173 bars for TATAELXSI (2026-07-02 to 2026-08-01)
-[BackfillQueue] Fetching TATAELXSI (NSE:TATAELXSI26SEPFUT) [714 in queue] from 2026-08-01 to 2026-08-31...
-[BackfillQueue] Skipped 1 invalid bars for TATAELXSI
-[BackfillQueue] Saved 8065 bars for TATAELXSI (2026-08-01 to 2026-08-31)
-[FYERS_HSM_STATUS] starting
-[FYERS_HSM_CONNECT] Connecting to wss://socket.fyers.in/hsm/v1-5/prod...
-[BackfillQueue] Fetching TATAELXSI (NSE:TATAELXSI26SEPFUT) [714 in queue] from 2026-08-31 to 2026-09-14...
-[FYERS_HSM_CONNECT] Connected.
-[FYERS_HSM_STATUS] connected
-[FYERS_HSM_AUTH] Authenticating binary stream...
-[FYERS_HSM_AUTH] Auth successful.
-[FYERS_HSM_STATUS] authenticated
-[FYERS_HSM_STATUS] Flushing 875 pending subscriptions...
-[FYERS_HSM_SUBSCRIBE] Subscribing to 661 topics...
-[FYERS_HSM_STATUS] subscribed symbols=ABB,CANBK,LUPIN,MIDCPNIFTY,NHPC,ONGC,PIIND,RADICO,ABCAPITAL,ASHOKLEY,BAJAJHLDNG,BHARTIARTL,CUMMINSIND,ETERNAL,GODREJPROP,HINDALCO,IEX,IRFC,KFINTECH,PRESTIGE,SHREECEM,TATACONSUM,TRENT,ADANIGREEN,APOLLOHOSP,BAJAJFINSV,BHARATFORG,CROMPTON,EICHERMOT,GODREJCP,HEROMOTOCO,IDFCFIRSTB,IREDA,KEI,LTF,MCX,NBCC,OFSS,PHOENIXLTD,SWIGGY,TORNTPHARM,VMM,ALKEM,ADANIPOWER,360ONE,ADANIENT,ADANIPORTS,AMBER,ADANIENSOL,AMBUJACEM,ANGELONE,APLAPOLLO,ASTRAL,ASIANPAINT,AUBANK,AUROPHARMA,AXISBANK,BAJAJ-AUTO,BANDHANBNK,BAJFINANCE,BANKINDIA,BANKBARODA,BANKNIFTY,BDL,BEL,BHEL,BIOCON,BLUESTARCO,BOSCHLTD,BPCL,BRITANNIA,BSE,CAMS,CGPOWER,CHOLAFIN,CDSL,CIPLA,COALINDIA,COCHINSHIP,COFORGE,COLPAL,CONCOR,DABUR,DALBHARAT,DELHIVERY,DIVISLAB,DIXON,DLF,DMART,DRREDDY,FEDERALBNK,FINNIFTY,FORCEMOT,FORTIS,GAIL,GLENMARK,GMRAIRPORT,GODFRYPHLP,GRASIM,GVT&D,HAL,HAVELLS,HCLTECH,HDFCAMC,HDFCBANK,HDFCLIFE,HINDPETRO,HINDUNILVR,HINDZINC,HYUNDAI,ICICIBANK,ICICIGI,ICICIPRULI,IDEA,INDHOTEL,INDIANB,INDIGO,INDUSINDBK,INDUSTOWER,INFY,INOXWIND,IOC,ITC,JINDALSTEL,JIOFIN,JSWENERGY,JSWSTEEL,JUBLFOOD,KALYANKJIL,KAYNES,KOTAKBANK,KPITTECH,LAURUSLABS,LICHSGFIN,LICI,LT,LODHA,NAUKRI,POLYCAB,SUNPHARMA,TIINDIA,MARICO,MARUTI,MPHASIS,NIFTYNXT50,PAYTM,POLICYBZR,MANKIND,PETRONET,POWERGRID,SBICARD,SUPREMEIND,TITAN,VBL,M&M,NAM-INDIA,NTPC,LTM,RVNL,SRF,TECHM,UNOMINDA,MANAPPURAM,MUTHOOTFIN,NMDC,PERSISTENT,RELIANCE,SONACOMS,TCS,UNITDSPR,ZYDUSLIFE,MAXHEALTH,NYKAA,PFC,POWERINDIA,VEDL,MAZDOCK,OBEROIRLTY,PGEL,PREMIERENE,SBIN,MFSL,OIL,PIDILITIND,RBLBANK,SIEMENS,TATAPOWER,ULTRACEMCO,WIPRO,MOTHERSON,PAGEIND,PNB,SHRIRAMFIN,TATAELXSI,TVSMOTOR,WAAREEENER,MOTILALOFS,NIFTYFPI,PATANJALI,PNBHOUSING,NATIONALUM,SBILIFE,SUZLON,TMPV,NESTLEIND,VOLTAS,NIFTY,SOLARINDS,TATASTEEL,UNIONBANK,YESBANK,RECLTD,SAIL,UPL,20MICRONS,21STCENMGM,3BBLACKBIO,3MINDIA,3PLAND,5PAISA,63MOONS,A2ZINFRA,AAATECH,AADHARHFC,AAKASH,AAREYDRUGS,AARON,AARTIDRUGS,AARTIIND,AARTIPHARM,AARVI,AASTHA,AAVAS,ABANSENT,ABBOTINDIA,ABCOTS,ABDL,ABFRL,ABLBL,ABMKNO,ABREL,ABSLAMC,ACC,ACCELYA,ACE,ACEINTEG,ACGL,ACI,ACL,ACMESOLAR,ACUTAAS,ADDIND,ADFFOODS,ADL,ADOR,ADROITINFO,ADSL,ADVAIT,ADVANCE,ADVANIHOTR,ADVENTHTL,ADVENZYMES,ADVIKCA,AEGISLOG,AEGISVOPAK,AEPL,AEQUS,AEROENTER,AEROFLEX,AERONEU,AEROPLANE,AETHER,AFCONS,AFFLE,AFFORDABLE,AFIL,AFSL,AGARIND,AGARWALEYE,AGI,AGIIL,AGL,AGRITECH,AGROPHOS,AHCL,AHLADA,AHLEAST,AHLUCONT,AIAENG,AIIL,AIRAN,AIROLAM,AJANTPHARM,AJAXENGG,AJMERA,AJOONI,AKASH,AKCAPIT,AKG,AKSHAR,AKUMS,ALANKIT,ALBERTDAVD,ALEMBICLTD,ALFREDHE,ALGOQUANT,ALICON,ALIVUS,ALKYLAMINE,ALLCARGO,ALLDIGI,ALLTIME,ALOKINDS,ALPA,ALPINETEX,ALUFLUOR,AMAGI,AMAL,AMARJOTHI,AMBICAAGAR,AMBIKCO,AMJLAND,AMNPLST,AMRUTANJAN,ANANDRATHI,ANANTRAJ,ANDHRAPAP,ANDHRSUGAR,ANDREWYU,ANIKINDS,ANNAPURNA,ANNU,ANSALBU,ANTELOPUS,ANTGRAPHIC,ANTHEM,ANUHPHR,ANUP,ANURAS,APARINDS,APCL,APCOTEXIND,APEX,APLLTD,APOLLO,APOLLOPIPE,APOLLOTYRE,APOLSINHOT,APOORVA,APTECHT,APTUS,AQYLON,ARCHIDPLY,ARCHIES,ARCIL,ARCL,ARDEE,ARE&M,ARENTERP,ARFIN,ARIHANT,ARIHANTCAP,ARIHANTSUP,ARIS,ARKADE,ARMANFIN,AROGRANITE,ARROWGREEN,ARSSBL,ARTEMISMED,ARTNIRMAN,ARVEE,ARVIND,ARVINDFASN,ARVSMART,ARYAMAN,ASAHIINDIA,ASAL,ASALCBR,ASHAPURMIN,ASHIANA,ASHIMASYN,ASHOKA,ASHOKAMET,ASIANENE,ASIANHOTNR,ASIANTILES,ASIANTNE,ASKAUTOLTD,ASMS,ASPINWALL,ASSAMENT,ASTAR,ASTEC,ASTERDM,ASTRAMICRO,ASTRAZEN,ATALREAL,ATAM,ATGL,ATHERENERG,ATL,ATLANTAA,ATLANTAELE,ATLASCYCLE,ATUL,ATULAUTO,AUGMONT,AURIONPRO,AURUM,AURUS,AUSOMENT,AUSTENG,AUTOAXLES,AUTOIND,AVADHSUGAR,AVALON,AVANCE,AVANTEL,AVANTIFEED,AVL,AVONMORE,AVROIND,AVTNPL,AWFIS,AWHCL,AWL,AXISCADES,AXITA,AXTEL,AYE,AYMSYNTEX,AZAD,AZADIND,BAGFILMS,BAIDFIN,BAJAJCON,BAJAJELEC,BAJAJHCARE,BAJAJHFL,BAJAJHIND,BAJAJINDEF,BAJAJST,BAJEL,BALAJEE,BALAJITELE,BALAMINES,BALAXI,BALKRISHNA,BALKRISIND,BALMLAWRIE,BALPHARMA,BALRAMCHIN,BALUFORGE,BANARBEADS,BANARISUG,BANCOINDIA,BANG,BANKA,BANSALWIRE,BANSWRAS,BASF,BATAINDIA,BATLIBOI,BAYERCROP,BBL,BBOX,BBTC,BBTCL,BCG,BCLIND,BCONCEPTS,BCPL,BEARDSELL,BECTORFOOD,BEDMUTHA,BEEKAY,BELLACASA,BELRISE,BEML,BENARAS,BENGALASM,BEPL,BERGEPAINT,BESTAGRO,BETA,BFINVEST,BFUTILITIE,BHAGCHEM,BHAGERIA,BHAGYANGR,BHANDARI,BHARATCOAL,BHARATRAS,BHARATSE,BHARATWIRE,BHARTIHEXA,BIGBLOC,BIKAJI,BIL,BIMETAL,BIOFILCHEM,BIRLACABLE,BIRLACORPN,BIRLAMONEY,BIRLANU,BLACKBUCK,BLACKROSE,BLAL,BLBLIMITED,BLEL,BLIL,BLKASHYAP,BLS,BLSE,BLUECLOUDS,BLUECOAST,BLUEDART,BLUEJET,BLUESTONE,BLUSPRING,BMWVENTLTD,BNAGROCHEM,BOHRAIND,BOMDYEING,BONLON,BORANA,BOROLTD,BORORENEW,BOROSCI,BOSCH-HCIL,BPL,BPLPHARMA,BRAHMINFRA,BRIGADE,BRIGHOTEL,BRIGHTBR,BRNL,BROOKS,BSHSL,BSL,BSOFT,BTML,BUILDPRO,BUTTERFLY,BVCL,BYKE,CAMLINFINE,CAMPUS,CANFINHOME,CANHLIFE,CANTABIL,CAPACITE,CAPILLARY,CAPITALSFB,CAPLIPOINT,CARBORUNIV,CARERATING,CARRARO,CARTRADE,CARYSIL,CASTROLIND,CCAVENUE,CCCL,CCHHL,CCL,CEATLTD,CEIGALL,CEINSYS,CELEBRITY,CELLO,CEMPRO,CENTENKA,CENTEXT,CENTRALBK,CENTRUM,CENTUM,CENTURYPLY,CERA,CESC,CEWATER,CGCL,CGVAK,CHALET,CHAMBLFERT,CHEMBOND,CHEMCON,CHEMCRUX,CHEMFAB,CHEMPLASTS,CHENNPETRO,CHEVIOT,CHOICEIN,CHOLAHLDNG,CIEINDIA,CIFL,CINELINE,CINEVISTA,CLEAN,CLEANMAX,CLEDUCATE,CLSEL,CMLL,CMPDI,CMRGREEN,CMSINFO,CNL,COASTCORP,COCKERILL,COFFEEDAY,COHANCE,COMFINTE,COMPEAU,COMPUSOFT,COMSYN,CONCORDBIO,CONFIPET,CONTROLPR,CORALFINAC,CORDELIA,COROMANDEL,CORONA,COSMOFIRST,CPCAP,CPEDU,CPL,CPPLUS,CRAFTSMAN,CRAMC,CRAVATEX,CREATIVEYE,CREDITACC,CREST,CRESTO,CRISIL,CRIZAC,CROWN,CSBBANK,CSLFINANCE,CSM,CUB,CUPID,CYIENT,CYIENTDLM,DALMIASUG,DAMCAPITAL,DANGEE,DATAMATICS,DATAPATTNS,DAVANGERE,DBCORP,DBEIL,DBL,DBOL,DBREALTY,DCAL,DCBBANK,DCI,DCM,DCMFINSERV,DCMNVL,360ONE-FUT,ABCAPITAL-FUT,ABB-FUT,ADANIENSOL-FUT,ADANIENT-FUT,ADANIPORTS-FUT,ADANIGREEN-FUT,ALKEM-FUT,AMBER-FUT,ADANIPOWER-FUT,AMBUJACEM-FUT,APLAPOLLO-FUT,ANGELONE-FUT,ASHOKLEY-FUT,APOLLOHOSP-FUT,ASIANPAINT-FUT,ASTRAL-FUT,AUROPHARMA-FUT,AXISBANK-FUT,AUBANK-FUT,BAJAJ-AUTO-FUT,BAJAJHLDNG-FUT,BANDHANBNK-FUT,BAJFINANCE-FUT,BAJAJFINSV-FUT,BANKBARODA-FUT,BANKINDIA-FUT,BANKNIFTY-FUT,BEL-FUT,BDL-FUT,BHARATFORG-FUT,BHARTIARTL-FUT,BHEL-FUT,BLUESTARCO-FUT,BIOCON-FUT,BSE-FUT,BOSCHLTD-FUT,BPCL-FUT,BRITANNIA-FUT,CAMS-FUT,CANBK-FUT,CDSL-FUT,CGPOWER-FUT,CIPLA-FUT,CHOLAFIN-FUT,COCHINSHIP-FUT,COALINDIA-FUT,COFORGE-FUT,COLPAL-FUT,CUMMINSIND-FUT,CONCOR-FUT,CROMPTON-FUT,DABUR-FUT,DALBHARAT-FUT,DLF-FUT,DIVISLAB-FUT,DELHIVERY-FUT,DIXON-FUT,DMART-FUT,FEDERALBNK-FUT,DRREDDY-FUT,ETERNAL-FUT,EICHERMOT-FUT,GAIL-FUT,FINNIFTY-FUT,GLENMARK-FUT,FORCEMOT-FUT,GODFRYPHLP-FUT,GMRAIRPORT-FUT,FORTIS-FUT,GODREJPROP-FUT,GODREJCP-FUT,HAL-FUT,GVT&D-FUT,GRASIM-FUT,HAVELLS-FUT,HCLTECH-FUT,HDFCAMC-FUT,HDFCBANK-FUT,HINDALCO-FUT,HDFCLIFE-FUT,HINDPETRO-FUT,HEROMOTOCO-FUT,HINDUNILVR-FUT,HYUNDAI-FUT,ICICIBANK-FUT,ICICIPRULI-FUT,HINDZINC-FUT,ICICIGI-FUT,IDEA-FUT,IDFCFIRSTB-FUT,IEX-FUT,INDHOTEL-FUT,INDIANB-FUT,INDIGO-FUT,INDUSTOWER-FUT,INFY-FUT,IOC-FUT,INDUSINDBK-FUT,IRFC-FUT,INOXWIND-FUT,ITC-FUT,IREDA-FUT,JIOFIN-FUT,JINDALSTEL-FUT,JSWSTEEL-FUT,JSWENERGY-FUT,JUBLFOOD-FUT,KAYNES-FUT,KEI-FUT,KALYANKJIL-FUT,KFINTECH-FUT,KOTAKBANK-FUT,KPITTECH-FUT,LODHA-FUT,LAURUSLABS-FUT,LICHSGFIN-FUT,LT-FUT,LICI-FUT,LTF-FUT,LTM-FUT,LUPIN-FUT,M&M-FUT,MARICO-FUT,MANAPPURAM-FUT,MANKIND-FUT,MARUTI-FUT,MAZDOCK-FUT,MAXHEALTH-FUT,MCX-FUT,MOTHERSON-FUT,MOTILALOFS-FUT,MPHASIS-FUT,MFSL-FUT,MIDCPNIFTY-FUT,NATIONALUM-FUT,MUTHOOTFIN-FUT,NAM-INDIA-FUT,NBCC-FUT,NAUKRI-FUT,NHPC-FUT,NESTLEIND-FUT,NIFTYFPI-FUT,NIFTY-FUT,NIFTYNXT50-FUT,NMDC-FUT,NTPC-FUT,NYKAA-FUT,OFSS-FUT,OBEROIRLTY-FUT,OIL-FUT,ONGC-FUT,PATANJALI-FUT,PAGEIND-FUT,PAYTM-FUT,PERSISTENT-FUT,PETRONET-FUT,PFC-FUT,PGEL-FUT,PIDILITIND-FUT,PHOENIXLTD-FUT,PNB-FUT,PNBHOUSING-FUT,POLICYBZR-FUT,PIIND-FUT,POLYCAB-FUT,POWERGRID-FUT,POWERINDIA-FUT,PRESTIGE-FUT,PREMIERENE-FUT,RECLTD-FUT,RADICO-FUT,RBLBANK-FUT,RVNL-FUT,SAIL-FUT,RELIANCE-FUT,SBILIFE-FUT,SHREECEM-FUT,SBICARD-FUT,SBIN-FUT,SIEMENS-FUT,SHRIRAMFIN-FUT,SOLARINDS-FUT,SRF-FUT,SONACOMS-FUT,SUNPHARMA-FUT,SUZLON-FUT,SUPREMEIND-FUT,SWIGGY-FUT,TATACONSUM-FUT,TATAELXSI-FUT,TATAPOWER-FUT,TATASTEEL-FUT,TCS-FUT,TECHM-FUT,TITAN-FUT,TIINDIA-FUT,TORNTPHARM-FUT,TMPV-FUT,TRENT-FUT,ULTRACEMCO-FUT,UNITDSPR-FUT,UNIONBANK-FUT,TVSMOTOR-FUT,UNOMINDA-FUT,UPL-FUT,VBL-FUT,VMM-FUT,VEDL-FUT,WAAREEENER-FUT,VOLTAS-FUT,YESBANK-FUT,ZYDUSLIFE-FUT,WIPRO-FUT
-[HSM_SUB_BATCH] batch=1 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|13 lastToken=sf|nse_cm|1270 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=2 symbols=50 bytes=767
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|324 lastToken=sf|nse_fo|68489 packetBytes=778
-[BackfillQueue] Saved 3850 bars for TATAELXSI (2026-08-31 to 2026-09-14)
-[BackfillQueue] Gap-fill for TATAELXSI completed successfully!
-[LIVE_BACKFILL_CONCURRENCY] liveWorker=connected_idle backfillWorker=running
-[HSM_SUB_BATCH] batch=3 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68490 lastToken=sf|nse_fo|68770 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=4 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68780 lastToken=sf|nse_fo|68767 packetBytes=813
-[HSM_SUB_BATCH] batch=5 symbols=50 bytes=783
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68741 lastToken=sf|nse_cm|27061 packetBytes=794
-[BackfillQueue] Fetching PATANJALI (NSE:PATANJALI26SEPFUT) [713 in queue] from 2026-07-07 to 2026-08-06...
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=6 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5578 lastToken=sf|nse_cm|9558 packetBytes=804
-[HSM_SUB_BATCH] batch=7 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|24715 lastToken=sf|nse_cm|10755 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=8 symbols=50 bytes=790
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5435 lastToken=sf|nse_cm|6066 packetBytes=801
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=9 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|757645 lastToken=sf|nse_cm|335 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=10 symbols=50 bytes=780
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|338 lastToken=sf|nse_cm|7848 packetBytes=791
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=11 symbols=50 bytes=791
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|762588 lastToken=sf|nse_cm|583 packetBytes=802
-[BackfillQueue] Saved 7614 bars for PATANJALI (2026-07-07 to 2026-08-06)
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=12 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|759477 lastToken=sf|nse_cm|760183 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=13 symbols=50 bytes=796
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|20223 lastToken=sf|nse_cm|21794 packetBytes=807
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=14 symbols=11 bytes=175
-[HSM_SUB_SEND] count=11 firstToken=sf|nse_cm|17881 lastToken=sf|nse_cm|11039 packetBytes=186
-[BackfillQueue] Fetching PATANJALI (NSE:PATANJALI26SEPFUT) [713 in queue] from 2026-08-06 to 2026-09-05...
-[HSM_SUB_ACK] received status=ACK
-[BackfillQueue] Saved 8449 bars for PATANJALI (2026-08-06 to 2026-09-05)
-[BackfillQueue] Fetching PATANJALI (NSE:PATANJALI26SEPFUT) [713 in queue] from 2026-09-05 to 2026-09-14...
-[BackfillQueue] Skipped 1 invalid bars for PATANJALI
-[BackfillQueue] Saved 1924 bars for PATANJALI (2026-09-05 to 2026-09-14)
-[BackfillQueue] Gap-fill for PATANJALI completed successfully!
-[BackfillQueue] Fetching TMPV (NSE:TMPV26SEPFUT) [712 in queue] from 2026-07-06 to 2026-08-05...
-[BackfillQueue] Saved 8628 bars for TMPV (2026-07-06 to 2026-08-05)
-[BackfillQueue] Fetching TMPV (NSE:TMPV26SEPFUT) [712 in queue] from 2026-08-05 to 2026-09-04...
-[BackfillQueue] Saved 8854 bars for TMPV (2026-08-05 to 2026-09-04)
-[BackfillQueue] Fetching TMPV (NSE:TMPV26SEPFUT) [712 in queue] from 2026-09-04 to 2026-09-14...
-[BackfillQueue] Saved 2310 bars for TMPV (2026-09-04 to 2026-09-14)
-[BackfillQueue] Gap-fill for TMPV completed successfully!
-[BackfillQueue] Fetching TATASTEEL (NSE:TATASTEEL26SEPFUT) [711 in queue] from 2026-07-03 to 2026-08-02...
-[BackfillQueue] Saved 7850 bars for TATASTEEL (2026-07-03 to 2026-08-02)
-[BackfillQueue] Fetching TATASTEEL (NSE:TATASTEEL26SEPFUT) [711 in queue] from 2026-08-02 to 2026-09-01...
-[BackfillQueue] Saved 8468 bars for TATASTEEL (2026-08-02 to 2026-09-01)
-[BackfillQueue] Fetching TATASTEEL (NSE:TATASTEEL26SEPFUT) [711 in queue] from 2026-09-01 to 2026-09-14...
-[BackfillQueue] Saved 3465 bars for TATASTEEL (2026-09-01 to 2026-09-14)
-[BackfillQueue] Gap-fill for TATASTEEL completed successfully!
-[BackfillQueue] Fetching UPL (NSE:UPL26SEPFUT) [710 in queue] from 2026-07-02 to 2026-08-01...
-[BackfillQueue] Saved 7337 bars for UPL (2026-07-02 to 2026-08-01)
-[BackfillQueue] Fetching UPL (NSE:UPL26SEPFUT) [710 in queue] from 2026-08-01 to 2026-08-31...
-[BackfillQueue] Saved 8078 bars for UPL (2026-08-01 to 2026-08-31)
-[BackfillQueue] Fetching UPL (NSE:UPL26SEPFUT) [710 in queue] from 2026-08-31 to 2026-09-24...
-[BackfillQueue] Skipped 1 invalid bars for UPL
-[BackfillQueue] Saved 6925 bars for UPL (2026-08-31 to 2026-09-24)
-[BackfillQueue] Gap-fill for UPL completed successfully!
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for 20MICRONS (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for 20MICRONS (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7498 bars for 20MICRONS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7498 bars for 20MICRONS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for 20MICRONS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for 20MICRONS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for 20MICRONS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for 20MICRONS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for 20MICRONS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for 20MICRONS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for 20MICRONS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for 20MICRONS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching 20MICRONS (NSE:20MICRONS-EQ) [709 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for 20MICRONS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for 20MICRONS completed successfully!
-[GapDetector] 20MICRONS: 4 gap(s): 2025-12-01T03:45→2026-01-15T09:59, 2026-03-03T03:45→2026-05-28T09:59, 2026-06-26T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for 20MICRONS: 2025-12-01 → 2026-01-15
-[BackfillQueue] Enqueued gap-fill for 20MICRONS: 2026-03-03 → 2026-05-28
-[BackfillQueue] Enqueued gap-fill for 20MICRONS: 2026-06-26 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for 20MICRONS: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7395 bars for 21STCENMGM (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 7789 bars for 21STCENMGM (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7367 bars for 21STCENMGM (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7374 bars for 21STCENMGM (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8769 bars for 21STCENMGM (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2026-02-25 to 2026-03-27...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7092 bars for 21STCENMGM (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6487 bars for 21STCENMGM (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 7679 bars for 21STCENMGM (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7294 bars for 21STCENMGM (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 6746 bars for 21STCENMGM (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8132 bars for 21STCENMGM (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 7881 bars for 21STCENMGM (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching 21STCENMGM (NSE:21STCENMGM-EQ) [712 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1474 bars for 21STCENMGM (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for 21STCENMGM completed successfully!
-[GapDetector] 21STCENMGM: 3 gap(s): 2025-10-01T03:45→2025-12-24T03:48, 2025-12-31T03:45→2026-03-30T03:54, 2026-03-31T03:45→2026-04-23T03:46
-[BackfillQueue] Enqueued gap-fill for 21STCENMGM: 2025-10-01 → 2025-12-24
-[BackfillQueue] Enqueued gap-fill for 21STCENMGM: 2025-12-31 → 2026-03-30
-[BackfillQueue] Enqueued gap-fill for 21STCENMGM: 2026-03-31 → 2026-04-23
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for 360ONE (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for 360ONE (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for 360ONE (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for 360ONE (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for 360ONE (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for 360ONE (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for 360ONE (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for 360ONE (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for 360ONE (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for 360ONE (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for 360ONE (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for 360ONE (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching 360ONE (NSE:360ONE-EQ) [714 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for 360ONE (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for 360ONE completed successfully!
-[GapDetector] 360ONE: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for 360ONE: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for 360ONE: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for 360ONE: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 2246 bars for 3BBLACKBIO (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8219 bars for 3BBLACKBIO (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7848 bars for 3BBLACKBIO (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7477 bars for 3BBLACKBIO (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8227 bars for 3BBLACKBIO (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8245 bars for 3BBLACKBIO (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching 3BBLACKBIO (NSE:3BBLACKBIO-EQ) [716 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for 3BBLACKBIO (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for 3BBLACKBIO completed successfully!
-[GapDetector] 3BBLACKBIO: 2 gap(s): 2026-04-23T03:45→2026-07-17T03:45, 2026-07-24T03:45→2026-09-23T03:45
-[BackfillQueue] Enqueued gap-fill for 3BBLACKBIO: 2026-04-23 → 2026-07-17
-[BackfillQueue] Enqueued gap-fill for 3BBLACKBIO: 2026-07-24 → 2026-09-23
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7560 bars for 3MINDIA (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for 3MINDIA (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for 3MINDIA (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for 3MINDIA (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for 3MINDIA (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for 3MINDIA (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2026-03-27 to 2026-04-26...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 6750 bars for 3MINDIA (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for 3MINDIA (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for 3MINDIA (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for 3MINDIA (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for 3MINDIA (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8256 bars for 3MINDIA (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching 3MINDIA (NSE:3MINDIA-EQ) [717 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1499 bars for 3MINDIA (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for 3MINDIA completed successfully!
-[GapDetector] 3MINDIA: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-24T03:45
-[BackfillQueue] Enqueued gap-fill for 3MINDIA: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for 3MINDIA: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for 3MINDIA: 2026-09-14 → 2026-09-24
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7536 bars for 3PLAND (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8087 bars for 3PLAND (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7330 bars for 3PLAND (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7393 bars for 3PLAND (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8845 bars for 3PLAND (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7303 bars for 3PLAND (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6618 bars for 3PLAND (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 7989 bars for 3PLAND (2026-04-26 to 2026-05-26)
-{"ts":"2026-09-28T19:49:42.521Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2026-05-26 to 2026-06-25...
-{"ts":"2026-09-28T19:49:42.792Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
-[BackfillQueue] Saved 7412 bars for 3PLAND (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7233 bars for 3PLAND (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 7951 bars for 3PLAND (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8035 bars for 3PLAND (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching 3PLAND (NSE:3PLAND-EQ) [719 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1408 bars for 3PLAND (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for 3PLAND completed successfully!
-[GapDetector] 3PLAND: 3 gap(s): 2025-09-30T03:45→2025-12-26T03:45, 2025-12-30T03:45→2026-03-26T09:59, 2026-03-30T03:45→2026-05-13T03:48
-[BackfillQueue] Enqueued gap-fill for 3PLAND: 2025-09-30 → 2025-12-26
-[BackfillQueue] Enqueued gap-fill for 3PLAND: 2025-12-30 → 2026-03-26
-[BackfillQueue] Enqueued gap-fill for 3PLAND: 2026-03-30 → 2026-05-13
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for 5PAISA (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8246 bars for 5PAISA (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for 5PAISA (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for 5PAISA (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for 5PAISA (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for 5PAISA (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6748 bars for 5PAISA (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8248 bars for 5PAISA (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7868 bars for 5PAISA (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for 5PAISA (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8248 bars for 5PAISA (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for 5PAISA (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching 5PAISA (NSE:5PAISA-EQ) [721 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for 5PAISA (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for 5PAISA completed successfully!
-[GapDetector] 5PAISA: 4 gap(s): 2025-11-03T03:45→2025-11-13T03:47, 2026-01-15T03:45→2026-04-09T03:45, 2026-04-22T03:45→2026-06-26T09:59, 2026-08-05T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for 5PAISA: 2025-11-03 → 2025-11-13
-[BackfillQueue] Enqueued gap-fill for 5PAISA: 2026-01-15 → 2026-04-09
-[BackfillQueue] Enqueued gap-fill for 5PAISA: 2026-04-22 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for 5PAISA: 2026-08-05 → 2026-09-14
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for 63MOONS (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for 63MOONS (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for 63MOONS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for 63MOONS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2026-01-26 to 2026-02-25...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 9000 bars for 63MOONS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for 63MOONS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for 63MOONS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for 63MOONS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for 63MOONS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for 63MOONS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for 63MOONS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for 63MOONS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching 63MOONS (NSE:63MOONS-EQ) [724 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for 63MOONS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for 63MOONS completed successfully!
-[GapDetector] 63MOONS: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for 63MOONS: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for 63MOONS: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for 63MOONS: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Skipped 2 invalid bars for A2ZINFRA
-[BackfillQueue] Saved 7242 bars for A2ZINFRA (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8240 bars for A2ZINFRA (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7478 bars for A2ZINFRA (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7485 bars for A2ZINFRA (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8979 bars for A2ZINFRA (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7475 bars for A2ZINFRA (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6717 bars for A2ZINFRA (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8211 bars for A2ZINFRA (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7853 bars for A2ZINFRA (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7495 bars for A2ZINFRA (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8240 bars for A2ZINFRA (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8217 bars for A2ZINFRA (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching A2ZINFRA (NSE:A2ZINFRA-EQ) [726 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1494 bars for A2ZINFRA (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for A2ZINFRA completed successfully!
-[GapDetector] A2ZINFRA: 4 gap(s): 2025-09-30T03:45→2025-12-29T03:45, 2025-12-31T03:45→2026-03-30T03:45, 2026-03-31T03:45→2026-06-26T09:59, 2026-07-01T03:45→2026-09-25T03:45
-[BackfillQueue] Enqueued gap-fill for A2ZINFRA: 2025-09-30 → 2025-12-29
-[BackfillQueue] Enqueued gap-fill for A2ZINFRA: 2025-12-31 → 2026-03-30
-[BackfillQueue] Enqueued gap-fill for A2ZINFRA: 2026-03-31 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for A2ZINFRA: 2026-07-01 → 2026-09-25
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7559 bars for AAATECH (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8205 bars for AAATECH (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7461 bars for AAATECH (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7495 bars for AAATECH (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8964 bars for AAATECH (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7476 bars for AAATECH (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6734 bars for AAATECH (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8189 bars for AAATECH (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7842 bars for AAATECH (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7402 bars for AAATECH (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8174 bars for AAATECH (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2026-08-24 to 2026-09-23...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 8169 bars for AAATECH (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AAATECH (NSE:AAATECH-EQ) [729 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1496 bars for AAATECH (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AAATECH completed successfully!
-[GapDetector] AAATECH: 4 gap(s): 2025-10-20T03:45→2026-01-15T09:59, 2026-01-23T03:45→2026-04-21T03:47, 2026-04-27T03:45→2026-07-24T03:51, 2026-07-27T03:45→2026-08-20T03:49
-[BackfillQueue] Enqueued gap-fill for AAATECH: 2025-10-20 → 2026-01-15
-[BackfillQueue] Enqueued gap-fill for AAATECH: 2026-01-23 → 2026-04-21
-[BackfillQueue] Enqueued gap-fill for AAATECH: 2026-04-27 → 2026-07-24
-[BackfillQueue] Enqueued gap-fill for AAATECH: 2026-07-27 → 2026-08-20
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AADHARHFC (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AADHARHFC (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AADHARHFC (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AADHARHFC (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AADHARHFC (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2026-02-25 to 2026-03-27...
-[FYERS_HSM_CONNECT] Disconnected. Scheduling reconnect...
-[BackfillQueue] Saved 7500 bars for AADHARHFC (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AADHARHFC (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AADHARHFC (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AADHARHFC (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AADHARHFC (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AADHARHFC (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2026-08-24 to 2026-09-23...
+◇ injected env (5) from ..\..\Roaming\DataBridgePro\.env
+◇ injected env (5) from C:\Users\Windows\AppData\Roaming\DataBridgePro\.env
+{"ts":"2026-09-30T07:28:07.850Z","event":"server_started","host":"127.0.0.1","port":7890,"endpoints":["http://127.0.0.1:7890/api/brokers","http://127.0.0.1:7890/api/status/feed","http://127.0.0.1:7890/api/status/health","http://127.0.0.1:7890/api/settings","http://127.0.0.1:7890/api/logs","ws://127.0.0.1:7890/api/status/stream"]}
+[IPC] AmiBroker TCP Server listening on 127.0.0.1:7891
+[POSTGRES] Connected successfully
+[DB] Loading last 3 days of bars from PostgreSQL into RAM cache...
+[Init] Log level: info
+[INFO] [FeedSimulator] Symbol added: COALINDIA (BSE)
+[Init] Auto-connecting broker fyers-edf11f90...
 [FYERS_HSM_STATUS] starting
 [FYERS_HSM_CONNECT] Connecting to wss://socket.fyers.in/hsm/v1-5/prod...
 [FYERS_HSM_CONNECT] Connected.
@@ -1054,2711 +14,5756 @@
 [FYERS_HSM_AUTH] Authenticating binary stream...
 [FYERS_HSM_AUTH] Auth successful.
 [FYERS_HSM_STATUS] authenticated
-[FYERS_HSM_STATUS] Flushing 875 pending subscriptions...
-[FYERS_HSM_SUBSCRIBE] Subscribing to 661 topics...
-[FYERS_HSM_STATUS] subscribed symbols=ABB,CANBK,LUPIN,MIDCPNIFTY,NHPC,ONGC,PIIND,RADICO,ABCAPITAL,ASHOKLEY,BAJAJHLDNG,BHARTIARTL,CUMMINSIND,ETERNAL,GODREJPROP,HINDALCO,IEX,IRFC,KFINTECH,PRESTIGE,SHREECEM,TATACONSUM,TRENT,ADANIGREEN,APOLLOHOSP,BAJAJFINSV,BHARATFORG,CROMPTON,EICHERMOT,GODREJCP,HEROMOTOCO,IDFCFIRSTB,IREDA,KEI,LTF,MCX,NBCC,OFSS,PHOENIXLTD,SWIGGY,TORNTPHARM,VMM,ALKEM,ADANIPOWER,360ONE,ADANIENT,ADANIPORTS,AMBER,ADANIENSOL,AMBUJACEM,ANGELONE,APLAPOLLO,ASTRAL,ASIANPAINT,AUBANK,AUROPHARMA,AXISBANK,BAJAJ-AUTO,BANDHANBNK,BAJFINANCE,BANKINDIA,BANKBARODA,BANKNIFTY,BDL,BEL,BHEL,BIOCON,BLUESTARCO,BOSCHLTD,BPCL,BRITANNIA,BSE,CAMS,CGPOWER,CHOLAFIN,CDSL,CIPLA,COALINDIA,COCHINSHIP,COFORGE,COLPAL,CONCOR,DABUR,DALBHARAT,DELHIVERY,DIVISLAB,DIXON,DLF,DMART,DRREDDY,FEDERALBNK,FINNIFTY,FORCEMOT,FORTIS,GAIL,GLENMARK,GMRAIRPORT,GODFRYPHLP,GRASIM,GVT&D,HAL,HAVELLS,HCLTECH,HDFCAMC,HDFCBANK,HDFCLIFE,HINDPETRO,HINDUNILVR,HINDZINC,HYUNDAI,ICICIBANK,ICICIGI,ICICIPRULI,IDEA,INDHOTEL,INDIANB,INDIGO,INDUSINDBK,INDUSTOWER,INFY,INOXWIND,IOC,ITC,JINDALSTEL,JIOFIN,JSWENERGY,JSWSTEEL,JUBLFOOD,KALYANKJIL,KAYNES,KOTAKBANK,KPITTECH,LAURUSLABS,LICHSGFIN,LICI,LT,LODHA,NAUKRI,POLYCAB,SUNPHARMA,TIINDIA,MARICO,MARUTI,MPHASIS,NIFTYNXT50,PAYTM,POLICYBZR,MANKIND,PETRONET,POWERGRID,SBICARD,SUPREMEIND,TITAN,VBL,M&M,NAM-INDIA,NTPC,LTM,RVNL,SRF,TECHM,UNOMINDA,MANAPPURAM,MUTHOOTFIN,NMDC,PERSISTENT,RELIANCE,SONACOMS,TCS,UNITDSPR,ZYDUSLIFE,MAXHEALTH,NYKAA,PFC,POWERINDIA,VEDL,MAZDOCK,OBEROIRLTY,PGEL,PREMIERENE,SBIN,MFSL,OIL,PIDILITIND,RBLBANK,SIEMENS,TATAPOWER,ULTRACEMCO,WIPRO,MOTHERSON,PAGEIND,PNB,SHRIRAMFIN,TATAELXSI,TVSMOTOR,WAAREEENER,MOTILALOFS,NIFTYFPI,PATANJALI,PNBHOUSING,NATIONALUM,SBILIFE,SUZLON,TMPV,NESTLEIND,VOLTAS,NIFTY,SOLARINDS,TATASTEEL,UNIONBANK,YESBANK,RECLTD,SAIL,UPL,20MICRONS,21STCENMGM,3BBLACKBIO,3MINDIA,3PLAND,5PAISA,63MOONS,A2ZINFRA,AAATECH,AADHARHFC,AAKASH,AAREYDRUGS,AARON,AARTIDRUGS,AARTIIND,AARTIPHARM,AARVI,AASTHA,AAVAS,ABANSENT,ABBOTINDIA,ABCOTS,ABDL,ABFRL,ABLBL,ABMKNO,ABREL,ABSLAMC,ACC,ACCELYA,ACE,ACEINTEG,ACGL,ACI,ACL,ACMESOLAR,ACUTAAS,ADDIND,ADFFOODS,ADL,ADOR,ADROITINFO,ADSL,ADVAIT,ADVANCE,ADVANIHOTR,ADVENTHTL,ADVENZYMES,ADVIKCA,AEGISLOG,AEGISVOPAK,AEPL,AEQUS,AEROENTER,AEROFLEX,AERONEU,AEROPLANE,AETHER,AFCONS,AFFLE,AFFORDABLE,AFIL,AFSL,AGARIND,AGARWALEYE,AGI,AGIIL,AGL,AGRITECH,AGROPHOS,AHCL,AHLADA,AHLEAST,AHLUCONT,AIAENG,AIIL,AIRAN,AIROLAM,AJANTPHARM,AJAXENGG,AJMERA,AJOONI,AKASH,AKCAPIT,AKG,AKSHAR,AKUMS,ALANKIT,ALBERTDAVD,ALEMBICLTD,ALFREDHE,ALGOQUANT,ALICON,ALIVUS,ALKYLAMINE,ALLCARGO,ALLDIGI,ALLTIME,ALOKINDS,ALPA,ALPINETEX,ALUFLUOR,AMAGI,AMAL,AMARJOTHI,AMBICAAGAR,AMBIKCO,AMJLAND,AMNPLST,AMRUTANJAN,ANANDRATHI,ANANTRAJ,ANDHRAPAP,ANDHRSUGAR,ANDREWYU,ANIKINDS,ANNAPURNA,ANNU,ANSALBU,ANTELOPUS,ANTGRAPHIC,ANTHEM,ANUHPHR,ANUP,ANURAS,APARINDS,APCL,APCOTEXIND,APEX,APLLTD,APOLLO,APOLLOPIPE,APOLLOTYRE,APOLSINHOT,APOORVA,APTECHT,APTUS,AQYLON,ARCHIDPLY,ARCHIES,ARCIL,ARCL,ARDEE,ARE&M,ARENTERP,ARFIN,ARIHANT,ARIHANTCAP,ARIHANTSUP,ARIS,ARKADE,ARMANFIN,AROGRANITE,ARROWGREEN,ARSSBL,ARTEMISMED,ARTNIRMAN,ARVEE,ARVIND,ARVINDFASN,ARVSMART,ARYAMAN,ASAHIINDIA,ASAL,ASALCBR,ASHAPURMIN,ASHIANA,ASHIMASYN,ASHOKA,ASHOKAMET,ASIANENE,ASIANHOTNR,ASIANTILES,ASIANTNE,ASKAUTOLTD,ASMS,ASPINWALL,ASSAMENT,ASTAR,ASTEC,ASTERDM,ASTRAMICRO,ASTRAZEN,ATALREAL,ATAM,ATGL,ATHERENERG,ATL,ATLANTAA,ATLANTAELE,ATLASCYCLE,ATUL,ATULAUTO,AUGMONT,AURIONPRO,AURUM,AURUS,AUSOMENT,AUSTENG,AUTOAXLES,AUTOIND,AVADHSUGAR,AVALON,AVANCE,AVANTEL,AVANTIFEED,AVL,AVONMORE,AVROIND,AVTNPL,AWFIS,AWHCL,AWL,AXISCADES,AXITA,AXTEL,AYE,AYMSYNTEX,AZAD,AZADIND,BAGFILMS,BAIDFIN,BAJAJCON,BAJAJELEC,BAJAJHCARE,BAJAJHFL,BAJAJHIND,BAJAJINDEF,BAJAJST,BAJEL,BALAJEE,BALAJITELE,BALAMINES,BALAXI,BALKRISHNA,BALKRISIND,BALMLAWRIE,BALPHARMA,BALRAMCHIN,BALUFORGE,BANARBEADS,BANARISUG,BANCOINDIA,BANG,BANKA,BANSALWIRE,BANSWRAS,BASF,BATAINDIA,BATLIBOI,BAYERCROP,BBL,BBOX,BBTC,BBTCL,BCG,BCLIND,BCONCEPTS,BCPL,BEARDSELL,BECTORFOOD,BEDMUTHA,BEEKAY,BELLACASA,BELRISE,BEML,BENARAS,BENGALASM,BEPL,BERGEPAINT,BESTAGRO,BETA,BFINVEST,BFUTILITIE,BHAGCHEM,BHAGERIA,BHAGYANGR,BHANDARI,BHARATCOAL,BHARATRAS,BHARATSE,BHARATWIRE,BHARTIHEXA,BIGBLOC,BIKAJI,BIL,BIMETAL,BIOFILCHEM,BIRLACABLE,BIRLACORPN,BIRLAMONEY,BIRLANU,BLACKBUCK,BLACKROSE,BLAL,BLBLIMITED,BLEL,BLIL,BLKASHYAP,BLS,BLSE,BLUECLOUDS,BLUECOAST,BLUEDART,BLUEJET,BLUESTONE,BLUSPRING,BMWVENTLTD,BNAGROCHEM,BOHRAIND,BOMDYEING,BONLON,BORANA,BOROLTD,BORORENEW,BOROSCI,BOSCH-HCIL,BPL,BPLPHARMA,BRAHMINFRA,BRIGADE,BRIGHOTEL,BRIGHTBR,BRNL,BROOKS,BSHSL,BSL,BSOFT,BTML,BUILDPRO,BUTTERFLY,BVCL,BYKE,CAMLINFINE,CAMPUS,CANFINHOME,CANHLIFE,CANTABIL,CAPACITE,CAPILLARY,CAPITALSFB,CAPLIPOINT,CARBORUNIV,CARERATING,CARRARO,CARTRADE,CARYSIL,CASTROLIND,CCAVENUE,CCCL,CCHHL,CCL,CEATLTD,CEIGALL,CEINSYS,CELEBRITY,CELLO,CEMPRO,CENTENKA,CENTEXT,CENTRALBK,CENTRUM,CENTUM,CENTURYPLY,CERA,CESC,CEWATER,CGCL,CGVAK,CHALET,CHAMBLFERT,CHEMBOND,CHEMCON,CHEMCRUX,CHEMFAB,CHEMPLASTS,CHENNPETRO,CHEVIOT,CHOICEIN,CHOLAHLDNG,CIEINDIA,CIFL,CINELINE,CINEVISTA,CLEAN,CLEANMAX,CLEDUCATE,CLSEL,CMLL,CMPDI,CMRGREEN,CMSINFO,CNL,COASTCORP,COCKERILL,COFFEEDAY,COHANCE,COMFINTE,COMPEAU,COMPUSOFT,COMSYN,CONCORDBIO,CONFIPET,CONTROLPR,CORALFINAC,CORDELIA,COROMANDEL,CORONA,COSMOFIRST,CPCAP,CPEDU,CPL,CPPLUS,CRAFTSMAN,CRAMC,CRAVATEX,CREATIVEYE,CREDITACC,CREST,CRESTO,CRISIL,CRIZAC,CROWN,CSBBANK,CSLFINANCE,CSM,CUB,CUPID,CYIENT,CYIENTDLM,DALMIASUG,DAMCAPITAL,DANGEE,DATAMATICS,DATAPATTNS,DAVANGERE,DBCORP,DBEIL,DBL,DBOL,DBREALTY,DCAL,DCBBANK,DCI,DCM,DCMFINSERV,DCMNVL,360ONE-FUT,ABCAPITAL-FUT,ABB-FUT,ADANIENSOL-FUT,ADANIENT-FUT,ADANIPORTS-FUT,ADANIGREEN-FUT,ALKEM-FUT,AMBER-FUT,ADANIPOWER-FUT,AMBUJACEM-FUT,APLAPOLLO-FUT,ANGELONE-FUT,ASHOKLEY-FUT,APOLLOHOSP-FUT,ASIANPAINT-FUT,ASTRAL-FUT,AUROPHARMA-FUT,AXISBANK-FUT,AUBANK-FUT,BAJAJ-AUTO-FUT,BAJAJHLDNG-FUT,BANDHANBNK-FUT,BAJFINANCE-FUT,BAJAJFINSV-FUT,BANKBARODA-FUT,BANKINDIA-FUT,BANKNIFTY-FUT,BEL-FUT,BDL-FUT,BHARATFORG-FUT,BHARTIARTL-FUT,BHEL-FUT,BLUESTARCO-FUT,BIOCON-FUT,BSE-FUT,BOSCHLTD-FUT,BPCL-FUT,BRITANNIA-FUT,CAMS-FUT,CANBK-FUT,CDSL-FUT,CGPOWER-FUT,CIPLA-FUT,CHOLAFIN-FUT,COCHINSHIP-FUT,COALINDIA-FUT,COFORGE-FUT,COLPAL-FUT,CUMMINSIND-FUT,CONCOR-FUT,CROMPTON-FUT,DABUR-FUT,DALBHARAT-FUT,DLF-FUT,DIVISLAB-FUT,DELHIVERY-FUT,DIXON-FUT,DMART-FUT,FEDERALBNK-FUT,DRREDDY-FUT,ETERNAL-FUT,EICHERMOT-FUT,GAIL-FUT,FINNIFTY-FUT,GLENMARK-FUT,FORCEMOT-FUT,GODFRYPHLP-FUT,GMRAIRPORT-FUT,FORTIS-FUT,GODREJPROP-FUT,GODREJCP-FUT,HAL-FUT,GVT&D-FUT,GRASIM-FUT,HAVELLS-FUT,HCLTECH-FUT,HDFCAMC-FUT,HDFCBANK-FUT,HINDALCO-FUT,HDFCLIFE-FUT,HINDPETRO-FUT,HEROMOTOCO-FUT,HINDUNILVR-FUT,HYUNDAI-FUT,ICICIBANK-FUT,ICICIPRULI-FUT,HINDZINC-FUT,ICICIGI-FUT,IDEA-FUT,IDFCFIRSTB-FUT,IEX-FUT,INDHOTEL-FUT,INDIANB-FUT,INDIGO-FUT,INDUSTOWER-FUT,INFY-FUT,IOC-FUT,INDUSINDBK-FUT,IRFC-FUT,INOXWIND-FUT,ITC-FUT,IREDA-FUT,JIOFIN-FUT,JINDALSTEL-FUT,JSWSTEEL-FUT,JSWENERGY-FUT,JUBLFOOD-FUT,KAYNES-FUT,KEI-FUT,KALYANKJIL-FUT,KFINTECH-FUT,KOTAKBANK-FUT,KPITTECH-FUT,LODHA-FUT,LAURUSLABS-FUT,LICHSGFIN-FUT,LT-FUT,LICI-FUT,LTF-FUT,LTM-FUT,LUPIN-FUT,M&M-FUT,MARICO-FUT,MANAPPURAM-FUT,MANKIND-FUT,MARUTI-FUT,MAZDOCK-FUT,MAXHEALTH-FUT,MCX-FUT,MOTHERSON-FUT,MOTILALOFS-FUT,MPHASIS-FUT,MFSL-FUT,MIDCPNIFTY-FUT,NATIONALUM-FUT,MUTHOOTFIN-FUT,NAM-INDIA-FUT,NBCC-FUT,NAUKRI-FUT,NHPC-FUT,NESTLEIND-FUT,NIFTYFPI-FUT,NIFTY-FUT,NIFTYNXT50-FUT,NMDC-FUT,NTPC-FUT,NYKAA-FUT,OFSS-FUT,OBEROIRLTY-FUT,OIL-FUT,ONGC-FUT,PATANJALI-FUT,PAGEIND-FUT,PAYTM-FUT,PERSISTENT-FUT,PETRONET-FUT,PFC-FUT,PGEL-FUT,PIDILITIND-FUT,PHOENIXLTD-FUT,PNB-FUT,PNBHOUSING-FUT,POLICYBZR-FUT,PIIND-FUT,POLYCAB-FUT,POWERGRID-FUT,POWERINDIA-FUT,PRESTIGE-FUT,PREMIERENE-FUT,RECLTD-FUT,RADICO-FUT,RBLBANK-FUT,RVNL-FUT,SAIL-FUT,RELIANCE-FUT,SBILIFE-FUT,SHREECEM-FUT,SBICARD-FUT,SBIN-FUT,SIEMENS-FUT,SHRIRAMFIN-FUT,SOLARINDS-FUT,SRF-FUT,SONACOMS-FUT,SUNPHARMA-FUT,SUZLON-FUT,SUPREMEIND-FUT,SWIGGY-FUT,TATACONSUM-FUT,TATAELXSI-FUT,TATAPOWER-FUT,TATASTEEL-FUT,TCS-FUT,TECHM-FUT,TITAN-FUT,TIINDIA-FUT,TORNTPHARM-FUT,TMPV-FUT,TRENT-FUT,ULTRACEMCO-FUT,UNITDSPR-FUT,UNIONBANK-FUT,TVSMOTOR-FUT,UNOMINDA-FUT,UPL-FUT,VBL-FUT,VMM-FUT,VEDL-FUT,WAAREEENER-FUT,VOLTAS-FUT,YESBANK-FUT,ZYDUSLIFE-FUT,WIPRO-FUT
-[HSM_SUB_BATCH] batch=1 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|13 lastToken=sf|nse_cm|1270 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=2 symbols=50 bytes=767
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|324 lastToken=sf|nse_fo|68489 packetBytes=778
 [LIVE_BACKFILL_CONCURRENCY] liveWorker=connected_idle backfillWorker=running
+[DB] Loaded 26704 bars into RAM cache
+[FyersAdapter] Master CSV cache loaded with 57451 symbols.
+[FYERS_HSM_SUBSCRIBE] Subscribing to 1 topics...
+[FYERS_HSM_STATUS] subscribed symbols=BSE:COALINDIA-A
+[HSM_SUB_BATCH] batch=1 symbols=1 bytes=19
+[HSM_SUB_SEND] count=1 firstToken=sf|bse_cm|533278 lastToken=sf|bse_cm|533278 packetBytes=30
+[Init] Ticker COALINDIA is up to date on disk (last bar: 2026-09-30T07:27).
 [HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=3 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68490 lastToken=sf|nse_fo|68770 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=4 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68780 lastToken=sf|nse_fo|68767 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=5 symbols=50 bytes=783
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68741 lastToken=sf|nse_cm|27061 packetBytes=794
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=6 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5578 lastToken=sf|nse_cm|9558 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=7 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|24715 lastToken=sf|nse_cm|10755 packetBytes=804
-[BackfillQueue] Saved 8257 bars for AADHARHFC (2026-08-24 to 2026-09-23)
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=8 symbols=50 bytes=790
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5435 lastToken=sf|nse_cm|6066 packetBytes=801
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=9 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|757645 lastToken=sf|nse_cm|335 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=10 symbols=50 bytes=780
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|338 lastToken=sf|nse_cm|7848 packetBytes=791
-[BackfillQueue] Fetching AADHARHFC (NSE:AADHARHFC-EQ) [732 in queue] from 2026-09-23 to 2026-09-28...
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=11 symbols=50 bytes=791
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|762588 lastToken=sf|nse_cm|583 packetBytes=802
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=12 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|759477 lastToken=sf|nse_cm|760183 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=13 symbols=50 bytes=796
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|20223 lastToken=sf|nse_cm|21794 packetBytes=807
-[BackfillQueue] Saved 1500 bars for AADHARHFC (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AADHARHFC completed successfully!
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=14 symbols=11 bytes=175
-[HSM_SUB_SEND] count=11 firstToken=sf|nse_cm|17881 lastToken=sf|nse_cm|11039 packetBytes=186
-[HSM_SUB_ACK] received status=ACK
-{"ts":"2026-09-28T19:50:41.513Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
-[GapDetector] AADHARHFC: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AADHARHFC: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AADHARHFC: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AADHARHFC: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7557 bars for AAKASH (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8230 bars for AAKASH (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7493 bars for AAKASH (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7494 bars for AAKASH (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8996 bars for AAKASH (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AAKASH (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6746 bars for AAKASH (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8245 bars for AAKASH (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AAKASH (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7490 bars for AAKASH (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8233 bars for AAKASH (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8239 bars for AAKASH (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AAKASH (NSE:AAKASH-EQ) [734 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1493 bars for AAKASH (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AAKASH completed successfully!
-[GapDetector] AAKASH: 4 gap(s): 2025-10-14T03:45→2026-01-06T03:45, 2026-01-13T03:45→2026-04-10T03:46, 2026-04-15T03:45→2026-07-08T03:45, 2026-07-15T03:45→2026-09-25T03:48
-[BackfillQueue] Enqueued gap-fill for AAKASH: 2025-10-14 → 2026-01-06
-[BackfillQueue] Enqueued gap-fill for AAKASH: 2026-01-13 → 2026-04-10
-[BackfillQueue] Enqueued gap-fill for AAKASH: 2026-04-15 → 2026-07-08
-[BackfillQueue] Enqueued gap-fill for AAKASH: 2026-07-15 → 2026-09-25
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Skipped 3 invalid bars for AAREYDRUGS
-[BackfillQueue] Saved 7114 bars for AAREYDRUGS (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Skipped 15 invalid bars for AAREYDRUGS
-[BackfillQueue] Saved 7936 bars for AAREYDRUGS (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7462 bars for AAREYDRUGS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7480 bars for AAREYDRUGS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8984 bars for AAREYDRUGS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7489 bars for AAREYDRUGS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6746 bars for AAREYDRUGS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8169 bars for AAREYDRUGS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2026-05-26 to 2026-06-25...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7682 bars for AAREYDRUGS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 6315 bars for AAREYDRUGS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 7849 bars for AAREYDRUGS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Skipped 1 invalid bars for AAREYDRUGS
-[BackfillQueue] Saved 8237 bars for AAREYDRUGS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AAREYDRUGS (NSE:AAREYDRUGS-EQ) [737 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1493 bars for AAREYDRUGS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AAREYDRUGS completed successfully!
-[GapDetector] AAREYDRUGS: 3 gap(s): 2025-10-01T03:45→2025-12-29T03:45, 2025-12-31T03:45→2026-03-26T09:59, 2026-03-31T03:45→2026-05-22T04:01
-[BackfillQueue] Enqueued gap-fill for AAREYDRUGS: 2025-10-01 → 2025-12-29
-[BackfillQueue] Enqueued gap-fill for AAREYDRUGS: 2025-12-31 → 2026-03-26
-[BackfillQueue] Enqueued gap-fill for AAREYDRUGS: 2026-03-31 → 2026-05-22
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7547 bars for AARON (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8241 bars for AARON (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7475 bars for AARON (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7487 bars for AARON (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8934 bars for AARON (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7464 bars for AARON (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6719 bars for AARON (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8151 bars for AARON (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7820 bars for AARON (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7441 bars for AARON (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8240 bars for AARON (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8179 bars for AARON (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AARON (NSE:AARON-EQ) [739 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1498 bars for AARON (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AARON completed successfully!
-[GapDetector] AARON: 4 gap(s): 2025-10-09T03:45→2026-01-02T03:45, 2026-01-09T03:45→2026-04-09T03:45, 2026-04-16T03:45→2026-07-14T03:50, 2026-07-15T03:45→2026-08-11T03:45
-[BackfillQueue] Enqueued gap-fill for AARON: 2025-10-09 → 2026-01-02
-[BackfillQueue] Enqueued gap-fill for AARON: 2026-01-09 → 2026-04-09
-[BackfillQueue] Enqueued gap-fill for AARON: 2026-04-16 → 2026-07-14
-[BackfillQueue] Enqueued gap-fill for AARON: 2026-07-15 → 2026-08-11
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AARTIDRUGS (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AARTIDRUGS (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AARTIDRUGS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AARTIDRUGS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AARTIDRUGS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AARTIDRUGS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AARTIDRUGS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AARTIDRUGS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AARTIDRUGS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AARTIDRUGS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AARTIDRUGS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8256 bars for AARTIDRUGS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AARTIDRUGS (NSE:AARTIDRUGS-EQ) [742 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AARTIDRUGS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AARTIDRUGS completed successfully!
-[GapDetector] AARTIDRUGS: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-08-28T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AARTIDRUGS: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AARTIDRUGS: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AARTIDRUGS: 2026-08-28 → 2026-09-14
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AARTIIND (2025-09-28 to 2025-10-28)
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AARTIIND (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AARTIIND (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AARTIIND (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AARTIIND (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AARTIIND (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AARTIIND (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AARTIIND (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AARTIIND (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AARTIIND (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AARTIIND (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AARTIIND (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AARTIIND (NSE:AARTIIND-EQ) [744 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AARTIIND (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AARTIIND completed successfully!
-[GapDetector] AARTIIND: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AARTIIND: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AARTIIND: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AARTIIND: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AARTIPHARM (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AARTIPHARM (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AARTIPHARM (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AARTIPHARM (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AARTIPHARM (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AARTIPHARM (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AARTIPHARM (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AARTIPHARM (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AARTIPHARM (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AARTIPHARM (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AARTIPHARM (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AARTIPHARM (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AARTIPHARM (NSE:AARTIPHARM-EQ) [746 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AARTIPHARM (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AARTIPHARM completed successfully!
-[GapDetector] AARTIPHARM: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AARTIPHARM: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AARTIPHARM: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AARTIPHARM: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7505 bars for AARVI (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8209 bars for AARVI (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7486 bars for AARVI (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7480 bars for AARVI (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8988 bars for AARVI (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7463 bars for AARVI (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2026-03-27 to 2026-04-26...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 6730 bars for AARVI (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8151 bars for AARVI (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7864 bars for AARVI (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7450 bars for AARVI (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8226 bars for AARVI (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8089 bars for AARVI (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AARVI (NSE:AARVI-EQ) [748 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1485 bars for AARVI (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AARVI completed successfully!
-[GapDetector] AARVI: 4 gap(s): 2025-09-30T03:45→2025-12-26T03:49, 2026-01-05T03:45→2026-04-01T03:47, 2026-04-06T03:45→2026-07-03T04:01, 2026-07-06T03:45→2026-09-10T04:02
-[BackfillQueue] Enqueued gap-fill for AARVI: 2025-09-30 → 2025-12-26
-[BackfillQueue] Enqueued gap-fill for AARVI: 2026-01-05 → 2026-04-01
-[BackfillQueue] Enqueued gap-fill for AARVI: 2026-04-06 → 2026-07-03
-[BackfillQueue] Enqueued gap-fill for AARVI: 2026-07-06 → 2026-09-10
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 5602 bars for AASTHA (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AASTHA (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AASTHA (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AASTHA (NSE:AASTHA-EQ) [751 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AASTHA (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AASTHA completed successfully!
-[GapDetector] AASTHA: 1 gap(s): 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AASTHA: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AAVAS (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AAVAS (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AAVAS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AAVAS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AAVAS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AAVAS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AAVAS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AAVAS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AAVAS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AAVAS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AAVAS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AAVAS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AAVAS (NSE:AAVAS-EQ) [751 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AAVAS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AAVAS completed successfully!
-[GapDetector] AAVAS: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AAVAS: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AAVAS: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AAVAS: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 2198 bars for ABANSENT (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8242 bars for ABANSENT (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7750 bars for ABANSENT (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7313 bars for ABANSENT (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2026-07-25 to 2026-08-24...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 8093 bars for ABANSENT (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8178 bars for ABANSENT (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ABANSENT (NSE:ABANSENT-EQ) [753 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1498 bars for ABANSENT (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ABANSENT completed successfully!
-[GapDetector] ABANSENT: 2 gap(s): 2026-04-21T03:45→2026-07-20T03:45, 2026-07-24T03:45→2026-09-24T03:46
-[BackfillQueue] Enqueued gap-fill for ABANSENT: 2026-04-21 → 2026-07-20
-[BackfillQueue] Enqueued gap-fill for ABANSENT: 2026-07-24 → 2026-09-24
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ABB (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ABB (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ABB (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ABB (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ABB (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ABB (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ABB (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ABB (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ABB (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ABB (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2026-07-25 to 2026-08-24...
-[FYERS_HSM_CONNECT] Disconnected. Scheduling reconnect...
-[BackfillQueue] Saved 8250 bars for ABB (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ABB (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ABB (NSE:ABB-EQ) [754 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ABB (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ABB completed successfully!
-[GapDetector] ABB: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ABB: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ABB: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ABB: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ABBOTINDIA (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ABBOTINDIA (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ABBOTINDIA (2025-11-27 to 2025-12-27)
-[FYERS_HSM_STATUS] starting
-[FYERS_HSM_CONNECT] Connecting to wss://socket.fyers.in/hsm/v1-5/prod...
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2025-12-27 to 2026-01-26...
-[FYERS_HSM_CONNECT] Connected.
-[FYERS_HSM_STATUS] connected
-[FYERS_HSM_AUTH] Authenticating binary stream...
-[FYERS_HSM_AUTH] Auth successful.
-[FYERS_HSM_STATUS] authenticated
-[FYERS_HSM_STATUS] Flushing 875 pending subscriptions...
-[FYERS_HSM_SUBSCRIBE] Subscribing to 661 topics...
-[FYERS_HSM_STATUS] subscribed symbols=ABB,CANBK,LUPIN,MIDCPNIFTY,NHPC,ONGC,PIIND,RADICO,ABCAPITAL,ASHOKLEY,BAJAJHLDNG,BHARTIARTL,CUMMINSIND,ETERNAL,GODREJPROP,HINDALCO,IEX,IRFC,KFINTECH,PRESTIGE,SHREECEM,TATACONSUM,TRENT,ADANIGREEN,APOLLOHOSP,BAJAJFINSV,BHARATFORG,CROMPTON,EICHERMOT,GODREJCP,HEROMOTOCO,IDFCFIRSTB,IREDA,KEI,LTF,MCX,NBCC,OFSS,PHOENIXLTD,SWIGGY,TORNTPHARM,VMM,ALKEM,ADANIPOWER,360ONE,ADANIENT,ADANIPORTS,AMBER,ADANIENSOL,AMBUJACEM,ANGELONE,APLAPOLLO,ASTRAL,ASIANPAINT,AUBANK,AUROPHARMA,AXISBANK,BAJAJ-AUTO,BANDHANBNK,BAJFINANCE,BANKINDIA,BANKBARODA,BANKNIFTY,BDL,BEL,BHEL,BIOCON,BLUESTARCO,BOSCHLTD,BPCL,BRITANNIA,BSE,CAMS,CGPOWER,CHOLAFIN,CDSL,CIPLA,COALINDIA,COCHINSHIP,COFORGE,COLPAL,CONCOR,DABUR,DALBHARAT,DELHIVERY,DIVISLAB,DIXON,DLF,DMART,DRREDDY,FEDERALBNK,FINNIFTY,FORCEMOT,FORTIS,GAIL,GLENMARK,GMRAIRPORT,GODFRYPHLP,GRASIM,GVT&D,HAL,HAVELLS,HCLTECH,HDFCAMC,HDFCBANK,HDFCLIFE,HINDPETRO,HINDUNILVR,HINDZINC,HYUNDAI,ICICIBANK,ICICIGI,ICICIPRULI,IDEA,INDHOTEL,INDIANB,INDIGO,INDUSINDBK,INDUSTOWER,INFY,INOXWIND,IOC,ITC,JINDALSTEL,JIOFIN,JSWENERGY,JSWSTEEL,JUBLFOOD,KALYANKJIL,KAYNES,KOTAKBANK,KPITTECH,LAURUSLABS,LICHSGFIN,LICI,LT,LODHA,NAUKRI,POLYCAB,SUNPHARMA,TIINDIA,MARICO,MARUTI,MPHASIS,NIFTYNXT50,PAYTM,POLICYBZR,MANKIND,PETRONET,POWERGRID,SBICARD,SUPREMEIND,TITAN,VBL,M&M,NAM-INDIA,NTPC,LTM,RVNL,SRF,TECHM,UNOMINDA,MANAPPURAM,MUTHOOTFIN,NMDC,PERSISTENT,RELIANCE,SONACOMS,TCS,UNITDSPR,ZYDUSLIFE,MAXHEALTH,NYKAA,PFC,POWERINDIA,VEDL,MAZDOCK,OBEROIRLTY,PGEL,PREMIERENE,SBIN,MFSL,OIL,PIDILITIND,RBLBANK,SIEMENS,TATAPOWER,ULTRACEMCO,WIPRO,MOTHERSON,PAGEIND,PNB,SHRIRAMFIN,TATAELXSI,TVSMOTOR,WAAREEENER,MOTILALOFS,NIFTYFPI,PATANJALI,PNBHOUSING,NATIONALUM,SBILIFE,SUZLON,TMPV,NESTLEIND,VOLTAS,NIFTY,SOLARINDS,TATASTEEL,UNIONBANK,YESBANK,RECLTD,SAIL,UPL,20MICRONS,21STCENMGM,3BBLACKBIO,3MINDIA,3PLAND,5PAISA,63MOONS,A2ZINFRA,AAATECH,AADHARHFC,AAKASH,AAREYDRUGS,AARON,AARTIDRUGS,AARTIIND,AARTIPHARM,AARVI,AASTHA,AAVAS,ABANSENT,ABBOTINDIA,ABCOTS,ABDL,ABFRL,ABLBL,ABMKNO,ABREL,ABSLAMC,ACC,ACCELYA,ACE,ACEINTEG,ACGL,ACI,ACL,ACMESOLAR,ACUTAAS,ADDIND,ADFFOODS,ADL,ADOR,ADROITINFO,ADSL,ADVAIT,ADVANCE,ADVANIHOTR,ADVENTHTL,ADVENZYMES,ADVIKCA,AEGISLOG,AEGISVOPAK,AEPL,AEQUS,AEROENTER,AEROFLEX,AERONEU,AEROPLANE,AETHER,AFCONS,AFFLE,AFFORDABLE,AFIL,AFSL,AGARIND,AGARWALEYE,AGI,AGIIL,AGL,AGRITECH,AGROPHOS,AHCL,AHLADA,AHLEAST,AHLUCONT,AIAENG,AIIL,AIRAN,AIROLAM,AJANTPHARM,AJAXENGG,AJMERA,AJOONI,AKASH,AKCAPIT,AKG,AKSHAR,AKUMS,ALANKIT,ALBERTDAVD,ALEMBICLTD,ALFREDHE,ALGOQUANT,ALICON,ALIVUS,ALKYLAMINE,ALLCARGO,ALLDIGI,ALLTIME,ALOKINDS,ALPA,ALPINETEX,ALUFLUOR,AMAGI,AMAL,AMARJOTHI,AMBICAAGAR,AMBIKCO,AMJLAND,AMNPLST,AMRUTANJAN,ANANDRATHI,ANANTRAJ,ANDHRAPAP,ANDHRSUGAR,ANDREWYU,ANIKINDS,ANNAPURNA,ANNU,ANSALBU,ANTELOPUS,ANTGRAPHIC,ANTHEM,ANUHPHR,ANUP,ANURAS,APARINDS,APCL,APCOTEXIND,APEX,APLLTD,APOLLO,APOLLOPIPE,APOLLOTYRE,APOLSINHOT,APOORVA,APTECHT,APTUS,AQYLON,ARCHIDPLY,ARCHIES,ARCIL,ARCL,ARDEE,ARE&M,ARENTERP,ARFIN,ARIHANT,ARIHANTCAP,ARIHANTSUP,ARIS,ARKADE,ARMANFIN,AROGRANITE,ARROWGREEN,ARSSBL,ARTEMISMED,ARTNIRMAN,ARVEE,ARVIND,ARVINDFASN,ARVSMART,ARYAMAN,ASAHIINDIA,ASAL,ASALCBR,ASHAPURMIN,ASHIANA,ASHIMASYN,ASHOKA,ASHOKAMET,ASIANENE,ASIANHOTNR,ASIANTILES,ASIANTNE,ASKAUTOLTD,ASMS,ASPINWALL,ASSAMENT,ASTAR,ASTEC,ASTERDM,ASTRAMICRO,ASTRAZEN,ATALREAL,ATAM,ATGL,ATHERENERG,ATL,ATLANTAA,ATLANTAELE,ATLASCYCLE,ATUL,ATULAUTO,AUGMONT,AURIONPRO,AURUM,AURUS,AUSOMENT,AUSTENG,AUTOAXLES,AUTOIND,AVADHSUGAR,AVALON,AVANCE,AVANTEL,AVANTIFEED,AVL,AVONMORE,AVROIND,AVTNPL,AWFIS,AWHCL,AWL,AXISCADES,AXITA,AXTEL,AYE,AYMSYNTEX,AZAD,AZADIND,BAGFILMS,BAIDFIN,BAJAJCON,BAJAJELEC,BAJAJHCARE,BAJAJHFL,BAJAJHIND,BAJAJINDEF,BAJAJST,BAJEL,BALAJEE,BALAJITELE,BALAMINES,BALAXI,BALKRISHNA,BALKRISIND,BALMLAWRIE,BALPHARMA,BALRAMCHIN,BALUFORGE,BANARBEADS,BANARISUG,BANCOINDIA,BANG,BANKA,BANSALWIRE,BANSWRAS,BASF,BATAINDIA,BATLIBOI,BAYERCROP,BBL,BBOX,BBTC,BBTCL,BCG,BCLIND,BCONCEPTS,BCPL,BEARDSELL,BECTORFOOD,BEDMUTHA,BEEKAY,BELLACASA,BELRISE,BEML,BENARAS,BENGALASM,BEPL,BERGEPAINT,BESTAGRO,BETA,BFINVEST,BFUTILITIE,BHAGCHEM,BHAGERIA,BHAGYANGR,BHANDARI,BHARATCOAL,BHARATRAS,BHARATSE,BHARATWIRE,BHARTIHEXA,BIGBLOC,BIKAJI,BIL,BIMETAL,BIOFILCHEM,BIRLACABLE,BIRLACORPN,BIRLAMONEY,BIRLANU,BLACKBUCK,BLACKROSE,BLAL,BLBLIMITED,BLEL,BLIL,BLKASHYAP,BLS,BLSE,BLUECLOUDS,BLUECOAST,BLUEDART,BLUEJET,BLUESTONE,BLUSPRING,BMWVENTLTD,BNAGROCHEM,BOHRAIND,BOMDYEING,BONLON,BORANA,BOROLTD,BORORENEW,BOROSCI,BOSCH-HCIL,BPL,BPLPHARMA,BRAHMINFRA,BRIGADE,BRIGHOTEL,BRIGHTBR,BRNL,BROOKS,BSHSL,BSL,BSOFT,BTML,BUILDPRO,BUTTERFLY,BVCL,BYKE,CAMLINFINE,CAMPUS,CANFINHOME,CANHLIFE,CANTABIL,CAPACITE,CAPILLARY,CAPITALSFB,CAPLIPOINT,CARBORUNIV,CARERATING,CARRARO,CARTRADE,CARYSIL,CASTROLIND,CCAVENUE,CCCL,CCHHL,CCL,CEATLTD,CEIGALL,CEINSYS,CELEBRITY,CELLO,CEMPRO,CENTENKA,CENTEXT,CENTRALBK,CENTRUM,CENTUM,CENTURYPLY,CERA,CESC,CEWATER,CGCL,CGVAK,CHALET,CHAMBLFERT,CHEMBOND,CHEMCON,CHEMCRUX,CHEMFAB,CHEMPLASTS,CHENNPETRO,CHEVIOT,CHOICEIN,CHOLAHLDNG,CIEINDIA,CIFL,CINELINE,CINEVISTA,CLEAN,CLEANMAX,CLEDUCATE,CLSEL,CMLL,CMPDI,CMRGREEN,CMSINFO,CNL,COASTCORP,COCKERILL,COFFEEDAY,COHANCE,COMFINTE,COMPEAU,COMPUSOFT,COMSYN,CONCORDBIO,CONFIPET,CONTROLPR,CORALFINAC,CORDELIA,COROMANDEL,CORONA,COSMOFIRST,CPCAP,CPEDU,CPL,CPPLUS,CRAFTSMAN,CRAMC,CRAVATEX,CREATIVEYE,CREDITACC,CREST,CRESTO,CRISIL,CRIZAC,CROWN,CSBBANK,CSLFINANCE,CSM,CUB,CUPID,CYIENT,CYIENTDLM,DALMIASUG,DAMCAPITAL,DANGEE,DATAMATICS,DATAPATTNS,DAVANGERE,DBCORP,DBEIL,DBL,DBOL,DBREALTY,DCAL,DCBBANK,DCI,DCM,DCMFINSERV,DCMNVL,360ONE-FUT,ABCAPITAL-FUT,ABB-FUT,ADANIENSOL-FUT,ADANIENT-FUT,ADANIPORTS-FUT,ADANIGREEN-FUT,ALKEM-FUT,AMBER-FUT,ADANIPOWER-FUT,AMBUJACEM-FUT,APLAPOLLO-FUT,ANGELONE-FUT,ASHOKLEY-FUT,APOLLOHOSP-FUT,ASIANPAINT-FUT,ASTRAL-FUT,AUROPHARMA-FUT,AXISBANK-FUT,AUBANK-FUT,BAJAJ-AUTO-FUT,BAJAJHLDNG-FUT,BANDHANBNK-FUT,BAJFINANCE-FUT,BAJAJFINSV-FUT,BANKBARODA-FUT,BANKINDIA-FUT,BANKNIFTY-FUT,BEL-FUT,BDL-FUT,BHARATFORG-FUT,BHARTIARTL-FUT,BHEL-FUT,BLUESTARCO-FUT,BIOCON-FUT,BSE-FUT,BOSCHLTD-FUT,BPCL-FUT,BRITANNIA-FUT,CAMS-FUT,CANBK-FUT,CDSL-FUT,CGPOWER-FUT,CIPLA-FUT,CHOLAFIN-FUT,COCHINSHIP-FUT,COALINDIA-FUT,COFORGE-FUT,COLPAL-FUT,CUMMINSIND-FUT,CONCOR-FUT,CROMPTON-FUT,DABUR-FUT,DALBHARAT-FUT,DLF-FUT,DIVISLAB-FUT,DELHIVERY-FUT,DIXON-FUT,DMART-FUT,FEDERALBNK-FUT,DRREDDY-FUT,ETERNAL-FUT,EICHERMOT-FUT,GAIL-FUT,FINNIFTY-FUT,GLENMARK-FUT,FORCEMOT-FUT,GODFRYPHLP-FUT,GMRAIRPORT-FUT,FORTIS-FUT,GODREJPROP-FUT,GODREJCP-FUT,HAL-FUT,GVT&D-FUT,GRASIM-FUT,HAVELLS-FUT,HCLTECH-FUT,HDFCAMC-FUT,HDFCBANK-FUT,HINDALCO-FUT,HDFCLIFE-FUT,HINDPETRO-FUT,HEROMOTOCO-FUT,HINDUNILVR-FUT,HYUNDAI-FUT,ICICIBANK-FUT,ICICIPRULI-FUT,HINDZINC-FUT,ICICIGI-FUT,IDEA-FUT,IDFCFIRSTB-FUT,IEX-FUT,INDHOTEL-FUT,INDIANB-FUT,INDIGO-FUT,INDUSTOWER-FUT,INFY-FUT,IOC-FUT,INDUSINDBK-FUT,IRFC-FUT,INOXWIND-FUT,ITC-FUT,IREDA-FUT,JIOFIN-FUT,JINDALSTEL-FUT,JSWSTEEL-FUT,JSWENERGY-FUT,JUBLFOOD-FUT,KAYNES-FUT,KEI-FUT,KALYANKJIL-FUT,KFINTECH-FUT,KOTAKBANK-FUT,KPITTECH-FUT,LODHA-FUT,LAURUSLABS-FUT,LICHSGFIN-FUT,LT-FUT,LICI-FUT,LTF-FUT,LTM-FUT,LUPIN-FUT,M&M-FUT,MARICO-FUT,MANAPPURAM-FUT,MANKIND-FUT,MARUTI-FUT,MAZDOCK-FUT,MAXHEALTH-FUT,MCX-FUT,MOTHERSON-FUT,MOTILALOFS-FUT,MPHASIS-FUT,MFSL-FUT,MIDCPNIFTY-FUT,NATIONALUM-FUT,MUTHOOTFIN-FUT,NAM-INDIA-FUT,NBCC-FUT,NAUKRI-FUT,NHPC-FUT,NESTLEIND-FUT,NIFTYFPI-FUT,NIFTY-FUT,NIFTYNXT50-FUT,NMDC-FUT,NTPC-FUT,NYKAA-FUT,OFSS-FUT,OBEROIRLTY-FUT,OIL-FUT,ONGC-FUT,PATANJALI-FUT,PAGEIND-FUT,PAYTM-FUT,PERSISTENT-FUT,PETRONET-FUT,PFC-FUT,PGEL-FUT,PIDILITIND-FUT,PHOENIXLTD-FUT,PNB-FUT,PNBHOUSING-FUT,POLICYBZR-FUT,PIIND-FUT,POLYCAB-FUT,POWERGRID-FUT,POWERINDIA-FUT,PRESTIGE-FUT,PREMIERENE-FUT,RECLTD-FUT,RADICO-FUT,RBLBANK-FUT,RVNL-FUT,SAIL-FUT,RELIANCE-FUT,SBILIFE-FUT,SHREECEM-FUT,SBICARD-FUT,SBIN-FUT,SIEMENS-FUT,SHRIRAMFIN-FUT,SOLARINDS-FUT,SRF-FUT,SONACOMS-FUT,SUNPHARMA-FUT,SUZLON-FUT,SUPREMEIND-FUT,SWIGGY-FUT,TATACONSUM-FUT,TATAELXSI-FUT,TATAPOWER-FUT,TATASTEEL-FUT,TCS-FUT,TECHM-FUT,TITAN-FUT,TIINDIA-FUT,TORNTPHARM-FUT,TMPV-FUT,TRENT-FUT,ULTRACEMCO-FUT,UNITDSPR-FUT,UNIONBANK-FUT,TVSMOTOR-FUT,UNOMINDA-FUT,UPL-FUT,VBL-FUT,VMM-FUT,VEDL-FUT,WAAREEENER-FUT,VOLTAS-FUT,YESBANK-FUT,ZYDUSLIFE-FUT,WIPRO-FUT
-[HSM_SUB_BATCH] batch=1 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|13 lastToken=sf|nse_cm|1270 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=2 symbols=50 bytes=767
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|324 lastToken=sf|nse_fo|68489 packetBytes=778
-[LIVE_BACKFILL_CONCURRENCY] liveWorker=connected_idle backfillWorker=running
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=3 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68490 lastToken=sf|nse_fo|68770 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=4 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68780 lastToken=sf|nse_fo|68767 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=5 symbols=50 bytes=783
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68741 lastToken=sf|nse_cm|27061 packetBytes=794
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=6 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5578 lastToken=sf|nse_cm|9558 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=7 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|24715 lastToken=sf|nse_cm|10755 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=8 symbols=50 bytes=790
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5435 lastToken=sf|nse_cm|6066 packetBytes=801
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=9 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|757645 lastToken=sf|nse_cm|335 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=10 symbols=50 bytes=780
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|338 lastToken=sf|nse_cm|7848 packetBytes=791
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=11 symbols=50 bytes=791
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|762588 lastToken=sf|nse_cm|583 packetBytes=802
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=12 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|759477 lastToken=sf|nse_cm|760183 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=13 symbols=50 bytes=796
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|20223 lastToken=sf|nse_cm|21794 packetBytes=807
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=14 symbols=11 bytes=175
-[HSM_SUB_SEND] count=11 firstToken=sf|nse_cm|17881 lastToken=sf|nse_cm|11039 packetBytes=186
-[BackfillQueue] Saved 7500 bars for ABBOTINDIA (2025-12-27 to 2026-01-26)
-[HSM_SUB_ACK] received status=ACK
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2026-01-26 to 2026-02-25...
-{"ts":"2026-09-28T19:52:47.569Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
-[BackfillQueue] Saved 9000 bars for ABBOTINDIA (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ABBOTINDIA (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ABBOTINDIA (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ABBOTINDIA (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ABBOTINDIA (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ABBOTINDIA (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ABBOTINDIA (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ABBOTINDIA (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ABBOTINDIA (NSE:ABBOTINDIA-EQ) [756 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ABBOTINDIA (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ABBOTINDIA completed successfully!
-[GapDetector] ABBOTINDIA: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ABBOTINDIA: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ABBOTINDIA: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ABBOTINDIA: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ABCAPITAL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ABCAPITAL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ABCAPITAL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ABCAPITAL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ABCAPITAL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2026-02-25 to 2026-03-27...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7500 bars for ABCAPITAL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ABCAPITAL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ABCAPITAL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ABCAPITAL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ABCAPITAL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ABCAPITAL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ABCAPITAL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ABCAPITAL (NSE:ABCAPITAL-EQ) [758 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ABCAPITAL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ABCAPITAL completed successfully!
-[GapDetector] ABCAPITAL: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ABCAPITAL: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ABCAPITAL: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ABCAPITAL: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7550 bars for ABCOTS (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8237 bars for ABCOTS (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7463 bars for ABCOTS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7462 bars for ABCOTS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8961 bars for ABCOTS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7464 bars for ABCOTS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6727 bars for ABCOTS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8249 bars for ABCOTS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7855 bars for ABCOTS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7498 bars for ABCOTS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8204 bars for ABCOTS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8242 bars for ABCOTS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ABCOTS (NSE:ABCOTS-EQ) [760 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1499 bars for ABCOTS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ABCOTS completed successfully!
-[GapDetector] ABCOTS: 4 gap(s): 2025-10-06T03:45→2026-01-02T03:50, 2026-01-05T03:45→2026-04-02T03:46, 2026-04-06T03:45→2026-06-26T09:59, 2026-07-07T03:45→2026-09-25T03:45
-[BackfillQueue] Enqueued gap-fill for ABCOTS: 2025-10-06 → 2026-01-02
-[BackfillQueue] Enqueued gap-fill for ABCOTS: 2026-01-05 → 2026-04-02
-[BackfillQueue] Enqueued gap-fill for ABCOTS: 2026-04-06 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ABCOTS: 2026-07-07 → 2026-09-25
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ABDL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ABDL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ABDL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ABDL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ABDL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ABDL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ABDL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ABDL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ABDL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ABDL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ABDL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ABDL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ABDL (NSE:ABDL-EQ) [763 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ABDL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ABDL completed successfully!
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[GapDetector] ABDL: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ABDL: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ABDL: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ABDL: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ABFRL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ABFRL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ABFRL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ABFRL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ABFRL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ABFRL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ABFRL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ABFRL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ABFRL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ABFRL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ABFRL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ABFRL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ABFRL (NSE:ABFRL-EQ) [765 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ABFRL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ABFRL completed successfully!
-[GapDetector] ABFRL: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ABFRL: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ABFRL: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ABFRL: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ABLBL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ABLBL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ABLBL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ABLBL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ABLBL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ABLBL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ABLBL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ABLBL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ABLBL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ABLBL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ABLBL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ABLBL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ABLBL (NSE:ABLBL-EQ) [767 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ABLBL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ABLBL completed successfully!
-[GapDetector] ABLBL: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ABLBL: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ABLBL: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ABLBL: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 1966 bars for ABMKNO (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 7542 bars for ABMKNO (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7496 bars for ABMKNO (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 6521 bars for ABMKNO (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 7460 bars for ABMKNO (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 6951 bars for ABMKNO (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ABMKNO (NSE:ABMKNO-EQ) [769 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1282 bars for ABMKNO (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ABMKNO completed successfully!
-[GapDetector] ABMKNO: 2 gap(s): 2026-04-21T03:45→2026-07-17T03:51, 2026-07-20T03:45→2026-09-18T03:46
-[BackfillQueue] Enqueued gap-fill for ABMKNO: 2026-04-21 → 2026-07-17
-[BackfillQueue] Enqueued gap-fill for ABMKNO: 2026-07-20 → 2026-09-18
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2025-09-28 to 2025-10-28...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7561 bars for ABREL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ABREL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ABREL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ABREL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ABREL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ABREL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ABREL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ABREL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ABREL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ABREL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ABREL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ABREL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ABREL (NSE:ABREL-EQ) [770 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ABREL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ABREL completed successfully!
-[GapDetector] ABREL: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ABREL: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ABREL: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ABREL: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ABSLAMC (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ABSLAMC (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ABSLAMC (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ABSLAMC (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ABSLAMC (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ABSLAMC (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ABSLAMC (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ABSLAMC (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ABSLAMC (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ABSLAMC (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ABSLAMC (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ABSLAMC (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ABSLAMC (NSE:ABSLAMC-EQ) [772 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ABSLAMC (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ABSLAMC completed successfully!
-[GapDetector] ABSLAMC: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ABSLAMC: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ABSLAMC: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ABSLAMC: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ACC (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ACC (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ACC (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ACC (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ACC (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ACC (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ACC (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ACC (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ACC (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2026-06-25 to 2026-07-25...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7500 bars for ACC (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ACC (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ACC (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ACC (NSE:ACC-EQ) [774 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ACC (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ACC completed successfully!
-[GapDetector] ACC: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ACC: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ACC: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ACC: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ACCELYA (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8249 bars for ACCELYA (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7499 bars for ACCELYA (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7499 bars for ACCELYA (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ACCELYA (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ACCELYA (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ACCELYA (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8249 bars for ACCELYA (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7863 bars for ACCELYA (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7491 bars for ACCELYA (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8232 bars for ACCELYA (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8239 bars for ACCELYA (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ACCELYA (NSE:ACCELYA-EQ) [776 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ACCELYA (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ACCELYA completed successfully!
-[GapDetector] ACCELYA: 4 gap(s): 2025-11-12T03:45→2026-01-15T09:59, 2026-03-03T03:45→2026-05-28T09:59, 2026-06-05T03:45→2026-08-28T03:45, 2026-09-03T03:45→2026-09-23T03:45
-[BackfillQueue] Enqueued gap-fill for ACCELYA: 2025-11-12 → 2026-01-15
-[BackfillQueue] Enqueued gap-fill for ACCELYA: 2026-03-03 → 2026-05-28
-[BackfillQueue] Enqueued gap-fill for ACCELYA: 2026-06-05 → 2026-08-28
-[BackfillQueue] Enqueued gap-fill for ACCELYA: 2026-09-03 → 2026-09-23
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ACE (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ACE (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ACE (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ACE (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ACE (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2026-02-25 to 2026-03-27...
-[FYERS_HSM_CONNECT] Disconnected. Scheduling reconnect...
-[BackfillQueue] Saved 7500 bars for ACE (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ACE (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ACE (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ACE (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ACE (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ACE (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2026-08-24 to 2026-09-23...
-[FYERS_HSM_STATUS] starting
-[FYERS_HSM_CONNECT] Connecting to wss://socket.fyers.in/hsm/v1-5/prod...
-[BackfillQueue] Saved 8257 bars for ACE (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ACE (NSE:ACE-EQ) [779 in queue] from 2026-09-23 to 2026-09-28...
-[FYERS_HSM_CONNECT] Connected.
-[FYERS_HSM_STATUS] connected
-[FYERS_HSM_AUTH] Authenticating binary stream...
-[FYERS_HSM_AUTH] Auth successful.
-[FYERS_HSM_STATUS] authenticated
-[FYERS_HSM_STATUS] Flushing 875 pending subscriptions...
-[FYERS_HSM_SUBSCRIBE] Subscribing to 661 topics...
-[FYERS_HSM_STATUS] subscribed symbols=ABB,CANBK,LUPIN,MIDCPNIFTY,NHPC,ONGC,PIIND,RADICO,ABCAPITAL,ASHOKLEY,BAJAJHLDNG,BHARTIARTL,CUMMINSIND,ETERNAL,GODREJPROP,HINDALCO,IEX,IRFC,KFINTECH,PRESTIGE,SHREECEM,TATACONSUM,TRENT,ADANIGREEN,APOLLOHOSP,BAJAJFINSV,BHARATFORG,CROMPTON,EICHERMOT,GODREJCP,HEROMOTOCO,IDFCFIRSTB,IREDA,KEI,LTF,MCX,NBCC,OFSS,PHOENIXLTD,SWIGGY,TORNTPHARM,VMM,ALKEM,ADANIPOWER,360ONE,ADANIENT,ADANIPORTS,AMBER,ADANIENSOL,AMBUJACEM,ANGELONE,APLAPOLLO,ASTRAL,ASIANPAINT,AUBANK,AUROPHARMA,AXISBANK,BAJAJ-AUTO,BANDHANBNK,BAJFINANCE,BANKINDIA,BANKBARODA,BANKNIFTY,BDL,BEL,BHEL,BIOCON,BLUESTARCO,BOSCHLTD,BPCL,BRITANNIA,BSE,CAMS,CGPOWER,CHOLAFIN,CDSL,CIPLA,COALINDIA,COCHINSHIP,COFORGE,COLPAL,CONCOR,DABUR,DALBHARAT,DELHIVERY,DIVISLAB,DIXON,DLF,DMART,DRREDDY,FEDERALBNK,FINNIFTY,FORCEMOT,FORTIS,GAIL,GLENMARK,GMRAIRPORT,GODFRYPHLP,GRASIM,GVT&D,HAL,HAVELLS,HCLTECH,HDFCAMC,HDFCBANK,HDFCLIFE,HINDPETRO,HINDUNILVR,HINDZINC,HYUNDAI,ICICIBANK,ICICIGI,ICICIPRULI,IDEA,INDHOTEL,INDIANB,INDIGO,INDUSINDBK,INDUSTOWER,INFY,INOXWIND,IOC,ITC,JINDALSTEL,JIOFIN,JSWENERGY,JSWSTEEL,JUBLFOOD,KALYANKJIL,KAYNES,KOTAKBANK,KPITTECH,LAURUSLABS,LICHSGFIN,LICI,LT,LODHA,NAUKRI,POLYCAB,SUNPHARMA,TIINDIA,MARICO,MARUTI,MPHASIS,NIFTYNXT50,PAYTM,POLICYBZR,MANKIND,PETRONET,POWERGRID,SBICARD,SUPREMEIND,TITAN,VBL,M&M,NAM-INDIA,NTPC,LTM,RVNL,SRF,TECHM,UNOMINDA,MANAPPURAM,MUTHOOTFIN,NMDC,PERSISTENT,RELIANCE,SONACOMS,TCS,UNITDSPR,ZYDUSLIFE,MAXHEALTH,NYKAA,PFC,POWERINDIA,VEDL,MAZDOCK,OBEROIRLTY,PGEL,PREMIERENE,SBIN,MFSL,OIL,PIDILITIND,RBLBANK,SIEMENS,TATAPOWER,ULTRACEMCO,WIPRO,MOTHERSON,PAGEIND,PNB,SHRIRAMFIN,TATAELXSI,TVSMOTOR,WAAREEENER,MOTILALOFS,NIFTYFPI,PATANJALI,PNBHOUSING,NATIONALUM,SBILIFE,SUZLON,TMPV,NESTLEIND,VOLTAS,NIFTY,SOLARINDS,TATASTEEL,UNIONBANK,YESBANK,RECLTD,SAIL,UPL,20MICRONS,21STCENMGM,3BBLACKBIO,3MINDIA,3PLAND,5PAISA,63MOONS,A2ZINFRA,AAATECH,AADHARHFC,AAKASH,AAREYDRUGS,AARON,AARTIDRUGS,AARTIIND,AARTIPHARM,AARVI,AASTHA,AAVAS,ABANSENT,ABBOTINDIA,ABCOTS,ABDL,ABFRL,ABLBL,ABMKNO,ABREL,ABSLAMC,ACC,ACCELYA,ACE,ACEINTEG,ACGL,ACI,ACL,ACMESOLAR,ACUTAAS,ADDIND,ADFFOODS,ADL,ADOR,ADROITINFO,ADSL,ADVAIT,ADVANCE,ADVANIHOTR,ADVENTHTL,ADVENZYMES,ADVIKCA,AEGISLOG,AEGISVOPAK,AEPL,AEQUS,AEROENTER,AEROFLEX,AERONEU,AEROPLANE,AETHER,AFCONS,AFFLE,AFFORDABLE,AFIL,AFSL,AGARIND,AGARWALEYE,AGI,AGIIL,AGL,AGRITECH,AGROPHOS,AHCL,AHLADA,AHLEAST,AHLUCONT,AIAENG,AIIL,AIRAN,AIROLAM,AJANTPHARM,AJAXENGG,AJMERA,AJOONI,AKASH,AKCAPIT,AKG,AKSHAR,AKUMS,ALANKIT,ALBERTDAVD,ALEMBICLTD,ALFREDHE,ALGOQUANT,ALICON,ALIVUS,ALKYLAMINE,ALLCARGO,ALLDIGI,ALLTIME,ALOKINDS,ALPA,ALPINETEX,ALUFLUOR,AMAGI,AMAL,AMARJOTHI,AMBICAAGAR,AMBIKCO,AMJLAND,AMNPLST,AMRUTANJAN,ANANDRATHI,ANANTRAJ,ANDHRAPAP,ANDHRSUGAR,ANDREWYU,ANIKINDS,ANNAPURNA,ANNU,ANSALBU,ANTELOPUS,ANTGRAPHIC,ANTHEM,ANUHPHR,ANUP,ANURAS,APARINDS,APCL,APCOTEXIND,APEX,APLLTD,APOLLO,APOLLOPIPE,APOLLOTYRE,APOLSINHOT,APOORVA,APTECHT,APTUS,AQYLON,ARCHIDPLY,ARCHIES,ARCIL,ARCL,ARDEE,ARE&M,ARENTERP,ARFIN,ARIHANT,ARIHANTCAP,ARIHANTSUP,ARIS,ARKADE,ARMANFIN,AROGRANITE,ARROWGREEN,ARSSBL,ARTEMISMED,ARTNIRMAN,ARVEE,ARVIND,ARVINDFASN,ARVSMART,ARYAMAN,ASAHIINDIA,ASAL,ASALCBR,ASHAPURMIN,ASHIANA,ASHIMASYN,ASHOKA,ASHOKAMET,ASIANENE,ASIANHOTNR,ASIANTILES,ASIANTNE,ASKAUTOLTD,ASMS,ASPINWALL,ASSAMENT,ASTAR,ASTEC,ASTERDM,ASTRAMICRO,ASTRAZEN,ATALREAL,ATAM,ATGL,ATHERENERG,ATL,ATLANTAA,ATLANTAELE,ATLASCYCLE,ATUL,ATULAUTO,AUGMONT,AURIONPRO,AURUM,AURUS,AUSOMENT,AUSTENG,AUTOAXLES,AUTOIND,AVADHSUGAR,AVALON,AVANCE,AVANTEL,AVANTIFEED,AVL,AVONMORE,AVROIND,AVTNPL,AWFIS,AWHCL,AWL,AXISCADES,AXITA,AXTEL,AYE,AYMSYNTEX,AZAD,AZADIND,BAGFILMS,BAIDFIN,BAJAJCON,BAJAJELEC,BAJAJHCARE,BAJAJHFL,BAJAJHIND,BAJAJINDEF,BAJAJST,BAJEL,BALAJEE,BALAJITELE,BALAMINES,BALAXI,BALKRISHNA,BALKRISIND,BALMLAWRIE,BALPHARMA,BALRAMCHIN,BALUFORGE,BANARBEADS,BANARISUG,BANCOINDIA,BANG,BANKA,BANSALWIRE,BANSWRAS,BASF,BATAINDIA,BATLIBOI,BAYERCROP,BBL,BBOX,BBTC,BBTCL,BCG,BCLIND,BCONCEPTS,BCPL,BEARDSELL,BECTORFOOD,BEDMUTHA,BEEKAY,BELLACASA,BELRISE,BEML,BENARAS,BENGALASM,BEPL,BERGEPAINT,BESTAGRO,BETA,BFINVEST,BFUTILITIE,BHAGCHEM,BHAGERIA,BHAGYANGR,BHANDARI,BHARATCOAL,BHARATRAS,BHARATSE,BHARATWIRE,BHARTIHEXA,BIGBLOC,BIKAJI,BIL,BIMETAL,BIOFILCHEM,BIRLACABLE,BIRLACORPN,BIRLAMONEY,BIRLANU,BLACKBUCK,BLACKROSE,BLAL,BLBLIMITED,BLEL,BLIL,BLKASHYAP,BLS,BLSE,BLUECLOUDS,BLUECOAST,BLUEDART,BLUEJET,BLUESTONE,BLUSPRING,BMWVENTLTD,BNAGROCHEM,BOHRAIND,BOMDYEING,BONLON,BORANA,BOROLTD,BORORENEW,BOROSCI,BOSCH-HCIL,BPL,BPLPHARMA,BRAHMINFRA,BRIGADE,BRIGHOTEL,BRIGHTBR,BRNL,BROOKS,BSHSL,BSL,BSOFT,BTML,BUILDPRO,BUTTERFLY,BVCL,BYKE,CAMLINFINE,CAMPUS,CANFINHOME,CANHLIFE,CANTABIL,CAPACITE,CAPILLARY,CAPITALSFB,CAPLIPOINT,CARBORUNIV,CARERATING,CARRARO,CARTRADE,CARYSIL,CASTROLIND,CCAVENUE,CCCL,CCHHL,CCL,CEATLTD,CEIGALL,CEINSYS,CELEBRITY,CELLO,CEMPRO,CENTENKA,CENTEXT,CENTRALBK,CENTRUM,CENTUM,CENTURYPLY,CERA,CESC,CEWATER,CGCL,CGVAK,CHALET,CHAMBLFERT,CHEMBOND,CHEMCON,CHEMCRUX,CHEMFAB,CHEMPLASTS,CHENNPETRO,CHEVIOT,CHOICEIN,CHOLAHLDNG,CIEINDIA,CIFL,CINELINE,CINEVISTA,CLEAN,CLEANMAX,CLEDUCATE,CLSEL,CMLL,CMPDI,CMRGREEN,CMSINFO,CNL,COASTCORP,COCKERILL,COFFEEDAY,COHANCE,COMFINTE,COMPEAU,COMPUSOFT,COMSYN,CONCORDBIO,CONFIPET,CONTROLPR,CORALFINAC,CORDELIA,COROMANDEL,CORONA,COSMOFIRST,CPCAP,CPEDU,CPL,CPPLUS,CRAFTSMAN,CRAMC,CRAVATEX,CREATIVEYE,CREDITACC,CREST,CRESTO,CRISIL,CRIZAC,CROWN,CSBBANK,CSLFINANCE,CSM,CUB,CUPID,CYIENT,CYIENTDLM,DALMIASUG,DAMCAPITAL,DANGEE,DATAMATICS,DATAPATTNS,DAVANGERE,DBCORP,DBEIL,DBL,DBOL,DBREALTY,DCAL,DCBBANK,DCI,DCM,DCMFINSERV,DCMNVL,360ONE-FUT,ABCAPITAL-FUT,ABB-FUT,ADANIENSOL-FUT,ADANIENT-FUT,ADANIPORTS-FUT,ADANIGREEN-FUT,ALKEM-FUT,AMBER-FUT,ADANIPOWER-FUT,AMBUJACEM-FUT,APLAPOLLO-FUT,ANGELONE-FUT,ASHOKLEY-FUT,APOLLOHOSP-FUT,ASIANPAINT-FUT,ASTRAL-FUT,AUROPHARMA-FUT,AXISBANK-FUT,AUBANK-FUT,BAJAJ-AUTO-FUT,BAJAJHLDNG-FUT,BANDHANBNK-FUT,BAJFINANCE-FUT,BAJAJFINSV-FUT,BANKBARODA-FUT,BANKINDIA-FUT,BANKNIFTY-FUT,BEL-FUT,BDL-FUT,BHARATFORG-FUT,BHARTIARTL-FUT,BHEL-FUT,BLUESTARCO-FUT,BIOCON-FUT,BSE-FUT,BOSCHLTD-FUT,BPCL-FUT,BRITANNIA-FUT,CAMS-FUT,CANBK-FUT,CDSL-FUT,CGPOWER-FUT,CIPLA-FUT,CHOLAFIN-FUT,COCHINSHIP-FUT,COALINDIA-FUT,COFORGE-FUT,COLPAL-FUT,CUMMINSIND-FUT,CONCOR-FUT,CROMPTON-FUT,DABUR-FUT,DALBHARAT-FUT,DLF-FUT,DIVISLAB-FUT,DELHIVERY-FUT,DIXON-FUT,DMART-FUT,FEDERALBNK-FUT,DRREDDY-FUT,ETERNAL-FUT,EICHERMOT-FUT,GAIL-FUT,FINNIFTY-FUT,GLENMARK-FUT,FORCEMOT-FUT,GODFRYPHLP-FUT,GMRAIRPORT-FUT,FORTIS-FUT,GODREJPROP-FUT,GODREJCP-FUT,HAL-FUT,GVT&D-FUT,GRASIM-FUT,HAVELLS-FUT,HCLTECH-FUT,HDFCAMC-FUT,HDFCBANK-FUT,HINDALCO-FUT,HDFCLIFE-FUT,HINDPETRO-FUT,HEROMOTOCO-FUT,HINDUNILVR-FUT,HYUNDAI-FUT,ICICIBANK-FUT,ICICIPRULI-FUT,HINDZINC-FUT,ICICIGI-FUT,IDEA-FUT,IDFCFIRSTB-FUT,IEX-FUT,INDHOTEL-FUT,INDIANB-FUT,INDIGO-FUT,INDUSTOWER-FUT,INFY-FUT,IOC-FUT,INDUSINDBK-FUT,IRFC-FUT,INOXWIND-FUT,ITC-FUT,IREDA-FUT,JIOFIN-FUT,JINDALSTEL-FUT,JSWSTEEL-FUT,JSWENERGY-FUT,JUBLFOOD-FUT,KAYNES-FUT,KEI-FUT,KALYANKJIL-FUT,KFINTECH-FUT,KOTAKBANK-FUT,KPITTECH-FUT,LODHA-FUT,LAURUSLABS-FUT,LICHSGFIN-FUT,LT-FUT,LICI-FUT,LTF-FUT,LTM-FUT,LUPIN-FUT,M&M-FUT,MARICO-FUT,MANAPPURAM-FUT,MANKIND-FUT,MARUTI-FUT,MAZDOCK-FUT,MAXHEALTH-FUT,MCX-FUT,MOTHERSON-FUT,MOTILALOFS-FUT,MPHASIS-FUT,MFSL-FUT,MIDCPNIFTY-FUT,NATIONALUM-FUT,MUTHOOTFIN-FUT,NAM-INDIA-FUT,NBCC-FUT,NAUKRI-FUT,NHPC-FUT,NESTLEIND-FUT,NIFTYFPI-FUT,NIFTY-FUT,NIFTYNXT50-FUT,NMDC-FUT,NTPC-FUT,NYKAA-FUT,OFSS-FUT,OBEROIRLTY-FUT,OIL-FUT,ONGC-FUT,PATANJALI-FUT,PAGEIND-FUT,PAYTM-FUT,PERSISTENT-FUT,PETRONET-FUT,PFC-FUT,PGEL-FUT,PIDILITIND-FUT,PHOENIXLTD-FUT,PNB-FUT,PNBHOUSING-FUT,POLICYBZR-FUT,PIIND-FUT,POLYCAB-FUT,POWERGRID-FUT,POWERINDIA-FUT,PRESTIGE-FUT,PREMIERENE-FUT,RECLTD-FUT,RADICO-FUT,RBLBANK-FUT,RVNL-FUT,SAIL-FUT,RELIANCE-FUT,SBILIFE-FUT,SHREECEM-FUT,SBICARD-FUT,SBIN-FUT,SIEMENS-FUT,SHRIRAMFIN-FUT,SOLARINDS-FUT,SRF-FUT,SONACOMS-FUT,SUNPHARMA-FUT,SUZLON-FUT,SUPREMEIND-FUT,SWIGGY-FUT,TATACONSUM-FUT,TATAELXSI-FUT,TATAPOWER-FUT,TATASTEEL-FUT,TCS-FUT,TECHM-FUT,TITAN-FUT,TIINDIA-FUT,TORNTPHARM-FUT,TMPV-FUT,TRENT-FUT,ULTRACEMCO-FUT,UNITDSPR-FUT,UNIONBANK-FUT,TVSMOTOR-FUT,UNOMINDA-FUT,UPL-FUT,VBL-FUT,VMM-FUT,VEDL-FUT,WAAREEENER-FUT,VOLTAS-FUT,YESBANK-FUT,ZYDUSLIFE-FUT,WIPRO-FUT
-[HSM_SUB_BATCH] batch=1 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|13 lastToken=sf|nse_cm|1270 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=2 symbols=50 bytes=767
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|324 lastToken=sf|nse_fo|68489 packetBytes=778
-[LIVE_BACKFILL_CONCURRENCY] liveWorker=connected_idle backfillWorker=running
-[BackfillQueue] Saved 1500 bars for ACE (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ACE completed successfully!
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=3 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68490 lastToken=sf|nse_fo|68770 packetBytes=813
-[HSM_SUB_BATCH] batch=4 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68780 lastToken=sf|nse_fo|68767 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=5 symbols=50 bytes=783
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68741 lastToken=sf|nse_cm|27061 packetBytes=794
-[HSM_SUB_ACK] received status=ACK
-[GapDetector] ACE: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ACE: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ACE: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ACE: 2026-09-14 → 2026-09-14
-[HSM_SUB_BATCH] batch=6 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5578 lastToken=sf|nse_cm|9558 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=7 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|24715 lastToken=sf|nse_cm|10755 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=8 symbols=50 bytes=790
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5435 lastToken=sf|nse_cm|6066 packetBytes=801
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2025-09-28 to 2025-10-28...
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=9 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|757645 lastToken=sf|nse_cm|335 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=10 symbols=50 bytes=780
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|338 lastToken=sf|nse_cm|7848 packetBytes=791
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=11 symbols=50 bytes=791
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|762588 lastToken=sf|nse_cm|583 packetBytes=802
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=12 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|759477 lastToken=sf|nse_cm|760183 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=13 symbols=50 bytes=796
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|20223 lastToken=sf|nse_cm|21794 packetBytes=807
-{"ts":"2026-09-28T19:54:53.356Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=14 symbols=11 bytes=175
-[HSM_SUB_SEND] count=11 firstToken=sf|nse_cm|17881 lastToken=sf|nse_cm|11039 packetBytes=186
-[HSM_SUB_ACK] received status=ACK
-[BackfillQueue] Saved 7456 bars for ACEINTEG (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 7775 bars for ACEINTEG (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7234 bars for ACEINTEG (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 6877 bars for ACEINTEG (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8330 bars for ACEINTEG (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7280 bars for ACEINTEG (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6639 bars for ACEINTEG (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2026-04-26 to 2026-05-26...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7627 bars for ACEINTEG (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7461 bars for ACEINTEG (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7081 bars for ACEINTEG (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 7407 bars for ACEINTEG (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 7588 bars for ACEINTEG (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ACEINTEG (NSE:ACEINTEG-EQ) [781 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1499 bars for ACEINTEG (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ACEINTEG completed successfully!
-[GapDetector] ACEINTEG: 3 gap(s): 2025-09-30T03:45→2025-12-26T03:49, 2025-12-29T03:45→2026-03-27T04:24, 2026-03-30T03:45→2026-04-10T03:45
-[BackfillQueue] Enqueued gap-fill for ACEINTEG: 2025-09-30 → 2025-12-26
-[BackfillQueue] Enqueued gap-fill for ACEINTEG: 2025-12-29 → 2026-03-27
-[BackfillQueue] Enqueued gap-fill for ACEINTEG: 2026-03-30 → 2026-04-10
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 2549 bars for ACGL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 7940 bars for ACGL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ACGL (NSE:ACGL-EQ) [783 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1427 bars for ACGL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ACGL completed successfully!
-[GapDetector] ACGL: 1 gap(s): 2026-08-19T03:45→2026-09-25T04:54
-[BackfillQueue] Enqueued gap-fill for ACGL: 2026-08-19 → 2026-09-25
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ACI (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ACI (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ACI (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ACI (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ACI (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ACI (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ACI (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ACI (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ACI (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ACI (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ACI (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ACI (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ACI (NSE:ACI-EQ) [783 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ACI (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ACI completed successfully!
-[GapDetector] ACI: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ACI: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ACI: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ACI: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Skipped 1 invalid bars for ACL
-[BackfillQueue] Saved 7234 bars for ACL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8153 bars for ACL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7456 bars for ACL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7466 bars for ACL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8974 bars for ACL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2026-02-25 to 2026-03-27...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7479 bars for ACL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6741 bars for ACL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8169 bars for ACL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7805 bars for ACL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7452 bars for ACL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8209 bars for ACL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8217 bars for ACL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ACL (NSE:ACL-EQ) [785 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1492 bars for ACL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ACL completed successfully!
-[GapDetector] ACL: 4 gap(s): 2025-09-30T03:45→2025-12-29T03:45, 2025-12-30T03:45→2026-03-30T03:45, 2026-03-31T03:45→2026-06-26T09:59, 2026-06-30T03:45→2026-07-10T03:47
-[BackfillQueue] Enqueued gap-fill for ACL: 2025-09-30 → 2025-12-29
-[BackfillQueue] Enqueued gap-fill for ACL: 2025-12-30 → 2026-03-30
-[BackfillQueue] Enqueued gap-fill for ACL: 2026-03-31 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ACL: 2026-06-30 → 2026-07-10
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ACMESOLAR (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ACMESOLAR (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ACMESOLAR (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ACMESOLAR (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ACMESOLAR (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ACMESOLAR (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2026-03-27 to 2026-04-26...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 6750 bars for ACMESOLAR (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ACMESOLAR (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ACMESOLAR (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ACMESOLAR (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ACMESOLAR (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ACMESOLAR (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ACMESOLAR (NSE:ACMESOLAR-EQ) [788 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ACMESOLAR (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ACMESOLAR completed successfully!
-[GapDetector] ACMESOLAR: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ACMESOLAR: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ACMESOLAR: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ACMESOLAR: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ACUTAAS (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2025-10-28 to 2025-11-27...
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753288|430|430|430|430|86
+[INFO] [FeedSimulator] Feed simulator started: 1 instruments
+[Live Tick] 2026-09-30 07:28:08 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753290|429.95|429.95|429.95|429.95|18
+[Live Tick] 2026-09-30 07:28:10 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:11 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753292|429.95|429.95|429.95|429.95|18
+[Live Tick] 2026-09-30 07:28:12 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:14 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753295|429.95|429.95|429.95|429.95|18
+[Live Tick] 2026-09-30 07:28:15 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:16 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753297|429.95|429.95|429.95|429.95|18
+[Live Tick] 2026-09-30 07:28:17 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:19 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753300|429.95|429.95|429.95|429.95|18
+[Live Tick] 2026-09-30 07:28:20 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:21 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753302|429.95|429.95|429.95|429.95|18
+[Live Tick] 2026-09-30 07:28:22 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+{"ts":"2026-09-30T07:28:24.014Z","method":"GET","path":"/api/settings","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:28:24.017Z","method":"GET","path":"/api/brokers/fyers-edf11f90/master/status","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:28:24.023Z","method":"GET","path":"/api/settings","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:28:24.037Z","method":"GET","path":"/api/brokers","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:28:24.046Z","method":"GET","path":"/api/status/feed","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:28:24.056Z","method":"GET","path":"/api/logs","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:28:24.071Z","method":"GET","path":"/api/backfill/status","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:28:24.080Z","event":"ws_connected","clients":1}
+[Live Tick] 2026-09-30 07:28:24 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753305|430.3|430.3|430.3|430.3|1
+[Live Tick] 2026-09-30 07:28:25 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:26 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753308|430.3|430.3|430.3|430.3|1
+[Live Tick] 2026-09-30 07:28:28 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:29 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753310|430.3|430.3|430.3|430.3|1
+[Live Tick] 2026-09-30 07:28:30 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:31 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753313|430.3|430.3|430.3|430.3|1
+[Live Tick] 2026-09-30 07:28:33 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753315|430.3|430.3|430.3|430.3|1
+[Live Tick] 2026-09-30 07:28:35 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753318|430.3|430.3|430.3|430.3|1
+[Live Tick] 2026-09-30 07:28:38 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753321|430.3|430.3|430.3|430.3|1
+[Live Tick] 2026-09-30 07:28:41 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:42 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753323|430.3|430.3|430.3|430.3|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:44 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753325|430.3|430.3|430.3|430.3|1
+[Live Tick] 2026-09-30 07:28:45 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:47 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753328|430.3|430.3|430.3|430.3|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:49 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753331|429.95|429.95|429.95|429.95|1
+[Live Tick] 2026-09-30 07:28:51 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753333|429.95|429.95|429.95|429.95|1
+[Live Tick] 2026-09-30 07:28:53 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:54 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753336|429.95|429.95|429.95|429.95|1
+[Live Tick] 2026-09-30 07:28:56 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:57 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753338|429.95|429.95|429.95|429.95|1
+[Live Tick] 2026-09-30 07:28:58 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:28:59 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753341|429.95|429.95|429.95|429.95|1
+[Live Tick] 2026-09-30 07:29:01 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:02 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753343|429.95|429.95|429.95|429.95|1
+[Live Tick] 2026-09-30 07:29:03 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:05 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753346|429.95|429.95|429.95|429.95|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[Live Tick] 2026-09-30 07:29:07 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753348|429.95|429.95|429.95|429.95|1
+[Live Tick] 2026-09-30 07:29:08 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:10 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753351|429.95|429.95|429.95|429.95|1
+[Live Tick] 2026-09-30 07:29:11 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753353|429.85|429.85|429.85|429.85|3
+[Live Tick] 2026-09-30 07:29:13 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:15 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753356|429.85|429.85|429.85|429.85|3
+[Live Tick] 2026-09-30 07:29:16 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:17 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753359|429.85|429.85|429.85|429.85|3
+[Live Tick] 2026-09-30 07:29:19 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753361|429.85|429.85|429.85|429.85|3
+[Live Tick] 2026-09-30 07:29:21 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:22 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753365|429.85|429.85|429.85|429.85|3
+[Live Tick] 2026-09-30 07:29:25 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:26 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753368|429.85|429.85|429.85|429.85|3
+[Live Tick] 2026-09-30 07:29:28 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753370|429.85|429.85|429.85|429.85|3
+[Live Tick] 2026-09-30 07:29:30 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:31 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753373|430.3|430.3|430.3|430.3|79
+[Live Tick] 2026-09-30 07:29:33 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753375|430.3|430.3|430.3|430.3|79
+[Live Tick] 2026-09-30 07:29:35 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:36 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753378|430.3|430.3|430.3|430.3|79
+[Live Tick] 2026-09-30 07:29:38 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753380|430.3|430.3|430.3|430.3|79
+[Live Tick] 2026-09-30 07:29:40 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:42 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753383|430.3|430.3|430.3|430.3|79
+[Live Tick] 2026-09-30 07:29:43 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:44 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753385|430.3|430.3|430.3|430.3|79
+[Live Tick] 2026-09-30 07:29:45 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:47 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 78
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753388|430.3|430.3|430.3|430.3|78
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:49 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 78
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753390|430.3|430.3|430.3|430.3|78
+[Live Tick] 2026-09-30 07:29:50 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 78
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753393|430.3|430.3|430.3|430.3|78
+[Live Tick] 2026-09-30 07:29:53 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 78
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:54 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 78
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753395|430.3|430.3|430.3|430.3|78
+[Live Tick] 2026-09-30 07:29:55 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 78
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:29:57 | BSE:COALINDIA-A | ₹ 430.30 | Vol: 78
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753400|429.8|429.8|429.8|429.8|30
+[Live Tick] 2026-09-30 07:30:00 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 30
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:01 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 30
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753402|429.8|429.8|429.8|429.8|30
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753404|429.8|429.8|429.8|429.8|30
+[Live Tick] 2026-09-30 07:30:04 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 30
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:06 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 47
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753407|429.85|429.85|429.85|429.85|47
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:08 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 47
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753409|429.85|429.85|429.85|429.85|47
+[Live Tick] 2026-09-30 07:30:09 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 47
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:11 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 47
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753412|429.85|429.85|429.85|429.85|47
+[Live Tick] 2026-09-30 07:30:12 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 47
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:13 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 47
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753415|429.85|429.85|429.85|429.85|47
+[Live Tick] 2026-09-30 07:30:15 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 47
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:16 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 47
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753417|429.85|429.85|429.85|429.85|47
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753420|429.85|429.85|429.85|429.85|10
+[Live Tick] 2026-09-30 07:30:20 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753423|429.85|429.85|429.85|429.85|10
+[Live Tick] 2026-09-30 07:30:23 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:25 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753427|429.9|429.9|429.9|429.9|11
+[Live Tick] 2026-09-30 07:30:27 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753430|429.9|429.9|429.9|429.9|32
+[Live Tick] 2026-09-30 07:30:30 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:31 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753432|429.9|429.9|429.9|429.9|32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:33 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:34 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753435|429.9|429.9|429.9|429.9|8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:36 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753438|430.1|430.1|430.1|430.1|1
+[Live Tick] 2026-09-30 07:30:38 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753440|430.1|430.1|430.1|430.1|1
+[Live Tick] 2026-09-30 07:30:40 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:41 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753443|430.1|430.1|430.1|430.1|1
+[Live Tick] 2026-09-30 07:30:43 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:44 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753445|429.8|429.8|429.8|429.8|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:46 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753448|429.8|429.8|429.8|429.8|1
+[Live Tick] 2026-09-30 07:30:48 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:49 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753450|429.85|429.85|429.85|429.85|13
+[Live Tick] 2026-09-30 07:30:50 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:52 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753453|429.85|429.85|429.85|429.85|13
+[Live Tick] 2026-09-30 07:30:53 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753455|429.85|429.85|429.85|429.85|13
+[Live Tick] 2026-09-30 07:30:55 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753458|429.85|429.85|429.85|429.85|13
+[Live Tick] 2026-09-30 07:30:58 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:30:59 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753460|429.8|429.8|429.8|429.8|30
+[Live Tick] 2026-09-30 07:31:00 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 30
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:02 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 26
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753463|430.1|430.1|430.1|430.1|26
+[Live Tick] 2026-09-30 07:31:03 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 26
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:04 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753467|429.8|429.8|429.8|429.8|21
+[Live Tick] 2026-09-30 07:31:07 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:08 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753470|429.8|429.8|429.8|429.8|21
+[Live Tick] 2026-09-30 07:31:10 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753472|429.8|429.8|429.8|429.8|21
+[Live Tick] 2026-09-30 07:31:12 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:13 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753474|429.8|429.8|429.8|429.8|21
+[Live Tick] 2026-09-30 07:31:14 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:16 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753477|429.8|429.8|429.8|429.8|21
+[Live Tick] 2026-09-30 07:31:17 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:18 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753480|429.8|429.8|429.8|429.8|21
+[Live Tick] 2026-09-30 07:31:20 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753482|429.8|429.8|429.8|429.8|21
+[Live Tick] 2026-09-30 07:31:22 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:23 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753484|429.8|429.8|429.75|429.75|34
+[Live Tick] 2026-09-30 07:31:24 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:26 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753487|429.75|429.75|429.75|429.75|13
+[Live Tick] 2026-09-30 07:31:27 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753490|429.75|429.75|429.75|429.75|13
+[Live Tick] 2026-09-30 07:31:30 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:31 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 246
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753492|430.1|430.1|430.1|430.1|246
+[Live Tick] 2026-09-30 07:31:32 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 246
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:33 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 246
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753495|430.1|430.1|430.1|430.1|246
+[Live Tick] 2026-09-30 07:31:35 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 246
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:36 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 246
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753497|430.1|430.1|430.1|430.1|246
+[Live Tick] 2026-09-30 07:31:37 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 246
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:39 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 246
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753500|430.1|430.1|430.1|430.1|246
+[Live Tick] 2026-09-30 07:31:40 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 246
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:41 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 246
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753502|430.1|430.1|430.1|430.1|246
+[Live Tick] 2026-09-30 07:31:42 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 246
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:44 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753505|429.75|429.75|429.75|429.75|1
+[Live Tick] 2026-09-30 07:31:45 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:46 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753509|429.75|429.75|429.75|429.75|1
+[Live Tick] 2026-09-30 07:31:49 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:50 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753512|429.75|429.75|429.75|429.75|1
+[Live Tick] 2026-09-30 07:31:52 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753514|429.75|429.75|429.75|429.75|1
+[Live Tick] 2026-09-30 07:31:54 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:55 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753516|429.75|429.75|429.75|429.75|1
+[Live Tick] 2026-09-30 07:31:56 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:31:58 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753519|429.75|429.75|429.75|429.75|1
+[Live Tick] 2026-09-30 07:31:59 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:00 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753522|429.75|429.75|429.75|429.75|6
+[Live Tick] 2026-09-30 07:32:02 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753524|429.75|429.75|429.75|429.75|6
+[Live Tick] 2026-09-30 07:32:04 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:06 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753527|429.75|429.75|429.75|429.75|6
+[Live Tick] 2026-09-30 07:32:07 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753529|429.75|429.75|429.75|429.75|8
+[Live Tick] 2026-09-30 07:32:09 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:10 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753532|429.75|429.75|429.75|429.75|11
+[Live Tick] 2026-09-30 07:32:12 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:13 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753534|429.75|429.75|429.75|429.75|11
+[Live Tick] 2026-09-30 07:32:14 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:16 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 123
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753537|430.2|430.2|430.2|430.2|123
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:18 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 123
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753539|430.2|430.2|430.2|430.2|123
+[Live Tick] 2026-09-30 07:32:19 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 123
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753542|430.2|430.2|430.2|430.2|123
+[Live Tick] 2026-09-30 07:32:22 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 123
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:23 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 123
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753544|430.2|430.2|430.2|430.2|123
+[Live Tick] 2026-09-30 07:32:24 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 123
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:26 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 123
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753547|430.2|430.2|430.2|430.2|123
+[Live Tick] 2026-09-30 07:32:27 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 123
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:28 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 123
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753550|429.8|429.8|429.8|429.8|32
+[Live Tick] 2026-09-30 07:32:30 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753552|429.8|429.8|429.8|429.8|32
+[Live Tick] 2026-09-30 07:32:32 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:33 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753556|429.8|429.8|429.8|429.8|32
+[Live Tick] 2026-09-30 07:32:36 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[Live Tick] 2026-09-30 07:32:37 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753558|429.8|429.8|429.8|429.8|32
+[Live Tick] 2026-09-30 07:32:38 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:40 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753561|429.8|429.8|429.8|429.8|32
+[Live Tick] 2026-09-30 07:32:41 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:42 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753563|429.8|429.8|429.8|429.8|32
+[Live Tick] 2026-09-30 07:32:43 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:45 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753566|429.8|429.8|429.8|429.8|32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:47 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753569|429.9|429.9|429.9|429.9|11
+[Live Tick] 2026-09-30 07:32:49 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:50 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753571|429.9|429.9|429.9|429.9|11
+[Live Tick] 2026-09-30 07:32:51 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:53 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753574|429.9|429.9|429.9|429.9|11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:55 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753576|429.9|429.9|429.9|429.9|11
+[Live Tick] 2026-09-30 07:32:56 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:32:58 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753579|429.9|429.9|429.9|429.9|11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:00 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753581|430.2|430.2|430.2|430.2|200
+[Live Tick] 2026-09-30 07:33:01 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:03 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753584|430.2|430.2|430.2|430.2|200
+[Live Tick] 2026-09-30 07:33:04 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:05 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753587|430.2|430.2|430.2|430.2|200
+[Live Tick] 2026-09-30 07:33:07 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753589|430.2|430.2|430.2|430.2|200
+[Live Tick] 2026-09-30 07:33:09 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:10 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753592|430.2|430.2|430.2|430.2|200
+[Live Tick] 2026-09-30 07:33:12 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:13 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753594|430.2|430.2|430.2|430.2|200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:15 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753597|430.2|430.2|430.2|430.2|200
+[Live Tick] 2026-09-30 07:33:17 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:18 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753599|429.85|429.85|429.85|429.85|14
+[Live Tick] 2026-09-30 07:33:19 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:21 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753602|429.85|429.85|429.85|429.85|14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:23 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753604|429.85|429.85|429.85|429.85|14
+[Live Tick] 2026-09-30 07:33:24 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753607|429.85|429.85|429.85|429.85|14
+[Live Tick] 2026-09-30 07:33:27 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:28 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753609|429.85|429.85|429.85|429.85|14
+[Live Tick] 2026-09-30 07:33:29 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:31 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753612|429.85|429.85|429.85|429.85|14
+[Live Tick] 2026-09-30 07:33:32 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:33 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753614|429.85|429.85|429.85|429.85|14
+[Live Tick] 2026-09-30 07:33:34 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:36 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753617|429.85|429.85|429.85|429.85|14
+[Live Tick] 2026-09-30 07:33:37 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:38 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753621|429.85|429.85|429.85|429.85|14
+[Live Tick] 2026-09-30 07:33:41 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:42 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753623|429.85|429.85|429.85|429.85|14
+[Live Tick] 2026-09-30 07:33:43 | BSE:COALINDIA-A | ₹ 429.85 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:45 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753626|429.65|429.65|429.65|429.65|410
+[Live Tick] 2026-09-30 07:33:46 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:47 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753628|429.65|429.65|429.65|429.65|410
+[Live Tick] 2026-09-30 07:33:48 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:50 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753631|429.65|429.65|429.65|429.65|410
+[Live Tick] 2026-09-30 07:33:51 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:52 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753634|429.65|429.65|429.65|429.65|410
+[Live Tick] 2026-09-30 07:33:54 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753636|429.65|429.65|429.65|429.65|410
+[Live Tick] 2026-09-30 07:33:56 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:33:57 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753639|429.65|429.65|429.65|429.65|410
+[Live Tick] 2026-09-30 07:33:59 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:00 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 410
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753641|430|430|430|430|269
+[Live Tick] 2026-09-30 07:34:01 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 269
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:02 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 269
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753644|430|430|430|430|269
+[Live Tick] 2026-09-30 07:34:04 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 269
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:05 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753646|429.8|429.8|429.8|429.8|12
+[Live Tick] 2026-09-30 07:34:06 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753649|429.8|429.8|429.8|429.8|12
+[Live Tick] 2026-09-30 07:34:09 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:10 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[API] AmiBroker requested unknown symbol CIPLA, ignoring. Please add it via the UI.
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753651|429.8|429.8|429.8|429.8|12
+[Live Tick] 2026-09-30 07:34:11 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:13 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753654|429.8|429.8|429.8|429.8|12
+[Live Tick] 2026-09-30 07:34:14 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:15 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753656|429.8|429.8|429.8|429.8|12
+[Live Tick] 2026-09-30 07:34:16 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:18 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753660|429.8|429.8|429.8|429.8|12
+[Live Tick] 2026-09-30 07:34:20 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:22 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753663|429.8|429.8|429.8|429.8|12
+[Live Tick] 2026-09-30 07:34:23 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753665|429.8|429.8|429.8|429.8|12
+[Live Tick] 2026-09-30 07:34:25 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[API] AmiBroker requested unknown symbol GAIL-FUT, ignoring. Please add it via the UI.
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:27 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753668|429.8|429.8|429.8|429.8|12
+[Live Tick] 2026-09-30 07:34:28 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[API] AmiBroker requested unknown symbol M, ignoring. Please add it via the UI.
+[Live Tick] 2026-09-30 07:34:29 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[API] AmiBroker requested unknown symbol MARUTI, ignoring. Please add it via the UI.
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753670|429.8|429.8|429.8|429.8|12
+[Live Tick] 2026-09-30 07:34:30 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:32 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
 [API] AmiBroker requested unknown symbol TCS, ignoring. Please add it via the UI.
-[BackfillQueue] Saved 8250 bars for ACUTAAS (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ACUTAAS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ACUTAAS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ACUTAAS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2026-02-25 to 2026-03-27...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7500 bars for ACUTAAS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ACUTAAS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ACUTAAS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ACUTAAS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2026-06-25 to 2026-07-25...
-[FYERS_HSM_CONNECT] Disconnected. Scheduling reconnect...
-[BackfillQueue] Saved 7500 bars for ACUTAAS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2026-07-25 to 2026-08-24...
-[FYERS_HSM_STATUS] starting
-[FYERS_HSM_CONNECT] Connecting to wss://socket.fyers.in/hsm/v1-5/prod...
-[FYERS_HSM_CONNECT] Connected.
-[FYERS_HSM_STATUS] connected
-[FYERS_HSM_AUTH] Authenticating binary stream...
-[FYERS_HSM_AUTH] Auth successful.
-[FYERS_HSM_STATUS] authenticated
-[FYERS_HSM_STATUS] Flushing 875 pending subscriptions...
-[FYERS_HSM_SUBSCRIBE] Subscribing to 661 topics...
-[FYERS_HSM_STATUS] subscribed symbols=ABB,CANBK,LUPIN,MIDCPNIFTY,NHPC,ONGC,PIIND,RADICO,ABCAPITAL,ASHOKLEY,BAJAJHLDNG,BHARTIARTL,CUMMINSIND,ETERNAL,GODREJPROP,HINDALCO,IEX,IRFC,KFINTECH,PRESTIGE,SHREECEM,TATACONSUM,TRENT,ADANIGREEN,APOLLOHOSP,BAJAJFINSV,BHARATFORG,CROMPTON,EICHERMOT,GODREJCP,HEROMOTOCO,IDFCFIRSTB,IREDA,KEI,LTF,MCX,NBCC,OFSS,PHOENIXLTD,SWIGGY,TORNTPHARM,VMM,ALKEM,ADANIPOWER,360ONE,ADANIENT,ADANIPORTS,AMBER,ADANIENSOL,AMBUJACEM,ANGELONE,APLAPOLLO,ASTRAL,ASIANPAINT,AUBANK,AUROPHARMA,AXISBANK,BAJAJ-AUTO,BANDHANBNK,BAJFINANCE,BANKINDIA,BANKBARODA,BANKNIFTY,BDL,BEL,BHEL,BIOCON,BLUESTARCO,BOSCHLTD,BPCL,BRITANNIA,BSE,CAMS,CGPOWER,CHOLAFIN,CDSL,CIPLA,COALINDIA,COCHINSHIP,COFORGE,COLPAL,CONCOR,DABUR,DALBHARAT,DELHIVERY,DIVISLAB,DIXON,DLF,DMART,DRREDDY,FEDERALBNK,FINNIFTY,FORCEMOT,FORTIS,GAIL,GLENMARK,GMRAIRPORT,GODFRYPHLP,GRASIM,GVT&D,HAL,HAVELLS,HCLTECH,HDFCAMC,HDFCBANK,HDFCLIFE,HINDPETRO,HINDUNILVR,HINDZINC,HYUNDAI,ICICIBANK,ICICIGI,ICICIPRULI,IDEA,INDHOTEL,INDIANB,INDIGO,INDUSINDBK,INDUSTOWER,INFY,INOXWIND,IOC,ITC,JINDALSTEL,JIOFIN,JSWENERGY,JSWSTEEL,JUBLFOOD,KALYANKJIL,KAYNES,KOTAKBANK,KPITTECH,LAURUSLABS,LICHSGFIN,LICI,LT,LODHA,NAUKRI,POLYCAB,SUNPHARMA,TIINDIA,MARICO,MARUTI,MPHASIS,NIFTYNXT50,PAYTM,POLICYBZR,MANKIND,PETRONET,POWERGRID,SBICARD,SUPREMEIND,TITAN,VBL,M&M,NAM-INDIA,NTPC,LTM,RVNL,SRF,TECHM,UNOMINDA,MANAPPURAM,MUTHOOTFIN,NMDC,PERSISTENT,RELIANCE,SONACOMS,TCS,UNITDSPR,ZYDUSLIFE,MAXHEALTH,NYKAA,PFC,POWERINDIA,VEDL,MAZDOCK,OBEROIRLTY,PGEL,PREMIERENE,SBIN,MFSL,OIL,PIDILITIND,RBLBANK,SIEMENS,TATAPOWER,ULTRACEMCO,WIPRO,MOTHERSON,PAGEIND,PNB,SHRIRAMFIN,TATAELXSI,TVSMOTOR,WAAREEENER,MOTILALOFS,NIFTYFPI,PATANJALI,PNBHOUSING,NATIONALUM,SBILIFE,SUZLON,TMPV,NESTLEIND,VOLTAS,NIFTY,SOLARINDS,TATASTEEL,UNIONBANK,YESBANK,RECLTD,SAIL,UPL,20MICRONS,21STCENMGM,3BBLACKBIO,3MINDIA,3PLAND,5PAISA,63MOONS,A2ZINFRA,AAATECH,AADHARHFC,AAKASH,AAREYDRUGS,AARON,AARTIDRUGS,AARTIIND,AARTIPHARM,AARVI,AASTHA,AAVAS,ABANSENT,ABBOTINDIA,ABCOTS,ABDL,ABFRL,ABLBL,ABMKNO,ABREL,ABSLAMC,ACC,ACCELYA,ACE,ACEINTEG,ACGL,ACI,ACL,ACMESOLAR,ACUTAAS,ADDIND,ADFFOODS,ADL,ADOR,ADROITINFO,ADSL,ADVAIT,ADVANCE,ADVANIHOTR,ADVENTHTL,ADVENZYMES,ADVIKCA,AEGISLOG,AEGISVOPAK,AEPL,AEQUS,AEROENTER,AEROFLEX,AERONEU,AEROPLANE,AETHER,AFCONS,AFFLE,AFFORDABLE,AFIL,AFSL,AGARIND,AGARWALEYE,AGI,AGIIL,AGL,AGRITECH,AGROPHOS,AHCL,AHLADA,AHLEAST,AHLUCONT,AIAENG,AIIL,AIRAN,AIROLAM,AJANTPHARM,AJAXENGG,AJMERA,AJOONI,AKASH,AKCAPIT,AKG,AKSHAR,AKUMS,ALANKIT,ALBERTDAVD,ALEMBICLTD,ALFREDHE,ALGOQUANT,ALICON,ALIVUS,ALKYLAMINE,ALLCARGO,ALLDIGI,ALLTIME,ALOKINDS,ALPA,ALPINETEX,ALUFLUOR,AMAGI,AMAL,AMARJOTHI,AMBICAAGAR,AMBIKCO,AMJLAND,AMNPLST,AMRUTANJAN,ANANDRATHI,ANANTRAJ,ANDHRAPAP,ANDHRSUGAR,ANDREWYU,ANIKINDS,ANNAPURNA,ANNU,ANSALBU,ANTELOPUS,ANTGRAPHIC,ANTHEM,ANUHPHR,ANUP,ANURAS,APARINDS,APCL,APCOTEXIND,APEX,APLLTD,APOLLO,APOLLOPIPE,APOLLOTYRE,APOLSINHOT,APOORVA,APTECHT,APTUS,AQYLON,ARCHIDPLY,ARCHIES,ARCIL,ARCL,ARDEE,ARE&M,ARENTERP,ARFIN,ARIHANT,ARIHANTCAP,ARIHANTSUP,ARIS,ARKADE,ARMANFIN,AROGRANITE,ARROWGREEN,ARSSBL,ARTEMISMED,ARTNIRMAN,ARVEE,ARVIND,ARVINDFASN,ARVSMART,ARYAMAN,ASAHIINDIA,ASAL,ASALCBR,ASHAPURMIN,ASHIANA,ASHIMASYN,ASHOKA,ASHOKAMET,ASIANENE,ASIANHOTNR,ASIANTILES,ASIANTNE,ASKAUTOLTD,ASMS,ASPINWALL,ASSAMENT,ASTAR,ASTEC,ASTERDM,ASTRAMICRO,ASTRAZEN,ATALREAL,ATAM,ATGL,ATHERENERG,ATL,ATLANTAA,ATLANTAELE,ATLASCYCLE,ATUL,ATULAUTO,AUGMONT,AURIONPRO,AURUM,AURUS,AUSOMENT,AUSTENG,AUTOAXLES,AUTOIND,AVADHSUGAR,AVALON,AVANCE,AVANTEL,AVANTIFEED,AVL,AVONMORE,AVROIND,AVTNPL,AWFIS,AWHCL,AWL,AXISCADES,AXITA,AXTEL,AYE,AYMSYNTEX,AZAD,AZADIND,BAGFILMS,BAIDFIN,BAJAJCON,BAJAJELEC,BAJAJHCARE,BAJAJHFL,BAJAJHIND,BAJAJINDEF,BAJAJST,BAJEL,BALAJEE,BALAJITELE,BALAMINES,BALAXI,BALKRISHNA,BALKRISIND,BALMLAWRIE,BALPHARMA,BALRAMCHIN,BALUFORGE,BANARBEADS,BANARISUG,BANCOINDIA,BANG,BANKA,BANSALWIRE,BANSWRAS,BASF,BATAINDIA,BATLIBOI,BAYERCROP,BBL,BBOX,BBTC,BBTCL,BCG,BCLIND,BCONCEPTS,BCPL,BEARDSELL,BECTORFOOD,BEDMUTHA,BEEKAY,BELLACASA,BELRISE,BEML,BENARAS,BENGALASM,BEPL,BERGEPAINT,BESTAGRO,BETA,BFINVEST,BFUTILITIE,BHAGCHEM,BHAGERIA,BHAGYANGR,BHANDARI,BHARATCOAL,BHARATRAS,BHARATSE,BHARATWIRE,BHARTIHEXA,BIGBLOC,BIKAJI,BIL,BIMETAL,BIOFILCHEM,BIRLACABLE,BIRLACORPN,BIRLAMONEY,BIRLANU,BLACKBUCK,BLACKROSE,BLAL,BLBLIMITED,BLEL,BLIL,BLKASHYAP,BLS,BLSE,BLUECLOUDS,BLUECOAST,BLUEDART,BLUEJET,BLUESTONE,BLUSPRING,BMWVENTLTD,BNAGROCHEM,BOHRAIND,BOMDYEING,BONLON,BORANA,BOROLTD,BORORENEW,BOROSCI,BOSCH-HCIL,BPL,BPLPHARMA,BRAHMINFRA,BRIGADE,BRIGHOTEL,BRIGHTBR,BRNL,BROOKS,BSHSL,BSL,BSOFT,BTML,BUILDPRO,BUTTERFLY,BVCL,BYKE,CAMLINFINE,CAMPUS,CANFINHOME,CANHLIFE,CANTABIL,CAPACITE,CAPILLARY,CAPITALSFB,CAPLIPOINT,CARBORUNIV,CARERATING,CARRARO,CARTRADE,CARYSIL,CASTROLIND,CCAVENUE,CCCL,CCHHL,CCL,CEATLTD,CEIGALL,CEINSYS,CELEBRITY,CELLO,CEMPRO,CENTENKA,CENTEXT,CENTRALBK,CENTRUM,CENTUM,CENTURYPLY,CERA,CESC,CEWATER,CGCL,CGVAK,CHALET,CHAMBLFERT,CHEMBOND,CHEMCON,CHEMCRUX,CHEMFAB,CHEMPLASTS,CHENNPETRO,CHEVIOT,CHOICEIN,CHOLAHLDNG,CIEINDIA,CIFL,CINELINE,CINEVISTA,CLEAN,CLEANMAX,CLEDUCATE,CLSEL,CMLL,CMPDI,CMRGREEN,CMSINFO,CNL,COASTCORP,COCKERILL,COFFEEDAY,COHANCE,COMFINTE,COMPEAU,COMPUSOFT,COMSYN,CONCORDBIO,CONFIPET,CONTROLPR,CORALFINAC,CORDELIA,COROMANDEL,CORONA,COSMOFIRST,CPCAP,CPEDU,CPL,CPPLUS,CRAFTSMAN,CRAMC,CRAVATEX,CREATIVEYE,CREDITACC,CREST,CRESTO,CRISIL,CRIZAC,CROWN,CSBBANK,CSLFINANCE,CSM,CUB,CUPID,CYIENT,CYIENTDLM,DALMIASUG,DAMCAPITAL,DANGEE,DATAMATICS,DATAPATTNS,DAVANGERE,DBCORP,DBEIL,DBL,DBOL,DBREALTY,DCAL,DCBBANK,DCI,DCM,DCMFINSERV,DCMNVL,360ONE-FUT,ABCAPITAL-FUT,ABB-FUT,ADANIENSOL-FUT,ADANIENT-FUT,ADANIPORTS-FUT,ADANIGREEN-FUT,ALKEM-FUT,AMBER-FUT,ADANIPOWER-FUT,AMBUJACEM-FUT,APLAPOLLO-FUT,ANGELONE-FUT,ASHOKLEY-FUT,APOLLOHOSP-FUT,ASIANPAINT-FUT,ASTRAL-FUT,AUROPHARMA-FUT,AXISBANK-FUT,AUBANK-FUT,BAJAJ-AUTO-FUT,BAJAJHLDNG-FUT,BANDHANBNK-FUT,BAJFINANCE-FUT,BAJAJFINSV-FUT,BANKBARODA-FUT,BANKINDIA-FUT,BANKNIFTY-FUT,BEL-FUT,BDL-FUT,BHARATFORG-FUT,BHARTIARTL-FUT,BHEL-FUT,BLUESTARCO-FUT,BIOCON-FUT,BSE-FUT,BOSCHLTD-FUT,BPCL-FUT,BRITANNIA-FUT,CAMS-FUT,CANBK-FUT,CDSL-FUT,CGPOWER-FUT,CIPLA-FUT,CHOLAFIN-FUT,COCHINSHIP-FUT,COALINDIA-FUT,COFORGE-FUT,COLPAL-FUT,CUMMINSIND-FUT,CONCOR-FUT,CROMPTON-FUT,DABUR-FUT,DALBHARAT-FUT,DLF-FUT,DIVISLAB-FUT,DELHIVERY-FUT,DIXON-FUT,DMART-FUT,FEDERALBNK-FUT,DRREDDY-FUT,ETERNAL-FUT,EICHERMOT-FUT,GAIL-FUT,FINNIFTY-FUT,GLENMARK-FUT,FORCEMOT-FUT,GODFRYPHLP-FUT,GMRAIRPORT-FUT,FORTIS-FUT,GODREJPROP-FUT,GODREJCP-FUT,HAL-FUT,GVT&D-FUT,GRASIM-FUT,HAVELLS-FUT,HCLTECH-FUT,HDFCAMC-FUT,HDFCBANK-FUT,HINDALCO-FUT,HDFCLIFE-FUT,HINDPETRO-FUT,HEROMOTOCO-FUT,HINDUNILVR-FUT,HYUNDAI-FUT,ICICIBANK-FUT,ICICIPRULI-FUT,HINDZINC-FUT,ICICIGI-FUT,IDEA-FUT,IDFCFIRSTB-FUT,IEX-FUT,INDHOTEL-FUT,INDIANB-FUT,INDIGO-FUT,INDUSTOWER-FUT,INFY-FUT,IOC-FUT,INDUSINDBK-FUT,IRFC-FUT,INOXWIND-FUT,ITC-FUT,IREDA-FUT,JIOFIN-FUT,JINDALSTEL-FUT,JSWSTEEL-FUT,JSWENERGY-FUT,JUBLFOOD-FUT,KAYNES-FUT,KEI-FUT,KALYANKJIL-FUT,KFINTECH-FUT,KOTAKBANK-FUT,KPITTECH-FUT,LODHA-FUT,LAURUSLABS-FUT,LICHSGFIN-FUT,LT-FUT,LICI-FUT,LTF-FUT,LTM-FUT,LUPIN-FUT,M&M-FUT,MARICO-FUT,MANAPPURAM-FUT,MANKIND-FUT,MARUTI-FUT,MAZDOCK-FUT,MAXHEALTH-FUT,MCX-FUT,MOTHERSON-FUT,MOTILALOFS-FUT,MPHASIS-FUT,MFSL-FUT,MIDCPNIFTY-FUT,NATIONALUM-FUT,MUTHOOTFIN-FUT,NAM-INDIA-FUT,NBCC-FUT,NAUKRI-FUT,NHPC-FUT,NESTLEIND-FUT,NIFTYFPI-FUT,NIFTY-FUT,NIFTYNXT50-FUT,NMDC-FUT,NTPC-FUT,NYKAA-FUT,OFSS-FUT,OBEROIRLTY-FUT,OIL-FUT,ONGC-FUT,PATANJALI-FUT,PAGEIND-FUT,PAYTM-FUT,PERSISTENT-FUT,PETRONET-FUT,PFC-FUT,PGEL-FUT,PIDILITIND-FUT,PHOENIXLTD-FUT,PNB-FUT,PNBHOUSING-FUT,POLICYBZR-FUT,PIIND-FUT,POLYCAB-FUT,POWERGRID-FUT,POWERINDIA-FUT,PRESTIGE-FUT,PREMIERENE-FUT,RECLTD-FUT,RADICO-FUT,RBLBANK-FUT,RVNL-FUT,SAIL-FUT,RELIANCE-FUT,SBILIFE-FUT,SHREECEM-FUT,SBICARD-FUT,SBIN-FUT,SIEMENS-FUT,SHRIRAMFIN-FUT,SOLARINDS-FUT,SRF-FUT,SONACOMS-FUT,SUNPHARMA-FUT,SUZLON-FUT,SUPREMEIND-FUT,SWIGGY-FUT,TATACONSUM-FUT,TATAELXSI-FUT,TATAPOWER-FUT,TATASTEEL-FUT,TCS-FUT,TECHM-FUT,TITAN-FUT,TIINDIA-FUT,TORNTPHARM-FUT,TMPV-FUT,TRENT-FUT,ULTRACEMCO-FUT,UNITDSPR-FUT,UNIONBANK-FUT,TVSMOTOR-FUT,UNOMINDA-FUT,UPL-FUT,VBL-FUT,VMM-FUT,VEDL-FUT,WAAREEENER-FUT,VOLTAS-FUT,YESBANK-FUT,ZYDUSLIFE-FUT,WIPRO-FUT
-[HSM_SUB_BATCH] batch=1 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|13 lastToken=sf|nse_cm|1270 packetBytes=795
-[LIVE_BACKFILL_CONCURRENCY] liveWorker=connected_idle backfillWorker=running
-[HSM_SUB_BATCH] batch=2 symbols=50 bytes=767
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|324 lastToken=sf|nse_fo|68489 packetBytes=778
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=3 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68490 lastToken=sf|nse_fo|68770 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=4 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68780 lastToken=sf|nse_fo|68767 packetBytes=813
-{"ts":"2026-09-28T19:57:04.071Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
-[HSM_SUB_BATCH] batch=5 symbols=50 bytes=783
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68741 lastToken=sf|nse_cm|27061 packetBytes=794
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=6 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5578 lastToken=sf|nse_cm|9558 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=7 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|24715 lastToken=sf|nse_cm|10755 packetBytes=804
-[HSM_SUB_BATCH] batch=8 symbols=50 bytes=790
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5435 lastToken=sf|nse_cm|6066 packetBytes=801
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=9 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|757645 lastToken=sf|nse_cm|335 packetBytes=804
-[HSM_SUB_BATCH] batch=10 symbols=50 bytes=780
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|338 lastToken=sf|nse_cm|7848 packetBytes=791
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=11 symbols=50 bytes=791
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|762588 lastToken=sf|nse_cm|583 packetBytes=802
-[HSM_SUB_BATCH] batch=12 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|759477 lastToken=sf|nse_cm|760183 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=13 symbols=50 bytes=796
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|20223 lastToken=sf|nse_cm|21794 packetBytes=807
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=14 symbols=11 bytes=175
-[HSM_SUB_SEND] count=11 firstToken=sf|nse_cm|17881 lastToken=sf|nse_cm|11039 packetBytes=186
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[BackfillQueue] Saved 8250 bars for ACUTAAS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ACUTAAS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ACUTAAS (NSE:ACUTAAS-EQ) [790 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ACUTAAS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ACUTAAS completed successfully!
-[GapDetector] ACUTAAS: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ACUTAAS: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ACUTAAS: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ACUTAAS: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ADANIENSOL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ADANIENSOL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ADANIENSOL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ADANIENSOL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ADANIENSOL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ADANIENSOL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2026-03-27 to 2026-04-26...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 6750 bars for ADANIENSOL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ADANIENSOL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ADANIENSOL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ADANIENSOL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ADANIENSOL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ADANIENSOL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADANIENSOL (NSE:ADANIENSOL-EQ) [792 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADANIENSOL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADANIENSOL completed successfully!
-[GapDetector] ADANIENSOL: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ADANIENSOL: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ADANIENSOL: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ADANIENSOL: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ADANIENT (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ADANIENT (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ADANIENT (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ADANIENT (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ADANIENT (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ADANIENT (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ADANIENT (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ADANIENT (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ADANIENT (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2026-06-25 to 2026-07-25...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7500 bars for ADANIENT (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ADANIENT (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ADANIENT (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADANIENT (NSE:ADANIENT-EQ) [794 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADANIENT (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADANIENT completed successfully!
-[GapDetector] ADANIENT: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ADANIENT: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ADANIENT: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ADANIENT: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ADANIGREEN (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ADANIGREEN (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ADANIGREEN (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ADANIGREEN (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ADANIGREEN (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ADANIGREEN (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ADANIGREEN (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ADANIGREEN (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2026-05-26 to 2026-06-25...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7875 bars for ADANIGREEN (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ADANIGREEN (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ADANIGREEN (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ADANIGREEN (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADANIGREEN (NSE:ADANIGREEN-EQ) [796 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADANIGREEN (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADANIGREEN completed successfully!
-[GapDetector] ADANIGREEN: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ADANIGREEN: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ADANIGREEN: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ADANIGREEN: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ADANIPORTS (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ADANIPORTS (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ADANIPORTS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ADANIPORTS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ADANIPORTS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ADANIPORTS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ADANIPORTS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ADANIPORTS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ADANIPORTS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2026-06-25 to 2026-07-25...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7500 bars for ADANIPORTS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ADANIPORTS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ADANIPORTS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADANIPORTS (NSE:ADANIPORTS-EQ) [798 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADANIPORTS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADANIPORTS completed successfully!
-[FYERS_HSM_CONNECT] Disconnected. Scheduling reconnect...
-[GapDetector] ADANIPORTS: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ADANIPORTS: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ADANIPORTS: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ADANIPORTS: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ADANIPOWER (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ADANIPOWER (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ADANIPOWER (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2025-12-27 to 2026-01-26...
-[FYERS_HSM_STATUS] starting
-[FYERS_HSM_CONNECT] Connecting to wss://socket.fyers.in/hsm/v1-5/prod...
-[FYERS_HSM_CONNECT] Connected.
-[FYERS_HSM_STATUS] connected
-[FYERS_HSM_AUTH] Authenticating binary stream...
-[FYERS_HSM_AUTH] Auth successful.
-[FYERS_HSM_STATUS] authenticated
-[FYERS_HSM_STATUS] Flushing 875 pending subscriptions...
-[FYERS_HSM_SUBSCRIBE] Subscribing to 661 topics...
-[FYERS_HSM_STATUS] subscribed symbols=ABB,CANBK,LUPIN,MIDCPNIFTY,NHPC,ONGC,PIIND,RADICO,ABCAPITAL,ASHOKLEY,BAJAJHLDNG,BHARTIARTL,CUMMINSIND,ETERNAL,GODREJPROP,HINDALCO,IEX,IRFC,KFINTECH,PRESTIGE,SHREECEM,TATACONSUM,TRENT,ADANIGREEN,APOLLOHOSP,BAJAJFINSV,BHARATFORG,CROMPTON,EICHERMOT,GODREJCP,HEROMOTOCO,IDFCFIRSTB,IREDA,KEI,LTF,MCX,NBCC,OFSS,PHOENIXLTD,SWIGGY,TORNTPHARM,VMM,ALKEM,ADANIPOWER,360ONE,ADANIENT,ADANIPORTS,AMBER,ADANIENSOL,AMBUJACEM,ANGELONE,APLAPOLLO,ASTRAL,ASIANPAINT,AUBANK,AUROPHARMA,AXISBANK,BAJAJ-AUTO,BANDHANBNK,BAJFINANCE,BANKINDIA,BANKBARODA,BANKNIFTY,BDL,BEL,BHEL,BIOCON,BLUESTARCO,BOSCHLTD,BPCL,BRITANNIA,BSE,CAMS,CGPOWER,CHOLAFIN,CDSL,CIPLA,COALINDIA,COCHINSHIP,COFORGE,COLPAL,CONCOR,DABUR,DALBHARAT,DELHIVERY,DIVISLAB,DIXON,DLF,DMART,DRREDDY,FEDERALBNK,FINNIFTY,FORCEMOT,FORTIS,GAIL,GLENMARK,GMRAIRPORT,GODFRYPHLP,GRASIM,GVT&D,HAL,HAVELLS,HCLTECH,HDFCAMC,HDFCBANK,HDFCLIFE,HINDPETRO,HINDUNILVR,HINDZINC,HYUNDAI,ICICIBANK,ICICIGI,ICICIPRULI,IDEA,INDHOTEL,INDIANB,INDIGO,INDUSINDBK,INDUSTOWER,INFY,INOXWIND,IOC,ITC,JINDALSTEL,JIOFIN,JSWENERGY,JSWSTEEL,JUBLFOOD,KALYANKJIL,KAYNES,KOTAKBANK,KPITTECH,LAURUSLABS,LICHSGFIN,LICI,LT,LODHA,NAUKRI,POLYCAB,SUNPHARMA,TIINDIA,MARICO,MARUTI,MPHASIS,NIFTYNXT50,PAYTM,POLICYBZR,MANKIND,PETRONET,POWERGRID,SBICARD,SUPREMEIND,TITAN,VBL,M&M,NAM-INDIA,NTPC,LTM,RVNL,SRF,TECHM,UNOMINDA,MANAPPURAM,MUTHOOTFIN,NMDC,PERSISTENT,RELIANCE,SONACOMS,TCS,UNITDSPR,ZYDUSLIFE,MAXHEALTH,NYKAA,PFC,POWERINDIA,VEDL,MAZDOCK,OBEROIRLTY,PGEL,PREMIERENE,SBIN,MFSL,OIL,PIDILITIND,RBLBANK,SIEMENS,TATAPOWER,ULTRACEMCO,WIPRO,MOTHERSON,PAGEIND,PNB,SHRIRAMFIN,TATAELXSI,TVSMOTOR,WAAREEENER,MOTILALOFS,NIFTYFPI,PATANJALI,PNBHOUSING,NATIONALUM,SBILIFE,SUZLON,TMPV,NESTLEIND,VOLTAS,NIFTY,SOLARINDS,TATASTEEL,UNIONBANK,YESBANK,RECLTD,SAIL,UPL,20MICRONS,21STCENMGM,3BBLACKBIO,3MINDIA,3PLAND,5PAISA,63MOONS,A2ZINFRA,AAATECH,AADHARHFC,AAKASH,AAREYDRUGS,AARON,AARTIDRUGS,AARTIIND,AARTIPHARM,AARVI,AASTHA,AAVAS,ABANSENT,ABBOTINDIA,ABCOTS,ABDL,ABFRL,ABLBL,ABMKNO,ABREL,ABSLAMC,ACC,ACCELYA,ACE,ACEINTEG,ACGL,ACI,ACL,ACMESOLAR,ACUTAAS,ADDIND,ADFFOODS,ADL,ADOR,ADROITINFO,ADSL,ADVAIT,ADVANCE,ADVANIHOTR,ADVENTHTL,ADVENZYMES,ADVIKCA,AEGISLOG,AEGISVOPAK,AEPL,AEQUS,AEROENTER,AEROFLEX,AERONEU,AEROPLANE,AETHER,AFCONS,AFFLE,AFFORDABLE,AFIL,AFSL,AGARIND,AGARWALEYE,AGI,AGIIL,AGL,AGRITECH,AGROPHOS,AHCL,AHLADA,AHLEAST,AHLUCONT,AIAENG,AIIL,AIRAN,AIROLAM,AJANTPHARM,AJAXENGG,AJMERA,AJOONI,AKASH,AKCAPIT,AKG,AKSHAR,AKUMS,ALANKIT,ALBERTDAVD,ALEMBICLTD,ALFREDHE,ALGOQUANT,ALICON,ALIVUS,ALKYLAMINE,ALLCARGO,ALLDIGI,ALLTIME,ALOKINDS,ALPA,ALPINETEX,ALUFLUOR,AMAGI,AMAL,AMARJOTHI,AMBICAAGAR,AMBIKCO,AMJLAND,AMNPLST,AMRUTANJAN,ANANDRATHI,ANANTRAJ,ANDHRAPAP,ANDHRSUGAR,ANDREWYU,ANIKINDS,ANNAPURNA,ANNU,ANSALBU,ANTELOPUS,ANTGRAPHIC,ANTHEM,ANUHPHR,ANUP,ANURAS,APARINDS,APCL,APCOTEXIND,APEX,APLLTD,APOLLO,APOLLOPIPE,APOLLOTYRE,APOLSINHOT,APOORVA,APTECHT,APTUS,AQYLON,ARCHIDPLY,ARCHIES,ARCIL,ARCL,ARDEE,ARE&M,ARENTERP,ARFIN,ARIHANT,ARIHANTCAP,ARIHANTSUP,ARIS,ARKADE,ARMANFIN,AROGRANITE,ARROWGREEN,ARSSBL,ARTEMISMED,ARTNIRMAN,ARVEE,ARVIND,ARVINDFASN,ARVSMART,ARYAMAN,ASAHIINDIA,ASAL,ASALCBR,ASHAPURMIN,ASHIANA,ASHIMASYN,ASHOKA,ASHOKAMET,ASIANENE,ASIANHOTNR,ASIANTILES,ASIANTNE,ASKAUTOLTD,ASMS,ASPINWALL,ASSAMENT,ASTAR,ASTEC,ASTERDM,ASTRAMICRO,ASTRAZEN,ATALREAL,ATAM,ATGL,ATHERENERG,ATL,ATLANTAA,ATLANTAELE,ATLASCYCLE,ATUL,ATULAUTO,AUGMONT,AURIONPRO,AURUM,AURUS,AUSOMENT,AUSTENG,AUTOAXLES,AUTOIND,AVADHSUGAR,AVALON,AVANCE,AVANTEL,AVANTIFEED,AVL,AVONMORE,AVROIND,AVTNPL,AWFIS,AWHCL,AWL,AXISCADES,AXITA,AXTEL,AYE,AYMSYNTEX,AZAD,AZADIND,BAGFILMS,BAIDFIN,BAJAJCON,BAJAJELEC,BAJAJHCARE,BAJAJHFL,BAJAJHIND,BAJAJINDEF,BAJAJST,BAJEL,BALAJEE,BALAJITELE,BALAMINES,BALAXI,BALKRISHNA,BALKRISIND,BALMLAWRIE,BALPHARMA,BALRAMCHIN,BALUFORGE,BANARBEADS,BANARISUG,BANCOINDIA,BANG,BANKA,BANSALWIRE,BANSWRAS,BASF,BATAINDIA,BATLIBOI,BAYERCROP,BBL,BBOX,BBTC,BBTCL,BCG,BCLIND,BCONCEPTS,BCPL,BEARDSELL,BECTORFOOD,BEDMUTHA,BEEKAY,BELLACASA,BELRISE,BEML,BENARAS,BENGALASM,BEPL,BERGEPAINT,BESTAGRO,BETA,BFINVEST,BFUTILITIE,BHAGCHEM,BHAGERIA,BHAGYANGR,BHANDARI,BHARATCOAL,BHARATRAS,BHARATSE,BHARATWIRE,BHARTIHEXA,BIGBLOC,BIKAJI,BIL,BIMETAL,BIOFILCHEM,BIRLACABLE,BIRLACORPN,BIRLAMONEY,BIRLANU,BLACKBUCK,BLACKROSE,BLAL,BLBLIMITED,BLEL,BLIL,BLKASHYAP,BLS,BLSE,BLUECLOUDS,BLUECOAST,BLUEDART,BLUEJET,BLUESTONE,BLUSPRING,BMWVENTLTD,BNAGROCHEM,BOHRAIND,BOMDYEING,BONLON,BORANA,BOROLTD,BORORENEW,BOROSCI,BOSCH-HCIL,BPL,BPLPHARMA,BRAHMINFRA,BRIGADE,BRIGHOTEL,BRIGHTBR,BRNL,BROOKS,BSHSL,BSL,BSOFT,BTML,BUILDPRO,BUTTERFLY,BVCL,BYKE,CAMLINFINE,CAMPUS,CANFINHOME,CANHLIFE,CANTABIL,CAPACITE,CAPILLARY,CAPITALSFB,CAPLIPOINT,CARBORUNIV,CARERATING,CARRARO,CARTRADE,CARYSIL,CASTROLIND,CCAVENUE,CCCL,CCHHL,CCL,CEATLTD,CEIGALL,CEINSYS,CELEBRITY,CELLO,CEMPRO,CENTENKA,CENTEXT,CENTRALBK,CENTRUM,CENTUM,CENTURYPLY,CERA,CESC,CEWATER,CGCL,CGVAK,CHALET,CHAMBLFERT,CHEMBOND,CHEMCON,CHEMCRUX,CHEMFAB,CHEMPLASTS,CHENNPETRO,CHEVIOT,CHOICEIN,CHOLAHLDNG,CIEINDIA,CIFL,CINELINE,CINEVISTA,CLEAN,CLEANMAX,CLEDUCATE,CLSEL,CMLL,CMPDI,CMRGREEN,CMSINFO,CNL,COASTCORP,COCKERILL,COFFEEDAY,COHANCE,COMFINTE,COMPEAU,COMPUSOFT,COMSYN,CONCORDBIO,CONFIPET,CONTROLPR,CORALFINAC,CORDELIA,COROMANDEL,CORONA,COSMOFIRST,CPCAP,CPEDU,CPL,CPPLUS,CRAFTSMAN,CRAMC,CRAVATEX,CREATIVEYE,CREDITACC,CREST,CRESTO,CRISIL,CRIZAC,CROWN,CSBBANK,CSLFINANCE,CSM,CUB,CUPID,CYIENT,CYIENTDLM,DALMIASUG,DAMCAPITAL,DANGEE,DATAMATICS,DATAPATTNS,DAVANGERE,DBCORP,DBEIL,DBL,DBOL,DBREALTY,DCAL,DCBBANK,DCI,DCM,DCMFINSERV,DCMNVL,360ONE-FUT,ABCAPITAL-FUT,ABB-FUT,ADANIENSOL-FUT,ADANIENT-FUT,ADANIPORTS-FUT,ADANIGREEN-FUT,ALKEM-FUT,AMBER-FUT,ADANIPOWER-FUT,AMBUJACEM-FUT,APLAPOLLO-FUT,ANGELONE-FUT,ASHOKLEY-FUT,APOLLOHOSP-FUT,ASIANPAINT-FUT,ASTRAL-FUT,AUROPHARMA-FUT,AXISBANK-FUT,AUBANK-FUT,BAJAJ-AUTO-FUT,BAJAJHLDNG-FUT,BANDHANBNK-FUT,BAJFINANCE-FUT,BAJAJFINSV-FUT,BANKBARODA-FUT,BANKINDIA-FUT,BANKNIFTY-FUT,BEL-FUT,BDL-FUT,BHARATFORG-FUT,BHARTIARTL-FUT,BHEL-FUT,BLUESTARCO-FUT,BIOCON-FUT,BSE-FUT,BOSCHLTD-FUT,BPCL-FUT,BRITANNIA-FUT,CAMS-FUT,CANBK-FUT,CDSL-FUT,CGPOWER-FUT,CIPLA-FUT,CHOLAFIN-FUT,COCHINSHIP-FUT,COALINDIA-FUT,COFORGE-FUT,COLPAL-FUT,CUMMINSIND-FUT,CONCOR-FUT,CROMPTON-FUT,DABUR-FUT,DALBHARAT-FUT,DLF-FUT,DIVISLAB-FUT,DELHIVERY-FUT,DIXON-FUT,DMART-FUT,FEDERALBNK-FUT,DRREDDY-FUT,ETERNAL-FUT,EICHERMOT-FUT,GAIL-FUT,FINNIFTY-FUT,GLENMARK-FUT,FORCEMOT-FUT,GODFRYPHLP-FUT,GMRAIRPORT-FUT,FORTIS-FUT,GODREJPROP-FUT,GODREJCP-FUT,HAL-FUT,GVT&D-FUT,GRASIM-FUT,HAVELLS-FUT,HCLTECH-FUT,HDFCAMC-FUT,HDFCBANK-FUT,HINDALCO-FUT,HDFCLIFE-FUT,HINDPETRO-FUT,HEROMOTOCO-FUT,HINDUNILVR-FUT,HYUNDAI-FUT,ICICIBANK-FUT,ICICIPRULI-FUT,HINDZINC-FUT,ICICIGI-FUT,IDEA-FUT,IDFCFIRSTB-FUT,IEX-FUT,INDHOTEL-FUT,INDIANB-FUT,INDIGO-FUT,INDUSTOWER-FUT,INFY-FUT,IOC-FUT,INDUSINDBK-FUT,IRFC-FUT,INOXWIND-FUT,ITC-FUT,IREDA-FUT,JIOFIN-FUT,JINDALSTEL-FUT,JSWSTEEL-FUT,JSWENERGY-FUT,JUBLFOOD-FUT,KAYNES-FUT,KEI-FUT,KALYANKJIL-FUT,KFINTECH-FUT,KOTAKBANK-FUT,KPITTECH-FUT,LODHA-FUT,LAURUSLABS-FUT,LICHSGFIN-FUT,LT-FUT,LICI-FUT,LTF-FUT,LTM-FUT,LUPIN-FUT,M&M-FUT,MARICO-FUT,MANAPPURAM-FUT,MANKIND-FUT,MARUTI-FUT,MAZDOCK-FUT,MAXHEALTH-FUT,MCX-FUT,MOTHERSON-FUT,MOTILALOFS-FUT,MPHASIS-FUT,MFSL-FUT,MIDCPNIFTY-FUT,NATIONALUM-FUT,MUTHOOTFIN-FUT,NAM-INDIA-FUT,NBCC-FUT,NAUKRI-FUT,NHPC-FUT,NESTLEIND-FUT,NIFTYFPI-FUT,NIFTY-FUT,NIFTYNXT50-FUT,NMDC-FUT,NTPC-FUT,NYKAA-FUT,OFSS-FUT,OBEROIRLTY-FUT,OIL-FUT,ONGC-FUT,PATANJALI-FUT,PAGEIND-FUT,PAYTM-FUT,PERSISTENT-FUT,PETRONET-FUT,PFC-FUT,PGEL-FUT,PIDILITIND-FUT,PHOENIXLTD-FUT,PNB-FUT,PNBHOUSING-FUT,POLICYBZR-FUT,PIIND-FUT,POLYCAB-FUT,POWERGRID-FUT,POWERINDIA-FUT,PRESTIGE-FUT,PREMIERENE-FUT,RECLTD-FUT,RADICO-FUT,RBLBANK-FUT,RVNL-FUT,SAIL-FUT,RELIANCE-FUT,SBILIFE-FUT,SHREECEM-FUT,SBICARD-FUT,SBIN-FUT,SIEMENS-FUT,SHRIRAMFIN-FUT,SOLARINDS-FUT,SRF-FUT,SONACOMS-FUT,SUNPHARMA-FUT,SUZLON-FUT,SUPREMEIND-FUT,SWIGGY-FUT,TATACONSUM-FUT,TATAELXSI-FUT,TATAPOWER-FUT,TATASTEEL-FUT,TCS-FUT,TECHM-FUT,TITAN-FUT,TIINDIA-FUT,TORNTPHARM-FUT,TMPV-FUT,TRENT-FUT,ULTRACEMCO-FUT,UNITDSPR-FUT,UNIONBANK-FUT,TVSMOTOR-FUT,UNOMINDA-FUT,UPL-FUT,VBL-FUT,VMM-FUT,VEDL-FUT,WAAREEENER-FUT,VOLTAS-FUT,YESBANK-FUT,ZYDUSLIFE-FUT,WIPRO-FUT
-[HSM_SUB_BATCH] batch=1 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|13 lastToken=sf|nse_cm|1270 packetBytes=795
-[LIVE_BACKFILL_CONCURRENCY] liveWorker=connected_idle backfillWorker=running
-[BackfillQueue] Saved 7500 bars for ADANIPOWER (2025-12-27 to 2026-01-26)
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=2 symbols=50 bytes=767
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|324 lastToken=sf|nse_fo|68489 packetBytes=778
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=3 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68490 lastToken=sf|nse_fo|68770 packetBytes=813
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2026-01-26 to 2026-02-25...
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=4 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68780 lastToken=sf|nse_fo|68767 packetBytes=813
-[HSM_SUB_BATCH] batch=5 symbols=50 bytes=783
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68741 lastToken=sf|nse_cm|27061 packetBytes=794
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=6 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5578 lastToken=sf|nse_cm|9558 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=7 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|24715 lastToken=sf|nse_cm|10755 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=8 symbols=50 bytes=790
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5435 lastToken=sf|nse_cm|6066 packetBytes=801
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=9 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|757645 lastToken=sf|nse_cm|335 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=10 symbols=50 bytes=780
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|338 lastToken=sf|nse_cm|7848 packetBytes=791
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=11 symbols=50 bytes=791
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|762588 lastToken=sf|nse_cm|583 packetBytes=802
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=12 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|759477 lastToken=sf|nse_cm|760183 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=13 symbols=50 bytes=796
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|20223 lastToken=sf|nse_cm|21794 packetBytes=807
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=14 symbols=11 bytes=175
-[HSM_SUB_SEND] count=11 firstToken=sf|nse_cm|17881 lastToken=sf|nse_cm|11039 packetBytes=186
-[HSM_SUB_ACK] received status=ACK
-[BackfillQueue] Saved 9000 bars for ADANIPOWER (2026-01-26 to 2026-02-25)
-{"ts":"2026-09-28T19:59:12.190Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ADANIPOWER (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ADANIPOWER (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ADANIPOWER (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ADANIPOWER (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ADANIPOWER (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2026-07-25 to 2026-08-24...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 8250 bars for ADANIPOWER (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ADANIPOWER (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADANIPOWER (NSE:ADANIPOWER-EQ) [800 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADANIPOWER (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADANIPOWER completed successfully!
-[GapDetector] ADANIPOWER: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ADANIPOWER: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ADANIPOWER: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ADANIPOWER: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 1966 bars for ADDIND (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 7696 bars for ADDIND (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADDIND (NSE:ADDIND-EQ) [802 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1472 bars for ADDIND (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADDIND completed successfully!
-[GapDetector] ADDIND: 1 gap(s): 2026-08-19T03:45→2026-09-28T03:48
-[BackfillQueue] Enqueued gap-fill for ADDIND: 2026-08-19 → 2026-09-28
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ADFFOODS (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ADFFOODS (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7498 bars for ADFFOODS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7498 bars for ADFFOODS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ADFFOODS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7497 bars for ADFFOODS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ADFFOODS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ADFFOODS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ADFFOODS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2026-06-25 to 2026-07-25...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7500 bars for ADFFOODS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8249 bars for ADFFOODS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8255 bars for ADFFOODS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADFFOODS (NSE:ADFFOODS-EQ) [802 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADFFOODS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADFFOODS completed successfully!
-[GapDetector] ADFFOODS: 3 gap(s): 2025-12-24T03:45→2026-03-18T03:45, 2026-03-26T03:45→2026-05-28T09:59, 2026-06-26T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ADFFOODS: 2025-12-24 → 2026-03-18
-[BackfillQueue] Enqueued gap-fill for ADFFOODS: 2026-03-26 → 2026-05-28
-[BackfillQueue] Enqueued gap-fill for ADFFOODS: 2026-06-26 → 2026-09-14
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7253 bars for ADL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 7171 bars for ADL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 6824 bars for ADL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 6986 bars for ADL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 7981 bars for ADL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 6571 bars for ADL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6072 bars for ADL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 7352 bars for ADL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 6631 bars for ADL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 6163 bars for ADL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 7331 bars for ADL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 6781 bars for ADL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADL (NSE:ADL-EQ) [804 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1117 bars for ADL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADL completed successfully!
-[GapDetector] ADL: 2 gap(s): 2025-09-30T03:45→2025-12-19T07:00, 2025-12-30T03:45→2026-03-27T03:55
-[BackfillQueue] Enqueued gap-fill for ADL: 2025-09-30 → 2025-12-19
-[BackfillQueue] Enqueued gap-fill for ADL: 2025-12-30 → 2026-03-27
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7557 bars for ADOR (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8238 bars for ADOR (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7499 bars for ADOR (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7499 bars for ADOR (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8998 bars for ADOR (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ADOR (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2026-03-27 to 2026-04-26...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 6748 bars for ADOR (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ADOR (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7874 bars for ADOR (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ADOR (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ADOR (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ADOR (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADOR (NSE:ADOR-EQ) [805 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADOR (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADOR completed successfully!
-[GapDetector] ADOR: 4 gap(s): 2025-10-07T03:45→2025-12-26T03:45, 2026-01-06T03:45→2026-03-31T09:59, 2026-04-24T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ADOR: 2025-10-07 → 2025-12-26
-[BackfillQueue] Enqueued gap-fill for ADOR: 2026-01-06 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ADOR: 2026-04-24 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ADOR: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7508 bars for ADROITINFO (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8179 bars for ADROITINFO (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7417 bars for ADROITINFO (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7396 bars for ADROITINFO (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8909 bars for ADROITINFO (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7467 bars for ADROITINFO (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6702 bars for ADROITINFO (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8182 bars for ADROITINFO (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7769 bars for ADROITINFO (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7257 bars for ADROITINFO (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8200 bars for ADROITINFO (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8213 bars for ADROITINFO (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADROITINFO (NSE:ADROITINFO-EQ) [808 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADROITINFO (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADROITINFO completed successfully!
-[GapDetector] ADROITINFO: 4 gap(s): 2025-09-30T03:45→2025-12-26T03:49, 2025-12-30T03:45→2026-03-26T09:59, 2026-03-30T03:45→2026-06-25T03:55, 2026-06-26T03:45→2026-07-10T03:59
-[BackfillQueue] Enqueued gap-fill for ADROITINFO: 2025-09-30 → 2025-12-26
-[BackfillQueue] Enqueued gap-fill for ADROITINFO: 2025-12-30 → 2026-03-26
-[BackfillQueue] Enqueued gap-fill for ADROITINFO: 2026-03-30 → 2026-06-25
-[BackfillQueue] Enqueued gap-fill for ADROITINFO: 2026-06-26 → 2026-07-10
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ADSL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8249 bars for ADSL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2025-11-27 to 2025-12-27...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7500 bars for ADSL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ADSL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ADSL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ADSL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2026-03-27 to 2026-04-26...
-[FYERS_HSM_CONNECT] Disconnected. Scheduling reconnect...
-[BackfillQueue] Saved 6750 bars for ADSL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2026-04-26 to 2026-05-26...
-[FYERS_HSM_STATUS] starting
-[FYERS_HSM_CONNECT] Connecting to wss://socket.fyers.in/hsm/v1-5/prod...
-[FYERS_HSM_CONNECT] Connected.
-[FYERS_HSM_STATUS] connected
-[FYERS_HSM_AUTH] Authenticating binary stream...
-[FYERS_HSM_AUTH] Auth successful.
-[FYERS_HSM_STATUS] authenticated
-[FYERS_HSM_STATUS] Flushing 875 pending subscriptions...
-[FYERS_HSM_SUBSCRIBE] Subscribing to 661 topics...
-[FYERS_HSM_STATUS] subscribed symbols=ABB,CANBK,LUPIN,MIDCPNIFTY,NHPC,ONGC,PIIND,RADICO,ABCAPITAL,ASHOKLEY,BAJAJHLDNG,BHARTIARTL,CUMMINSIND,ETERNAL,GODREJPROP,HINDALCO,IEX,IRFC,KFINTECH,PRESTIGE,SHREECEM,TATACONSUM,TRENT,ADANIGREEN,APOLLOHOSP,BAJAJFINSV,BHARATFORG,CROMPTON,EICHERMOT,GODREJCP,HEROMOTOCO,IDFCFIRSTB,IREDA,KEI,LTF,MCX,NBCC,OFSS,PHOENIXLTD,SWIGGY,TORNTPHARM,VMM,ALKEM,ADANIPOWER,360ONE,ADANIENT,ADANIPORTS,AMBER,ADANIENSOL,AMBUJACEM,ANGELONE,APLAPOLLO,ASTRAL,ASIANPAINT,AUBANK,AUROPHARMA,AXISBANK,BAJAJ-AUTO,BANDHANBNK,BAJFINANCE,BANKINDIA,BANKBARODA,BANKNIFTY,BDL,BEL,BHEL,BIOCON,BLUESTARCO,BOSCHLTD,BPCL,BRITANNIA,BSE,CAMS,CGPOWER,CHOLAFIN,CDSL,CIPLA,COALINDIA,COCHINSHIP,COFORGE,COLPAL,CONCOR,DABUR,DALBHARAT,DELHIVERY,DIVISLAB,DIXON,DLF,DMART,DRREDDY,FEDERALBNK,FINNIFTY,FORCEMOT,FORTIS,GAIL,GLENMARK,GMRAIRPORT,GODFRYPHLP,GRASIM,GVT&D,HAL,HAVELLS,HCLTECH,HDFCAMC,HDFCBANK,HDFCLIFE,HINDPETRO,HINDUNILVR,HINDZINC,HYUNDAI,ICICIBANK,ICICIGI,ICICIPRULI,IDEA,INDHOTEL,INDIANB,INDIGO,INDUSINDBK,INDUSTOWER,INFY,INOXWIND,IOC,ITC,JINDALSTEL,JIOFIN,JSWENERGY,JSWSTEEL,JUBLFOOD,KALYANKJIL,KAYNES,KOTAKBANK,KPITTECH,LAURUSLABS,LICHSGFIN,LICI,LT,LODHA,NAUKRI,POLYCAB,SUNPHARMA,TIINDIA,MARICO,MARUTI,MPHASIS,NIFTYNXT50,PAYTM,POLICYBZR,MANKIND,PETRONET,POWERGRID,SBICARD,SUPREMEIND,TITAN,VBL,M&M,NAM-INDIA,NTPC,LTM,RVNL,SRF,TECHM,UNOMINDA,MANAPPURAM,MUTHOOTFIN,NMDC,PERSISTENT,RELIANCE,SONACOMS,TCS,UNITDSPR,ZYDUSLIFE,MAXHEALTH,NYKAA,PFC,POWERINDIA,VEDL,MAZDOCK,OBEROIRLTY,PGEL,PREMIERENE,SBIN,MFSL,OIL,PIDILITIND,RBLBANK,SIEMENS,TATAPOWER,ULTRACEMCO,WIPRO,MOTHERSON,PAGEIND,PNB,SHRIRAMFIN,TATAELXSI,TVSMOTOR,WAAREEENER,MOTILALOFS,NIFTYFPI,PATANJALI,PNBHOUSING,NATIONALUM,SBILIFE,SUZLON,TMPV,NESTLEIND,VOLTAS,NIFTY,SOLARINDS,TATASTEEL,UNIONBANK,YESBANK,RECLTD,SAIL,UPL,20MICRONS,21STCENMGM,3BBLACKBIO,3MINDIA,3PLAND,5PAISA,63MOONS,A2ZINFRA,AAATECH,AADHARHFC,AAKASH,AAREYDRUGS,AARON,AARTIDRUGS,AARTIIND,AARTIPHARM,AARVI,AASTHA,AAVAS,ABANSENT,ABBOTINDIA,ABCOTS,ABDL,ABFRL,ABLBL,ABMKNO,ABREL,ABSLAMC,ACC,ACCELYA,ACE,ACEINTEG,ACGL,ACI,ACL,ACMESOLAR,ACUTAAS,ADDIND,ADFFOODS,ADL,ADOR,ADROITINFO,ADSL,ADVAIT,ADVANCE,ADVANIHOTR,ADVENTHTL,ADVENZYMES,ADVIKCA,AEGISLOG,AEGISVOPAK,AEPL,AEQUS,AEROENTER,AEROFLEX,AERONEU,AEROPLANE,AETHER,AFCONS,AFFLE,AFFORDABLE,AFIL,AFSL,AGARIND,AGARWALEYE,AGI,AGIIL,AGL,AGRITECH,AGROPHOS,AHCL,AHLADA,AHLEAST,AHLUCONT,AIAENG,AIIL,AIRAN,AIROLAM,AJANTPHARM,AJAXENGG,AJMERA,AJOONI,AKASH,AKCAPIT,AKG,AKSHAR,AKUMS,ALANKIT,ALBERTDAVD,ALEMBICLTD,ALFREDHE,ALGOQUANT,ALICON,ALIVUS,ALKYLAMINE,ALLCARGO,ALLDIGI,ALLTIME,ALOKINDS,ALPA,ALPINETEX,ALUFLUOR,AMAGI,AMAL,AMARJOTHI,AMBICAAGAR,AMBIKCO,AMJLAND,AMNPLST,AMRUTANJAN,ANANDRATHI,ANANTRAJ,ANDHRAPAP,ANDHRSUGAR,ANDREWYU,ANIKINDS,ANNAPURNA,ANNU,ANSALBU,ANTELOPUS,ANTGRAPHIC,ANTHEM,ANUHPHR,ANUP,ANURAS,APARINDS,APCL,APCOTEXIND,APEX,APLLTD,APOLLO,APOLLOPIPE,APOLLOTYRE,APOLSINHOT,APOORVA,APTECHT,APTUS,AQYLON,ARCHIDPLY,ARCHIES,ARCIL,ARCL,ARDEE,ARE&M,ARENTERP,ARFIN,ARIHANT,ARIHANTCAP,ARIHANTSUP,ARIS,ARKADE,ARMANFIN,AROGRANITE,ARROWGREEN,ARSSBL,ARTEMISMED,ARTNIRMAN,ARVEE,ARVIND,ARVINDFASN,ARVSMART,ARYAMAN,ASAHIINDIA,ASAL,ASALCBR,ASHAPURMIN,ASHIANA,ASHIMASYN,ASHOKA,ASHOKAMET,ASIANENE,ASIANHOTNR,ASIANTILES,ASIANTNE,ASKAUTOLTD,ASMS,ASPINWALL,ASSAMENT,ASTAR,ASTEC,ASTERDM,ASTRAMICRO,ASTRAZEN,ATALREAL,ATAM,ATGL,ATHERENERG,ATL,ATLANTAA,ATLANTAELE,ATLASCYCLE,ATUL,ATULAUTO,AUGMONT,AURIONPRO,AURUM,AURUS,AUSOMENT,AUSTENG,AUTOAXLES,AUTOIND,AVADHSUGAR,AVALON,AVANCE,AVANTEL,AVANTIFEED,AVL,AVONMORE,AVROIND,AVTNPL,AWFIS,AWHCL,AWL,AXISCADES,AXITA,AXTEL,AYE,AYMSYNTEX,AZAD,AZADIND,BAGFILMS,BAIDFIN,BAJAJCON,BAJAJELEC,BAJAJHCARE,BAJAJHFL,BAJAJHIND,BAJAJINDEF,BAJAJST,BAJEL,BALAJEE,BALAJITELE,BALAMINES,BALAXI,BALKRISHNA,BALKRISIND,BALMLAWRIE,BALPHARMA,BALRAMCHIN,BALUFORGE,BANARBEADS,BANARISUG,BANCOINDIA,BANG,BANKA,BANSALWIRE,BANSWRAS,BASF,BATAINDIA,BATLIBOI,BAYERCROP,BBL,BBOX,BBTC,BBTCL,BCG,BCLIND,BCONCEPTS,BCPL,BEARDSELL,BECTORFOOD,BEDMUTHA,BEEKAY,BELLACASA,BELRISE,BEML,BENARAS,BENGALASM,BEPL,BERGEPAINT,BESTAGRO,BETA,BFINVEST,BFUTILITIE,BHAGCHEM,BHAGERIA,BHAGYANGR,BHANDARI,BHARATCOAL,BHARATRAS,BHARATSE,BHARATWIRE,BHARTIHEXA,BIGBLOC,BIKAJI,BIL,BIMETAL,BIOFILCHEM,BIRLACABLE,BIRLACORPN,BIRLAMONEY,BIRLANU,BLACKBUCK,BLACKROSE,BLAL,BLBLIMITED,BLEL,BLIL,BLKASHYAP,BLS,BLSE,BLUECLOUDS,BLUECOAST,BLUEDART,BLUEJET,BLUESTONE,BLUSPRING,BMWVENTLTD,BNAGROCHEM,BOHRAIND,BOMDYEING,BONLON,BORANA,BOROLTD,BORORENEW,BOROSCI,BOSCH-HCIL,BPL,BPLPHARMA,BRAHMINFRA,BRIGADE,BRIGHOTEL,BRIGHTBR,BRNL,BROOKS,BSHSL,BSL,BSOFT,BTML,BUILDPRO,BUTTERFLY,BVCL,BYKE,CAMLINFINE,CAMPUS,CANFINHOME,CANHLIFE,CANTABIL,CAPACITE,CAPILLARY,CAPITALSFB,CAPLIPOINT,CARBORUNIV,CARERATING,CARRARO,CARTRADE,CARYSIL,CASTROLIND,CCAVENUE,CCCL,CCHHL,CCL,CEATLTD,CEIGALL,CEINSYS,CELEBRITY,CELLO,CEMPRO,CENTENKA,CENTEXT,CENTRALBK,CENTRUM,CENTUM,CENTURYPLY,CERA,CESC,CEWATER,CGCL,CGVAK,CHALET,CHAMBLFERT,CHEMBOND,CHEMCON,CHEMCRUX,CHEMFAB,CHEMPLASTS,CHENNPETRO,CHEVIOT,CHOICEIN,CHOLAHLDNG,CIEINDIA,CIFL,CINELINE,CINEVISTA,CLEAN,CLEANMAX,CLEDUCATE,CLSEL,CMLL,CMPDI,CMRGREEN,CMSINFO,CNL,COASTCORP,COCKERILL,COFFEEDAY,COHANCE,COMFINTE,COMPEAU,COMPUSOFT,COMSYN,CONCORDBIO,CONFIPET,CONTROLPR,CORALFINAC,CORDELIA,COROMANDEL,CORONA,COSMOFIRST,CPCAP,CPEDU,CPL,CPPLUS,CRAFTSMAN,CRAMC,CRAVATEX,CREATIVEYE,CREDITACC,CREST,CRESTO,CRISIL,CRIZAC,CROWN,CSBBANK,CSLFINANCE,CSM,CUB,CUPID,CYIENT,CYIENTDLM,DALMIASUG,DAMCAPITAL,DANGEE,DATAMATICS,DATAPATTNS,DAVANGERE,DBCORP,DBEIL,DBL,DBOL,DBREALTY,DCAL,DCBBANK,DCI,DCM,DCMFINSERV,DCMNVL,360ONE-FUT,ABCAPITAL-FUT,ABB-FUT,ADANIENSOL-FUT,ADANIENT-FUT,ADANIPORTS-FUT,ADANIGREEN-FUT,ALKEM-FUT,AMBER-FUT,ADANIPOWER-FUT,AMBUJACEM-FUT,APLAPOLLO-FUT,ANGELONE-FUT,ASHOKLEY-FUT,APOLLOHOSP-FUT,ASIANPAINT-FUT,ASTRAL-FUT,AUROPHARMA-FUT,AXISBANK-FUT,AUBANK-FUT,BAJAJ-AUTO-FUT,BAJAJHLDNG-FUT,BANDHANBNK-FUT,BAJFINANCE-FUT,BAJAJFINSV-FUT,BANKBARODA-FUT,BANKINDIA-FUT,BANKNIFTY-FUT,BEL-FUT,BDL-FUT,BHARATFORG-FUT,BHARTIARTL-FUT,BHEL-FUT,BLUESTARCO-FUT,BIOCON-FUT,BSE-FUT,BOSCHLTD-FUT,BPCL-FUT,BRITANNIA-FUT,CAMS-FUT,CANBK-FUT,CDSL-FUT,CGPOWER-FUT,CIPLA-FUT,CHOLAFIN-FUT,COCHINSHIP-FUT,COALINDIA-FUT,COFORGE-FUT,COLPAL-FUT,CUMMINSIND-FUT,CONCOR-FUT,CROMPTON-FUT,DABUR-FUT,DALBHARAT-FUT,DLF-FUT,DIVISLAB-FUT,DELHIVERY-FUT,DIXON-FUT,DMART-FUT,FEDERALBNK-FUT,DRREDDY-FUT,ETERNAL-FUT,EICHERMOT-FUT,GAIL-FUT,FINNIFTY-FUT,GLENMARK-FUT,FORCEMOT-FUT,GODFRYPHLP-FUT,GMRAIRPORT-FUT,FORTIS-FUT,GODREJPROP-FUT,GODREJCP-FUT,HAL-FUT,GVT&D-FUT,GRASIM-FUT,HAVELLS-FUT,HCLTECH-FUT,HDFCAMC-FUT,HDFCBANK-FUT,HINDALCO-FUT,HDFCLIFE-FUT,HINDPETRO-FUT,HEROMOTOCO-FUT,HINDUNILVR-FUT,HYUNDAI-FUT,ICICIBANK-FUT,ICICIPRULI-FUT,HINDZINC-FUT,ICICIGI-FUT,IDEA-FUT,IDFCFIRSTB-FUT,IEX-FUT,INDHOTEL-FUT,INDIANB-FUT,INDIGO-FUT,INDUSTOWER-FUT,INFY-FUT,IOC-FUT,INDUSINDBK-FUT,IRFC-FUT,INOXWIND-FUT,ITC-FUT,IREDA-FUT,JIOFIN-FUT,JINDALSTEL-FUT,JSWSTEEL-FUT,JSWENERGY-FUT,JUBLFOOD-FUT,KAYNES-FUT,KEI-FUT,KALYANKJIL-FUT,KFINTECH-FUT,KOTAKBANK-FUT,KPITTECH-FUT,LODHA-FUT,LAURUSLABS-FUT,LICHSGFIN-FUT,LT-FUT,LICI-FUT,LTF-FUT,LTM-FUT,LUPIN-FUT,M&M-FUT,MARICO-FUT,MANAPPURAM-FUT,MANKIND-FUT,MARUTI-FUT,MAZDOCK-FUT,MAXHEALTH-FUT,MCX-FUT,MOTHERSON-FUT,MOTILALOFS-FUT,MPHASIS-FUT,MFSL-FUT,MIDCPNIFTY-FUT,NATIONALUM-FUT,MUTHOOTFIN-FUT,NAM-INDIA-FUT,NBCC-FUT,NAUKRI-FUT,NHPC-FUT,NESTLEIND-FUT,NIFTYFPI-FUT,NIFTY-FUT,NIFTYNXT50-FUT,NMDC-FUT,NTPC-FUT,NYKAA-FUT,OFSS-FUT,OBEROIRLTY-FUT,OIL-FUT,ONGC-FUT,PATANJALI-FUT,PAGEIND-FUT,PAYTM-FUT,PERSISTENT-FUT,PETRONET-FUT,PFC-FUT,PGEL-FUT,PIDILITIND-FUT,PHOENIXLTD-FUT,PNB-FUT,PNBHOUSING-FUT,POLICYBZR-FUT,PIIND-FUT,POLYCAB-FUT,POWERGRID-FUT,POWERINDIA-FUT,PRESTIGE-FUT,PREMIERENE-FUT,RECLTD-FUT,RADICO-FUT,RBLBANK-FUT,RVNL-FUT,SAIL-FUT,RELIANCE-FUT,SBILIFE-FUT,SHREECEM-FUT,SBICARD-FUT,SBIN-FUT,SIEMENS-FUT,SHRIRAMFIN-FUT,SOLARINDS-FUT,SRF-FUT,SONACOMS-FUT,SUNPHARMA-FUT,SUZLON-FUT,SUPREMEIND-FUT,SWIGGY-FUT,TATACONSUM-FUT,TATAELXSI-FUT,TATAPOWER-FUT,TATASTEEL-FUT,TCS-FUT,TECHM-FUT,TITAN-FUT,TIINDIA-FUT,TORNTPHARM-FUT,TMPV-FUT,TRENT-FUT,ULTRACEMCO-FUT,UNITDSPR-FUT,UNIONBANK-FUT,TVSMOTOR-FUT,UNOMINDA-FUT,UPL-FUT,VBL-FUT,VMM-FUT,VEDL-FUT,WAAREEENER-FUT,VOLTAS-FUT,YESBANK-FUT,ZYDUSLIFE-FUT,WIPRO-FUT
-[HSM_SUB_BATCH] batch=1 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|13 lastToken=sf|nse_cm|1270 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[LIVE_BACKFILL_CONCURRENCY] liveWorker=connected_idle backfillWorker=running
-[HSM_SUB_BATCH] batch=2 symbols=50 bytes=767
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|324 lastToken=sf|nse_fo|68489 packetBytes=778
-[HSM_SUB_BATCH] batch=3 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68490 lastToken=sf|nse_fo|68770 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=4 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68780 lastToken=sf|nse_fo|68767 packetBytes=813
-[HSM_SUB_BATCH] batch=5 symbols=50 bytes=783
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68741 lastToken=sf|nse_cm|27061 packetBytes=794
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=6 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5578 lastToken=sf|nse_cm|9558 packetBytes=804
-[HSM_SUB_BATCH] batch=7 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|24715 lastToken=sf|nse_cm|10755 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=8 symbols=50 bytes=790
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5435 lastToken=sf|nse_cm|6066 packetBytes=801
-[HSM_SUB_BATCH] batch=9 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|757645 lastToken=sf|nse_cm|335 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=10 symbols=50 bytes=780
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|338 lastToken=sf|nse_cm|7848 packetBytes=791
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=11 symbols=50 bytes=791
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|762588 lastToken=sf|nse_cm|583 packetBytes=802
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=12 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|759477 lastToken=sf|nse_cm|760183 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=13 symbols=50 bytes=796
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|20223 lastToken=sf|nse_cm|21794 packetBytes=807
-[HSM_SUB_BATCH] batch=14 symbols=11 bytes=175
-[HSM_SUB_SEND] count=11 firstToken=sf|nse_cm|17881 lastToken=sf|nse_cm|11039 packetBytes=186
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-{"ts":"2026-09-28T20:01:21.084Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
-[BackfillQueue] Saved 8250 bars for ADSL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7874 bars for ADSL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ADSL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ADSL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ADSL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADSL (NSE:ADSL-EQ) [811 in queue] from 2026-09-23 to 2026-09-28...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 1500 bars for ADSL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADSL completed successfully!
-[GapDetector] ADSL: 4 gap(s): 2025-11-12T03:45→2025-11-12T03:45, 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ADSL: 2025-11-12 → 2025-11-12
-[BackfillQueue] Enqueued gap-fill for ADSL: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ADSL: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ADSL: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 1875 bars for ADVAIT (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ADVAIT (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ADVAIT (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ADVAIT (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ADVAIT (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ADVAIT (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ADVAIT (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ADVAIT (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8260 bars for ADVAIT (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADVAIT (NSE:ADVAIT-EQ) [814 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADVAIT (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADVAIT completed successfully!
-[GapDetector] ADVAIT: 3 gap(s): 2026-03-03T03:45→2026-05-28T09:59, 2026-06-26T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-22T03:46
-[BackfillQueue] Enqueued gap-fill for ADVAIT: 2026-03-03 → 2026-05-28
-[BackfillQueue] Enqueued gap-fill for ADVAIT: 2026-06-26 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ADVAIT: 2026-09-14 → 2026-09-22
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 5266 bars for ADVANCE (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ADVANCE (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ADVANCE (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ADVANCE (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ADVANCE (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7499 bars for ADVANCE (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6749 bars for ADVANCE (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2026-04-26 to 2026-05-26...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 8245 bars for ADVANCE (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7866 bars for ADVANCE (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7488 bars for ADVANCE (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8248 bars for ADVANCE (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8252 bars for ADVANCE (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADVANCE (NSE:ADVANCE-EQ) [816 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADVANCE (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADVANCE completed successfully!
-[GapDetector] ADVANCE: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-04-24T03:45→2026-07-22T03:45, 2026-07-23T03:45→2026-09-21T03:45
-[BackfillQueue] Enqueued gap-fill for ADVANCE: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ADVANCE: 2026-04-24 → 2026-07-22
-[BackfillQueue] Enqueued gap-fill for ADVANCE: 2026-07-23 → 2026-09-21
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7548 bars for ADVANIHOTR (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8237 bars for ADVANIHOTR (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7498 bars for ADVANIHOTR (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ADVANIHOTR (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8990 bars for ADVANIHOTR (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7489 bars for ADVANIHOTR (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6747 bars for ADVANIHOTR (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8244 bars for ADVANIHOTR (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7859 bars for ADVANIHOTR (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7484 bars for ADVANIHOTR (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8225 bars for ADVANIHOTR (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8209 bars for ADVANIHOTR (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADVANIHOTR (NSE:ADVANIHOTR-EQ) [818 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1495 bars for ADVANIHOTR (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADVANIHOTR completed successfully!
-[GapDetector] ADVANIHOTR: 4 gap(s): 2025-10-08T03:45→2025-12-17T03:45, 2026-01-15T03:45→2026-03-31T09:59, 2026-04-16T03:45→2026-07-14T03:45, 2026-07-15T03:45→2026-09-25T03:47
-[BackfillQueue] Enqueued gap-fill for ADVANIHOTR: 2025-10-08 → 2025-12-17
-[BackfillQueue] Enqueued gap-fill for ADVANIHOTR: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ADVANIHOTR: 2026-04-16 → 2026-07-14
-[BackfillQueue] Enqueued gap-fill for ADVANIHOTR: 2026-07-15 → 2026-09-25
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 4455 bars for ADVENTHTL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for ADVENTHTL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7499 bars for ADVENTHTL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8996 bars for ADVENTHTL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7497 bars for ADVENTHTL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2026-03-27 to 2026-04-26...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 6749 bars for ADVENTHTL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ADVENTHTL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ADVENTHTL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7498 bars for ADVENTHTL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8246 bars for ADVENTHTL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8250 bars for ADVENTHTL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADVENTHTL (NSE:ADVENTHTL-EQ) [821 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADVENTHTL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADVENTHTL completed successfully!
-[GapDetector] ADVENTHTL: 3 gap(s): 2026-01-09T03:45→2026-03-31T09:59, 2026-04-17T03:45→2026-06-26T09:59, 2026-07-22T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ADVENTHTL: 2026-01-09 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for ADVENTHTL: 2026-04-17 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ADVENTHTL: 2026-07-22 → 2026-09-14
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for ADVENZYMES (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for ADVENZYMES (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7499 bars for ADVENZYMES (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for ADVENZYMES (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for ADVENZYMES (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for ADVENZYMES (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for ADVENZYMES (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for ADVENZYMES (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for ADVENZYMES (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for ADVENZYMES (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for ADVENZYMES (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for ADVENZYMES (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADVENZYMES (NSE:ADVENZYMES-EQ) [823 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADVENZYMES (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADVENZYMES completed successfully!
-[GapDetector] ADVENZYMES: 4 gap(s): 2025-12-05T03:45→2026-03-03T09:59, 2026-03-26T03:45→2026-05-28T09:59, 2026-06-26T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ADVENZYMES: 2025-12-05 → 2026-03-03
-[BackfillQueue] Enqueued gap-fill for ADVENZYMES: 2026-03-26 → 2026-05-28
-[BackfillQueue] Enqueued gap-fill for ADVENZYMES: 2026-06-26 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for ADVENZYMES: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 2625 bars for ADVIKCA (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8250 bars for ADVIKCA (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching ADVIKCA (NSE:ADVIKCA-EQ) [826 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for ADVIKCA (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for ADVIKCA completed successfully!
-[GapDetector] ADVIKCA: 1 gap(s): 2026-08-28T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for ADVIKCA: 2026-08-28 → 2026-09-14
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2025-09-28 to 2025-10-28...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7561 bars for AEGISLOG (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AEGISLOG (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AEGISLOG (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AEGISLOG (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AEGISLOG (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AEGISLOG (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AEGISLOG (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AEGISLOG (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AEGISLOG (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AEGISLOG (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AEGISLOG (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AEGISLOG (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AEGISLOG (NSE:AEGISLOG-EQ) [826 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AEGISLOG (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AEGISLOG completed successfully!
-[GapDetector] AEGISLOG: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AEGISLOG: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AEGISLOG: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AEGISLOG: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AEGISVOPAK (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AEGISVOPAK (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AEGISVOPAK (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AEGISVOPAK (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AEGISVOPAK (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2026-02-25 to 2026-03-27...
-[FYERS_HSM_CONNECT] Disconnected. Scheduling reconnect...
-[BackfillQueue] Saved 7500 bars for AEGISVOPAK (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AEGISVOPAK (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AEGISVOPAK (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AEGISVOPAK (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AEGISVOPAK (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2026-07-25 to 2026-08-24...
-[FYERS_HSM_STATUS] starting
-[FYERS_HSM_CONNECT] Connecting to wss://socket.fyers.in/hsm/v1-5/prod...
-[FYERS_HSM_CONNECT] Connected.
-[FYERS_HSM_STATUS] connected
-[FYERS_HSM_AUTH] Authenticating binary stream...
-[FYERS_HSM_AUTH] Auth successful.
-[FYERS_HSM_STATUS] authenticated
-[FYERS_HSM_STATUS] Flushing 875 pending subscriptions...
-[FYERS_HSM_SUBSCRIBE] Subscribing to 661 topics...
-[FYERS_HSM_STATUS] subscribed symbols=ABB,CANBK,LUPIN,MIDCPNIFTY,NHPC,ONGC,PIIND,RADICO,ABCAPITAL,ASHOKLEY,BAJAJHLDNG,BHARTIARTL,CUMMINSIND,ETERNAL,GODREJPROP,HINDALCO,IEX,IRFC,KFINTECH,PRESTIGE,SHREECEM,TATACONSUM,TRENT,ADANIGREEN,APOLLOHOSP,BAJAJFINSV,BHARATFORG,CROMPTON,EICHERMOT,GODREJCP,HEROMOTOCO,IDFCFIRSTB,IREDA,KEI,LTF,MCX,NBCC,OFSS,PHOENIXLTD,SWIGGY,TORNTPHARM,VMM,ALKEM,ADANIPOWER,360ONE,ADANIENT,ADANIPORTS,AMBER,ADANIENSOL,AMBUJACEM,ANGELONE,APLAPOLLO,ASTRAL,ASIANPAINT,AUBANK,AUROPHARMA,AXISBANK,BAJAJ-AUTO,BANDHANBNK,BAJFINANCE,BANKINDIA,BANKBARODA,BANKNIFTY,BDL,BEL,BHEL,BIOCON,BLUESTARCO,BOSCHLTD,BPCL,BRITANNIA,BSE,CAMS,CGPOWER,CHOLAFIN,CDSL,CIPLA,COALINDIA,COCHINSHIP,COFORGE,COLPAL,CONCOR,DABUR,DALBHARAT,DELHIVERY,DIVISLAB,DIXON,DLF,DMART,DRREDDY,FEDERALBNK,FINNIFTY,FORCEMOT,FORTIS,GAIL,GLENMARK,GMRAIRPORT,GODFRYPHLP,GRASIM,GVT&D,HAL,HAVELLS,HCLTECH,HDFCAMC,HDFCBANK,HDFCLIFE,HINDPETRO,HINDUNILVR,HINDZINC,HYUNDAI,ICICIBANK,ICICIGI,ICICIPRULI,IDEA,INDHOTEL,INDIANB,INDIGO,INDUSINDBK,INDUSTOWER,INFY,INOXWIND,IOC,ITC,JINDALSTEL,JIOFIN,JSWENERGY,JSWSTEEL,JUBLFOOD,KALYANKJIL,KAYNES,KOTAKBANK,KPITTECH,LAURUSLABS,LICHSGFIN,LICI,LT,LODHA,NAUKRI,POLYCAB,SUNPHARMA,TIINDIA,MARICO,MARUTI,MPHASIS,NIFTYNXT50,PAYTM,POLICYBZR,MANKIND,PETRONET,POWERGRID,SBICARD,SUPREMEIND,TITAN,VBL,M&M,NAM-INDIA,NTPC,LTM,RVNL,SRF,TECHM,UNOMINDA,MANAPPURAM,MUTHOOTFIN,NMDC,PERSISTENT,RELIANCE,SONACOMS,TCS,UNITDSPR,ZYDUSLIFE,MAXHEALTH,NYKAA,PFC,POWERINDIA,VEDL,MAZDOCK,OBEROIRLTY,PGEL,PREMIERENE,SBIN,MFSL,OIL,PIDILITIND,RBLBANK,SIEMENS,TATAPOWER,ULTRACEMCO,WIPRO,MOTHERSON,PAGEIND,PNB,SHRIRAMFIN,TATAELXSI,TVSMOTOR,WAAREEENER,MOTILALOFS,NIFTYFPI,PATANJALI,PNBHOUSING,NATIONALUM,SBILIFE,SUZLON,TMPV,NESTLEIND,VOLTAS,NIFTY,SOLARINDS,TATASTEEL,UNIONBANK,YESBANK,RECLTD,SAIL,UPL,20MICRONS,21STCENMGM,3BBLACKBIO,3MINDIA,3PLAND,5PAISA,63MOONS,A2ZINFRA,AAATECH,AADHARHFC,AAKASH,AAREYDRUGS,AARON,AARTIDRUGS,AARTIIND,AARTIPHARM,AARVI,AASTHA,AAVAS,ABANSENT,ABBOTINDIA,ABCOTS,ABDL,ABFRL,ABLBL,ABMKNO,ABREL,ABSLAMC,ACC,ACCELYA,ACE,ACEINTEG,ACGL,ACI,ACL,ACMESOLAR,ACUTAAS,ADDIND,ADFFOODS,ADL,ADOR,ADROITINFO,ADSL,ADVAIT,ADVANCE,ADVANIHOTR,ADVENTHTL,ADVENZYMES,ADVIKCA,AEGISLOG,AEGISVOPAK,AEPL,AEQUS,AEROENTER,AEROFLEX,AERONEU,AEROPLANE,AETHER,AFCONS,AFFLE,AFFORDABLE,AFIL,AFSL,AGARIND,AGARWALEYE,AGI,AGIIL,AGL,AGRITECH,AGROPHOS,AHCL,AHLADA,AHLEAST,AHLUCONT,AIAENG,AIIL,AIRAN,AIROLAM,AJANTPHARM,AJAXENGG,AJMERA,AJOONI,AKASH,AKCAPIT,AKG,AKSHAR,AKUMS,ALANKIT,ALBERTDAVD,ALEMBICLTD,ALFREDHE,ALGOQUANT,ALICON,ALIVUS,ALKYLAMINE,ALLCARGO,ALLDIGI,ALLTIME,ALOKINDS,ALPA,ALPINETEX,ALUFLUOR,AMAGI,AMAL,AMARJOTHI,AMBICAAGAR,AMBIKCO,AMJLAND,AMNPLST,AMRUTANJAN,ANANDRATHI,ANANTRAJ,ANDHRAPAP,ANDHRSUGAR,ANDREWYU,ANIKINDS,ANNAPURNA,ANNU,ANSALBU,ANTELOPUS,ANTGRAPHIC,ANTHEM,ANUHPHR,ANUP,ANURAS,APARINDS,APCL,APCOTEXIND,APEX,APLLTD,APOLLO,APOLLOPIPE,APOLLOTYRE,APOLSINHOT,APOORVA,APTECHT,APTUS,AQYLON,ARCHIDPLY,ARCHIES,ARCIL,ARCL,ARDEE,ARE&M,ARENTERP,ARFIN,ARIHANT,ARIHANTCAP,ARIHANTSUP,ARIS,ARKADE,ARMANFIN,AROGRANITE,ARROWGREEN,ARSSBL,ARTEMISMED,ARTNIRMAN,ARVEE,ARVIND,ARVINDFASN,ARVSMART,ARYAMAN,ASAHIINDIA,ASAL,ASALCBR,ASHAPURMIN,ASHIANA,ASHIMASYN,ASHOKA,ASHOKAMET,ASIANENE,ASIANHOTNR,ASIANTILES,ASIANTNE,ASKAUTOLTD,ASMS,ASPINWALL,ASSAMENT,ASTAR,ASTEC,ASTERDM,ASTRAMICRO,ASTRAZEN,ATALREAL,ATAM,ATGL,ATHERENERG,ATL,ATLANTAA,ATLANTAELE,ATLASCYCLE,ATUL,ATULAUTO,AUGMONT,AURIONPRO,AURUM,AURUS,AUSOMENT,AUSTENG,AUTOAXLES,AUTOIND,AVADHSUGAR,AVALON,AVANCE,AVANTEL,AVANTIFEED,AVL,AVONMORE,AVROIND,AVTNPL,AWFIS,AWHCL,AWL,AXISCADES,AXITA,AXTEL,AYE,AYMSYNTEX,AZAD,AZADIND,BAGFILMS,BAIDFIN,BAJAJCON,BAJAJELEC,BAJAJHCARE,BAJAJHFL,BAJAJHIND,BAJAJINDEF,BAJAJST,BAJEL,BALAJEE,BALAJITELE,BALAMINES,BALAXI,BALKRISHNA,BALKRISIND,BALMLAWRIE,BALPHARMA,BALRAMCHIN,BALUFORGE,BANARBEADS,BANARISUG,BANCOINDIA,BANG,BANKA,BANSALWIRE,BANSWRAS,BASF,BATAINDIA,BATLIBOI,BAYERCROP,BBL,BBOX,BBTC,BBTCL,BCG,BCLIND,BCONCEPTS,BCPL,BEARDSELL,BECTORFOOD,BEDMUTHA,BEEKAY,BELLACASA,BELRISE,BEML,BENARAS,BENGALASM,BEPL,BERGEPAINT,BESTAGRO,BETA,BFINVEST,BFUTILITIE,BHAGCHEM,BHAGERIA,BHAGYANGR,BHANDARI,BHARATCOAL,BHARATRAS,BHARATSE,BHARATWIRE,BHARTIHEXA,BIGBLOC,BIKAJI,BIL,BIMETAL,BIOFILCHEM,BIRLACABLE,BIRLACORPN,BIRLAMONEY,BIRLANU,BLACKBUCK,BLACKROSE,BLAL,BLBLIMITED,BLEL,BLIL,BLKASHYAP,BLS,BLSE,BLUECLOUDS,BLUECOAST,BLUEDART,BLUEJET,BLUESTONE,BLUSPRING,BMWVENTLTD,BNAGROCHEM,BOHRAIND,BOMDYEING,BONLON,BORANA,BOROLTD,BORORENEW,BOROSCI,BOSCH-HCIL,BPL,BPLPHARMA,BRAHMINFRA,BRIGADE,BRIGHOTEL,BRIGHTBR,BRNL,BROOKS,BSHSL,BSL,BSOFT,BTML,BUILDPRO,BUTTERFLY,BVCL,BYKE,CAMLINFINE,CAMPUS,CANFINHOME,CANHLIFE,CANTABIL,CAPACITE,CAPILLARY,CAPITALSFB,CAPLIPOINT,CARBORUNIV,CARERATING,CARRARO,CARTRADE,CARYSIL,CASTROLIND,CCAVENUE,CCCL,CCHHL,CCL,CEATLTD,CEIGALL,CEINSYS,CELEBRITY,CELLO,CEMPRO,CENTENKA,CENTEXT,CENTRALBK,CENTRUM,CENTUM,CENTURYPLY,CERA,CESC,CEWATER,CGCL,CGVAK,CHALET,CHAMBLFERT,CHEMBOND,CHEMCON,CHEMCRUX,CHEMFAB,CHEMPLASTS,CHENNPETRO,CHEVIOT,CHOICEIN,CHOLAHLDNG,CIEINDIA,CIFL,CINELINE,CINEVISTA,CLEAN,CLEANMAX,CLEDUCATE,CLSEL,CMLL,CMPDI,CMRGREEN,CMSINFO,CNL,COASTCORP,COCKERILL,COFFEEDAY,COHANCE,COMFINTE,COMPEAU,COMPUSOFT,COMSYN,CONCORDBIO,CONFIPET,CONTROLPR,CORALFINAC,CORDELIA,COROMANDEL,CORONA,COSMOFIRST,CPCAP,CPEDU,CPL,CPPLUS,CRAFTSMAN,CRAMC,CRAVATEX,CREATIVEYE,CREDITACC,CREST,CRESTO,CRISIL,CRIZAC,CROWN,CSBBANK,CSLFINANCE,CSM,CUB,CUPID,CYIENT,CYIENTDLM,DALMIASUG,DAMCAPITAL,DANGEE,DATAMATICS,DATAPATTNS,DAVANGERE,DBCORP,DBEIL,DBL,DBOL,DBREALTY,DCAL,DCBBANK,DCI,DCM,DCMFINSERV,DCMNVL,360ONE-FUT,ABCAPITAL-FUT,ABB-FUT,ADANIENSOL-FUT,ADANIENT-FUT,ADANIPORTS-FUT,ADANIGREEN-FUT,ALKEM-FUT,AMBER-FUT,ADANIPOWER-FUT,AMBUJACEM-FUT,APLAPOLLO-FUT,ANGELONE-FUT,ASHOKLEY-FUT,APOLLOHOSP-FUT,ASIANPAINT-FUT,ASTRAL-FUT,AUROPHARMA-FUT,AXISBANK-FUT,AUBANK-FUT,BAJAJ-AUTO-FUT,BAJAJHLDNG-FUT,BANDHANBNK-FUT,BAJFINANCE-FUT,BAJAJFINSV-FUT,BANKBARODA-FUT,BANKINDIA-FUT,BANKNIFTY-FUT,BEL-FUT,BDL-FUT,BHARATFORG-FUT,BHARTIARTL-FUT,BHEL-FUT,BLUESTARCO-FUT,BIOCON-FUT,BSE-FUT,BOSCHLTD-FUT,BPCL-FUT,BRITANNIA-FUT,CAMS-FUT,CANBK-FUT,CDSL-FUT,CGPOWER-FUT,CIPLA-FUT,CHOLAFIN-FUT,COCHINSHIP-FUT,COALINDIA-FUT,COFORGE-FUT,COLPAL-FUT,CUMMINSIND-FUT,CONCOR-FUT,CROMPTON-FUT,DABUR-FUT,DALBHARAT-FUT,DLF-FUT,DIVISLAB-FUT,DELHIVERY-FUT,DIXON-FUT,DMART-FUT,FEDERALBNK-FUT,DRREDDY-FUT,ETERNAL-FUT,EICHERMOT-FUT,GAIL-FUT,FINNIFTY-FUT,GLENMARK-FUT,FORCEMOT-FUT,GODFRYPHLP-FUT,GMRAIRPORT-FUT,FORTIS-FUT,GODREJPROP-FUT,GODREJCP-FUT,HAL-FUT,GVT&D-FUT,GRASIM-FUT,HAVELLS-FUT,HCLTECH-FUT,HDFCAMC-FUT,HDFCBANK-FUT,HINDALCO-FUT,HDFCLIFE-FUT,HINDPETRO-FUT,HEROMOTOCO-FUT,HINDUNILVR-FUT,HYUNDAI-FUT,ICICIBANK-FUT,ICICIPRULI-FUT,HINDZINC-FUT,ICICIGI-FUT,IDEA-FUT,IDFCFIRSTB-FUT,IEX-FUT,INDHOTEL-FUT,INDIANB-FUT,INDIGO-FUT,INDUSTOWER-FUT,INFY-FUT,IOC-FUT,INDUSINDBK-FUT,IRFC-FUT,INOXWIND-FUT,ITC-FUT,IREDA-FUT,JIOFIN-FUT,JINDALSTEL-FUT,JSWSTEEL-FUT,JSWENERGY-FUT,JUBLFOOD-FUT,KAYNES-FUT,KEI-FUT,KALYANKJIL-FUT,KFINTECH-FUT,KOTAKBANK-FUT,KPITTECH-FUT,LODHA-FUT,LAURUSLABS-FUT,LICHSGFIN-FUT,LT-FUT,LICI-FUT,LTF-FUT,LTM-FUT,LUPIN-FUT,M&M-FUT,MARICO-FUT,MANAPPURAM-FUT,MANKIND-FUT,MARUTI-FUT,MAZDOCK-FUT,MAXHEALTH-FUT,MCX-FUT,MOTHERSON-FUT,MOTILALOFS-FUT,MPHASIS-FUT,MFSL-FUT,MIDCPNIFTY-FUT,NATIONALUM-FUT,MUTHOOTFIN-FUT,NAM-INDIA-FUT,NBCC-FUT,NAUKRI-FUT,NHPC-FUT,NESTLEIND-FUT,NIFTYFPI-FUT,NIFTY-FUT,NIFTYNXT50-FUT,NMDC-FUT,NTPC-FUT,NYKAA-FUT,OFSS-FUT,OBEROIRLTY-FUT,OIL-FUT,ONGC-FUT,PATANJALI-FUT,PAGEIND-FUT,PAYTM-FUT,PERSISTENT-FUT,PETRONET-FUT,PFC-FUT,PGEL-FUT,PIDILITIND-FUT,PHOENIXLTD-FUT,PNB-FUT,PNBHOUSING-FUT,POLICYBZR-FUT,PIIND-FUT,POLYCAB-FUT,POWERGRID-FUT,POWERINDIA-FUT,PRESTIGE-FUT,PREMIERENE-FUT,RECLTD-FUT,RADICO-FUT,RBLBANK-FUT,RVNL-FUT,SAIL-FUT,RELIANCE-FUT,SBILIFE-FUT,SHREECEM-FUT,SBICARD-FUT,SBIN-FUT,SIEMENS-FUT,SHRIRAMFIN-FUT,SOLARINDS-FUT,SRF-FUT,SONACOMS-FUT,SUNPHARMA-FUT,SUZLON-FUT,SUPREMEIND-FUT,SWIGGY-FUT,TATACONSUM-FUT,TATAELXSI-FUT,TATAPOWER-FUT,TATASTEEL-FUT,TCS-FUT,TECHM-FUT,TITAN-FUT,TIINDIA-FUT,TORNTPHARM-FUT,TMPV-FUT,TRENT-FUT,ULTRACEMCO-FUT,UNITDSPR-FUT,UNIONBANK-FUT,TVSMOTOR-FUT,UNOMINDA-FUT,UPL-FUT,VBL-FUT,VMM-FUT,VEDL-FUT,WAAREEENER-FUT,VOLTAS-FUT,YESBANK-FUT,ZYDUSLIFE-FUT,WIPRO-FUT
-[HSM_SUB_BATCH] batch=1 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|13 lastToken=sf|nse_cm|1270 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=2 symbols=50 bytes=767
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|324 lastToken=sf|nse_fo|68489 packetBytes=778
-[LIVE_BACKFILL_CONCURRENCY] liveWorker=connected_idle backfillWorker=running
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=3 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68490 lastToken=sf|nse_fo|68770 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=4 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68780 lastToken=sf|nse_fo|68767 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=5 symbols=50 bytes=783
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68741 lastToken=sf|nse_cm|27061 packetBytes=794
-[BackfillQueue] Saved 8250 bars for AEGISVOPAK (2026-07-25 to 2026-08-24)
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=6 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5578 lastToken=sf|nse_cm|9558 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=7 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|24715 lastToken=sf|nse_cm|10755 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=8 symbols=50 bytes=790
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5435 lastToken=sf|nse_cm|6066 packetBytes=801
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2026-08-24 to 2026-09-23...
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=9 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|757645 lastToken=sf|nse_cm|335 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=10 symbols=50 bytes=780
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|338 lastToken=sf|nse_cm|7848 packetBytes=791
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=11 symbols=50 bytes=791
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|762588 lastToken=sf|nse_cm|583 packetBytes=802
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=12 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|759477 lastToken=sf|nse_cm|760183 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=13 symbols=50 bytes=796
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|20223 lastToken=sf|nse_cm|21794 packetBytes=807
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=14 symbols=11 bytes=175
-[HSM_SUB_SEND] count=11 firstToken=sf|nse_cm|17881 lastToken=sf|nse_cm|11039 packetBytes=186
-[HSM_SUB_ACK] received status=ACK
-[BackfillQueue] Saved 8257 bars for AEGISVOPAK (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AEGISVOPAK (NSE:AEGISVOPAK-EQ) [828 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AEGISVOPAK (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AEGISVOPAK completed successfully!
-[GapDetector] AEGISVOPAK: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AEGISVOPAK: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AEGISVOPAK: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AEGISVOPAK: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2026-01-26 to 2026-02-25...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 4081 bars for AEPL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6664 bars for AEPL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8180 bars for AEPL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7791 bars for AEPL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7393 bars for AEPL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8196 bars for AEPL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8212 bars for AEPL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AEPL (NSE:AEPL-EQ) [830 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1486 bars for AEPL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AEPL completed successfully!
-[GapDetector] AEPL: 3 gap(s): 2026-03-13T03:45→2026-06-10T03:45, 2026-06-12T03:45→2026-09-07T03:45, 2026-09-10T03:45→2026-09-28T03:47
-[BackfillQueue] Enqueued gap-fill for AEPL: 2026-03-13 → 2026-06-10
-[BackfillQueue] Enqueued gap-fill for AEPL: 2026-06-12 → 2026-09-07
-[BackfillQueue] Enqueued gap-fill for AEPL: 2026-09-10 → 2026-09-28
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 4455 bars for AEQUS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AEQUS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AEQUS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AEQUS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AEQUS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AEQUS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AEQUS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AEQUS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AEQUS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AEQUS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AEQUS (NSE:AEQUS-EQ) [832 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AEQUS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AEQUS completed successfully!
-[GapDetector] AEQUS: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AEQUS: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AEQUS: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AEQUS: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7559 bars for AEROENTER (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8244 bars for AEROENTER (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7498 bars for AEROENTER (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AEROENTER (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AEROENTER (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7497 bars for AEROENTER (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6747 bars for AEROENTER (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AEROENTER (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AEROENTER (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2026-06-25 to 2026-07-25...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7500 bars for AEROENTER (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AEROENTER (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AEROENTER (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AEROENTER (NSE:AEROENTER-EQ) [834 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AEROENTER (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AEROENTER completed successfully!
-[GapDetector] AEROENTER: 4 gap(s): 2025-10-20T03:45→2026-01-15T09:59, 2026-03-03T03:45→2026-05-28T09:59, 2026-06-26T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AEROENTER: 2025-10-20 → 2026-01-15
-[BackfillQueue] Enqueued gap-fill for AEROENTER: 2026-03-03 → 2026-05-28
-[BackfillQueue] Enqueued gap-fill for AEROENTER: 2026-06-26 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AEROENTER: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AEROFLEX (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AEROFLEX (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AEROFLEX (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AEROFLEX (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AEROFLEX (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AEROFLEX (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AEROFLEX (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AEROFLEX (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AEROFLEX (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AEROFLEX (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AEROFLEX (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AEROFLEX (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AEROFLEX (NSE:AEROFLEX-EQ) [837 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AEROFLEX (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AEROFLEX completed successfully!
-[GapDetector] AEROFLEX: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AEROFLEX: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AEROFLEX: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AEROFLEX: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7549 bars for AERONEU (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8214 bars for AERONEU (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7483 bars for AERONEU (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7465 bars for AERONEU (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8923 bars for AERONEU (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7463 bars for AERONEU (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6713 bars for AERONEU (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8201 bars for AERONEU (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7790 bars for AERONEU (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7476 bars for AERONEU (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8079 bars for AERONEU (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Skipped 1 invalid bars for AERONEU
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 8086 bars for AERONEU (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AERONEU (NSE:AERONEU-EQ) [839 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AERONEU (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AERONEU completed successfully!
-[GapDetector] AERONEU: 3 gap(s): 2025-10-07T03:45→2026-01-02T03:46, 2026-01-06T03:45→2026-04-02T03:45, 2026-04-07T03:45→2026-06-03T03:45
-[BackfillQueue] Enqueued gap-fill for AERONEU: 2025-10-07 → 2026-01-02
-[BackfillQueue] Enqueued gap-fill for AERONEU: 2026-01-06 → 2026-04-02
-[BackfillQueue] Enqueued gap-fill for AERONEU: 2026-04-07 → 2026-06-03
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 3750 bars for AEROPLANE (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AEROPLANE (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AEROPLANE (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AEROPLANE (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AEROPLANE (NSE:AEROPLANE-EQ) [841 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AEROPLANE (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AEROPLANE completed successfully!
-[GapDetector] AEROPLANE: 2 gap(s): 2026-06-26T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AEROPLANE: 2026-06-26 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AEROPLANE: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AETHER (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AETHER (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AETHER (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AETHER (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AETHER (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AETHER (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AETHER (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AETHER (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AETHER (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AETHER (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AETHER (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AETHER (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AETHER (NSE:AETHER-EQ) [842 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AETHER (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AETHER completed successfully!
-[GapDetector] AETHER: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AETHER: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AETHER: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AETHER: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AFCONS (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AFCONS (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AFCONS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AFCONS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AFCONS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AFCONS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AFCONS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AFCONS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AFCONS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AFCONS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2026-07-25 to 2026-08-24...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 8250 bars for AFCONS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AFCONS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AFCONS (NSE:AFCONS-EQ) [844 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AFCONS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AFCONS completed successfully!
-[GapDetector] AFCONS: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AFCONS: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AFCONS: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AFCONS: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AFFLE (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AFFLE (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AFFLE (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AFFLE (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AFFLE (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AFFLE (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AFFLE (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AFFLE (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AFFLE (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AFFLE (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AFFLE (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AFFLE (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AFFLE (NSE:AFFLE-EQ) [846 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AFFLE (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AFFLE completed successfully!
-[GapDetector] AFFLE: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AFFLE: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AFFLE: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AFFLE: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7559 bars for AFFORDABLE (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8249 bars for AFFORDABLE (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7496 bars for AFFORDABLE (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7491 bars for AFFORDABLE (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8990 bars for AFFORDABLE (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7490 bars for AFFORDABLE (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6747 bars for AFFORDABLE (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2026-04-26 to 2026-05-26...
-[FYERS_HSM_CONNECT] Disconnected. Scheduling reconnect...
-[BackfillQueue] Saved 8214 bars for AFFORDABLE (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7864 bars for AFFORDABLE (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7491 bars for AFFORDABLE (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8244 bars for AFFORDABLE (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8242 bars for AFFORDABLE (2026-08-24 to 2026-09-23)
-[FYERS_HSM_STATUS] starting
-[FYERS_HSM_CONNECT] Connecting to wss://socket.fyers.in/hsm/v1-5/prod...
-[BackfillQueue] Fetching AFFORDABLE (NSE:AFFORDABLE-EQ) [848 in queue] from 2026-09-23 to 2026-09-28...
-[FYERS_HSM_CONNECT] Connected.
-[FYERS_HSM_STATUS] connected
-[FYERS_HSM_AUTH] Authenticating binary stream...
-[FYERS_HSM_AUTH] Auth successful.
-[FYERS_HSM_STATUS] authenticated
-[FYERS_HSM_STATUS] Flushing 875 pending subscriptions...
-[FYERS_HSM_SUBSCRIBE] Subscribing to 661 topics...
-[FYERS_HSM_STATUS] subscribed symbols=ABB,CANBK,LUPIN,MIDCPNIFTY,NHPC,ONGC,PIIND,RADICO,ABCAPITAL,ASHOKLEY,BAJAJHLDNG,BHARTIARTL,CUMMINSIND,ETERNAL,GODREJPROP,HINDALCO,IEX,IRFC,KFINTECH,PRESTIGE,SHREECEM,TATACONSUM,TRENT,ADANIGREEN,APOLLOHOSP,BAJAJFINSV,BHARATFORG,CROMPTON,EICHERMOT,GODREJCP,HEROMOTOCO,IDFCFIRSTB,IREDA,KEI,LTF,MCX,NBCC,OFSS,PHOENIXLTD,SWIGGY,TORNTPHARM,VMM,ALKEM,ADANIPOWER,360ONE,ADANIENT,ADANIPORTS,AMBER,ADANIENSOL,AMBUJACEM,ANGELONE,APLAPOLLO,ASTRAL,ASIANPAINT,AUBANK,AUROPHARMA,AXISBANK,BAJAJ-AUTO,BANDHANBNK,BAJFINANCE,BANKINDIA,BANKBARODA,BANKNIFTY,BDL,BEL,BHEL,BIOCON,BLUESTARCO,BOSCHLTD,BPCL,BRITANNIA,BSE,CAMS,CGPOWER,CHOLAFIN,CDSL,CIPLA,COALINDIA,COCHINSHIP,COFORGE,COLPAL,CONCOR,DABUR,DALBHARAT,DELHIVERY,DIVISLAB,DIXON,DLF,DMART,DRREDDY,FEDERALBNK,FINNIFTY,FORCEMOT,FORTIS,GAIL,GLENMARK,GMRAIRPORT,GODFRYPHLP,GRASIM,GVT&D,HAL,HAVELLS,HCLTECH,HDFCAMC,HDFCBANK,HDFCLIFE,HINDPETRO,HINDUNILVR,HINDZINC,HYUNDAI,ICICIBANK,ICICIGI,ICICIPRULI,IDEA,INDHOTEL,INDIANB,INDIGO,INDUSINDBK,INDUSTOWER,INFY,INOXWIND,IOC,ITC,JINDALSTEL,JIOFIN,JSWENERGY,JSWSTEEL,JUBLFOOD,KALYANKJIL,KAYNES,KOTAKBANK,KPITTECH,LAURUSLABS,LICHSGFIN,LICI,LT,LODHA,NAUKRI,POLYCAB,SUNPHARMA,TIINDIA,MARICO,MARUTI,MPHASIS,NIFTYNXT50,PAYTM,POLICYBZR,MANKIND,PETRONET,POWERGRID,SBICARD,SUPREMEIND,TITAN,VBL,M&M,NAM-INDIA,NTPC,LTM,RVNL,SRF,TECHM,UNOMINDA,MANAPPURAM,MUTHOOTFIN,NMDC,PERSISTENT,RELIANCE,SONACOMS,TCS,UNITDSPR,ZYDUSLIFE,MAXHEALTH,NYKAA,PFC,POWERINDIA,VEDL,MAZDOCK,OBEROIRLTY,PGEL,PREMIERENE,SBIN,MFSL,OIL,PIDILITIND,RBLBANK,SIEMENS,TATAPOWER,ULTRACEMCO,WIPRO,MOTHERSON,PAGEIND,PNB,SHRIRAMFIN,TATAELXSI,TVSMOTOR,WAAREEENER,MOTILALOFS,NIFTYFPI,PATANJALI,PNBHOUSING,NATIONALUM,SBILIFE,SUZLON,TMPV,NESTLEIND,VOLTAS,NIFTY,SOLARINDS,TATASTEEL,UNIONBANK,YESBANK,RECLTD,SAIL,UPL,20MICRONS,21STCENMGM,3BBLACKBIO,3MINDIA,3PLAND,5PAISA,63MOONS,A2ZINFRA,AAATECH,AADHARHFC,AAKASH,AAREYDRUGS,AARON,AARTIDRUGS,AARTIIND,AARTIPHARM,AARVI,AASTHA,AAVAS,ABANSENT,ABBOTINDIA,ABCOTS,ABDL,ABFRL,ABLBL,ABMKNO,ABREL,ABSLAMC,ACC,ACCELYA,ACE,ACEINTEG,ACGL,ACI,ACL,ACMESOLAR,ACUTAAS,ADDIND,ADFFOODS,ADL,ADOR,ADROITINFO,ADSL,ADVAIT,ADVANCE,ADVANIHOTR,ADVENTHTL,ADVENZYMES,ADVIKCA,AEGISLOG,AEGISVOPAK,AEPL,AEQUS,AEROENTER,AEROFLEX,AERONEU,AEROPLANE,AETHER,AFCONS,AFFLE,AFFORDABLE,AFIL,AFSL,AGARIND,AGARWALEYE,AGI,AGIIL,AGL,AGRITECH,AGROPHOS,AHCL,AHLADA,AHLEAST,AHLUCONT,AIAENG,AIIL,AIRAN,AIROLAM,AJANTPHARM,AJAXENGG,AJMERA,AJOONI,AKASH,AKCAPIT,AKG,AKSHAR,AKUMS,ALANKIT,ALBERTDAVD,ALEMBICLTD,ALFREDHE,ALGOQUANT,ALICON,ALIVUS,ALKYLAMINE,ALLCARGO,ALLDIGI,ALLTIME,ALOKINDS,ALPA,ALPINETEX,ALUFLUOR,AMAGI,AMAL,AMARJOTHI,AMBICAAGAR,AMBIKCO,AMJLAND,AMNPLST,AMRUTANJAN,ANANDRATHI,ANANTRAJ,ANDHRAPAP,ANDHRSUGAR,ANDREWYU,ANIKINDS,ANNAPURNA,ANNU,ANSALBU,ANTELOPUS,ANTGRAPHIC,ANTHEM,ANUHPHR,ANUP,ANURAS,APARINDS,APCL,APCOTEXIND,APEX,APLLTD,APOLLO,APOLLOPIPE,APOLLOTYRE,APOLSINHOT,APOORVA,APTECHT,APTUS,AQYLON,ARCHIDPLY,ARCHIES,ARCIL,ARCL,ARDEE,ARE&M,ARENTERP,ARFIN,ARIHANT,ARIHANTCAP,ARIHANTSUP,ARIS,ARKADE,ARMANFIN,AROGRANITE,ARROWGREEN,ARSSBL,ARTEMISMED,ARTNIRMAN,ARVEE,ARVIND,ARVINDFASN,ARVSMART,ARYAMAN,ASAHIINDIA,ASAL,ASALCBR,ASHAPURMIN,ASHIANA,ASHIMASYN,ASHOKA,ASHOKAMET,ASIANENE,ASIANHOTNR,ASIANTILES,ASIANTNE,ASKAUTOLTD,ASMS,ASPINWALL,ASSAMENT,ASTAR,ASTEC,ASTERDM,ASTRAMICRO,ASTRAZEN,ATALREAL,ATAM,ATGL,ATHERENERG,ATL,ATLANTAA,ATLANTAELE,ATLASCYCLE,ATUL,ATULAUTO,AUGMONT,AURIONPRO,AURUM,AURUS,AUSOMENT,AUSTENG,AUTOAXLES,AUTOIND,AVADHSUGAR,AVALON,AVANCE,AVANTEL,AVANTIFEED,AVL,AVONMORE,AVROIND,AVTNPL,AWFIS,AWHCL,AWL,AXISCADES,AXITA,AXTEL,AYE,AYMSYNTEX,AZAD,AZADIND,BAGFILMS,BAIDFIN,BAJAJCON,BAJAJELEC,BAJAJHCARE,BAJAJHFL,BAJAJHIND,BAJAJINDEF,BAJAJST,BAJEL,BALAJEE,BALAJITELE,BALAMINES,BALAXI,BALKRISHNA,BALKRISIND,BALMLAWRIE,BALPHARMA,BALRAMCHIN,BALUFORGE,BANARBEADS,BANARISUG,BANCOINDIA,BANG,BANKA,BANSALWIRE,BANSWRAS,BASF,BATAINDIA,BATLIBOI,BAYERCROP,BBL,BBOX,BBTC,BBTCL,BCG,BCLIND,BCONCEPTS,BCPL,BEARDSELL,BECTORFOOD,BEDMUTHA,BEEKAY,BELLACASA,BELRISE,BEML,BENARAS,BENGALASM,BEPL,BERGEPAINT,BESTAGRO,BETA,BFINVEST,BFUTILITIE,BHAGCHEM,BHAGERIA,BHAGYANGR,BHANDARI,BHARATCOAL,BHARATRAS,BHARATSE,BHARATWIRE,BHARTIHEXA,BIGBLOC,BIKAJI,BIL,BIMETAL,BIOFILCHEM,BIRLACABLE,BIRLACORPN,BIRLAMONEY,BIRLANU,BLACKBUCK,BLACKROSE,BLAL,BLBLIMITED,BLEL,BLIL,BLKASHYAP,BLS,BLSE,BLUECLOUDS,BLUECOAST,BLUEDART,BLUEJET,BLUESTONE,BLUSPRING,BMWVENTLTD,BNAGROCHEM,BOHRAIND,BOMDYEING,BONLON,BORANA,BOROLTD,BORORENEW,BOROSCI,BOSCH-HCIL,BPL,BPLPHARMA,BRAHMINFRA,BRIGADE,BRIGHOTEL,BRIGHTBR,BRNL,BROOKS,BSHSL,BSL,BSOFT,BTML,BUILDPRO,BUTTERFLY,BVCL,BYKE,CAMLINFINE,CAMPUS,CANFINHOME,CANHLIFE,CANTABIL,CAPACITE,CAPILLARY,CAPITALSFB,CAPLIPOINT,CARBORUNIV,CARERATING,CARRARO,CARTRADE,CARYSIL,CASTROLIND,CCAVENUE,CCCL,CCHHL,CCL,CEATLTD,CEIGALL,CEINSYS,CELEBRITY,CELLO,CEMPRO,CENTENKA,CENTEXT,CENTRALBK,CENTRUM,CENTUM,CENTURYPLY,CERA,CESC,CEWATER,CGCL,CGVAK,CHALET,CHAMBLFERT,CHEMBOND,CHEMCON,CHEMCRUX,CHEMFAB,CHEMPLASTS,CHENNPETRO,CHEVIOT,CHOICEIN,CHOLAHLDNG,CIEINDIA,CIFL,CINELINE,CINEVISTA,CLEAN,CLEANMAX,CLEDUCATE,CLSEL,CMLL,CMPDI,CMRGREEN,CMSINFO,CNL,COASTCORP,COCKERILL,COFFEEDAY,COHANCE,COMFINTE,COMPEAU,COMPUSOFT,COMSYN,CONCORDBIO,CONFIPET,CONTROLPR,CORALFINAC,CORDELIA,COROMANDEL,CORONA,COSMOFIRST,CPCAP,CPEDU,CPL,CPPLUS,CRAFTSMAN,CRAMC,CRAVATEX,CREATIVEYE,CREDITACC,CREST,CRESTO,CRISIL,CRIZAC,CROWN,CSBBANK,CSLFINANCE,CSM,CUB,CUPID,CYIENT,CYIENTDLM,DALMIASUG,DAMCAPITAL,DANGEE,DATAMATICS,DATAPATTNS,DAVANGERE,DBCORP,DBEIL,DBL,DBOL,DBREALTY,DCAL,DCBBANK,DCI,DCM,DCMFINSERV,DCMNVL,360ONE-FUT,ABCAPITAL-FUT,ABB-FUT,ADANIENSOL-FUT,ADANIENT-FUT,ADANIPORTS-FUT,ADANIGREEN-FUT,ALKEM-FUT,AMBER-FUT,ADANIPOWER-FUT,AMBUJACEM-FUT,APLAPOLLO-FUT,ANGELONE-FUT,ASHOKLEY-FUT,APOLLOHOSP-FUT,ASIANPAINT-FUT,ASTRAL-FUT,AUROPHARMA-FUT,AXISBANK-FUT,AUBANK-FUT,BAJAJ-AUTO-FUT,BAJAJHLDNG-FUT,BANDHANBNK-FUT,BAJFINANCE-FUT,BAJAJFINSV-FUT,BANKBARODA-FUT,BANKINDIA-FUT,BANKNIFTY-FUT,BEL-FUT,BDL-FUT,BHARATFORG-FUT,BHARTIARTL-FUT,BHEL-FUT,BLUESTARCO-FUT,BIOCON-FUT,BSE-FUT,BOSCHLTD-FUT,BPCL-FUT,BRITANNIA-FUT,CAMS-FUT,CANBK-FUT,CDSL-FUT,CGPOWER-FUT,CIPLA-FUT,CHOLAFIN-FUT,COCHINSHIP-FUT,COALINDIA-FUT,COFORGE-FUT,COLPAL-FUT,CUMMINSIND-FUT,CONCOR-FUT,CROMPTON-FUT,DABUR-FUT,DALBHARAT-FUT,DLF-FUT,DIVISLAB-FUT,DELHIVERY-FUT,DIXON-FUT,DMART-FUT,FEDERALBNK-FUT,DRREDDY-FUT,ETERNAL-FUT,EICHERMOT-FUT,GAIL-FUT,FINNIFTY-FUT,GLENMARK-FUT,FORCEMOT-FUT,GODFRYPHLP-FUT,GMRAIRPORT-FUT,FORTIS-FUT,GODREJPROP-FUT,GODREJCP-FUT,HAL-FUT,GVT&D-FUT,GRASIM-FUT,HAVELLS-FUT,HCLTECH-FUT,HDFCAMC-FUT,HDFCBANK-FUT,HINDALCO-FUT,HDFCLIFE-FUT,HINDPETRO-FUT,HEROMOTOCO-FUT,HINDUNILVR-FUT,HYUNDAI-FUT,ICICIBANK-FUT,ICICIPRULI-FUT,HINDZINC-FUT,ICICIGI-FUT,IDEA-FUT,IDFCFIRSTB-FUT,IEX-FUT,INDHOTEL-FUT,INDIANB-FUT,INDIGO-FUT,INDUSTOWER-FUT,INFY-FUT,IOC-FUT,INDUSINDBK-FUT,IRFC-FUT,INOXWIND-FUT,ITC-FUT,IREDA-FUT,JIOFIN-FUT,JINDALSTEL-FUT,JSWSTEEL-FUT,JSWENERGY-FUT,JUBLFOOD-FUT,KAYNES-FUT,KEI-FUT,KALYANKJIL-FUT,KFINTECH-FUT,KOTAKBANK-FUT,KPITTECH-FUT,LODHA-FUT,LAURUSLABS-FUT,LICHSGFIN-FUT,LT-FUT,LICI-FUT,LTF-FUT,LTM-FUT,LUPIN-FUT,M&M-FUT,MARICO-FUT,MANAPPURAM-FUT,MANKIND-FUT,MARUTI-FUT,MAZDOCK-FUT,MAXHEALTH-FUT,MCX-FUT,MOTHERSON-FUT,MOTILALOFS-FUT,MPHASIS-FUT,MFSL-FUT,MIDCPNIFTY-FUT,NATIONALUM-FUT,MUTHOOTFIN-FUT,NAM-INDIA-FUT,NBCC-FUT,NAUKRI-FUT,NHPC-FUT,NESTLEIND-FUT,NIFTYFPI-FUT,NIFTY-FUT,NIFTYNXT50-FUT,NMDC-FUT,NTPC-FUT,NYKAA-FUT,OFSS-FUT,OBEROIRLTY-FUT,OIL-FUT,ONGC-FUT,PATANJALI-FUT,PAGEIND-FUT,PAYTM-FUT,PERSISTENT-FUT,PETRONET-FUT,PFC-FUT,PGEL-FUT,PIDILITIND-FUT,PHOENIXLTD-FUT,PNB-FUT,PNBHOUSING-FUT,POLICYBZR-FUT,PIIND-FUT,POLYCAB-FUT,POWERGRID-FUT,POWERINDIA-FUT,PRESTIGE-FUT,PREMIERENE-FUT,RECLTD-FUT,RADICO-FUT,RBLBANK-FUT,RVNL-FUT,SAIL-FUT,RELIANCE-FUT,SBILIFE-FUT,SHREECEM-FUT,SBICARD-FUT,SBIN-FUT,SIEMENS-FUT,SHRIRAMFIN-FUT,SOLARINDS-FUT,SRF-FUT,SONACOMS-FUT,SUNPHARMA-FUT,SUZLON-FUT,SUPREMEIND-FUT,SWIGGY-FUT,TATACONSUM-FUT,TATAELXSI-FUT,TATAPOWER-FUT,TATASTEEL-FUT,TCS-FUT,TECHM-FUT,TITAN-FUT,TIINDIA-FUT,TORNTPHARM-FUT,TMPV-FUT,TRENT-FUT,ULTRACEMCO-FUT,UNITDSPR-FUT,UNIONBANK-FUT,TVSMOTOR-FUT,UNOMINDA-FUT,UPL-FUT,VBL-FUT,VMM-FUT,VEDL-FUT,WAAREEENER-FUT,VOLTAS-FUT,YESBANK-FUT,ZYDUSLIFE-FUT,WIPRO-FUT
-[HSM_SUB_BATCH] batch=1 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|13 lastToken=sf|nse_cm|1270 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=2 symbols=50 bytes=767
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|324 lastToken=sf|nse_fo|68489 packetBytes=778
-[LIVE_BACKFILL_CONCURRENCY] liveWorker=connected_idle backfillWorker=running
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=3 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68490 lastToken=sf|nse_fo|68770 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=4 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68780 lastToken=sf|nse_fo|68767 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=5 symbols=50 bytes=783
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68741 lastToken=sf|nse_cm|27061 packetBytes=794
-[BackfillQueue] Saved 1500 bars for AFFORDABLE (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AFFORDABLE completed successfully!
-[HSM_SUB_BATCH] batch=6 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5578 lastToken=sf|nse_cm|9558 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=7 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|24715 lastToken=sf|nse_cm|10755 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=8 symbols=50 bytes=790
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5435 lastToken=sf|nse_cm|6066 packetBytes=801
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=9 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|757645 lastToken=sf|nse_cm|335 packetBytes=804
-[GapDetector] AFFORDABLE: 4 gap(s): 2025-10-17T03:45→2026-01-14T03:45, 2026-01-15T03:45→2026-03-31T09:59, 2026-04-20T03:45→2026-07-14T03:45, 2026-07-24T03:45→2026-09-23T03:48
-[BackfillQueue] Enqueued gap-fill for AFFORDABLE: 2025-10-17 → 2026-01-14
-[BackfillQueue] Enqueued gap-fill for AFFORDABLE: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AFFORDABLE: 2026-04-20 → 2026-07-14
-[BackfillQueue] Enqueued gap-fill for AFFORDABLE: 2026-07-24 → 2026-09-23
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=10 symbols=50 bytes=780
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|338 lastToken=sf|nse_cm|7848 packetBytes=791
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=11 symbols=50 bytes=791
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|762588 lastToken=sf|nse_cm|583 packetBytes=802
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=12 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|759477 lastToken=sf|nse_cm|760183 packetBytes=795
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2025-09-28 to 2025-10-28...
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=13 symbols=50 bytes=796
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|20223 lastToken=sf|nse_cm|21794 packetBytes=807
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=14 symbols=11 bytes=175
-[HSM_SUB_SEND] count=11 firstToken=sf|nse_cm|17881 lastToken=sf|nse_cm|11039 packetBytes=186
-[HSM_SUB_ACK] received status=ACK
-[BackfillQueue] Saved 7561 bars for AFIL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AFIL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AFIL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AFIL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8999 bars for AFIL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7498 bars for AFIL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6746 bars for AFIL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8244 bars for AFIL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7873 bars for AFIL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7497 bars for AFIL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8244 bars for AFIL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8253 bars for AFIL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AFIL (NSE:AFIL-EQ) [851 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AFIL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AFIL completed successfully!
-[GapDetector] AFIL: 3 gap(s): 2026-01-15T03:45→2026-04-15T03:45, 2026-04-27T03:45→2026-07-07T03:45, 2026-07-27T03:45→2026-09-18T03:45
-[BackfillQueue] Enqueued gap-fill for AFIL: 2026-01-15 → 2026-04-15
-[BackfillQueue] Enqueued gap-fill for AFIL: 2026-04-27 → 2026-07-07
-[BackfillQueue] Enqueued gap-fill for AFIL: 2026-07-27 → 2026-09-18
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7488 bars for AFSL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8180 bars for AFSL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7470 bars for AFSL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7465 bars for AFSL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8986 bars for AFSL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7478 bars for AFSL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6733 bars for AFSL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8170 bars for AFSL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7785 bars for AFSL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7223 bars for AFSL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8091 bars for AFSL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8064 bars for AFSL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AFSL (NSE:AFSL-EQ) [853 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1466 bars for AFSL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AFSL completed successfully!
-[GapDetector] AFSL: 3 gap(s): 2025-10-01T03:45→2025-12-26T03:45, 2025-12-30T03:45→2026-03-26T09:59, 2026-03-31T03:45→2026-06-11T03:46
-[BackfillQueue] Enqueued gap-fill for AFSL: 2025-10-01 → 2025-12-26
-[BackfillQueue] Enqueued gap-fill for AFSL: 2025-12-30 → 2026-03-26
-[BackfillQueue] Enqueued gap-fill for AFSL: 2026-03-31 → 2026-06-11
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2025-09-28 to 2025-10-28...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7557 bars for AGARIND (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8240 bars for AGARIND (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7498 bars for AGARIND (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7495 bars for AGARIND (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8994 bars for AGARIND (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7499 bars for AGARIND (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AGARIND (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AGARIND (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7873 bars for AGARIND (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7499 bars for AGARIND (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8249 bars for AGARIND (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AGARIND (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AGARIND (NSE:AGARIND-EQ) [855 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AGARIND (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AGARIND completed successfully!
-[GapDetector] AGARIND: 4 gap(s): 2025-10-10T03:45→2026-01-06T03:45, 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-08-17T03:45, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AGARIND: 2025-10-10 → 2026-01-06
-[BackfillQueue] Enqueued gap-fill for AGARIND: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AGARIND: 2026-05-28 → 2026-08-17
-[BackfillQueue] Enqueued gap-fill for AGARIND: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AGARWALEYE (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AGARWALEYE (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AGARWALEYE (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AGARWALEYE (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8999 bars for AGARWALEYE (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AGARWALEYE (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AGARWALEYE (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AGARWALEYE (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AGARWALEYE (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AGARWALEYE (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AGARWALEYE (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AGARWALEYE (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AGARWALEYE (NSE:AGARWALEYE-EQ) [858 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AGARWALEYE (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AGARWALEYE completed successfully!
-[GapDetector] AGARWALEYE: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AGARWALEYE: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AGARWALEYE: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AGARWALEYE: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AGI (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AGI (2025-10-28 to 2025-11-27)
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AGI (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7499 bars for AGI (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AGI (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AGI (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AGI (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AGI (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AGI (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AGI (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AGI (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AGI (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AGI (NSE:AGI-EQ) [860 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AGI (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AGI completed successfully!
-[GapDetector] AGI: 3 gap(s): 2025-12-30T03:45→2026-03-26T09:59, 2026-03-31T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AGI: 2025-12-30 → 2026-03-26
-[BackfillQueue] Enqueued gap-fill for AGI: 2026-03-31 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AGI: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AGIIL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AGIIL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AGIIL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AGIIL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AGIIL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AGIIL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AGIIL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AGIIL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AGIIL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AGIIL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AGIIL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AGIIL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AGIIL (NSE:AGIIL-EQ) [862 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AGIIL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AGIIL completed successfully!
-[GapDetector] AGIIL: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AGIIL: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AGIIL: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AGIIL: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 5979 bars for AGL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AGL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AGL (2026-08-24 to 2026-09-23)
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Fetching AGL (NSE:AGL-EQ) [864 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AGL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AGL completed successfully!
-[GapDetector] AGL: 1 gap(s): 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AGL: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7464 bars for AGRITECH (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8174 bars for AGRITECH (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7492 bars for AGRITECH (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7320 bars for AGRITECH (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8816 bars for AGRITECH (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7379 bars for AGRITECH (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6598 bars for AGRITECH (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 7936 bars for AGRITECH (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7706 bars for AGRITECH (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7143 bars for AGRITECH (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 7914 bars for AGRITECH (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 7997 bars for AGRITECH (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AGRITECH (NSE:AGRITECH-EQ) [864 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1493 bars for AGRITECH (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AGRITECH completed successfully!
-[GapDetector] AGRITECH: 3 gap(s): 2025-10-06T03:45→2026-01-02T03:48, 2026-01-05T03:45→2026-04-02T03:47, 2026-04-07T03:45→2026-05-20T05:25
-[BackfillQueue] Enqueued gap-fill for AGRITECH: 2025-10-06 → 2026-01-02
-[BackfillQueue] Enqueued gap-fill for AGRITECH: 2026-01-05 → 2026-04-02
-[BackfillQueue] Enqueued gap-fill for AGRITECH: 2026-04-07 → 2026-05-20
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7510 bars for AGROPHOS (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8164 bars for AGROPHOS (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7439 bars for AGROPHOS (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7462 bars for AGROPHOS (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8933 bars for AGROPHOS (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7413 bars for AGROPHOS (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6732 bars for AGROPHOS (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8147 bars for AGROPHOS (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7784 bars for AGROPHOS (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7435 bars for AGROPHOS (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8157 bars for AGROPHOS (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8171 bars for AGROPHOS (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AGROPHOS (NSE:AGROPHOS-EQ) [866 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AGROPHOS (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AGROPHOS completed successfully!
-[GapDetector] AGROPHOS: 3 gap(s): 2025-10-06T03:45→2025-12-31T03:48, 2026-01-05T03:45→2026-03-31T09:59, 2026-04-07T03:45→2026-05-26T04:02
-[BackfillQueue] Enqueued gap-fill for AGROPHOS: 2025-10-06 → 2025-12-31
-[BackfillQueue] Enqueued gap-fill for AGROPHOS: 2026-01-05 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AGROPHOS: 2026-04-07 → 2026-05-26
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2025-09-28 to 2025-10-28...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7557 bars for AHCL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8248 bars for AHCL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7493 bars for AHCL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2025-12-27 to 2026-01-26...
-[FYERS_HSM_CONNECT] Disconnected. Scheduling reconnect...
-[BackfillQueue] Saved 7493 bars for AHCL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8994 bars for AHCL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7499 bars for AHCL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6748 bars for AHCL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AHCL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2026-05-26 to 2026-06-25...
-[FYERS_HSM_STATUS] starting
-[FYERS_HSM_CONNECT] Connecting to wss://socket.fyers.in/hsm/v1-5/prod...
-[FYERS_HSM_CONNECT] Connected.
-[FYERS_HSM_STATUS] connected
-[FYERS_HSM_AUTH] Authenticating binary stream...
-[FYERS_HSM_AUTH] Auth successful.
-[FYERS_HSM_STATUS] authenticated
-[FYERS_HSM_STATUS] Flushing 875 pending subscriptions...
-[FYERS_HSM_SUBSCRIBE] Subscribing to 661 topics...
-[FYERS_HSM_STATUS] subscribed symbols=ABB,CANBK,LUPIN,MIDCPNIFTY,NHPC,ONGC,PIIND,RADICO,ABCAPITAL,ASHOKLEY,BAJAJHLDNG,BHARTIARTL,CUMMINSIND,ETERNAL,GODREJPROP,HINDALCO,IEX,IRFC,KFINTECH,PRESTIGE,SHREECEM,TATACONSUM,TRENT,ADANIGREEN,APOLLOHOSP,BAJAJFINSV,BHARATFORG,CROMPTON,EICHERMOT,GODREJCP,HEROMOTOCO,IDFCFIRSTB,IREDA,KEI,LTF,MCX,NBCC,OFSS,PHOENIXLTD,SWIGGY,TORNTPHARM,VMM,ALKEM,ADANIPOWER,360ONE,ADANIENT,ADANIPORTS,AMBER,ADANIENSOL,AMBUJACEM,ANGELONE,APLAPOLLO,ASTRAL,ASIANPAINT,AUBANK,AUROPHARMA,AXISBANK,BAJAJ-AUTO,BANDHANBNK,BAJFINANCE,BANKINDIA,BANKBARODA,BANKNIFTY,BDL,BEL,BHEL,BIOCON,BLUESTARCO,BOSCHLTD,BPCL,BRITANNIA,BSE,CAMS,CGPOWER,CHOLAFIN,CDSL,CIPLA,COALINDIA,COCHINSHIP,COFORGE,COLPAL,CONCOR,DABUR,DALBHARAT,DELHIVERY,DIVISLAB,DIXON,DLF,DMART,DRREDDY,FEDERALBNK,FINNIFTY,FORCEMOT,FORTIS,GAIL,GLENMARK,GMRAIRPORT,GODFRYPHLP,GRASIM,GVT&D,HAL,HAVELLS,HCLTECH,HDFCAMC,HDFCBANK,HDFCLIFE,HINDPETRO,HINDUNILVR,HINDZINC,HYUNDAI,ICICIBANK,ICICIGI,ICICIPRULI,IDEA,INDHOTEL,INDIANB,INDIGO,INDUSINDBK,INDUSTOWER,INFY,INOXWIND,IOC,ITC,JINDALSTEL,JIOFIN,JSWENERGY,JSWSTEEL,JUBLFOOD,KALYANKJIL,KAYNES,KOTAKBANK,KPITTECH,LAURUSLABS,LICHSGFIN,LICI,LT,LODHA,NAUKRI,POLYCAB,SUNPHARMA,TIINDIA,MARICO,MARUTI,MPHASIS,NIFTYNXT50,PAYTM,POLICYBZR,MANKIND,PETRONET,POWERGRID,SBICARD,SUPREMEIND,TITAN,VBL,M&M,NAM-INDIA,NTPC,LTM,RVNL,SRF,TECHM,UNOMINDA,MANAPPURAM,MUTHOOTFIN,NMDC,PERSISTENT,RELIANCE,SONACOMS,TCS,UNITDSPR,ZYDUSLIFE,MAXHEALTH,NYKAA,PFC,POWERINDIA,VEDL,MAZDOCK,OBEROIRLTY,PGEL,PREMIERENE,SBIN,MFSL,OIL,PIDILITIND,RBLBANK,SIEMENS,TATAPOWER,ULTRACEMCO,WIPRO,MOTHERSON,PAGEIND,PNB,SHRIRAMFIN,TATAELXSI,TVSMOTOR,WAAREEENER,MOTILALOFS,NIFTYFPI,PATANJALI,PNBHOUSING,NATIONALUM,SBILIFE,SUZLON,TMPV,NESTLEIND,VOLTAS,NIFTY,SOLARINDS,TATASTEEL,UNIONBANK,YESBANK,RECLTD,SAIL,UPL,20MICRONS,21STCENMGM,3BBLACKBIO,3MINDIA,3PLAND,5PAISA,63MOONS,A2ZINFRA,AAATECH,AADHARHFC,AAKASH,AAREYDRUGS,AARON,AARTIDRUGS,AARTIIND,AARTIPHARM,AARVI,AASTHA,AAVAS,ABANSENT,ABBOTINDIA,ABCOTS,ABDL,ABFRL,ABLBL,ABMKNO,ABREL,ABSLAMC,ACC,ACCELYA,ACE,ACEINTEG,ACGL,ACI,ACL,ACMESOLAR,ACUTAAS,ADDIND,ADFFOODS,ADL,ADOR,ADROITINFO,ADSL,ADVAIT,ADVANCE,ADVANIHOTR,ADVENTHTL,ADVENZYMES,ADVIKCA,AEGISLOG,AEGISVOPAK,AEPL,AEQUS,AEROENTER,AEROFLEX,AERONEU,AEROPLANE,AETHER,AFCONS,AFFLE,AFFORDABLE,AFIL,AFSL,AGARIND,AGARWALEYE,AGI,AGIIL,AGL,AGRITECH,AGROPHOS,AHCL,AHLADA,AHLEAST,AHLUCONT,AIAENG,AIIL,AIRAN,AIROLAM,AJANTPHARM,AJAXENGG,AJMERA,AJOONI,AKASH,AKCAPIT,AKG,AKSHAR,AKUMS,ALANKIT,ALBERTDAVD,ALEMBICLTD,ALFREDHE,ALGOQUANT,ALICON,ALIVUS,ALKYLAMINE,ALLCARGO,ALLDIGI,ALLTIME,ALOKINDS,ALPA,ALPINETEX,ALUFLUOR,AMAGI,AMAL,AMARJOTHI,AMBICAAGAR,AMBIKCO,AMJLAND,AMNPLST,AMRUTANJAN,ANANDRATHI,ANANTRAJ,ANDHRAPAP,ANDHRSUGAR,ANDREWYU,ANIKINDS,ANNAPURNA,ANNU,ANSALBU,ANTELOPUS,ANTGRAPHIC,ANTHEM,ANUHPHR,ANUP,ANURAS,APARINDS,APCL,APCOTEXIND,APEX,APLLTD,APOLLO,APOLLOPIPE,APOLLOTYRE,APOLSINHOT,APOORVA,APTECHT,APTUS,AQYLON,ARCHIDPLY,ARCHIES,ARCIL,ARCL,ARDEE,ARE&M,ARENTERP,ARFIN,ARIHANT,ARIHANTCAP,ARIHANTSUP,ARIS,ARKADE,ARMANFIN,AROGRANITE,ARROWGREEN,ARSSBL,ARTEMISMED,ARTNIRMAN,ARVEE,ARVIND,ARVINDFASN,ARVSMART,ARYAMAN,ASAHIINDIA,ASAL,ASALCBR,ASHAPURMIN,ASHIANA,ASHIMASYN,ASHOKA,ASHOKAMET,ASIANENE,ASIANHOTNR,ASIANTILES,ASIANTNE,ASKAUTOLTD,ASMS,ASPINWALL,ASSAMENT,ASTAR,ASTEC,ASTERDM,ASTRAMICRO,ASTRAZEN,ATALREAL,ATAM,ATGL,ATHERENERG,ATL,ATLANTAA,ATLANTAELE,ATLASCYCLE,ATUL,ATULAUTO,AUGMONT,AURIONPRO,AURUM,AURUS,AUSOMENT,AUSTENG,AUTOAXLES,AUTOIND,AVADHSUGAR,AVALON,AVANCE,AVANTEL,AVANTIFEED,AVL,AVONMORE,AVROIND,AVTNPL,AWFIS,AWHCL,AWL,AXISCADES,AXITA,AXTEL,AYE,AYMSYNTEX,AZAD,AZADIND,BAGFILMS,BAIDFIN,BAJAJCON,BAJAJELEC,BAJAJHCARE,BAJAJHFL,BAJAJHIND,BAJAJINDEF,BAJAJST,BAJEL,BALAJEE,BALAJITELE,BALAMINES,BALAXI,BALKRISHNA,BALKRISIND,BALMLAWRIE,BALPHARMA,BALRAMCHIN,BALUFORGE,BANARBEADS,BANARISUG,BANCOINDIA,BANG,BANKA,BANSALWIRE,BANSWRAS,BASF,BATAINDIA,BATLIBOI,BAYERCROP,BBL,BBOX,BBTC,BBTCL,BCG,BCLIND,BCONCEPTS,BCPL,BEARDSELL,BECTORFOOD,BEDMUTHA,BEEKAY,BELLACASA,BELRISE,BEML,BENARAS,BENGALASM,BEPL,BERGEPAINT,BESTAGRO,BETA,BFINVEST,BFUTILITIE,BHAGCHEM,BHAGERIA,BHAGYANGR,BHANDARI,BHARATCOAL,BHARATRAS,BHARATSE,BHARATWIRE,BHARTIHEXA,BIGBLOC,BIKAJI,BIL,BIMETAL,BIOFILCHEM,BIRLACABLE,BIRLACORPN,BIRLAMONEY,BIRLANU,BLACKBUCK,BLACKROSE,BLAL,BLBLIMITED,BLEL,BLIL,BLKASHYAP,BLS,BLSE,BLUECLOUDS,BLUECOAST,BLUEDART,BLUEJET,BLUESTONE,BLUSPRING,BMWVENTLTD,BNAGROCHEM,BOHRAIND,BOMDYEING,BONLON,BORANA,BOROLTD,BORORENEW,BOROSCI,BOSCH-HCIL,BPL,BPLPHARMA,BRAHMINFRA,BRIGADE,BRIGHOTEL,BRIGHTBR,BRNL,BROOKS,BSHSL,BSL,BSOFT,BTML,BUILDPRO,BUTTERFLY,BVCL,BYKE,CAMLINFINE,CAMPUS,CANFINHOME,CANHLIFE,CANTABIL,CAPACITE,CAPILLARY,CAPITALSFB,CAPLIPOINT,CARBORUNIV,CARERATING,CARRARO,CARTRADE,CARYSIL,CASTROLIND,CCAVENUE,CCCL,CCHHL,CCL,CEATLTD,CEIGALL,CEINSYS,CELEBRITY,CELLO,CEMPRO,CENTENKA,CENTEXT,CENTRALBK,CENTRUM,CENTUM,CENTURYPLY,CERA,CESC,CEWATER,CGCL,CGVAK,CHALET,CHAMBLFERT,CHEMBOND,CHEMCON,CHEMCRUX,CHEMFAB,CHEMPLASTS,CHENNPETRO,CHEVIOT,CHOICEIN,CHOLAHLDNG,CIEINDIA,CIFL,CINELINE,CINEVISTA,CLEAN,CLEANMAX,CLEDUCATE,CLSEL,CMLL,CMPDI,CMRGREEN,CMSINFO,CNL,COASTCORP,COCKERILL,COFFEEDAY,COHANCE,COMFINTE,COMPEAU,COMPUSOFT,COMSYN,CONCORDBIO,CONFIPET,CONTROLPR,CORALFINAC,CORDELIA,COROMANDEL,CORONA,COSMOFIRST,CPCAP,CPEDU,CPL,CPPLUS,CRAFTSMAN,CRAMC,CRAVATEX,CREATIVEYE,CREDITACC,CREST,CRESTO,CRISIL,CRIZAC,CROWN,CSBBANK,CSLFINANCE,CSM,CUB,CUPID,CYIENT,CYIENTDLM,DALMIASUG,DAMCAPITAL,DANGEE,DATAMATICS,DATAPATTNS,DAVANGERE,DBCORP,DBEIL,DBL,DBOL,DBREALTY,DCAL,DCBBANK,DCI,DCM,DCMFINSERV,DCMNVL,360ONE-FUT,ABCAPITAL-FUT,ABB-FUT,ADANIENSOL-FUT,ADANIENT-FUT,ADANIPORTS-FUT,ADANIGREEN-FUT,ALKEM-FUT,AMBER-FUT,ADANIPOWER-FUT,AMBUJACEM-FUT,APLAPOLLO-FUT,ANGELONE-FUT,ASHOKLEY-FUT,APOLLOHOSP-FUT,ASIANPAINT-FUT,ASTRAL-FUT,AUROPHARMA-FUT,AXISBANK-FUT,AUBANK-FUT,BAJAJ-AUTO-FUT,BAJAJHLDNG-FUT,BANDHANBNK-FUT,BAJFINANCE-FUT,BAJAJFINSV-FUT,BANKBARODA-FUT,BANKINDIA-FUT,BANKNIFTY-FUT,BEL-FUT,BDL-FUT,BHARATFORG-FUT,BHARTIARTL-FUT,BHEL-FUT,BLUESTARCO-FUT,BIOCON-FUT,BSE-FUT,BOSCHLTD-FUT,BPCL-FUT,BRITANNIA-FUT,CAMS-FUT,CANBK-FUT,CDSL-FUT,CGPOWER-FUT,CIPLA-FUT,CHOLAFIN-FUT,COCHINSHIP-FUT,COALINDIA-FUT,COFORGE-FUT,COLPAL-FUT,CUMMINSIND-FUT,CONCOR-FUT,CROMPTON-FUT,DABUR-FUT,DALBHARAT-FUT,DLF-FUT,DIVISLAB-FUT,DELHIVERY-FUT,DIXON-FUT,DMART-FUT,FEDERALBNK-FUT,DRREDDY-FUT,ETERNAL-FUT,EICHERMOT-FUT,GAIL-FUT,FINNIFTY-FUT,GLENMARK-FUT,FORCEMOT-FUT,GODFRYPHLP-FUT,GMRAIRPORT-FUT,FORTIS-FUT,GODREJPROP-FUT,GODREJCP-FUT,HAL-FUT,GVT&D-FUT,GRASIM-FUT,HAVELLS-FUT,HCLTECH-FUT,HDFCAMC-FUT,HDFCBANK-FUT,HINDALCO-FUT,HDFCLIFE-FUT,HINDPETRO-FUT,HEROMOTOCO-FUT,HINDUNILVR-FUT,HYUNDAI-FUT,ICICIBANK-FUT,ICICIPRULI-FUT,HINDZINC-FUT,ICICIGI-FUT,IDEA-FUT,IDFCFIRSTB-FUT,IEX-FUT,INDHOTEL-FUT,INDIANB-FUT,INDIGO-FUT,INDUSTOWER-FUT,INFY-FUT,IOC-FUT,INDUSINDBK-FUT,IRFC-FUT,INOXWIND-FUT,ITC-FUT,IREDA-FUT,JIOFIN-FUT,JINDALSTEL-FUT,JSWSTEEL-FUT,JSWENERGY-FUT,JUBLFOOD-FUT,KAYNES-FUT,KEI-FUT,KALYANKJIL-FUT,KFINTECH-FUT,KOTAKBANK-FUT,KPITTECH-FUT,LODHA-FUT,LAURUSLABS-FUT,LICHSGFIN-FUT,LT-FUT,LICI-FUT,LTF-FUT,LTM-FUT,LUPIN-FUT,M&M-FUT,MARICO-FUT,MANAPPURAM-FUT,MANKIND-FUT,MARUTI-FUT,MAZDOCK-FUT,MAXHEALTH-FUT,MCX-FUT,MOTHERSON-FUT,MOTILALOFS-FUT,MPHASIS-FUT,MFSL-FUT,MIDCPNIFTY-FUT,NATIONALUM-FUT,MUTHOOTFIN-FUT,NAM-INDIA-FUT,NBCC-FUT,NAUKRI-FUT,NHPC-FUT,NESTLEIND-FUT,NIFTYFPI-FUT,NIFTY-FUT,NIFTYNXT50-FUT,NMDC-FUT,NTPC-FUT,NYKAA-FUT,OFSS-FUT,OBEROIRLTY-FUT,OIL-FUT,ONGC-FUT,PATANJALI-FUT,PAGEIND-FUT,PAYTM-FUT,PERSISTENT-FUT,PETRONET-FUT,PFC-FUT,PGEL-FUT,PIDILITIND-FUT,PHOENIXLTD-FUT,PNB-FUT,PNBHOUSING-FUT,POLICYBZR-FUT,PIIND-FUT,POLYCAB-FUT,POWERGRID-FUT,POWERINDIA-FUT,PRESTIGE-FUT,PREMIERENE-FUT,RECLTD-FUT,RADICO-FUT,RBLBANK-FUT,RVNL-FUT,SAIL-FUT,RELIANCE-FUT,SBILIFE-FUT,SHREECEM-FUT,SBICARD-FUT,SBIN-FUT,SIEMENS-FUT,SHRIRAMFIN-FUT,SOLARINDS-FUT,SRF-FUT,SONACOMS-FUT,SUNPHARMA-FUT,SUZLON-FUT,SUPREMEIND-FUT,SWIGGY-FUT,TATACONSUM-FUT,TATAELXSI-FUT,TATAPOWER-FUT,TATASTEEL-FUT,TCS-FUT,TECHM-FUT,TITAN-FUT,TIINDIA-FUT,TORNTPHARM-FUT,TMPV-FUT,TRENT-FUT,ULTRACEMCO-FUT,UNITDSPR-FUT,UNIONBANK-FUT,TVSMOTOR-FUT,UNOMINDA-FUT,UPL-FUT,VBL-FUT,VMM-FUT,VEDL-FUT,WAAREEENER-FUT,VOLTAS-FUT,YESBANK-FUT,ZYDUSLIFE-FUT,WIPRO-FUT
-[HSM_SUB_BATCH] batch=1 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|13 lastToken=sf|nse_cm|1270 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[LIVE_BACKFILL_CONCURRENCY] liveWorker=connected_idle backfillWorker=running
-[HSM_SUB_BATCH] batch=2 symbols=50 bytes=767
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|324 lastToken=sf|nse_fo|68489 packetBytes=778
-[HSM_SUB_BATCH] batch=3 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68490 lastToken=sf|nse_fo|68770 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=4 symbols=50 bytes=802
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68780 lastToken=sf|nse_fo|68767 packetBytes=813
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=5 symbols=50 bytes=783
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_fo|68741 lastToken=sf|nse_cm|27061 packetBytes=794
-[HSM_SUB_BATCH] batch=6 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5578 lastToken=sf|nse_cm|9558 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=7 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|24715 lastToken=sf|nse_cm|10755 packetBytes=804
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=8 symbols=50 bytes=790
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|5435 lastToken=sf|nse_cm|6066 packetBytes=801
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=9 symbols=50 bytes=793
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|757645 lastToken=sf|nse_cm|335 packetBytes=804
-[HSM_SUB_BATCH] batch=10 symbols=50 bytes=780
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|338 lastToken=sf|nse_cm|7848 packetBytes=791
-[HSM_SUB_ACK] received status=ACK
-[BackfillQueue] Saved 7875 bars for AHCL (2026-05-26 to 2026-06-25)
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=11 symbols=50 bytes=791
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|762588 lastToken=sf|nse_cm|583 packetBytes=802
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=12 symbols=50 bytes=784
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|759477 lastToken=sf|nse_cm|760183 packetBytes=795
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=13 symbols=50 bytes=796
-[HSM_SUB_SEND] count=50 firstToken=sf|nse_cm|20223 lastToken=sf|nse_cm|21794 packetBytes=807
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2026-06-25 to 2026-07-25...
-[HSM_SUB_ACK] received status=ACK
-[HSM_SUB_BATCH] batch=14 symbols=11 bytes=175
-[HSM_SUB_SEND] count=11 firstToken=sf|nse_cm|17881 lastToken=sf|nse_cm|11039 packetBytes=186
-[HSM_SUB_ACK] received status=ACK
-[BackfillQueue] Saved 7500 bars for AHCL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AHCL (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AHCL (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AHCL (NSE:AHCL-EQ) [868 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AHCL (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AHCL completed successfully!
-[GapDetector] AHCL: 4 gap(s): 2025-10-14T03:45→2026-01-09T03:46, 2026-01-15T03:45→2026-04-07T03:45, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AHCL: 2025-10-14 → 2026-01-09
-[BackfillQueue] Enqueued gap-fill for AHCL: 2026-01-15 → 2026-04-07
-[BackfillQueue] Enqueued gap-fill for AHCL: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AHCL: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7516 bars for AHLADA (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8161 bars for AHLADA (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7380 bars for AHLADA (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7428 bars for AHLADA (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8875 bars for AHLADA (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7459 bars for AHLADA (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6676 bars for AHLADA (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8066 bars for AHLADA (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7658 bars for AHLADA (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7274 bars for AHLADA (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8116 bars for AHLADA (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8115 bars for AHLADA (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AHLADA (NSE:AHLADA-EQ) [871 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1480 bars for AHLADA (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AHLADA completed successfully!
-[GapDetector] AHLADA: 3 gap(s): 2025-10-07T03:45→2026-01-02T03:47, 2026-01-05T03:45→2026-03-31T09:59, 2026-04-08T03:45→2026-05-12T03:52
-[BackfillQueue] Enqueued gap-fill for AHLADA: 2025-10-07 → 2026-01-02
-[BackfillQueue] Enqueued gap-fill for AHLADA: 2026-01-05 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AHLADA: 2026-04-08 → 2026-05-12
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7218 bars for AHLEAST (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 7527 bars for AHLEAST (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2025-11-27 to 2025-12-27...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 6505 bars for AHLEAST (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7047 bars for AHLEAST (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 8462 bars for AHLEAST (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7022 bars for AHLEAST (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6548 bars for AHLEAST (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 7715 bars for AHLEAST (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7386 bars for AHLEAST (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 6777 bars for AHLEAST (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 7209 bars for AHLEAST (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 7103 bars for AHLEAST (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AHLEAST (NSE:AHLEAST-EQ) [873 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1329 bars for AHLEAST (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AHLEAST completed successfully!
-[GapDetector] AHLEAST: 2 gap(s): 2025-10-01T03:45→2025-12-29T03:45, 2025-12-30T03:45→2026-03-13T03:48
-[BackfillQueue] Enqueued gap-fill for AHLEAST: 2025-10-01 → 2025-12-29
-[BackfillQueue] Enqueued gap-fill for AHLEAST: 2025-12-30 → 2026-03-13
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AHLUCONT (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8245 bars for AHLUCONT (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AHLUCONT (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AHLUCONT (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AHLUCONT (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AHLUCONT (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AHLUCONT (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8249 bars for AHLUCONT (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AHLUCONT (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7499 bars for AHLUCONT (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AHLUCONT (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AHLUCONT (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AHLUCONT (NSE:AHLUCONT-EQ) [874 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AHLUCONT (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AHLUCONT completed successfully!
-[GapDetector] AHLUCONT: 4 gap(s): 2025-11-13T03:45→2025-11-13T03:49, 2026-01-15T03:45→2026-03-31T09:59, 2026-05-19T03:45→2026-07-01T03:45, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AHLUCONT: 2025-11-13 → 2025-11-13
-[BackfillQueue] Enqueued gap-fill for AHLUCONT: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AHLUCONT: 2026-05-19 → 2026-07-01
-[BackfillQueue] Enqueued gap-fill for AHLUCONT: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AIAENG (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AIAENG (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AIAENG (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2025-12-27 to 2026-01-26...
-[HSM_SYMBOL_STATS] subscribed=713 receiving=713 notReceiving=0
-[BackfillQueue] Saved 7500 bars for AIAENG (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AIAENG (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AIAENG (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AIAENG (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AIAENG (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AIAENG (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AIAENG (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2026-07-25 to 2026-08-24...
-[BackfillQueue] Saved 8250 bars for AIAENG (2026-07-25 to 2026-08-24)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2026-08-24 to 2026-09-23...
-[BackfillQueue] Saved 8257 bars for AIAENG (2026-08-24 to 2026-09-23)
-[BackfillQueue] Fetching AIAENG (NSE:AIAENG-EQ) [877 in queue] from 2026-09-23 to 2026-09-28...
-[BackfillQueue] Saved 1500 bars for AIAENG (2026-09-23 to 2026-09-28)
-[BackfillQueue] 365-Day Backfill for AIAENG completed successfully!
-[GapDetector] AIAENG: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
-[BackfillQueue] Enqueued gap-fill for AIAENG: 2026-01-15 → 2026-03-31
-[BackfillQueue] Enqueued gap-fill for AIAENG: 2026-05-28 → 2026-06-26
-[BackfillQueue] Enqueued gap-fill for AIAENG: 2026-09-14 → 2026-09-14
-[BackfillQueue] Fetching AIIL (NSE:AIIL-EQ) [879 in queue] from 2025-09-28 to 2025-10-28...
-[BackfillQueue] Saved 7561 bars for AIIL (2025-09-28 to 2025-10-28)
-[BackfillQueue] Fetching AIIL (NSE:AIIL-EQ) [879 in queue] from 2025-10-28 to 2025-11-27...
-[BackfillQueue] Saved 8250 bars for AIIL (2025-10-28 to 2025-11-27)
-[BackfillQueue] Fetching AIIL (NSE:AIIL-EQ) [879 in queue] from 2025-11-27 to 2025-12-27...
-[BackfillQueue] Saved 7500 bars for AIIL (2025-11-27 to 2025-12-27)
-[BackfillQueue] Fetching AIIL (NSE:AIIL-EQ) [879 in queue] from 2025-12-27 to 2026-01-26...
-[BackfillQueue] Saved 7500 bars for AIIL (2025-12-27 to 2026-01-26)
-[BackfillQueue] Fetching AIIL (NSE:AIIL-EQ) [879 in queue] from 2026-01-26 to 2026-02-25...
-[BackfillQueue] Saved 9000 bars for AIIL (2026-01-26 to 2026-02-25)
-[BackfillQueue] Fetching AIIL (NSE:AIIL-EQ) [879 in queue] from 2026-02-25 to 2026-03-27...
-[BackfillQueue] Saved 7500 bars for AIIL (2026-02-25 to 2026-03-27)
-[BackfillQueue] Fetching AIIL (NSE:AIIL-EQ) [879 in queue] from 2026-03-27 to 2026-04-26...
-[BackfillQueue] Saved 6750 bars for AIIL (2026-03-27 to 2026-04-26)
-[BackfillQueue] Fetching AIIL (NSE:AIIL-EQ) [879 in queue] from 2026-04-26 to 2026-05-26...
-[BackfillQueue] Saved 8250 bars for AIIL (2026-04-26 to 2026-05-26)
-[BackfillQueue] Fetching AIIL (NSE:AIIL-EQ) [879 in queue] from 2026-05-26 to 2026-06-25...
-[BackfillQueue] Saved 7875 bars for AIIL (2026-05-26 to 2026-06-25)
-[BackfillQueue] Fetching AIIL (NSE:AIIL-EQ) [879 in queue] from 2026-06-25 to 2026-07-25...
-[BackfillQueue] Saved 7500 bars for AIIL (2026-06-25 to 2026-07-25)
-[BackfillQueue] Fetching AIIL (NSE:AIIL-EQ) [879 in queue] from 2026-07-25 to 2026-08-24...
-[B
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753673|430.15|430.15|430.15|430.15|10
+[Live Tick] 2026-09-30 07:34:33 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:34 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753676|430.15|430.15|430.15|430.15|10
+[Live Tick] 2026-09-30 07:34:36 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 1 | Receiving Live Ticks: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[API] AmiBroker requested unknown symbol BAJAJINDEF, ignoring. Please add it via the UI.
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753678|430.15|430.15|430.15|430.15|10
+[Live Tick] 2026-09-30 07:34:38 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:39 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753681|430.15|430.15|430.15|430.15|10
+[Live Tick] 2026-09-30 07:34:41 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[API] AmiBroker requested unknown symbol ABCAPITAL, ignoring. Please add it via the UI.
+[Live Tick] 2026-09-30 07:34:42 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753684|430.15|430.15|430.15|430.15|10
+[Live Tick] 2026-09-30 07:34:44 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:45 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[API] AmiBroker requested unknown symbol 360NE, ignoring. Please add it via the UI.
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753686|430.15|430.15|430.15|430.15|10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:47 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753689|430.15|430.15|430.15|430.15|10
+[Live Tick] 2026-09-30 07:34:49 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753692|430.15|430.15|430.15|430.15|10
+[Live Tick] 2026-09-30 07:34:52 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:53 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753695|430.15|430.15|430.15|430.15|10
+[Live Tick] 2026-09-30 07:34:55 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:34:56 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+{"ts":"2026-09-30T07:34:57.907Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:34:58.254Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:34:58.483Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753697|429.7|429.7|429.7|429.7|199
+[Live Tick] 2026-09-30 07:34:57 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 199
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+{"ts":"2026-09-30T07:35:00.033Z","method":"POST","path":"/api/brokers/fyers-edf11f90/symbols","ip":"127.0.0.1"}
+[INFO] [FeedSimulator] Symbol added: CIPLA (NSE)
+[Backfill] CIPLA : Queued for backfill (365 days)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2025-09-30 to 2025-10-30...
+[FYERS_HSM_SUBSCRIBE] Subscribing to 1 topics...
+[FYERS_HSM_STATUS] subscribed symbols=NSE:CIPLA-EQ
+[HSM_SUB_BATCH] batch=1 symbols=1 bytes=16
+[HSM_SUB_SEND] count=1 firstToken=sf|nse_cm|694 lastToken=sf|nse_cm|694 packetBytes=27
+[HSM_SUB_ACK] received status=ACK
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753699|1364.6|1364.6|1364.6|1364.6|1
+[Live Tick] 2026-09-30 07:34:59 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7561 bars for CIPLA (2025-09-30 to 2025-10-30)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2025-10-30 to 2025-11-29...
+[Live Tick] 2026-09-30 07:35:01 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7875 bars for CIPLA (2025-10-30 to 2025-11-29)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2025-11-29 to 2025-12-29...
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753702|1364.6|1364.6|1364.6|1364.6|47
+[Live Tick] 2026-09-30 07:35:02 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 47
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7500 bars for CIPLA (2025-11-29 to 2025-12-29)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2025-12-29 to 2026-01-28...
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7875 bars for CIPLA (2025-12-29 to 2026-01-28)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2026-01-28 to 2026-02-27...
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753704|430|430|430|430|155
+[Live Tick] 2026-09-30 07:35:04 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 155
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 9000 bars for CIPLA (2026-01-28 to 2026-02-27)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2026-02-27 to 2026-03-29...
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+{"ts":"2026-09-30T07:35:06.206Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:35:06.415Z","method":"GET","path":"/api/brokers/fyers-edf11f90/search","ip":"127.0.0.1"}
+[BackfillQueue] Saved 7125 bars for CIPLA (2026-02-27 to 2026-03-29)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2026-03-29 to 2026-04-28...
+[Live Tick] 2026-09-30 07:35:06 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753706|429.75|429.75|429.75|429.75|19
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7125 bars for CIPLA (2026-03-29 to 2026-04-28)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2026-04-28 to 2026-05-28...
+[System Status] Total Symbols Active: 2 | Receiving Live Ticks: 2
+[Live Tick] 2026-09-30 07:35:07 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 19
+[BackfillQueue] Saved 7875 bars for CIPLA (2026-04-28 to 2026-05-28)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2026-05-28 to 2026-06-27...
+[BackfillQueue] Saved 7500 bars for CIPLA (2026-05-28 to 2026-06-27)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753709|429.75|429.75|429.75|429.75|19
+[Live Tick] 2026-09-30 07:35:09 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 19
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2026-06-27 to 2026-07-27...
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:10 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[BackfillQueue] Saved 7875 bars for CIPLA (2026-06-27 to 2026-07-27)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2026-07-27 to 2026-08-26...
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753711|1364.6|1364.6|1364.6|1364.6|2
+[Live Tick] 2026-09-30 07:35:11 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 8625 bars for CIPLA (2026-07-27 to 2026-08-26)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2026-08-26 to 2026-09-25...
+[Live Tick] 2026-09-30 07:35:12 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 19
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 8257 bars for CIPLA (2026-08-26 to 2026-09-25)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2026-09-25 to 2026-09-30...
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 1356 bars for CIPLA (2026-09-25 to 2026-09-30)
+[BackfillQueue] 365-Day Backfill for CIPLA completed successfully!
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753714|429.75|429.75|429.75|429.75|19
+[Live Tick] 2026-09-30 07:35:14 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 19
+[GapDetector] CIPLA: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
+[BackfillQueue] Enqueued gap-fill for CIPLA: 2026-01-15 → 2026-03-31
+[BackfillQueue] Enqueued gap-fill for CIPLA: 2026-05-28 → 2026-06-26
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [2 in queue] from 2026-01-15 to 2026-02-14...
+[BackfillQueue] Saved 7875 bars for CIPLA (2026-01-15 to 2026-02-14)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [2 in queue] from 2026-02-14 to 2026-03-16...
+[Live Tick] 2026-09-30 07:35:15 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 19
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[BackfillQueue] Saved 7500 bars for CIPLA (2026-02-14 to 2026-03-16)
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [2 in queue] from 2026-03-16 to 2026-03-31...
+[BackfillQueue] Saved 3750 bars for CIPLA (2026-03-16 to 2026-03-31)
+[BackfillQueue] Gap-fill for CIPLA completed successfully!
+[BackfillQueue] Fetching CIPLA (NSE:CIPLA-EQ) [1 in queue] from 2026-05-28 to 2026-06-26...
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753716|1364.6|1364.6|1364.6|1364.6|11
+[Live Tick] 2026-09-30 07:35:16 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7500 bars for CIPLA (2026-05-28 to 2026-06-26)
+[BackfillQueue] Gap-fill for CIPLA completed successfully!
+{"ts":"2026-09-30T07:35:18.024Z","method":"POST","path":"/api/brokers/fyers-edf11f90/symbols","ip":"127.0.0.1"}
+[INFO] [FeedSimulator] Symbol added: TCS (NSE)
+[Backfill] TCS : Queued for backfill (365 days)
+[FYERS_HSM_SUBSCRIBE] Subscribing to 1 topics...
+[FYERS_HSM_STATUS] subscribed symbols=NSE:TCS-EQ
+[HSM_SUB_BATCH] batch=1 symbols=1 bytes=18
+[HSM_SUB_SEND] count=1 firstToken=sf|nse_cm|11536 lastToken=sf|nse_cm|11536 packetBytes=29
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2025-09-30 to 2025-10-30...
+[HSM_SUB_ACK] received status=ACK
+[BackfillQueue] Saved 7561 bars for TCS (2025-09-30 to 2025-10-30)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2025-10-30 to 2025-11-29...
+[Live Tick] 2026-09-30 07:35:18 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 19
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753719|2067.5|2067.5|2067.5|2067.5|75
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[BackfillQueue] Saved 7875 bars for TCS (2025-10-30 to 2025-11-29)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2025-11-29 to 2025-12-29...
+[Live Tick] 2026-09-30 07:35:19 | NSE:TCS-EQ | ₹ 2067.30 | Vol: 1
+[BackfillQueue] Saved 7500 bars for TCS (2025-11-29 to 2025-12-29)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2025-12-29 to 2026-01-28...
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7875 bars for TCS (2025-12-29 to 2026-01-28)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2026-01-28 to 2026-02-27...
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753721|429.75|429.75|429.75|429.75|19
+[Live Tick] 2026-09-30 07:35:21 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 19
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 9000 bars for TCS (2026-01-28 to 2026-02-27)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2026-02-27 to 2026-03-29...
+[Live Tick] 2026-09-30 07:35:23 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7125 bars for TCS (2026-02-27 to 2026-03-29)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2026-03-29 to 2026-04-28...
+[BackfillQueue] Saved 7125 bars for TCS (2026-03-29 to 2026-04-28)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753724|430|430|430|430|11
+[Live Tick] 2026-09-30 07:35:24 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2026-04-28 to 2026-05-28...
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7875 bars for TCS (2026-04-28 to 2026-05-28)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2026-05-28 to 2026-06-27...
+[Live Tick] 2026-09-30 07:35:25 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7500 bars for TCS (2026-05-28 to 2026-06-27)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2026-06-27 to 2026-07-27...
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753727|1364.6|1364.6|1364.6|1364.6|11
+[Live Tick] 2026-09-30 07:35:27 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7875 bars for TCS (2026-06-27 to 2026-07-27)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2026-07-27 to 2026-08-26...
+[Live Tick] 2026-09-30 07:35:28 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 8625 bars for TCS (2026-07-27 to 2026-08-26)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2026-08-26 to 2026-09-25...
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753729|430|430|430|430|11
+[Live Tick] 2026-09-30 07:35:29 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 8257 bars for TCS (2026-08-26 to 2026-09-25)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2026-09-25 to 2026-09-30...
+[BackfillQueue] Saved 1356 bars for TCS (2026-09-25 to 2026-09-30)
+[BackfillQueue] 365-Day Backfill for TCS completed successfully!
+[GapDetector] TCS: 3 gap(s): 2026-01-15T03:45→2026-03-31T09:59, 2026-05-28T03:45→2026-06-26T09:59, 2026-09-14T03:45→2026-09-14T09:59
+[BackfillQueue] Enqueued gap-fill for TCS: 2026-01-15 → 2026-03-31
+[BackfillQueue] Enqueued gap-fill for TCS: 2026-05-28 → 2026-06-26
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [2 in queue] from 2026-01-15 to 2026-02-14...
+[Live Tick] 2026-09-30 07:35:30 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7875 bars for TCS (2026-01-15 to 2026-02-14)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [2 in queue] from 2026-02-14 to 2026-03-16...
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753731|2068|2068|2068|2068|10
+[Live Tick] 2026-09-30 07:35:31 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7500 bars for TCS (2026-02-14 to 2026-03-16)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [2 in queue] from 2026-03-16 to 2026-03-31...
+[BackfillQueue] Saved 3750 bars for TCS (2026-03-16 to 2026-03-31)
+[BackfillQueue] Gap-fill for TCS completed successfully!
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Fetching TCS (NSE:TCS-EQ) [1 in queue] from 2026-05-28 to 2026-06-26...
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:32 | NSE:TCS-EQ | ₹ 2067.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[BackfillQueue] Saved 7500 bars for TCS (2026-05-28 to 2026-06-26)
+[BackfillQueue] Gap-fill for TCS completed successfully!
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753734|2068.1|2068.1|2068.1|2068.1|25
+[Live Tick] 2026-09-30 07:35:34 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 25
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:35 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753736|1364.6|1364.6|1364.6|1364.6|1
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:37 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:38 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 25
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753738|2068.2|2068.2|2068|2068|26
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:39 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:40 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 11
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753740|2068.2|2068.2|2068.1|2068.2|12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:42 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753743|2068.2|2068.2|2068.2|2068.2|5
+[Live Tick] 2026-09-30 07:35:43 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:44 | BSE:COALINDIA-A | ₹ 430.00 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753745|1364.6|1364.6|1364.6|1364.6|3
+[Live Tick] 2026-09-30 07:35:45 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:47 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 195
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753747|2068.1|2068.1|2068.1|2068.1|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:48 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:49 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753750|430.15|430.15|430.15|430.15|195
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:50 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753752|429.75|429.75|429.75|429.75|42
+[Live Tick] 2026-09-30 07:35:52 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 42
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:53 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 42
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753754|2068.1|2068.1|2068.1|2068.1|2
+[Live Tick] 2026-09-30 07:35:54 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:56 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 42
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753757|2068.3|2068.3|2068.3|2068.3|4
+[Live Tick] 2026-09-30 07:35:57 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:58 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 26
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753759|2068.3|2068.3|2068.3|2068.3|26
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:35:59 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 42
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:01 | NSE:CIPLA-EQ | ₹ 1364.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753762|1364.7|1364.7|1364.7|1364.7|1
+[Live Tick] 2026-09-30 07:36:02 | NSE:CIPLA-EQ | ₹ 1364.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:03 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753764|2069|2069|2069|2069|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:05 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:06 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753767|1364.7|1364.7|1364.7|1364.7|1
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:07 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753769|430.2|430.2|430.2|430.2|59
+[Live Tick] 2026-09-30 07:36:09 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:10 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753771|430.2|430.2|430.2|430.2|59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:12 | NSE:CIPLA-EQ | ₹ 1364.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:13 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753774|2069|2069|2069|2069|7
+[Live Tick] 2026-09-30 07:36:14 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:15 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753776|430.2|430.2|430.2|430.2|59
+[Live Tick] 2026-09-30 07:36:16 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:17 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753778|2069.1|2069.1|2069.1|2069.1|34
+[Live Tick] 2026-09-30 07:36:18 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 34
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:19 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753780|1364.8|1364.8|1364.8|1364.8|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:21 | BSE:COALINDIA-A | ₹ 430.20 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:22 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 33
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753783|2068.7|2068.7|2068.7|2068.7|15
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:24 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:25 | NSE:CIPLA-EQ | ₹ 1364.80 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753785|429.8|429.8|429.8|429.8|13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:26 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 25
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:27 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 25
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753788|2069.1|2069.1|2069.1|2069.1|25
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:28 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:29 | NSE:TCS-EQ | ₹ 2069.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753790|2069.2|2069.2|2069.2|2069.2|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:31 | NSE:CIPLA-EQ | ₹ 1364.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:32 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753793|429.8|429.8|429.8|429.8|13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:33 | NSE:TCS-EQ | ₹ 2069.20 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:34 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753795|2069.2|2069.6|2069.2|2069.6|18
+[Live Tick] 2026-09-30 07:36:35 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:36 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753797|2069.6|2069.6|2069.6|2069.6|14
+[Live Tick] 2026-09-30 07:36:37 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:38 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753799|2069.4|2069.6|2069.4|2069.6|5
+[Live Tick] 2026-09-30 07:36:40 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:41 | NSE:CIPLA-EQ | ₹ 1364.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753802|429.95|429.95|429.95|429.95|10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:42 | NSE:TCS-EQ | ₹ 2069.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:43 | NSE:TCS-EQ | ₹ 2069.20 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753804|429.95|429.95|429.95|429.95|10
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:45 | NSE:TCS-EQ | ₹ 2069.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753806|2069.6|2069.6|2069.6|2069.6|99
+[Live Tick] 2026-09-30 07:36:46 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 99
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:48 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753809|2069.5|2069.5|2069.5|2069.5|13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:49 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:50 | NSE:TCS-EQ | ₹ 2069.50 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753812|1364.7|1364.7|1364.7|1364.7|1
+[Live Tick] 2026-09-30 07:36:52 | NSE:CIPLA-EQ | ₹ 1364.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:53 | NSE:CIPLA-EQ | ₹ 1364.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753814|2069.4|2069.4|2069.4|2069.4|10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:54 | NSE:TCS-EQ | ₹ 2069.20 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:55 | NSE:CIPLA-EQ | ₹ 1364.80 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753816|2069|2069|2069|2069|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:36:57 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753818|1364.8|1364.8|1364.8|1364.8|6
+[Live Tick] 2026-09-30 07:36:58 | NSE:CIPLA-EQ | ₹ 1364.80 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:00 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753821|429.95|429.95|429.95|429.95|10
+[Live Tick] 2026-09-30 07:37:01 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:02 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753823|2069|2069|2069|2069|1
+[Live Tick] 2026-09-30 07:37:03 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:04 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753826|2068.8|2068.8|2068.8|2068.8|2
+[Live Tick] 2026-09-30 07:37:06 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:37:07 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753828|1364.8|1364.8|1364.8|1364.8|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:08 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:10 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753831|2069|2069|2069|2069|7
+[Live Tick] 2026-09-30 07:37:11 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:12 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753833|2069|2069|2069|2069|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:13 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:14 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 31
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753835|2069|2069|2068.9|2068.9|41
+[Live Tick] 2026-09-30 07:37:16 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 39
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:17 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 39
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753838|429.7|429.7|429.7|429.7|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:18 | NSE:CIPLA-EQ | ₹ 1364.80 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753840|429.7|429.7|429.7|429.7|5
+[Live Tick] 2026-09-30 07:37:20 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:21 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753842|429.7|429.7|429.7|429.7|5
+[Live Tick] 2026-09-30 07:37:22 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:24 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 33
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753845|1364.8|1364.8|1364.8|1364.8|6
+[Live Tick] 2026-09-30 07:37:25 | NSE:CIPLA-EQ | ₹ 1364.80 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:26 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 36
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753847|2068.7|2068.7|2068.7|2068.7|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:27 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 33
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:29 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 33
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753849|2068.7|2068.7|2068.7|2068.7|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:30 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 33
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:31 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 100
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753851|2068.7|2068.7|2068.7|2068.7|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:32 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753853|2068.6|2068.6|2068.6|2068.6|2
+[Live Tick] 2026-09-30 07:37:33 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:35 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753855|2068.7|2068.7|2068.2|2068.2|2
+[Live Tick] 2026-09-30 07:37:36 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 100
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753858|430.15|430.15|430.15|430.15|100
+[Live Tick] 2026-09-30 07:37:38 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 100
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:39 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753860|430.15|430.15|430.15|430.15|100
+[Live Tick] 2026-09-30 07:37:40 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 100
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:42 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 100
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753862|2068.3|2068.3|2068.3|2068.3|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:43 | NSE:CIPLA-EQ | ₹ 1364.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753865|430.15|430.15|430.15|430.15|100
+[Live Tick] 2026-09-30 07:37:45 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 100
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:47 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 100
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753868|430.15|430.15|430.15|430.15|100
+[Live Tick] 2026-09-30 07:37:48 | NSE:CIPLA-EQ | ₹ 1364.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:49 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753870|1364.8|1364.8|1364.8|1364.8|1
+[Live Tick] 2026-09-30 07:37:50 | NSE:CIPLA-EQ | ₹ 1364.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:52 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753873|1364.7|1364.7|1364.7|1364.7|1
+[Live Tick] 2026-09-30 07:37:53 | NSE:CIPLA-EQ | ₹ 1364.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:54 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753875|429.7|429.7|429.7|429.7|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:56 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753877|1364.8|1364.8|1364.8|1364.8|1
+[Live Tick] 2026-09-30 07:37:57 | NSE:CIPLA-EQ | ₹ 1364.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:37:59 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753880|2068.4|2068.4|2068.4|2068.4|4
+[Live Tick] 2026-09-30 07:38:00 | NSE:TCS-EQ | ₹ 2068.40 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:02 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 194
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753883|1364.8|1364.8|1364.8|1364.8|1
+[Live Tick] 2026-09-30 07:38:03 | NSE:CIPLA-EQ | ₹ 1364.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:04 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 194
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753886|430.15|430.15|430.15|430.15|194
+[Live Tick] 2026-09-30 07:38:06 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 194
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:06 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753888|430.15|430.15|430.15|430.15|194
+[Live Tick] 2026-09-30 07:38:08 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 194
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:10 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753891|430.15|430.15|430.15|430.15|194
+[Live Tick] 2026-09-30 07:38:11 | BSE:COALINDIA-A | ₹ 430.15 | Vol: 194
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:12 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 51
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753893|429.65|429.65|429.65|429.65|23
+[Live Tick] 2026-09-30 07:38:13 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:14 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 164
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753895|2068.5|2068.5|2068.5|2068.5|1
+[Live Tick] 2026-09-30 07:38:15 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:17 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753898|1364.7|1364.7|1364.7|1364.7|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:18 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:20 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753901|429.35|429.35|429.35|429.35|2
+[Live Tick] 2026-09-30 07:38:21 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:22 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753903|1364|1364|1364|1364|1
+[Live Tick] 2026-09-30 07:38:23 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:25 | NSE:CIPLA-EQ | ₹ 1364.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753906|429.55|429.55|429.55|429.55|4
+[Live Tick] 2026-09-30 07:38:26 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:27 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753909|429.55|429.55|429.55|429.55|4
+[Live Tick] 2026-09-30 07:38:29 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:30 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753911|429.55|429.55|429.55|429.55|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:32 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753914|429.55|429.55|429.55|429.55|1
+[Live Tick] 2026-09-30 07:38:34 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:35 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753916|429.55|429.55|429.55|429.55|1
+[Live Tick] 2026-09-30 07:38:36 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:38:38 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753919|429.55|429.55|429.55|429.55|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:39 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753921|2068.9|2068.9|2068.9|2068.9|1
+[Live Tick] 2026-09-30 07:38:41 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:42 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753923|429.65|429.65|429.65|429.65|18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:44 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:45 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 19
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753925|429.65|429.65|429.65|429.65|18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:46 | BSE:COALINDIA-A | ₹ 430.10 | Vol: 33
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753928|429.7|429.7|429.7|429.7|1
+[Live Tick] 2026-09-30 07:38:48 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:48 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753930|429.7|429.7|429.7|429.7|1
+[Live Tick] 2026-09-30 07:38:50 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753933|429.7|429.7|429.7|429.7|1
+[Live Tick] 2026-09-30 07:38:53 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:54 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753935|2068.5|2068.5|2068.5|2068.5|1
+[Live Tick] 2026-09-30 07:38:55 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:57 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753937|2068.5|2068.5|2068.5|2068.5|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:38:59 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753940|1364.4|1364.4|1364.4|1364.4|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:00 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 22
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:02 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753942|2068.6|2068.6|2068.6|2068.6|14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:03 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:04 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753945|429.6|429.6|429.6|429.6|15
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:05 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753947|429.5|429.5|429.5|429.5|134
+[Live Tick] 2026-09-30 07:39:07 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 134
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:08 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 134
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753949|429.5|429.5|429.5|429.5|134
+[Live Tick] 2026-09-30 07:39:09 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 134
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:10 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790753951|1364.4|1364.4|1364.4|1364.4|2
+[Live Tick] 2026-09-30 07:39:11 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:13 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753954|429.5|429.5|429.5|429.5|134
+[Live Tick] 2026-09-30 07:39:14 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 134
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:15 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753957|429.55|429.55|429.55|429.55|6
+[Live Tick] 2026-09-30 07:39:17 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:18 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753960|429.55|429.55|429.55|429.55|6
+[Live Tick] 2026-09-30 07:39:20 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753962|429.55|429.55|429.55|429.55|6
+[Live Tick] 2026-09-30 07:39:22 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:23 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753965|429.55|429.55|429.55|429.55|6
+[Live Tick] 2026-09-30 07:39:25 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:26 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753967|429.55|429.55|429.55|429.55|6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:27 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 15
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:29 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 15
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753970|429.6|429.6|429.6|429.6|15
+[Live Tick] 2026-09-30 07:39:30 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 15
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753972|429.6|429.6|429.6|429.6|1
+[Live Tick] 2026-09-30 07:39:32 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:33 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753975|429.6|429.6|429.6|429.6|1
+[Live Tick] 2026-09-30 07:39:35 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:36 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 81
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753977|429.65|429.65|429.65|429.65|2
+[Live Tick] 2026-09-30 07:39:37 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:38 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753980|429.65|429.65|429.65|429.65|2
+[Live Tick] 2026-09-30 07:39:40 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:41 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753982|429.9|429.9|429.9|429.9|14
+[Live Tick] 2026-09-30 07:39:42 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:44 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753984|2068.3|2068.3|2068.1|2068.1|21
+[Live Tick] 2026-09-30 07:39:45 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:46 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753987|429.65|429.65|429.65|429.65|1
+[Live Tick] 2026-09-30 07:39:47 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:49 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753990|429.65|429.65|429.65|429.65|1
+[Live Tick] 2026-09-30 07:39:50 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:51 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753992|429.65|429.65|429.65|429.65|1
+[Live Tick] 2026-09-30 07:39:52 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:54 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790753994|2068.1|2068.2|2068.1|2068.2|11
+[Live Tick] 2026-09-30 07:39:55 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:56 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753997|429.65|429.65|429.65|429.65|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:39:58 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790753999|429.65|429.65|429.65|429.65|1
+[Live Tick] 2026-09-30 07:39:59 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:00 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754001|429.65|429.65|429.6|429.6|2
+[Live Tick] 2026-09-30 07:40:01 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:03 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754003|2068.2|2068.2|2068.2|2068.2|2
+[Live Tick] 2026-09-30 07:40:03 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:05 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754006|1364.4|1364.4|1364.4|1364.4|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:06 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:40:07 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754009|2068.2|2068.2|2068.2|2068.2|3
+[Live Tick] 2026-09-30 07:40:09 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:10 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754011|1364.3|1364.3|1364.3|1364.3|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:12 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:13 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754013|2068.2|2068.2|2068.2|2068.2|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:14 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754016|429.55|429.55|429.55|429.55|5
+[Live Tick] 2026-09-30 07:40:16 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754018|429.55|429.55|429.55|429.55|1
+[Live Tick] 2026-09-30 07:40:18 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:19 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 26
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754020|2068.2|2068.2|2068.2|2068.2|3
+[Live Tick] 2026-09-30 07:40:20 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:22 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754023|429.55|429.55|429.55|429.55|1
+[Live Tick] 2026-09-30 07:40:23 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:24 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754026|429.55|429.55|429.55|429.55|1
+[Live Tick] 2026-09-30 07:40:26 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:27 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754030|429.55|429.55|429.55|429.55|1
+[Live Tick] 2026-09-30 07:40:30 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:31 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754032|429.55|429.55|429.55|429.55|1
+[Live Tick] 2026-09-30 07:40:32 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:33 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754034|429.5|429.55|429.5|429.55|116
+[Live Tick] 2026-09-30 07:40:34 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 100
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:35 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754037|1364.3|1364.3|1364.3|1364.3|1
+[Live Tick] 2026-09-30 07:40:37 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:38 | NSE:TCS-EQ | ₹ 2068.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754039|429.55|429.55|429.55|429.55|100
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:40 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 100
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754041|429.55|429.55|429.55|429.55|100
+[Live Tick] 2026-09-30 07:40:41 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 100
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:42 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754044|2068.6|2068.6|2068.6|2068.6|1
+[Live Tick] 2026-09-30 07:40:44 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:46 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754047|1364.3|1364.3|1364.3|1364.3|3
+[Live Tick] 2026-09-30 07:40:47 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:49 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754050|429.5|429.5|429.5|429.5|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:50 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754052|1364.3|1364.3|1364.3|1364.3|2
+[Live Tick] 2026-09-30 07:40:52 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:53 | NSE:TCS-EQ | ₹ 2068.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754055|429.5|429.5|429.5|429.5|2
+[Live Tick] 2026-09-30 07:40:55 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:56 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754057|1364.3|1364.3|1364.3|1364.3|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:58 | NSE:TCS-EQ | ₹ 2068.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:40:59 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754059|2068.4|2068.4|2068.4|2068.4|7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:00 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:01 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754062|1364.4|1364.4|1364.4|1364.4|3
+[Live Tick] 2026-09-30 07:41:02 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:04 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 22
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754065|429.5|429.5|429.5|429.5|200
+[Live Tick] 2026-09-30 07:41:05 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:06 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754067|1364.4|1364.4|1364.4|1364.4|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:08 | NSE:TCS-EQ | ₹ 2068.40 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:09 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754070|2068.3|2068.3|2068.3|2068.3|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:11 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:12 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754073|429.45|429.45|429.45|429.45|7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:13 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:14 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 53
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754076|429.75|429.75|429.75|429.75|6
+[Live Tick] 2026-09-30 07:41:16 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754078|429.75|429.75|429.75|429.75|6
+[Live Tick] 2026-09-30 07:41:18 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:19 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 31
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754080|429.75|429.75|429.75|429.75|6
+[Live Tick] 2026-09-30 07:41:20 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:22 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754083|1364.4|1364.4|1364.4|1364.4|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:23 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:24 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754085|1364.4|1364.4|1364.4|1364.4|11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:26 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754087|429.35|429.35|429.35|429.35|4
+[Live Tick] 2026-09-30 07:41:27 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754090|2068.3|2068.3|2068.3|2068.3|3
+[Live Tick] 2026-09-30 07:41:30 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:31 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754093|2068.3|2068.3|2068.3|2068.3|1
+[Live Tick] 2026-09-30 07:41:33 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:33 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754095|429.6|429.6|429.6|429.6|14
+[Live Tick] 2026-09-30 07:41:35 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:36 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754097|429.4|429.4|429.4|429.4|4
+[Live Tick] 2026-09-30 07:41:37 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:39 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754100|429.4|429.4|429.4|429.4|4
+[Live Tick] 2026-09-30 07:41:40 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:41 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 55
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754102|2067.9|2067.9|2067.9|2067.9|13
+[Live Tick] 2026-09-30 07:41:42 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:43 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754104|2068|2068|2067.9|2067.9|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:45 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:46 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754107|2068.2|2068.2|2068.2|2068.2|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:47 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:48 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 113
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754109|1364.4|1364.4|1364.4|1364.4|2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:50 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754111|2068.2|2068.2|2068.2|2068.2|3
+[Live Tick] 2026-09-30 07:41:51 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:52 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754113|2068.2|2068.2|2068.2|2068.2|3
+[Live Tick] 2026-09-30 07:41:53 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:55 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754116|1364.4|1364.4|1364.4|1364.4|11
+[Live Tick] 2026-09-30 07:41:56 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:41:58 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754119|1364.4|1364.4|1364.4|1364.4|11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:00 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754121|2068.2|2068.2|2068.2|2068.2|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:01 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 30
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:02 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 30
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754123|2067.9|2067.9|2067.9|2067.9|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:04 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754125|2068|2068|2068|2068|9
+[Live Tick] 2026-09-30 07:42:05 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:06 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 86
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754128|2067.9|2067.9|2067.9|2067.9|3
+[Live Tick] 2026-09-30 07:42:08 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:09 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 86
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754130|429.35|429.35|429.35|429.35|86
+[Live Tick] 2026-09-30 07:42:10 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 86
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:11 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 86
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754132|2068|2068|2068|2068|1
+[Live Tick] 2026-09-30 07:42:12 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:14 | NSE:CIPLA-EQ | ₹ 1364.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754135|2068.2|2068.2|2068.2|2068.2|10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:15 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 86
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:16 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 86
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754137|429.35|429.35|429.35|429.35|86
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:18 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754139|429.35|429.35|429.35|429.35|86
+[Live Tick] 2026-09-30 07:42:19 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 86
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:20 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 86
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754142|429.3|429.3|429.3|429.3|2
+[Live Tick] 2026-09-30 07:42:22 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:23 | NSE:TCS-EQ | ₹ 2067.80 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754144|2067.9|2067.9|2067.8|2067.8|5
+[Live Tick] 2026-09-30 07:42:24 | NSE:TCS-EQ | ₹ 2067.80 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:25 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754146|2067.9|2067.9|2067.9|2067.9|11
+[Live Tick] 2026-09-30 07:42:26 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:28 | NSE:TCS-EQ | ₹ 2067.70 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754149|2067.8|2067.8|2067.8|2067.8|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:29 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:30 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 4
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754151|2068|2068|2068|2068|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:32 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:33 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754153|429.75|429.75|429.75|429.75|10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:34 | NSE:CIPLA-EQ | ₹ 1364.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754156|429.75|429.75|429.75|429.75|10
+[Live Tick] 2026-09-30 07:42:36 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:37 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754158|2067.8|2067.8|2067.8|2067.8|1
+[Live Tick] 2026-09-30 07:42:38 | NSE:TCS-EQ | ₹ 2067.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:39 | NSE:TCS-EQ | ₹ 2067.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754160|2067.4|2067.4|2067.4|2067.4|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:41 | NSE:CIPLA-EQ | ₹ 1364.10 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:42 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754163|2068|2068|2068|2068|1
+[Live Tick] 2026-09-30 07:42:43 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:44 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754166|2068|2068|2068|2068|19
+[Live Tick] 2026-09-30 07:42:46 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 19
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:47 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754168|1364|1364|1364|1364|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:49 | NSE:TCS-EQ | ₹ 2067.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754170|2067.7|2067.7|2067.7|2067.7|1
+[Live Tick] 2026-09-30 07:42:50 | NSE:TCS-EQ | ₹ 2067.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:51 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754172|2067.9|2067.9|2067.9|2067.9|1
+[Live Tick] 2026-09-30 07:42:52 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:53 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754174|2068|2068|2067.9|2067.9|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:55 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:56 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754177|1363.9|1363.9|1363.9|1363.9|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:57 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:58 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754179|2068.4|2068.4|2068.4|2068.4|17
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:42:59 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754181|2068.9|2068.9|2068.9|2068.9|3
+[Live Tick] 2026-09-30 07:43:01 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:02 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754183|2068.9|2068.9|2068.9|2068.9|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:04 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754186|2068.6|2068.6|2068.6|2068.6|1
+[Live Tick] 2026-09-30 07:43:06 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:07 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754189|429.75|429.75|429.75|429.75|10
+[Live Tick] 2026-09-30 07:43:09 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:10 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754191|429.45|429.45|429.45|429.45|1
+[Live Tick] 2026-09-30 07:43:11 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:13 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754194|429.45|429.45|429.45|429.45|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:14 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:16 | NSE:CIPLA-EQ | ₹ 1363.80 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754196|429.45|429.45|429.45|429.45|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:17 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:18 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754199|1363.8|1363.8|1363.8|1363.8|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:20 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754201|2069|2069|2069|2069|5
+[Live Tick] 2026-09-30 07:43:21 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:22 | NSE:CIPLA-EQ | ₹ 1363.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754203|2069|2069|2069|2069|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:24 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:25 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754206|429.45|429.45|429.45|429.45|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:27 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754208|429.45|429.45|429.45|429.45|1
+[Live Tick] 2026-09-30 07:43:28 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:29 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754210|2068.9|2068.9|2068.9|2068.9|3
+[Live Tick] 2026-09-30 07:43:30 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:32 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754212|1363.8|1363.8|1363.8|1363.8|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:33 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 31
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:34 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754214|2068.6|2068.9|2068.6|2068.9|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:35 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 31
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754217|429.45|429.45|429.45|429.45|27
+[Live Tick] 2026-09-30 07:43:37 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 27
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:38 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 24
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754219|2068.8|2068.8|2068.6|2068.6|6
+[Live Tick] 2026-09-30 07:43:39 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:40 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 24
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754221|2068.8|2068.8|2068.8|2068.8|21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:42 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 15
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754223|2068.8|2068.8|2068.8|2068.8|15
+[Live Tick] 2026-09-30 07:43:43 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 15
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:44 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 24
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754226|429.35|429.35|429.35|429.35|24
+[Live Tick] 2026-09-30 07:43:46 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 24
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:47 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754228|2068.8|2068.8|2068.8|2068.8|9
+[Live Tick] 2026-09-30 07:43:48 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:49 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754230|2068.7|2068.7|2068.7|2068.7|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:51 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 24
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:52 | NSE:CIPLA-EQ | ₹ 1363.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754233|2068.5|2068.5|2068.5|2068.5|14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:53 | NSE:CIPLA-EQ | ₹ 1363.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754235|2068.7|2068.7|2068.7|2068.7|21
+[Live Tick] 2026-09-30 07:43:55 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:56 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 24
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754237|2068.6|2068.6|2068.6|2068.6|1
+[Live Tick] 2026-09-30 07:43:57 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:58 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754239|2068.6|2068.6|2068.6|2068.6|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:43:59 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 24
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:01 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754242|2068.7|2068.7|2068.7|2068.7|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:02 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:03 | NSE:CIPLA-EQ | ₹ 1363.80 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754244|2068.6|2068.6|2068.6|2068.6|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:05 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754246|2068.6|2068.6|2068.6|2068.6|2
+[Live Tick] 2026-09-30 07:44:06 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:44:07 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 46
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754248|2068.6|2068.7|2068.6|2068.7|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:09 | NSE:CIPLA-EQ | ₹ 1363.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:10 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754251|2068.7|2068.7|2068.7|2068.7|7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:11 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 46
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:12 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 46
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754253|1363.8|1363.8|1363.8|1363.8|10
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:14 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754255|2068.7|2068.7|2068.7|2068.7|20
+[Live Tick] 2026-09-30 07:44:15 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:16 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754257|2068|2068|2067.9|2067.9|9
+[Live Tick] 2026-09-30 07:44:18 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:19 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754259|429.45|429.45|429.45|429.45|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:20 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754261|429.45|429.45|429.45|429.45|5
+[Live Tick] 2026-09-30 07:44:21 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:23 | NSE:TCS-EQ | ₹ 2067.60 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754264|2067.7|2067.7|2067.7|2067.7|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:24 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:25 | NSE:TCS-EQ | ₹ 2067.70 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754265|2067.7|2067.9|2067.7|2067.9|26
+[Live Tick] 2026-09-30 07:44:26 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754268|1363.8|1363.8|1363.8|1363.8|13
+[Live Tick] 2026-09-30 07:44:28 | NSE:CIPLA-EQ | ₹ 1363.80 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:30 | NSE:CIPLA-EQ | ₹ 1363.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754270|2067.9|2067.9|2067.9|2067.9|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:31 | NSE:CIPLA-EQ | ₹ 1364.10 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:32 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754272|2067.9|2067.9|2067.9|2067.9|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:33 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754274|2067.9|2067.9|2067.9|2067.9|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:34 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:36 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754277|2067.8|2067.8|2067.8|2067.8|1
+[Live Tick] 2026-09-30 07:44:37 | NSE:TCS-EQ | ₹ 2067.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754279|429.9|429.9|429.9|429.9|9
+[Live Tick] 2026-09-30 07:44:39 | BSE:COALINDIA-A | ₹ 429.90 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:41 | NSE:TCS-EQ | ₹ 2067.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754283|429.45|429.45|429.45|429.45|1
+[Live Tick] 2026-09-30 07:44:43 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:45 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754285|429.45|429.45|429.45|429.45|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:46 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:47 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 9
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754288|429.65|429.65|429.65|429.65|9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:49 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:50 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754290|429.65|429.65|429.5|429.5|38
+[Live Tick] 2026-09-30 07:44:51 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:52 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 29
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754293|429.5|429.5|429.5|429.5|29
+[Live Tick] 2026-09-30 07:44:53 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 29
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:54 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 29
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754296|429.5|429.5|429.5|429.5|29
+[Live Tick] 2026-09-30 07:44:56 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 29
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:44:57 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754299|429.5|429.5|429.5|429.5|29
+[Live Tick] 2026-09-30 07:44:59 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 29
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:01 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754301|2067.6|2067.7|2067.6|2067.7|33
+[Live Tick] 2026-09-30 07:45:03 | NSE:TCS-EQ | ₹ 2067.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754305|1364.2|1364.2|1364.2|1364.2|11
+[Live Tick] 2026-09-30 07:45:05 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:06 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 217
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754307|2067.7|2067.7|2067.7|2067.7|3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:08 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 217
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754309|2067.7|2067.7|2067.7|2067.7|4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:10 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 217
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754311|2067.7|2067.7|2067.7|2067.7|12
+[Live Tick] 2026-09-30 07:45:11 | NSE:TCS-EQ | ₹ 2067.70 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:12 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754314|429.95|429.95|429.95|429.95|217
+[Live Tick] 2026-09-30 07:45:14 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 217
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:16 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754316|429.95|429.95|429.95|429.95|217
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:17 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754318|429.95|429.95|429.95|429.95|217
+[Live Tick] 2026-09-30 07:45:18 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 217
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:20 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754321|429.65|429.65|429.65|429.65|7
+[Live Tick] 2026-09-30 07:45:21 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:22 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754325|2067.9|2067.9|2067.9|2067.9|20
+[Live Tick] 2026-09-30 07:45:25 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:26 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754327|1364.3|1364.3|1364.3|1364.3|1
+[Live Tick] 2026-09-30 07:45:27 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:29 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754330|2067.9|2067.9|2067.9|2067.9|27
+[Live Tick] 2026-09-30 07:45:30 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 27
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:31 | NSE:TCS-EQ | ₹ 2067.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754333|1363.8|1363.8|1363.8|1363.8|92
+[Live Tick] 2026-09-30 07:45:33 | NSE:CIPLA-EQ | ₹ 1363.80 | Vol: 92
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:34 | NSE:TCS-EQ | ₹ 2067.80 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754335|1363.9|1363.9|1363.9|1363.9|1
+[Live Tick] 2026-09-30 07:45:35 | NSE:CIPLA-EQ | ₹ 1363.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:36 | NSE:CIPLA-EQ | ₹ 1363.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754338|429.65|429.65|429.65|429.65|300
+[Live Tick] 2026-09-30 07:45:38 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 300
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:39 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 300
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754340|429.65|429.65|429.65|429.65|300
+[Live Tick] 2026-09-30 07:45:40 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 300
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:41 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754343|429.65|429.65|429.65|429.65|300
+[Live Tick] 2026-09-30 07:45:43 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 300
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:44 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754346|1364.2|1364.2|1364.2|1364.2|11
+[Live Tick] 2026-09-30 07:45:46 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:48 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754348|1364.2|1364.2|1364.2|1364.2|11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:49 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:50 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754351|429.7|429.7|429.7|429.7|12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:51 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754353|1364.2|1364.2|1364.2|1364.2|11
+[Live Tick] 2026-09-30 07:45:53 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:54 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754355|1364.2|1364.2|1364.2|1364.2|5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:55 | BSE:COALINDIA-A | ₹ 429.70 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:57 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754358|1364.2|1364.2|1364.2|1364.2|5
+[Live Tick] 2026-09-30 07:45:58 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:45:59 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754360|1364.3|1364.3|1364.3|1364.3|11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:01 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:02 | BSE:COALINDIA-A | ₹ 430.05 | Vol: 168
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754362|1363.7|1363.7|1363.7|1363.7|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:03 | NSE:CIPLA-EQ | ₹ 1363.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754364|430.05|430.05|430.05|430.05|168
+[Live Tick] 2026-09-30 07:46:04 | BSE:COALINDIA-A | ₹ 430.05 | Vol: 168
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:06 | BSE:COALINDIA-A | ₹ 430.05 | Vol: 168
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754367|430.05|430.05|430.05|430.05|168
+[Live Tick] 2026-09-30 07:46:07 | BSE:COALINDIA-A | ₹ 430.05 | Vol: 168
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:08 | BSE:COALINDIA-A | ₹ 430.05 | Vol: 168
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754369|2068.7|2068.7|2068.5|2068.5|6
+[Live Tick] 2026-09-30 07:46:09 | BSE:COALINDIA-A | ₹ 430.05 | Vol: 168
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:11 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754372|2068.7|2068.7|2068.7|2068.7|4
+[Live Tick] 2026-09-30 07:46:12 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:13 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754375|1364|1364|1364|1364|2
+[Live Tick] 2026-09-30 07:46:15 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:16 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 22
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754377|1364|1364|1364|1364|2
+[Live Tick] 2026-09-30 07:46:17 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:18 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 22
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754379|2068.6|2068.6|2068.6|2068.6|12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:20 | NSE:CIPLA-EQ | ₹ 1364.10 | Vol: 16
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:21 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754382|1364.1|1364.1|1364.1|1364.1|16
+[Live Tick] 2026-09-30 07:46:22 | NSE:CIPLA-EQ | ₹ 1364.10 | Vol: 16
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:24 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754384|2068.6|2068.6|2068.6|2068.6|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:25 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 63
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754386|1364|1364|1364|1364|1
+[Live Tick] 2026-09-30 07:46:26 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:27 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754389|429.6|429.6|429.6|429.6|2
+[Live Tick] 2026-09-30 07:46:29 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:30 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754391|429.6|429.6|429.6|429.6|2
+[Live Tick] 2026-09-30 07:46:31 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:32 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754394|2068|2068|2068|2068|1
+[Live Tick] 2026-09-30 07:46:34 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:35 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754397|429.6|429.6|429.6|429.6|2
+[Live Tick] 2026-09-30 07:46:37 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:38 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754399|429.6|429.6|429.6|429.6|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:40 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754401|1363.7|1363.7|1363.7|1363.7|1
+[Live Tick] 2026-09-30 07:46:41 | NSE:CIPLA-EQ | ₹ 1363.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:42 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754404|1363.7|1363.7|1363.7|1363.7|1
+[Live Tick] 2026-09-30 07:46:44 | NSE:CIPLA-EQ | ₹ 1363.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:45 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754406|429.95|429.95|429.95|429.95|150
+[Live Tick] 2026-09-30 07:46:46 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 150
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:48 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 150
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754409|429.95|429.95|429.95|429.95|150
+[Live Tick] 2026-09-30 07:46:49 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 150
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:51 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 150
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754412|429.95|429.95|429.95|429.95|150
+[Live Tick] 2026-09-30 07:46:52 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 150
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:54 | NSE:CIPLA-EQ | ₹ 1363.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754414|2068.5|2068.5|2068.4|2068.4|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:56 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 150
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754417|1364.1|1364.1|1364.1|1364.1|7
+[Live Tick] 2026-09-30 07:46:57 | NSE:CIPLA-EQ | ₹ 1364.10 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:46:58 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 150
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754419|429.95|429.95|429.95|429.95|150
+[Live Tick] 2026-09-30 07:46:59 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 150
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:00 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 150
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754422|429.55|429.55|429.55|429.55|59
+[Live Tick] 2026-09-30 07:47:02 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:03 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754424|429.55|429.55|429.55|429.55|59
+[Live Tick] 2026-09-30 07:47:04 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:06 | BSE:COALINDIA-A | ₹ 429.55 | Vol: 59
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754427|429.45|429.45|429.45|429.45|131
+[Live Tick] 2026-09-30 07:47:07 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 131
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:08 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 131
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754429|429.45|429.45|429.45|429.45|131
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:09 | NSE:CIPLA-EQ | ₹ 1364.10 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:11 | NSE:CIPLA-EQ | ₹ 1364.10 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754432|429.3|429.3|429.3|429.3|337
+[Live Tick] 2026-09-30 07:47:12 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 337
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:14 | NSE:TCS-EQ | ₹ 2069.30 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754434|429.3|429.3|429.3|429.3|337
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:15 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 337
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:16 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 103
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754437|2069|2069|2069|2069|24
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:17 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 72
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754439|429.1|429.1|429.1|429.1|72
+[Live Tick] 2026-09-30 07:47:19 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 72
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:21 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 72
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754442|429.15|429.15|429.15|429.15|289
+[Live Tick] 2026-09-30 07:47:22 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 289
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:23 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 289
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754444|429.15|429.15|429.05|429.05|303
+[Live Tick] 2026-09-30 07:47:24 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:26 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 751
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754447|2069.1|2069.1|2069.1|2069.1|1
+[Live Tick] 2026-09-30 07:47:27 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:28 | BSE:COALINDIA-A | ₹ 428.90 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754450|428.9|428.9|428.9|428.9|10
+[Live Tick] 2026-09-30 07:47:30 | BSE:COALINDIA-A | ₹ 428.90 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:31 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 73
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754452|429|429|429|429|4
+[Live Tick] 2026-09-30 07:47:32 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:34 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754455|1364.2|1364.2|1364.2|1364.2|2
+[Live Tick] 2026-09-30 07:47:35 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:36 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754457|1364.3|1364.3|1364.3|1364.3|1
+[Live Tick] 2026-09-30 07:47:37 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:39 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754460|1364.3|1364.3|1364.3|1364.3|5
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:41 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754462|1364.3|1364.3|1364.3|1364.3|5
+[Live Tick] 2026-09-30 07:47:42 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:43 | NSE:CIPLA-EQ | ₹ 1364.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754465|1364.3|1364.3|1364.3|1364.3|11
+[Live Tick] 2026-09-30 07:47:45 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:46 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754467|2069.1|2069.1|2069.1|2069.1|19
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:47 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:49 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 631
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754469|1364.3|1364.3|1364.3|1364.3|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:50 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754471|2069|2069|2069|2069|3
+[Live Tick] 2026-09-30 07:47:51 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:52 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754474|2068.9|2068.9|2068.9|2068.9|3
+[Live Tick] 2026-09-30 07:47:54 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:55 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 49
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754476|1364.3|1364.3|1364.3|1364.3|8
+[Live Tick] 2026-09-30 07:47:56 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:57 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754478|1364.3|1364.3|1364.3|1364.3|8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:47:59 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 49
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:00 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 49
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754480|1364.3|1364.3|1364.3|1364.3|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:01 | NSE:CIPLA-EQ | ₹ 1364.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754483|429.2|429.2|429.2|429.2|3
+[Live Tick] 2026-09-30 07:48:03 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:04 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754486|429.2|429.2|429.2|429.2|3
+[Live Tick] 2026-09-30 07:48:06 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:48:07 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754488|429.05|429.05|429.05|429.05|75
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:09 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754490|1364.5|1364.5|1364.5|1364.5|1
+[Live Tick] 2026-09-30 07:48:10 | NSE:CIPLA-EQ | ₹ 1364.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:12 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754492|1364.6|1364.6|1364.6|1364.6|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:13 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754494|1364.6|1364.6|1364.6|1364.6|2
+[Live Tick] 2026-09-30 07:48:14 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:16 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754497|429.5|429.5|429.5|429.5|40
+[Live Tick] 2026-09-30 07:48:17 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 40
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:18 | NSE:CIPLA-EQ | ₹ 1364.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754499|1364.6|1364.6|1364.6|1364.6|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:20 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 40
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:21 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754501|1364.4|1364.4|1364.4|1364.4|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:22 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 40
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:23 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754504|1364.4|1364.4|1364.4|1364.4|1
+[Live Tick] 2026-09-30 07:48:24 | NSE:CIPLA-EQ | ₹ 1364.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:26 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 40
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754507|429.5|429.5|429.5|429.5|40
+[Live Tick] 2026-09-30 07:48:27 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 40
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:28 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 19
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754509|1364.6|1364.6|1364|1364|98
+[Live Tick] 2026-09-30 07:48:29 | NSE:CIPLA-EQ | ₹ 1364.00 | Vol: 97
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:31 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 46
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754512|2067.7|2067.7|2067.7|2067.7|1
+[Live Tick] 2026-09-30 07:48:32 | NSE:TCS-EQ | ₹ 2067.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:33 | NSE:CIPLA-EQ | ₹ 1364.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754514|1364.5|1364.5|1364.5|1364.5|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:35 | NSE:CIPLA-EQ | ₹ 1364.50 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754516|2068.1|2068.1|2068.1|2068.1|15
+[Live Tick] 2026-09-30 07:48:36 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 15
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:48:37 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 46
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754519|429.05|429.05|429.05|429.05|46
+[Live Tick] 2026-09-30 07:48:39 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 46
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:40 | NSE:CIPLA-EQ | ₹ 1362.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754521|429|429|429|429|70
+[Live Tick] 2026-09-30 07:48:41 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 70
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:42 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754523|1361.5|1361.5|1361.5|1361.5|1
+[Live Tick] 2026-09-30 07:48:43 | NSE:CIPLA-EQ | ₹ 1361.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:45 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 70
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754526|1361.1|1361.1|1361.1|1361.1|1
+[Live Tick] 2026-09-30 07:48:46 | NSE:CIPLA-EQ | ₹ 1361.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:47 | NSE:CIPLA-EQ | ₹ 1361.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754528|1361.1|1361.1|1361.1|1361.1|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:49 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 148
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:50 | NSE:CIPLA-EQ | ₹ 1360.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754531|2068.2|2068.2|2068.2|2068.2|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:51 | NSE:CIPLA-EQ | ₹ 1360.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:52 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 148
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754533|1360.9|1360.9|1360.9|1360.9|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:54 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 148
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:55 | NSE:CIPLA-EQ | ₹ 1361.50 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754536|1361.5|1361.5|1361.5|1361.5|11
+[Live Tick] 2026-09-30 07:48:56 | NSE:CIPLA-EQ | ₹ 1361.50 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:58 | NSE:CIPLA-EQ | ₹ 1361.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754538|2068|2068|2068|2068|14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:48:59 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 148
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:00 | NSE:CIPLA-EQ | ₹ 1361.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754540|1361.4|1361.5|1361.4|1361.5|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:01 | NSE:CIPLA-EQ | ₹ 1361.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754543|429|429|429|429|330
+[Live Tick] 2026-09-30 07:49:03 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 330
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:04 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 330
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754545|1361.5|1361.5|1361.5|1361.5|1
+[Live Tick] 2026-09-30 07:49:05 | NSE:CIPLA-EQ | ₹ 1361.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:06 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 330
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754547|1361.5|1361.5|1361.5|1361.5|7
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:08 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 51
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:09 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754549|2068|2068|2067.8|2067.8|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:10 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 25
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754552|1361.6|1361.6|1361.6|1361.6|1
+[Live Tick] 2026-09-30 07:49:12 | NSE:CIPLA-EQ | ₹ 1361.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:13 | NSE:CIPLA-EQ | ₹ 1361.50 | Vol: 124
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754554|2068|2068|2068|2068|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:14 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 25
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:15 | NSE:CIPLA-EQ | ₹ 1361.00 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754556|1361.3|1361.3|1361.3|1361.3|10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:17 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 138
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:18 | NSE:TCS-EQ | ₹ 2067.90 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754558|1361.3|1361.3|1361.3|1361.3|10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:19 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 138
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+{"ts":"2026-09-30T07:49:21.476Z","event":"ws_disconnected","clients":0}
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754560|429.35|429.35|429.35|429.35|138
+[Live Tick] 2026-09-30 07:49:20 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 138
+{"ts":"2026-09-30T07:49:21.587Z","method":"GET","path":"/api/settings","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:49:21.590Z","method":"GET","path":"/api/brokers/fyers-edf11f90/master/status","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:49:21.607Z","method":"GET","path":"/api/settings","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:49:21.615Z","method":"GET","path":"/api/brokers","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:49:21.624Z","method":"GET","path":"/api/status/feed","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:49:21.636Z","method":"GET","path":"/api/logs","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:49:21.649Z","method":"GET","path":"/api/backfill/status","ip":"127.0.0.1"}
+{"ts":"2026-09-30T07:49:21.667Z","event":"ws_connected","clients":1}
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:22 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 138
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754563|1361|1361|1361|1361|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:24 | NSE:TCS-EQ | ₹ 2067.80 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754565|2067.8|2067.8|2067.8|2067.8|18
+[Live Tick] 2026-09-30 07:49:25 | NSE:TCS-EQ | ₹ 2067.80 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:26 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 138
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754567|1361.6|1361.6|1361.6|1361.6|5
+[Live Tick] 2026-09-30 07:49:27 | NSE:CIPLA-EQ | ₹ 1361.60 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:29 | NSE:CIPLA-EQ | ₹ 1361.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754570|429.35|429.35|429.35|429.35|138
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:31 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 138
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754572|429.3|429.3|429.3|429.3|256
+[Live Tick] 2026-09-30 07:49:32 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 256
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:33 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 256
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754574|1361|1361|1361|1361|6
+[Live Tick] 2026-09-30 07:49:34 | NSE:CIPLA-EQ | ₹ 1361.00 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:36 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754576|1361.5|1361.5|1361.5|1361.5|11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:37 | NSE:CIPLA-EQ | ₹ 1361.50 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:49:38 | NSE:CIPLA-EQ | ₹ 1361.50 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754579|429|429|429|429|37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:40 | NSE:TCS-EQ | ₹ 2067.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754581|429|429|429|429|37
+[Live Tick] 2026-09-30 07:49:41 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:42 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754583|1361.8|1361.8|1361.8|1361.8|1
+[Live Tick] 2026-09-30 07:49:43 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:44 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754586|2067.7|2067.7|2067.7|2067.7|16
+[Live Tick] 2026-09-30 07:49:46 | NSE:TCS-EQ | ₹ 2067.70 | Vol: 16
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:47 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754588|1361.8|1361.8|1361.8|1361.8|5
+[Live Tick] 2026-09-30 07:49:48 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:50 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754590|1361.8|1361.8|1361.8|1361.8|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:51 | NSE:TCS-EQ | ₹ 2067.60 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:52 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754593|2067.6|2067.6|2067.6|2067.6|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:53 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:55 | NSE:TCS-EQ | ₹ 2067.60 | Vol: 15
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754596|2067.6|2067.6|2067.6|2067.6|57
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:56 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:57 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754598|2066.9|2066.9|2066.9|2066.9|7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:49:58 | NSE:TCS-EQ | ₹ 2067.40 | Vol: 25
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754600|429.15|429.15|429.15|429.15|28
+[Live Tick] 2026-09-30 07:50:00 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 28
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:01 | NSE:CIPLA-EQ | ₹ 1361.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754602|1361.3|1361.3|1361.3|1361.3|2
+[Live Tick] 2026-09-30 07:50:02 | NSE:CIPLA-EQ | ₹ 1361.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:04 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 269
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754605|2068|2068|2068|2068|10
+[Live Tick] 2026-09-30 07:50:05 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:06 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754607|1361.8|1361.8|1361.8|1361.8|1
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:08 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 147
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754609|1361.8|1361.8|1361.8|1361.8|1
+[Live Tick] 2026-09-30 07:50:09 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:10 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 147
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754611|1362.1|1362.1|1362.1|1362.1|5
+[Live Tick] 2026-09-30 07:50:11 | NSE:CIPLA-EQ | ₹ 1362.10 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:13 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 147
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754614|1362.5|1362.5|1362.5|1362.5|1
+[Live Tick] 2026-09-30 07:50:14 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:15 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 147
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754616|1362.5|1362.5|1362.5|1362.5|11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:16 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 156
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:18 | BSE:COALINDIA-A | ₹ 429.95 | Vol: 156
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754618|1362.5|1362.5|1362.3|1362.3|12
+[Live Tick] 2026-09-30 07:50:19 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:20 | NSE:CIPLA-EQ | ₹ 1362.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754620|429.75|429.75|429.75|429.75|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:21 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 328
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754623|429.5|429.5|429.5|429.5|328
+[Live Tick] 2026-09-30 07:50:23 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 328
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:24 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754626|429.5|429.5|429.5|429.5|328
+[Live Tick] 2026-09-30 07:50:26 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 328
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:27 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754628|429.1|429.1|429.1|429.1|26
+[Live Tick] 2026-09-30 07:50:28 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 26
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:29 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754630|429.1|429.1|429.1|429.1|26
+[Live Tick] 2026-09-30 07:50:30 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 26
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:32 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 278
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754633|1362.5|1362.5|1362.5|1362.5|18
+[Live Tick] 2026-09-30 07:50:33 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:34 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754635|2068.3|2068.3|2068.3|2068.3|26
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:36 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:37 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 278
+{"ts":"2026-09-30T07:50:38.152Z","method":"GET","path":"/api/status/feed","ip":"127.0.0.1"}
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754637|2068.3|2068.3|2067.8|2067.8|27
+[Live Tick] 2026-09-30 07:50:38 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:39 | NSE:TCS-EQ | ₹ 2067.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754640|2068.3|2068.3|2068.3|2068.3|2
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:41 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754642|1362.4|1362.4|1362.4|1362.4|1
+[Live Tick] 2026-09-30 07:50:42 | NSE:CIPLA-EQ | ₹ 1362.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:43 | NSE:CIPLA-EQ | ₹ 1362.40 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754644|1362.4|1362.4|1362.4|1362.4|3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:45 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:46 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754646|1362.4|1362.4|1362.4|1362.4|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:47 | NSE:TCS-EQ | ₹ 2068.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754648|429.2|429.2|429.2|429.2|116
+[Live Tick] 2026-09-30 07:50:48 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 116
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:49 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 116
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754651|1362.4|1362.4|1362.4|1362.4|1
+[Live Tick] 2026-09-30 07:50:51 | NSE:CIPLA-EQ | ₹ 1362.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:52 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754653|2068.4|2068.4|2068.4|2068.4|4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:53 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:55 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754655|2068.4|2068.5|2068.4|2068.5|24
+[Live Tick] 2026-09-30 07:50:56 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:57 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754658|429.45|429.45|429.45|429.45|18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:50:58 | NSE:TCS-EQ | ₹ 2068.40 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754660|429.45|429.45|429.45|429.45|18
+[Live Tick] 2026-09-30 07:51:00 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:01 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754662|1362.5|1362.5|1362.5|1362.5|21
+[Live Tick] 2026-09-30 07:51:02 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:03 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754664|1362.5|1362.5|1362.5|1362.5|21
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:05 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:06 | NSE:TCS-EQ | ₹ 2068.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754666|1362.8|1362.8|1362.8|1362.8|2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:07 | NSE:CIPLA-EQ | ₹ 1362.80 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754669|2068.5|2068.5|2068.5|2068.5|17
+[Live Tick] 2026-09-30 07:51:09 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 17
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:10 | NSE:CIPLA-EQ | ₹ 1362.80 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754671|2068.4|2068.4|2068.4|2068.4|2
+[Live Tick] 2026-09-30 07:51:11 | NSE:TCS-EQ | ₹ 2068.40 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:12 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 146
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754673|1362.1|1362.1|1362.1|1362.1|11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:14 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 146
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:15 | NSE:CIPLA-EQ | ₹ 1362.10 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754676|1362.1|1362.1|1362.1|1362.1|11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:16 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:17 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754678|1363.2|1363.2|1363.2|1363.2|17
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:19 | NSE:CIPLA-EQ | ₹ 1363.20 | Vol: 17
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754680|2068.2|2068.2|2068.2|2068.2|1
+[Live Tick] 2026-09-30 07:51:20 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:21 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754682|1362.5|1362.7|1362.5|1362.7|6
+[Live Tick] 2026-09-30 07:51:22 | NSE:CIPLA-EQ | ₹ 1362.70 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:24 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754684|1362.8|1362.8|1362.8|1362.8|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:25 | NSE:CIPLA-EQ | ₹ 1362.80 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:26 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 95
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754686|1362.9|1362.9|1362.9|1362.9|9
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:27 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 49
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754689|429.25|429.25|429.25|429.25|46
+[Live Tick] 2026-09-30 07:51:29 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 46
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:30 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754691|1362.9|1362.9|1362.5|1362.5|3
+[Live Tick] 2026-09-30 07:51:31 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:32 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754694|2068.9|2068.9|2068.9|2068.9|3
+[Live Tick] 2026-09-30 07:51:34 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:35 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754696|1361.6|1361.6|1361.6|1361.6|5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:36 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754698|1361.8|1361.8|1361.8|1361.8|1
+[Live Tick] 2026-09-30 07:51:38 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:39 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754701|1361.9|1361.9|1361.9|1361.9|7
+[Live Tick] 2026-09-30 07:51:41 | NSE:CIPLA-EQ | ₹ 1361.90 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:43 | NSE:CIPLA-EQ | ₹ 1361.90 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754703|429.3|429.3|429.3|429.3|355
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:44 | NSE:CIPLA-EQ | ₹ 1361.90 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754706|1362|1362|1362|1362|9
+[Live Tick] 2026-09-30 07:51:46 | NSE:CIPLA-EQ | ₹ 1362.00 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:47 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 355
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754708|429.3|429.3|429.3|429.3|355
+[Live Tick] 2026-09-30 07:51:48 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 355
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:49 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754710|1361.9|1361.9|1361.9|1361.9|4
+[Live Tick] 2026-09-30 07:51:50 | NSE:CIPLA-EQ | ₹ 1361.90 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:52 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754712|1361.8|1361.8|1361.8|1361.8|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:53 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 355
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:54 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754715|1361.8|1361.8|1361.8|1361.8|6
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:56 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 355
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754717|1361.8|1361.8|1361.8|1361.8|5
+[Live Tick] 2026-09-30 07:51:57 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:51:59 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 355
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754719|1361.8|1361.8|1361.8|1361.8|5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:00 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754722|2069|2069|2069|2069|1
+[Live Tick] 2026-09-30 07:52:02 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:03 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 249
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754725|429.75|429.75|429.75|429.75|249
+[Live Tick] 2026-09-30 07:52:05 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 249
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:06 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754727|1361.8|1361.8|1361.8|1361.8|1
+[Live Tick] 2026-09-30 07:52:07 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:09 | NSE:CIPLA-EQ | ₹ 1362.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754730|1362.2|1362.2|1362.2|1362.2|2
+[Live Tick] 2026-09-30 07:52:10 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 201
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:11 | NSE:CIPLA-EQ | ₹ 1362.20 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754732|1362.2|1362.2|1362.2|1362.2|6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:12 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 52
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:14 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 52
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754734|1362.2|1362.2|1362.2|1362.2|6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:15 | NSE:CIPLA-EQ | ₹ 1362.20 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754736|429.45|429.45|429.45|429.45|1
+[Live Tick] 2026-09-30 07:52:16 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:17 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754739|1362.1|1362.1|1362.1|1362.1|1
+[Live Tick] 2026-09-30 07:52:19 | NSE:CIPLA-EQ | ₹ 1362.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:20 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754741|429.45|429.45|429.45|429.45|1
+[Live Tick] 2026-09-30 07:52:21 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:22 | NSE:TCS-EQ | ₹ 2069.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754744|1362.2|1362.2|1362.2|1362.2|30
+[Live Tick] 2026-09-30 07:52:24 | NSE:CIPLA-EQ | ₹ 1362.20 | Vol: 30
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:25 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754746|1362.1|1362.1|1362.1|1362.1|11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:26 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:28 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754748|1361.8|1361.8|1361.8|1361.8|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:29 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754750|1361.8|1361.8|1361.8|1361.8|1
+[Live Tick] 2026-09-30 07:52:30 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:31 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 199
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754752|1361.8|1361.8|1361.8|1361.8|1
+[Live Tick] 2026-09-30 07:52:32 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:34 | NSE:CIPLA-EQ | ₹ 1362.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754754|1362.1|1362.1|1361.9|1361.9|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:35 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754757|2069.9|2069.9|2069.9|2069.9|3
+[Live Tick] 2026-09-30 07:52:37 | NSE:TCS-EQ | ₹ 2069.90 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:52:38 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754760|2069.9|2069.9|2069.9|2069.9|8
+[Live Tick] 2026-09-30 07:52:40 | NSE:TCS-EQ | ₹ 2069.90 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:41 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 42
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754762|429|429|429|429|42
+[Live Tick] 2026-09-30 07:52:42 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 42
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:43 | NSE:TCS-EQ | ₹ 2069.70 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754764|2069.5|2069.5|2069.5|2069.5|5
+[Live Tick] 2026-09-30 07:52:44 | NSE:TCS-EQ | ₹ 2069.50 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:45 | NSE:TCS-EQ | ₹ 2069.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754766|2069.6|2069.6|2069.6|2069.6|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:47 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 221
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:48 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 221
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754769|1362|1362|1362|1362|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:49 | NSE:TCS-EQ | ₹ 2069.50 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:50 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754771|429|429|429|429|221
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:52 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 221
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754773|429.2|429.2|429.2|429.2|3
+[Live Tick] 2026-09-30 07:52:53 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:54 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754776|429|429|429|429|37
+[Live Tick] 2026-09-30 07:52:56 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:57 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754778|1360.9|1360.9|1360.9|1360.9|14
+[Live Tick] 2026-09-30 07:52:58 | NSE:CIPLA-EQ | ₹ 1360.90 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:52:59 | NSE:TCS-EQ | ₹ 2069.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754780|2069.3|2069.3|2069.3|2069.3|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:01 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 48
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:02 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754783|2069.6|2069.6|2069.6|2069.6|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:03 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 48
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:04 | NSE:CIPLA-EQ | ₹ 1361.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754785|2069.7|2069.7|2069.7|2069.7|5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:06 | NSE:TCS-EQ | ₹ 2069.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754787|2069.3|2069.3|2069.3|2069.3|5
+[Live Tick] 2026-09-30 07:53:07 | NSE:TCS-EQ | ₹ 2069.30 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:08 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 48
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754790|429.25|429.25|429.25|429.25|48
+[Live Tick] 2026-09-30 07:53:10 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 48
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:11 | NSE:CIPLA-EQ | ₹ 1361.60 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754792|2069.3|2069.3|2069.3|2069.3|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:12 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 36
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:13 | BSE:COALINDIA-A | ₹ 428.95 | Vol: 40
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754794|2069.2|2069.2|2069.2|2069.2|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:15 | BSE:COALINDIA-A | ₹ 428.95 | Vol: 40
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754796|2069|2069|2069|2069|1
+[Live Tick] 2026-09-30 07:53:16 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:17 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754798|2068.4|2068.4|2068.4|2068.4|8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:19 | NSE:CIPLA-EQ | ₹ 1361.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754801|2068.7|2068.7|2068.7|2068.7|1
+[Live Tick] 2026-09-30 07:53:21 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:22 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754803|2068.6|2068.6|2068.6|2068.6|5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:24 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 38
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:25 | NSE:CIPLA-EQ | ₹ 1361.60 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754806|2068.7|2068.7|2068.7|2068.7|67
+[Live Tick] 2026-09-30 07:53:26 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 67
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:28 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754809|429|429|429|429|38
+[Live Tick] 2026-09-30 07:53:29 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 38
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:30 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754811|2068.9|2068.9|2068.9|2068.9|3
+[Live Tick] 2026-09-30 07:53:31 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:32 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754813|2068.9|2068.9|2068.9|2068.9|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:34 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:35 | NSE:CIPLA-EQ | ₹ 1361.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754816|2069.2|2069.2|2069.2|2069.2|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:36 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:53:38 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754819|2069|2069|2069|2069|3
+[Live Tick] 2026-09-30 07:53:39 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:40 | NSE:CIPLA-EQ | ₹ 1361.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754822|429.35|429.35|429.35|429.35|1
+[Live Tick] 2026-09-30 07:53:42 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:43 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754824|429.35|429.35|429.35|429.35|1
+[Live Tick] 2026-09-30 07:53:44 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:45 | NSE:CIPLA-EQ | ₹ 1361.60 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754827|429.25|429.25|429.25|429.25|15
+[Live Tick] 2026-09-30 07:53:47 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 15
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:49 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754829|429.25|429.25|429.25|429.25|15
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:50 | NSE:CIPLA-EQ | ₹ 1361.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754832|429.05|429.05|429.05|429.05|5
+[Live Tick] 2026-09-30 07:53:52 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:53 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754834|2068.8|2068.8|2068.8|2068.8|1
+[Live Tick] 2026-09-30 07:53:54 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:56 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 68
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754837|429.05|429.05|429.05|429.05|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:53:58 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 445
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754839|429.05|429.05|429.05|429.05|20
+[Live Tick] 2026-09-30 07:53:59 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:00 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754842|429.05|429.05|429.05|429.05|20
+[Live Tick] 2026-09-30 07:54:02 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:03 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754844|2069.1|2069.1|2069.1|2069.1|8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:04 | NSE:TCS-EQ | ₹ 2069.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:05 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754846|2069.2|2069.2|2069.2|2069.2|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:07 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 49
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:54:08 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 49
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754849|429|429|429|429|49
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:10 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 49
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754851|429|429|429|429|49
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:11 | NSE:CIPLA-EQ | ₹ 1360.80 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754853|2068.9|2068.9|2068.9|2068.9|6
+[Live Tick] 2026-09-30 07:54:13 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:15 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754856|2069.1|2069.1|2069.1|2069.1|10
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:16 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754858|429.2|429.2|429.2|429.2|23
+[Live Tick] 2026-09-30 07:54:18 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:20 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754860|1361.6|1361.6|1361.6|1361.6|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:21 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:22 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754863|429|429|429|429|37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:24 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754865|429|429|429|429|37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:25 | NSE:CIPLA-EQ | ₹ 1361.70 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:27 | NSE:CIPLA-EQ | ₹ 1361.70 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754867|2069|2069|2069|2069|5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:28 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754869|1361.7|1361.7|1361.7|1361.7|1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:30 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:31 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 63
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754872|1361.7|1361.7|1361.7|1361.7|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:32 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:34 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 49
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754875|429.3|429.3|429.3|429.3|49
+[Live Tick] 2026-09-30 07:54:35 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 49
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:36 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754877|2068.8|2068.8|2068.8|2068.8|1
+[Live Tick] 2026-09-30 07:54:37 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:39 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 49
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754880|2068.9|2068.9|2068.9|2068.9|1
+[Live Tick] 2026-09-30 07:54:40 | NSE:TCS-EQ | ₹ 2068.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:41 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754882|2068.9|2068.9|2068.9|2068.9|18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:43 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754884|2068.6|2068.6|2068.6|2068.6|1
+[Live Tick] 2026-09-30 07:54:44 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:45 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754886|429.15|429.15|429.15|429.15|37
+[Live Tick] 2026-09-30 07:54:46 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:48 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754890|2068.7|2068.7|2068.7|2068.7|2
+[Live Tick] 2026-09-30 07:54:50 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:52 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754893|429.15|429.15|429.15|429.15|37
+[Live Tick] 2026-09-30 07:54:53 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:54 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754895|2068.7|2068.7|2068.7|2068.7|21
+[Live Tick] 2026-09-30 07:54:55 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:56 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754898|429.15|429.15|429.15|429.15|37
+[Live Tick] 2026-09-30 07:54:58 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:54:59 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754900|1361.8|1361.8|1361.8|1361.8|1
+[Live Tick] 2026-09-30 07:55:00 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:55:02 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754902|1361.6|1361.6|1361.6|1361.6|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:55:03 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754905|429.5|429.5|429.5|429.5|266
+[Live Tick] 2026-09-30 07:55:05 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 266
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:55:06 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 266
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754907|429.5|429.5|429.5|429.5|266
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:55:08 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 266
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790754909|429.5|429.5|429.5|429.5|266
+[Live Tick] 2026-09-30 07:55:09 | BSE:COALINDIA-A | ₹ 429.50 | Vol: 266
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:55:10 | NSE:CIPLA-EQ | ₹ 1362.20 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790754911|1362.3|1362.3|1362.3|1362.3|1
+[Live Tick] 2026-09-30 07:55:11 | NSE:CIPLA-EQ | ₹ 1362.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 77 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 88 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:35 | NSE:TCS-EQ | ₹ 2070.00 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754996|2070|2070|2070|2070|12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:36 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 188
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:37 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790754998|2069.9|2069.9|2069.9|2069.9|28
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:38 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:39 | NSE:TCS-EQ | ₹ 2069.90 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755001|2070.4|2070.4|2070.4|2070.4|7
+[Live Tick] 2026-09-30 07:56:41 | NSE:TCS-EQ | ₹ 2070.40 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:42 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755004|2070|2070|2070|2070|1
+[Live Tick] 2026-09-30 07:56:44 | NSE:TCS-EQ | ₹ 2070.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755006|2070.2|2070.2|2070.2|2070.2|5
+[Live Tick] 2026-09-30 07:56:46 | NSE:TCS-EQ | ₹ 2070.20 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:47 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755008|2070.2|2070.2|2070.1|2070.1|4
+[Live Tick] 2026-09-30 07:56:48 | NSE:TCS-EQ | ₹ 2070.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:50 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755011|429.4|429.4|429.4|429.4|23
+[Live Tick] 2026-09-30 07:56:51 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 23
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:52 | NSE:TCS-EQ | ₹ 2070.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755014|1361.7|1361.7|1361.7|1361.7|1
+[Live Tick] 2026-09-30 07:56:54 | NSE:CIPLA-EQ | ₹ 1361.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:55 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 38
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755016|1361.7|1361.7|1361.7|1361.7|7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:56 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 38
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755018|1362.2|1362.2|1362.2|1362.2|8
+[Live Tick] 2026-09-30 07:56:58 | NSE:CIPLA-EQ | ₹ 1362.20 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:56:59 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 38
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755020|2070.2|2070.2|2070.2|2070.2|5
+[Live Tick] 2026-09-30 07:57:00 | NSE:TCS-EQ | ₹ 2070.20 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:01 | NSE:CIPLA-EQ | ₹ 1362.20 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755022|2069.8|2069.8|2069.8|2069.8|50
+[Live Tick] 2026-09-30 07:57:02 | NSE:TCS-EQ | ₹ 2069.80 | Vol: 50
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:04 | NSE:CIPLA-EQ | ₹ 1362.20 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755025|2069.8|2069.8|2069.8|2069.8|2
+[Live Tick] 2026-09-30 07:57:05 | NSE:TCS-EQ | ₹ 2069.80 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:07 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755027|2069.5|2069.5|2069.5|2069.5|84
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:08 | NSE:TCS-EQ | ₹ 2070.00 | Vol: 60
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:09 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755029|2070|2070|2070|2070|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:10 | NSE:TCS-EQ | ₹ 2069.50 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755032|2069.6|2069.6|2069.6|2069.6|9
+[Live Tick] 2026-09-30 07:57:12 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:13 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 79
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755034|2069.6|2069.6|2069.6|2069.6|6
+[Live Tick] 2026-09-30 07:57:14 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:16 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 280
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755036|2069.6|2069.6|2069.6|2069.6|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:17 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755038|1361.8|1361.8|1361.8|1361.8|2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:19 | NSE:CIPLA-EQ | ₹ 1361.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755040|2069.7|2069.7|2069.6|2069.6|5
+[Live Tick] 2026-09-30 07:57:20 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:22 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755043|1362.4|1362.4|1362.4|1362.4|2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:24 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:25 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 280
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755045|2069.7|2069.7|2069.7|2069.7|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:26 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:27 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 280
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755047|2069.6|2069.6|2069.6|2069.6|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:28 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755049|429.3|429.3|429.3|429.3|280
+[Live Tick] 2026-09-30 07:57:29 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 280
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:31 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755052|429.35|429.35|429.35|429.35|7
+[Live Tick] 2026-09-30 07:57:32 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:33 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 7
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755055|1362.4|1362.4|1362.4|1362.4|11
+[Live Tick] 2026-09-30 07:57:35 | NSE:CIPLA-EQ | ₹ 1362.40 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755057|2069.6|2069.6|2069.6|2069.6|1
+[Live Tick] 2026-09-30 07:57:37 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:38 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 85
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755059|1362.2|1362.2|1362.2|1362.2|1
+[Live Tick] 2026-09-30 07:57:39 | NSE:CIPLA-EQ | ₹ 1362.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:41 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755062|429.05|429.05|429.05|429.05|37
+[Live Tick] 2026-09-30 07:57:42 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:43 | NSE:CIPLA-EQ | ₹ 1362.10 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755065|2069.7|2069.7|2069.7|2069.7|2
+[Live Tick] 2026-09-30 07:57:45 | NSE:TCS-EQ | ₹ 2069.70 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:46 | NSE:TCS-EQ | ₹ 2069.70 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755067|429|429|429|429|10
+[Live Tick] 2026-09-30 07:57:47 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:48 | NSE:TCS-EQ | ₹ 2069.70 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755069|1362.4|1362.4|1362.4|1362.4|1
+[Live Tick] 2026-09-30 07:57:49 | NSE:CIPLA-EQ | ₹ 1362.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:51 | NSE:TCS-EQ | ₹ 2070.00 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755072|2070|2070|2070|2070|1
+[Live Tick] 2026-09-30 07:57:52 | NSE:TCS-EQ | ₹ 2070.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:54 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 288
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755074|2069.9|2069.9|2069.9|2069.9|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:55 | NSE:TCS-EQ | ₹ 2070.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:56 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755077|429.1|429.1|429.1|429.1|18
+[Live Tick] 2026-09-30 07:57:57 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:57:58 | NSE:TCS-EQ | ₹ 2069.60 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755080|429.1|429.1|429.1|429.1|18
+[Live Tick] 2026-09-30 07:58:00 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 18
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:01 | NSE:CIPLA-EQ | ₹ 1362.40 | Vol: 16
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755082|2069.9|2069.9|2069.9|2069.9|1
+[Live Tick] 2026-09-30 07:58:02 | NSE:TCS-EQ | ₹ 2069.90 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:04 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 51
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755085|1362.4|1362.4|1362.4|1362.4|11
+[Live Tick] 2026-09-30 07:58:05 | NSE:CIPLA-EQ | ₹ 1362.40 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:06 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 51
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755088|2069.1|2069.1|2069.1|2069.1|21
+[Live Tick] 2026-09-30 07:58:08 | NSE:TCS-EQ | ₹ 2069.10 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:09 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755090|429.1|429.1|429.1|429.1|37
+[Live Tick] 2026-09-30 07:58:10 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:11 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755093|429.1|429.1|429.1|429.1|37
+[Live Tick] 2026-09-30 07:58:13 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755095|1362.4|1362.4|1362.4|1362.4|8
+[Live Tick] 2026-09-30 07:58:15 | NSE:CIPLA-EQ | ₹ 1362.40 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:16 | NSE:CIPLA-EQ | ₹ 1361.30 | Vol: 266
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755097|1362.3|1362.3|1362.3|1362.3|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:18 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:19 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 281
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755100|2069|2069|2069|2069|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:20 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 281
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:21 | NSE:CIPLA-EQ | ₹ 1362.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755102|429.2|429.2|429.2|429.2|281
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:23 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755104|429.2|429.2|429.2|429.2|281
+[Live Tick] 2026-09-30 07:58:24 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 281
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:25 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 281
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755107|1362|1362|1362|1362|1
+[Live Tick] 2026-09-30 07:58:27 | NSE:CIPLA-EQ | ₹ 1362.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:28 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755109|429.2|429.2|429.2|429.2|281
+[Live Tick] 2026-09-30 07:58:29 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 281
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:31 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 281
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755112|429.45|429.45|429.45|429.45|252
+[Live Tick] 2026-09-30 07:58:32 | NSE:CIPLA-EQ | ₹ 1361.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:33 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 252
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755114|2068.7|2068.7|2068.7|2068.7|1
+[Live Tick] 2026-09-30 07:58:34 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:36 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 252
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755117|429.45|429.45|429.45|429.45|252
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:37 | NSE:CIPLA-EQ | ₹ 1361.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:58:38 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 252
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755119|2068.5|2068.5|2068.5|2068.5|4
+[Live Tick] 2026-09-30 07:58:39 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:41 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755122|429.45|429.45|429.45|429.45|252
+[Live Tick] 2026-09-30 07:58:42 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 252
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:43 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 252
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755124|2068.6|2068.6|2068.6|2068.6|1
+[Live Tick] 2026-09-30 07:58:44 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:45 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755126|2068.6|2068.6|2068.6|2068.6|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:47 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 185
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:48 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755128|2068.7|2068.9|2068.7|2068.9|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:50 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 185
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755131|429.1|429.1|429.1|429.1|185
+[Live Tick] 2026-09-30 07:58:51 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 185
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:52 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755133|429.1|429.1|429.1|429.1|185
+[Live Tick] 2026-09-30 07:58:53 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 185
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:55 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 66
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755136|2068.8|2068.8|2068.8|2068.8|21
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:56 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 66
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:58:57 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755138|2068.7|2068.7|2068.7|2068.7|3
+[Live Tick] 2026-09-30 07:58:58 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:00 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755141|2068.8|2068.8|2068.8|2068.8|8
+[Live Tick] 2026-09-30 07:59:01 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:02 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755143|2068.8|2068.8|2068.8|2068.8|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:03 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:05 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755145|1362.5|1362.5|1362.5|1362.5|4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:06 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755147|1362.3|1362.3|1362.3|1362.3|1
+[Live Tick] 2026-09-30 07:59:07 | NSE:CIPLA-EQ | ₹ 1362.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:08 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755149|2068.7|2068.8|2068.7|2068.8|16
+[Live Tick] 2026-09-30 07:59:10 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:11 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755151|1362.5|1362.5|1362.5|1362.5|6
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:12 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:13 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755154|2068.8|2068.8|2068.8|2068.8|1
+[Live Tick] 2026-09-30 07:59:14 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:16 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755157|429.45|429.45|429.45|429.45|164
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:17 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755159|1362.5|1362.5|1362.5|1362.5|2
+[Live Tick] 2026-09-30 07:59:19 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:20 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 167
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755161|2068.6|2068.6|2068.5|2068.5|7
+[Live Tick] 2026-09-30 07:59:21 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:23 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755164|2068.5|2068.5|2068.5|2068.5|2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:24 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 167
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:25 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755166|2068.6|2068.6|2068.6|2068.6|22
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:27 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755168|429.1|429.1|429.1|429.1|200
+[Live Tick] 2026-09-30 07:59:28 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 200
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:29 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755170|429.1|429.1|429.1|429.1|134
+[Live Tick] 2026-09-30 07:59:30 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 134
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:31 | NSE:CIPLA-EQ | ₹ 1362.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755173|2068.6|2068.6|2068.6|2068.6|3
+[Live Tick] 2026-09-30 07:59:33 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:34 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755175|2068.6|2068.6|2068.6|2068.6|8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:35 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 134
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755177|429.1|429.1|429.1|429.1|134
+[Live Tick] 2026-09-30 07:59:37 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 134
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 07:59:38 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755179|429.05|429.05|429.05|429.05|52
+[Live Tick] 2026-09-30 07:59:39 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 52
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:40 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755182|429.05|429.05|429.05|429.05|52
+[Live Tick] 2026-09-30 07:59:42 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 52
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:43 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 52
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755184|1362.3|1362.3|1362.3|1362.3|5
+[Live Tick] 2026-09-30 07:59:44 | NSE:CIPLA-EQ | ₹ 1362.30 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:46 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755186|2068.6|2068.6|2068.6|2068.6|10
+[Live Tick] 2026-09-30 07:59:46 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:48 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755189|429.05|429.05|429.05|429.05|52
+[Live Tick] 2026-09-30 07:59:49 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 52
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:50 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 30
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755192|1362|1362|1362|1362|1
+[Live Tick] 2026-09-30 07:59:52 | NSE:CIPLA-EQ | ₹ 1362.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:53 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 52
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755194|2068.5|2068.5|2068.5|2068.5|3
+[Live Tick] 2026-09-30 07:59:54 | NSE:TCS-EQ | ₹ 2068.50 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:56 | NSE:TCS-EQ | ₹ 2068.60 | Vol: 57
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755197|1362.3|1362.3|1362.3|1362.3|3
+[Live Tick] 2026-09-30 07:59:57 | NSE:CIPLA-EQ | ₹ 1362.30 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 07:59:58 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 52
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755200|429.05|429.05|429.05|429.05|52
+[Live Tick] 2026-09-30 08:00:00 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 52
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:01 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 8
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755202|1362.3|1362.3|1362.3|1362.3|17
+[Live Tick] 2026-09-30 08:00:02 | NSE:CIPLA-EQ | ₹ 1362.30 | Vol: 17
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:03 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 266
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755205|429.35|429.35|429.35|429.35|266
+[Live Tick] 2026-09-30 08:00:05 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 266
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:06 | NSE:CIPLA-EQ | ₹ 1361.70 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755207|429.05|429.05|429.05|429.05|39
+[Live Tick] 2026-09-30 08:00:07 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 39
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:09 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 39
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755210|429.05|429.05|429.05|429.05|39
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:11 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 63
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755212|429.05|429.05|429.05|429.05|39
+[Live Tick] 2026-09-30 08:00:12 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 39
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:13 | NSE:CIPLA-EQ | ₹ 1362.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755215|429.05|429.05|429.05|429.05|39
+[Live Tick] 2026-09-30 08:00:15 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 39
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:16 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 39
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755217|429.05|429.1|429.05|429.1|91
+[Live Tick] 2026-09-30 08:00:17 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 52
+[Live Tick] 2026-09-30 08:00:18 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755220|2068.2|2068.2|2068.2|2068.2|2
+[Live Tick] 2026-09-30 08:00:20 | NSE:TCS-EQ | ₹ 2068.20 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:21 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 52
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755222|2068.2|2068.2|2068.2|2068.2|15
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:23 | NSE:TCS-EQ | ₹ 2068.10 | Vol: 15
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:24 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 142
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755224|2068.2|2068.2|2068.1|2068.1|22
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:25 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 142
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:26 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 142
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755227|1362.3|1362.3|1362.3|1362.3|6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:28 | NSE:CIPLA-EQ | ₹ 1362.30 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755229|2068.4|2068.4|2068.4|2068.4|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:30 | BSE:COALINDIA-A | ₹ 429.05 | Vol: 36
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755231|429|429|429|429|37
+[Live Tick] 2026-09-30 08:00:31 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:33 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755234|2068.4|2068.4|2068.4|2068.4|3
+[Live Tick] 2026-09-30 08:00:34 | NSE:TCS-EQ | ₹ 2068.40 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:35 | NSE:CIPLA-EQ | ₹ 1362.50 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755236|2068.3|2068.3|2068.3|2068.3|1
+[Live Tick] 2026-09-30 08:00:36 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 08:00:38 | NSE:TCS-EQ | ₹ 2068.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755238|2068.3|2068.8|2068.3|2068.8|26
+[Live Tick] 2026-09-30 08:00:39 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:40 | BSE:COALINDIA-A | ₹ 429.00 | Vol: 37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755241|429|429|429|429|37
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:42 | NSE:TCS-EQ | ₹ 2068.80 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755243|429.3|429.3|429.3|429.3|10
+[Live Tick] 2026-09-30 08:00:43 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:44 | NSE:TCS-EQ | ₹ 2068.70 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755246|1362.6|1362.6|1362.6|1362.6|11
+[Live Tick] 2026-09-30 08:00:46 | NSE:CIPLA-EQ | ₹ 1362.60 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:48 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 219
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755248|2069|2069|2069|2069|13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:49 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 219
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755251|429.1|429.1|429.1|429.1|147
+[Live Tick] 2026-09-30 08:00:51 | BSE:COALINDIA-A | ₹ 429.10 | Vol: 147
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:52 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755253|429.15|429.15|429.15|429.15|95
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:54 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 95
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755255|2069|2069|2069|2069|21
+[Live Tick] 2026-09-30 08:00:55 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 21
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:00:57 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 20
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755258|429.15|429.15|429.15|429.15|95
+[Live Tick] 2026-09-30 08:00:58 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 95
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:00 | BSE:COALINDIA-A | ₹ 429.15 | Vol: 95
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755261|429.6|429.6|429.6|429.6|9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755261|2069|2069|2069|2069|9
+[Live Tick] 2026-09-30 08:01:01 | NSE:TCS-EQ | ₹ 2069.00 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 8 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:06 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755267|1362.8|1362.8|1362.8|1362.8|3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:07 | NSE:TCS-EQ | ₹ 2069.70 | Vol: 1
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:08 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755269|2069.7|2069.7|2069.7|2069.7|3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:10 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:10 | NSE:CIPLA-EQ | ₹ 1363.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755271|429.6|429.6|429.6|429.6|9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:12 | NSE:CIPLA-EQ | ₹ 1363.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755273|429.6|429.6|429.6|429.6|9
+[Live Tick] 2026-09-30 08:01:13 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:15 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755276|429.6|429.6|429.6|429.6|9
+[Live Tick] 2026-09-30 08:01:16 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:17 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755279|1363.3|1363.3|1363.3|1363.3|2
+[Live Tick] 2026-09-30 08:01:19 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755281|429.6|429.6|429.6|429.6|9
+[Live Tick] 2026-09-30 08:01:21 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:22 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755284|429.6|429.6|429.6|429.6|9
+[Live Tick] 2026-09-30 08:01:24 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:25 | NSE:TCS-EQ | ₹ 2069.90 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755285|2069.9|2069.9|2069.6|2069.6|11
+[Live Tick] 2026-09-30 08:01:26 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:27 | NSE:TCS-EQ | ₹ 2069.90 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755288|429.6|429.6|429.6|429.6|9
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:28 | NSE:CIPLA-EQ | ₹ 1363.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:30 | NSE:CIPLA-EQ | ₹ 1363.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755290|429.6|429.6|429.6|429.6|9
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:31 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 154
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755293|429.65|429.65|429.65|429.65|154
+[Live Tick] 2026-09-30 08:01:33 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 154
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:35 | NSE:TCS-EQ | ₹ 2070.10 | Vol: 19
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755295|2070.1|2070.1|2070|2070|20
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:36 | NSE:TCS-EQ | ₹ 2069.80 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:37 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 154
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755298|2070|2070|2070|2070|5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:39 | NSE:TCS-EQ | ₹ 2070.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755300|2069.7|2069.7|2069.7|2069.7|3
+[Live Tick] 2026-09-30 08:01:40 | NSE:TCS-EQ | ₹ 2069.70 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:41 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755302|2069.7|2070|2069.7|2070|8
+[Live Tick] 2026-09-30 08:01:43 | NSE:TCS-EQ | ₹ 2070.00 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755304|429.65|429.65|429.65|429.65|154
+[Live Tick] 2026-09-30 08:01:44 | BSE:COALINDIA-A | ₹ 429.65 | Vol: 154
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:45 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 54
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755306|1363.5|1363.5|1363.5|1363.5|6
+[Live Tick] 2026-09-30 08:01:46 | NSE:CIPLA-EQ | ₹ 1363.50 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:48 | NSE:TCS-EQ | ₹ 2070.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755309|2070|2070|2070|2070|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:49 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 54
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:50 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 54
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755311|429.3|429.3|429.3|429.3|54
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:51 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:52 | NSE:TCS-EQ | ₹ 2070.10 | Vol: 121
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755313|429.3|429.3|429.3|429.3|54
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:54 | NSE:TCS-EQ | ₹ 2070.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:55 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755316|2070.3|2070.3|2070.3|2070.3|32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:56 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 54
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:57 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 14
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755318|2070.3|2070.3|2070.3|2070.3|10
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:58 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 54
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:01:59 | BSE:COALINDIA-A | ₹ 429.30 | Vol: 54
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755320|2070.3|2070.3|2070.3|2070.3|18
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:00 | NSE:TCS-EQ | ₹ 2070.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:02 | BSE:COALINDIA-A | ₹ 429.80 | Vol: 222
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755322|1363.5|1363.5|1363.5|1363.5|16
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:03 | NSE:TCS-EQ | ₹ 2070.50 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755324|429.6|429.6|429.6|429.6|1
+[Live Tick] 2026-09-30 08:02:04 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:06 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755327|429.6|429.6|429.6|429.6|1
+[Live Tick] 2026-09-30 08:02:07 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 08:02:08 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755329|2070.4|2070.4|2070.4|2070.4|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:09 | NSE:TCS-EQ | ₹ 2070.30 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:10 | NSE:TCS-EQ | ₹ 2070.40 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755332|429.6|429.6|429.6|429.6|1
+[Live Tick] 2026-09-30 08:02:12 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:13 | NSE:TCS-EQ | ₹ 2070.80 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755335|429.6|429.6|429.6|429.6|1
+[Live Tick] 2026-09-30 08:02:15 | BSE:COALINDIA-A | ₹ 429.60 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:16 | NSE:CIPLA-EQ | ₹ 1363.50 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755337|429.45|429.45|429.45|429.45|12
+[Live Tick] 2026-09-30 08:02:17 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:18 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755339|2070.4|2070.4|2070.3|2070.3|10
+[Live Tick] 2026-09-30 08:02:19 | NSE:TCS-EQ | ₹ 2070.30 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:21 | NSE:TCS-EQ | ₹ 2070.40 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755342|2070.4|2070.4|2070.4|2070.4|2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:22 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755344|429.45|429.45|429.45|429.45|12
+[Live Tick] 2026-09-30 08:02:24 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:25 | NSE:TCS-EQ | ₹ 2070.00 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755346|429.45|429.45|429.45|429.45|12
+[Live Tick] 2026-09-30 08:02:26 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:27 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755348|1363.5|1363.5|1363.5|1363.5|11
+[Live Tick] 2026-09-30 08:02:28 | NSE:CIPLA-EQ | ₹ 1363.50 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:30 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755351|429.45|429.45|429.45|429.45|12
+[Live Tick] 2026-09-30 08:02:31 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:32 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755353|1363.1|1363.1|1363.1|1363.1|15
+[Live Tick] 2026-09-30 08:02:33 | NSE:CIPLA-EQ | ₹ 1363.10 | Vol: 15
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:34 | NSE:TCS-EQ | ₹ 2070.30 | Vol: 67
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755356|429.45|429.45|429.45|429.45|12
+[Live Tick] 2026-09-30 08:02:36 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[Live Tick] 2026-09-30 08:02:37 | NSE:TCS-EQ | ₹ 2070.10 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755359|429.45|429.45|429.45|429.45|12
+[Live Tick] 2026-09-30 08:02:39 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:40 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755361|429.45|429.45|429.45|429.45|12
+[Live Tick] 2026-09-30 08:02:41 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755364|429.45|429.45|429.45|429.45|12
+[Live Tick] 2026-09-30 08:02:44 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:45 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 6
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755366|429.45|429.45|429.45|429.45|12
+[Live Tick] 2026-09-30 08:02:46 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:48 | NSE:TCS-EQ | ₹ 2070.20 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755369|429.45|429.45|429.45|429.45|12
+[Live Tick] 2026-09-30 08:02:49 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:51 | NSE:CIPLA-EQ | ₹ 1363.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755372|429.45|429.45|429.45|429.45|12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:53 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755374|2070.1|2070.1|2070.1|2070.1|3
+[Live Tick] 2026-09-30 08:02:54 | NSE:TCS-EQ | ₹ 2070.10 | Vol: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:55 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755377|2070.2|2070.2|2070.2|2070.2|15
+[Live Tick] 2026-09-30 08:02:57 | NSE:TCS-EQ | ₹ 2070.20 | Vol: 15
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:02:58 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 12
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755379|2070.5|2070.5|2070.5|2070.5|4
+[Live Tick] 2026-09-30 08:02:59 | NSE:TCS-EQ | ₹ 2070.50 | Vol: 4
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:00 | NSE:TCS-EQ | ₹ 2070.50 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755381|1363.3|1363.3|1363.3|1363.3|5
+[Live Tick] 2026-09-30 08:03:01 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:03 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 238
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755384|2070.5|2070.5|2070.5|2070.5|1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:05 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 238
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755386|1363.3|1363.3|1363.3|1363.3|10
+[Live Tick] 2026-09-30 08:03:06 | NSE:CIPLA-EQ | ₹ 1363.30 | Vol: 10
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:07 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 238
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755388|429.75|429.75|429.75|429.75|238
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:08 | NSE:CIPLA-EQ | ₹ 1363.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755390|429.75|429.75|429.75|429.75|238
+[Live Tick] 2026-09-30 08:03:10 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 238
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:12 | NSE:TCS-EQ | ₹ 2070.40 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755393|429.75|429.75|429.75|429.75|238
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:14 | NSE:TCS-EQ | ₹ 2070.40 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:15 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 238
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755396|429.75|429.75|429.75|429.75|238
+[Live Tick] 2026-09-30 08:03:16 | BSE:COALINDIA-A | ₹ 429.75 | Vol: 238
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:18 | NSE:CIPLA-EQ | ₹ 1363.20 | Vol: 1
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755398|429.75|429.75|429.75|429.75|238
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:19 | NSE:TCS-EQ | ₹ 2070.40 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755401|1363.2|1363.2|1363.2|1363.2|5
+[Live Tick] 2026-09-30 08:03:21 | NSE:CIPLA-EQ | ₹ 1363.20 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:22 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755403|429.45|429.45|429.45|429.45|2
+[Live Tick] 2026-09-30 08:03:23 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:25 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755406|429.45|429.45|429.45|429.45|2
+[Live Tick] 2026-09-30 08:03:26 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:27 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755409|429.45|429.45|429.45|429.45|2
+[Live Tick] 2026-09-30 08:03:29 | BSE:COALINDIA-A | ₹ 429.45 | Vol: 2
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:30 | NSE:TCS-EQ | ₹ 2070.10 | Vol: 5
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755411|429.4|429.4|429.4|429.4|32
+[Live Tick] 2026-09-30 08:03:31 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 32
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:32 | BSE:COALINDIA-A | ₹ 429.40 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 2 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|TCS|1790755414|2070.3|2070.3|2070.3|2070.3|1
+[Live Tick] 2026-09-30 08:03:34 | NSE:TCS-EQ | ₹ 2070.30 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:35 | BSE:COALINDIA-A | ₹ 429.35 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755416|1363.2|1363.2|1363.2|1363.2|11
+[Live Tick] 2026-09-30 08:03:36 | NSE:CIPLA-EQ | ₹ 1363.20 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 3 bars persisted (250ms flush)
+[System Status] Total Symbols Active: 3 | Receiving Live Ticks: 3
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:37 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 13
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|CIPLA|1790755418|1363.2|1363.2|1363.2|1363.2|11
+[Live Tick] 2026-09-30 08:03:38 | NSE:CIPLA-EQ | ₹ 1363.20 | Vol: 11
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[Live Tick] 2026-09-30 08:03:40 | BSE:COALINDIA-A | ₹ 429.25 | Vol: 22
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[IPC_LIVE_BAR] Broadcasted: LIVE_BAR|COALINDIA|1790755421|429.2|429.2|429.2|429.2|1
+[Live Tick] 2026-09-30 08:03:41 | BSE:COALINDIA-A | ₹ 429.20 | Vol: 1
+[DEBUG] [FeedSimulator] Batch write: 1 bars persisted (250ms flush)
+[D

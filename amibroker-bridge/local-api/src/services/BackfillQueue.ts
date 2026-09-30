@@ -168,6 +168,13 @@ class BackfillQueueService extends EventEmitter {
         const targetTo   = new Date(toMs)
         const depthDays = Math.max(1, Math.ceil((toMs - fromMs) / (24 * 3600 * 1000)))
 
+        // Skip same-day gaps - Fyers won't have historical data for current day
+        if (gapFrom.toISOString().split('T')[0] === targetTo.toISOString().split('T')[0]) {
+          this.activeTickers.delete(gapKey)
+          this.activeTickers.delete(ticker)
+          return
+        }
+
         this.queue.push({
           ticker,
           brokerId,
