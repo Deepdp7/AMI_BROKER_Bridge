@@ -519,6 +519,33 @@ async function initSimulator() {
       await new Promise(r => setTimeout(r, 100))
     }
 
+    // === Startup today-bar fetch ===
+    // After gap detection, always fetch today's bars for every symbol.
+    // This ensures that if the app was closed during or after market hours,
+    // all candles for today are loaded into RAM (the DB backfill queue handles DB storage).
+    const todayFetchDelay = 5000  // wait 5s for broker connection to be ready
+    setTimeout(async () => {
+      const nowIST = new Date(Date.now() + 5.5 * 3600 * 1000)
+      const istHHMM = nowIST.getUTCHours() * 100 + nowIST.getUTCMinutes()
+      // Only run after market open (9:15 IST) — before that, no today bars exist
+      if (istHHMM < 915) return
+
+      const allSyms = stmts.getSymbols.all() as any[]
+      for (const sym of allSyms) {
+        if ((sym.brokerId || sym.broker_id) === 'orphaned') continue
+        const brokerId = sym.brokerId || sym.broker_id
+        const adapter = brokerManager.getAdapter(brokerId)
+        if (!adapter) continue
+        const ticker = sym.amiBrokerTicker || sym.amibroker_ticker
+        try {
+          await fetchTodayBars(adapter, ticker)
+        } catch (e) { /* ignore per-ticker errors */ }
+        await new Promise(r => setTimeout(r, 200)) // rate-limit
+      }
+      console.log('[Init] Startup today-bar fetch complete.')
+    }, todayFetchDelay)
+
+
     // Auto-start with mock data for demonstration (only runs if no real ticks)
     feedSimulator.start()
   } catch (e) {

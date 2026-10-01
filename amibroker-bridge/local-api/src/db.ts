@@ -48,7 +48,7 @@ export const pool = new Pool({
   port: parseInt(process.env.PGPORT || '5432'),
   database: process.env.PGDATABASE || 'databridgepro',
   user: process.env.PGUSER || 'postgres',
-  password: process.env.PGPASSWORD || 'postgres',
+  password: process.env.PGPASSWORD || '987498',
   max: 20, // max connections
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 15000,

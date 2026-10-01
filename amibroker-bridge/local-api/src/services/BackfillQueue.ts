@@ -168,11 +168,21 @@ class BackfillQueueService extends EventEmitter {
         const targetTo   = new Date(toMs)
         const depthDays = Math.max(1, Math.ceil((toMs - fromMs) / (24 * 3600 * 1000)))
 
-        // Skip same-day gaps - Fyers won't have historical data for current day
-        if (gapFrom.toISOString().split('T')[0] === targetTo.toISOString().split('T')[0]) {
-          this.activeTickers.delete(gapKey)
-          this.activeTickers.delete(ticker)
-          return
+        // Skip same-day gaps ONLY if market is currently open (9:15–15:30 IST).
+        // After market close, Fyers has full historical data for today — allow the fill.
+        const isSameDay = gapFrom.toISOString().split('T')[0] === targetTo.toISOString().split('T')[0]
+        if (isSameDay) {
+          const nowIST = new Date(Date.now() + 5.5 * 3600 * 1000)
+          const istHHMM = nowIST.getUTCHours() * 100 + nowIST.getUTCMinutes()
+          const isMarketOpen = istHHMM >= 915 && istHHMM < 1530  // 9:15 AM to 3:30 PM IST
+          if (isMarketOpen) {
+            // During live market: skip (data is incomplete, live ticks handle it)
+            this.activeTickers.delete(gapKey)
+            this.activeTickers.delete(ticker)
+            return
+          }
+          // After market close: fall through and fetch today's completed bars
+          console.log(`[BackfillQueue] Same-day gap fill allowed (market closed): ${ticker} ${gapFrom.toISOString().slice(0, 16)} → ${targetTo.toISOString().slice(0, 16)}`)
         }
 
         this.queue.push({
@@ -218,6 +228,13 @@ class BackfillQueueService extends EventEmitter {
     for (const item of items) {
       this.enqueue(item.ticker, item.brokerId, item.brokerToken || '', item.depthDays ?? 365)
     }
+  }
+
+  public cancel(ticker: string) {
+    this.queue = this.queue.filter(t => t.ticker !== ticker)
+    this.activeTickers.delete(ticker)
+    backfillStatusMap.delete(ticker)
+    console.log(`[BackfillQueue] Cancelled all pending backfill tasks for ${ticker}`)
   }
 
   public getQueueLength(): number {

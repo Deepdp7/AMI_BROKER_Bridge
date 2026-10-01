@@ -6,6 +6,7 @@ import { feedSimulator } from '../services/feedSimulator'
 import { brokerManager } from '../services/BrokerManager'
 import { FyersAdapter } from '../services/adapters/FyersAdapter'
 import { backfilledTickers } from '../shared/backfillState'
+import { backfillQueue } from '../services/BackfillQueue'
 import type { BrokerAccount } from '../types'
 
 const router = Router()
@@ -485,8 +486,9 @@ router.delete('/:id/symbols/:ticker', (req, res) => {
     feedSimulator.removeSymbolByTicker(ticker, id, `NSE:${ticker}-EQ`) // Best effort removal
     feedSimulator.removeSymbolByTicker(ticker, id) // Standard removal
     brokerManager.unsubscribe(id, [ticker])
-    // Clear from backfill Set so re-adding this symbol triggers a fresh fetch
+    // Clear from backfill Set and cancel any ongoing queue tasks
     backfilledTickers.delete(ticker)
+    backfillQueue.cancel(ticker)
     res.json({ ok: true })
   } catch (e) {
     res.status(500).json({ error: String(e) })

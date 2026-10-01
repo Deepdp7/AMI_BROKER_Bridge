@@ -220,6 +220,9 @@ export class FyersHSMClient extends EventEmitter {
     }
     this.isConnecting = false
     this.authenticated = false
+    this.subscriptions.clear()
+    this.scripsData.clear()
+    this.indexData.clear()
   }
 
   private triggerReconnect() {
