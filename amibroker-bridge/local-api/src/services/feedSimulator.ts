@@ -212,10 +212,6 @@ export class FeedSimulator extends EventEmitter {
         // Strip exchange prefix for comparison
         const instrWithoutExch = instrIdUpper.includes(':') ? instrIdUpper.split(':')[1] : instrIdUpper
 
-        // Check if it's an NFO futures tick that starts with our ticker (e.g. 360ONE26SEPFUT starts with 360ONE)
-        const isFuturesTick = /\d{2}[A-Z]{3}FUT$/.test(instrWithoutExch) || /FUT$/.test(instrWithoutExch)
-        const futuresBaseMatch = isFuturesTick && (instrWithoutExch.startsWith(tickerUpper) || instrWithoutExch.replace(/\d{2}[A-Z]{3}FUT$/, '') === tickerUpper || instrWithoutExch.replace(/FUT$/, '') === tickerUpper)
-
         if (
           instrIdUpper === tickerUpper ||
           instrIdUpper === `NSE:${tickerUpper}-EQ` ||
@@ -223,8 +219,7 @@ export class FeedSimulator extends EventEmitter {
           instrIdUpper === `NSE:${tickerUpper}-INDEX` ||
           instrIdUpper === `NSE:${tickerUpper}` ||
           instrIdUpper.endsWith(`:${tickerUpper}-EQ`) ||
-          instrIdUpper.endsWith(`:${tickerUpper}`) ||
-          futuresBaseMatch
+          instrIdUpper.endsWith(`:${tickerUpper}`)
         ) {
           key = k
           inst = instrument

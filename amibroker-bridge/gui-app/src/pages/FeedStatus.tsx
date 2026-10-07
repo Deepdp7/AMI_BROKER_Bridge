@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useAppStore } from '../store/appStore'
 import type { SymbolFeed } from '../store/appStore'
-import { Activity, TrendingUp, TrendingDown, Minus, Search, Cpu, HardDrive, Clock, Zap, Radio, Globe } from 'lucide-react'
+import { Activity, TrendingUp, TrendingDown, Minus, Search, Cpu, HardDrive, Clock, Zap, Radio, Globe, RefreshCw } from 'lucide-react'
 import { LineChart, Line, ResponsiveContainer, Tooltip } from 'recharts'
 import { TableVirtuoso } from 'react-virtuoso'
 // Mini sparkline data store
@@ -127,6 +127,40 @@ export function FeedStatusPage() {
   const { symbols, coreStats, brokers, marketStatus } = useAppStore()
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'streaming' | 'stale'>('all')
+  const [refreshingToday, setRefreshingToday] = useState<Record<string, boolean>>({})
+  const [refreshAllBusy, setRefreshAllBusy] = useState(false)
+
+  const API = 'http://127.0.0.1:7890'
+
+  async function refreshToday(ticker: string) {
+    setRefreshingToday(prev => ({ ...prev, [ticker]: true }))
+    try {
+      await fetch(`${API}/api/backfill/today`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ticker }),
+      })
+    } catch (e) { /* ignore */ } finally {
+      setTimeout(() => setRefreshingToday(prev => ({ ...prev, [ticker]: false })), 2000)
+    }
+  }
+
+  async function refreshAllToday() {
+    setRefreshAllBusy(true)
+    try {
+      for (const sym of symbols) {
+        if (!sym.ticker) continue
+        await fetch(`${API}/api/backfill/today`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ticker: sym.ticker }),
+        })
+        await new Promise(r => setTimeout(r, 100)) // small delay between calls
+      }
+    } catch (e) { /* ignore */ } finally {
+      setTimeout(() => setRefreshAllBusy(false), 2000)
+    }
+  }
 
   const filtered = symbols.filter(s => {
     const matchSearch = (s.ticker || '').toLowerCase().includes(search.toLowerCase()) ||
@@ -157,7 +191,7 @@ export function FeedStatusPage() {
               : `Real-time market data streaming via ${brokerName}`}
           </p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
           {/* Market status badge */}
           {marketStatus !== 'unknown' && (
             <span
@@ -180,6 +214,22 @@ export function FeedStatusPage() {
             <span className={`status-dot ${streamingCount > 0 ? 'connected' : ''}`} style={{ width: 6, height: 6 }} />
             {streamingCount} / {symbols.length} Streaming
           </span>
+          {/* Global Refresh All Today button */}
+          <button
+            onClick={refreshAllToday}
+            disabled={refreshAllBusy}
+            title="Force-fetch today's bars for ALL symbols (fixes gaps from app restarts)"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+              padding: '0.35rem 0.85rem', borderRadius: '6px', fontSize: '0.74rem',
+              fontWeight: 700, cursor: refreshAllBusy ? 'not-allowed' : 'pointer',
+              border: '1px solid rgba(56,189,248,0.4)', background: 'rgba(56,189,248,0.12)',
+              color: '#38bdf8', transition: 'all 0.15s', opacity: refreshAllBusy ? 0.6 : 1,
+            }}
+          >
+            <RefreshCw size={13} style={{ animation: refreshAllBusy ? 'spin 1s linear infinite' : 'none' }} />
+            {refreshAllBusy ? 'Refreshing...' : '↻ Refresh All Today'}
+          </button>
         </div>
       </div>
 
@@ -267,14 +317,15 @@ export function FeedStatusPage() {
               data={filtered}
               fixedHeaderContent={() => (
                 <tr style={{ background: 'rgba(5, 12, 20, 0.95)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                  <th style={{ padding: '0.75rem 1.25rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '22%' }}>Symbol</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '10%' }}>Exchange</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '16%' }}>LTP / Change</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '14%' }}>20s Trend</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '12%' }}>Last Tick</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '8%' }}>Bars/Min</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '8%' }}>Latency</th>
-                  <th style={{ padding: '0.75rem 1.25rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '10%', textAlign: 'right' }}>Status</th>
+                  <th style={{ padding: '0.75rem 1.25rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '20%' }}>Symbol</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '8%' }}>Exchange</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '14%' }}>LTP / Change</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '12%' }}>20s Trend</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '10%' }}>Last Tick</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '7%' }}>Bars/Min</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '7%' }}>Latency</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '10%', textAlign: 'center' }}>↻ Today</th>
+                  <th style={{ padding: '0.75rem 1.25rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '12%', textAlign: 'right' }}>Status</th>
                 </tr>
               )}
               itemContent={(index, sym) => (
@@ -310,6 +361,24 @@ export function FeedStatusPage() {
                     <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.82rem', color: sym.internalLatencyMs < 50 ? '#00d4aa' : '#f59e0b' }}>
                       {sym.internalLatencyMs || 0}ms
                     </span>
+                  </td>
+                  <td style={{ padding: '0.85rem 1rem', textAlign: 'center' }}>
+                    <button
+                      onClick={() => refreshToday(sym.ticker)}
+                      disabled={!!refreshingToday[sym.ticker]}
+                      title={`Force-fetch today's bars for ${sym.ticker}`}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '0.25rem',
+                        padding: '0.2rem 0.55rem', borderRadius: '5px', fontSize: '0.7rem',
+                        fontWeight: 700, cursor: refreshingToday[sym.ticker] ? 'not-allowed' : 'pointer',
+                        border: '1px solid rgba(56,189,248,0.3)', background: 'rgba(56,189,248,0.08)',
+                        color: '#38bdf8', transition: 'all 0.15s',
+                        opacity: refreshingToday[sym.ticker] ? 0.5 : 1,
+                      }}
+                    >
+                      <RefreshCw size={10} style={{ animation: refreshingToday[sym.ticker] ? 'spin 1s linear infinite' : 'none' }} />
+                      {refreshingToday[sym.ticker] ? '...' : 'Today'}
+                    </button>
                   </td>
                   <td style={{ padding: '0.85rem 1.25rem', textAlign: 'right' }}>
                     <StatusBadge status={sym.status} />

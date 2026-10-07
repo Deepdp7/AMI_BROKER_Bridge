@@ -1,0 +1,163 @@
+================================================================
+  DataBridge Pro - Complete Setup Guide
+  For AmiBroker + Fyers Live Data Feed
+================================================================
+
+FILES IN THIS PACKAGE
+---------------------
+  databridge-pro_0.1.0_x64-setup.exe  → Main installer (run this first)
+  DataBridgePro.dll                    → AmiBroker Plugin
+  Setup_Guide.txt                      → This file
+
+
+================================================================
+STEP 1: INSTALL AmiBroker PLUGIN (DLL)
+================================================================
+
+1. Copy the file:  DataBridgePro.dll
+
+2. Go to your AmiBroker installation folder.
+   Typically:  C:\Program Files\AmiBroker
+
+3. Open the "Plugins" folder inside it.
+
+4. Paste DataBridgePro.dll into the Plugins folder.
+
+5. Restart AmiBroker if it was already open.
+
+
+================================================================
+STEP 2: INSTALL DataBridge Pro (EXE)
+================================================================
+
+1. Run:  databridge-pro_0.1.0_x64-setup.exe
+
+2. Follow the on-screen instructions to install.
+
+3. After installation, launch DataBridge Pro from the
+   Start Menu or Desktop shortcut.
+
+
+================================================================
+STEP 3: CONFIGURE AmiBroker DATABASE
+================================================================
+
+1. Open AmiBroker.
+
+2. Go to:  File → Database Settings
+
+3. Set "Data source" to:  DataBridge Pro (v1.0)
+   (This option appears only after the DLL is installed correctly)
+
+4. Set "Local time offset" to:  0
+   (Our plugin handles IST automatically — do NOT set any offset)
+
+5. Set "Base time interval" to:  1 Minute
+
+6. Click "Intraday Settings":
+   ✔ Check "Filter weekends"
+   ✔ Click OK
+
+7. Click OK to save database settings.
+
+
+================================================================
+STEP 4: CONNECT TO FYERS & START
+================================================================
+
+1. Open DataBridge Pro.
+
+2. Go to Settings → Add Broker → Select Fyers.
+
+3. Enter your Fyers API Key and API Secret.
+
+4. Click "Authenticate" and complete Fyers login in the browser.
+
+5. Click the ▶ Start button.
+
+6. DataBridge Pro will automatically:
+   - Download historical data (Backfill) for all symbols
+   - Start streaming live ticks to AmiBroker in real-time
+   - Auto-reconnect if connection drops
+
+
+================================================================
+STEP 5: ADD SYMBOLS (IMPORTANT — READ CAREFULLY!)
+================================================================
+
+⚠ WARNING: NEVER import a CSV file directly inside AmiBroker.
+   AmiBroker will create broken symbol names like "RELIANCE,NSE,EQ".
+
+✅ CORRECT WAY:
+   1. Open DataBridge Pro.
+   2. Click "Add Symbols" → "Import CSV".
+   3. Select your symbols CSV file.
+   4. DataBridge Pro will push the symbols to AmiBroker automatically.
+
+CSV FORMAT EXAMPLE:
+   RELIANCE
+   TCS
+   INFY
+   WIPRO26OCTFUT     ← Futures: use exact token name
+   NIFTY50           ← Index
+   BANKNIFTY
+
+- Equity stocks:  just the ticker name (e.g. RELIANCE)
+- Futures:        ticker + expiry (e.g. WIPRO26OCTFUT)
+- Indices:        NIFTY50 or BANKNIFTY
+
+
+================================================================
+STEP 6: DAILY USAGE
+================================================================
+
+Every trading day:
+1. Open DataBridge Pro (if not already running).
+2. It will auto-login and resume live feed.
+3. Open AmiBroker — charts will update automatically.
+
+If AmiBroker was closed during market hours:
+→ On next open, DataBridge Pro will auto-detect the missing data
+  gap and backfill it within seconds. No manual action needed.
+
+
+================================================================
+CHART SETTINGS IN AmiBroker (RECOMMENDED)
+================================================================
+
+For best results in AmiBroker charts:
+- Chart Style:     View → Price chart style → Candlesticks
+- Timeframe:       1 minute (matches live feed interval)
+- Time Shift:      File → Database Settings → 0 (already set above)
+
+
+================================================================
+TROUBLESHOOTING
+================================================================
+
+Q: "DataBridge Pro (v1.0)" does not appear in AmiBroker Data Source list?
+A: Make sure DataBridgePro.dll is in the correct Plugins folder
+   and restart AmiBroker.
+
+Q: Charts show a gap or spike at the end of the day?
+A: This is normal — it's Fyers post-market data (3:59 PM tick).
+   It is 100% accurate data from Fyers.
+
+Q: No live data after market opens?
+A: Check DataBridge Pro is running and Fyers token is valid.
+   Re-authenticate if needed from Settings.
+
+Q: Software shows "Disconnected"?
+A: DataBridge Pro auto-reconnects. Wait 10-15 seconds.
+
+
+================================================================
+SUPPORT
+================================================================
+
+For any issues, please share the log from:
+DataBridge Pro → Logs tab
+
+================================================================
+Happy Trading!
+================================================================

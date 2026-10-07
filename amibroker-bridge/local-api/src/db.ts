@@ -99,8 +99,82 @@ const barsMemCache = new Map<string, Map<number, Bar1s>>()
 // Asynchronous Batch Writers (to keep event loop non-blocking)
 const pendingBarsAppends = new Map<string, any[]>() // key: amibroker_ticker, value: bar objects
 
+async function initSchema() {
+  const client = await pool.connect()
+  try {
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS brokers (
+        id TEXT PRIMARY KEY,
+        broker_type TEXT,
+        label TEXT,
+        credential_ref TEXT,
+        api_key TEXT,
+        api_secret TEXT,
+        access_token TEXT,
+        status TEXT,
+        health_score INTEGER,
+        reconnect_count_1h INTEGER,
+        account_id TEXT,
+        created_at BIGINT,
+        last_connected_at BIGINT
+      );
+
+      CREATE TABLE IF NOT EXISTS symbols (
+        instrument_id TEXT,
+        broker_id TEXT,
+        amibroker_ticker TEXT,
+        exchange TEXT,
+        instrument_type TEXT,
+        raw_symbol TEXT,
+        created_at BIGINT,
+        PRIMARY KEY (instrument_id, broker_id),
+        UNIQUE (broker_id, amibroker_ticker)
+      );
+
+      CREATE TABLE IF NOT EXISTS settings (
+        key TEXT PRIMARY KEY,
+        value TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS connection_events (
+        id SERIAL PRIMARY KEY,
+        broker_id TEXT,
+        event_type TEXT,
+        detail TEXT,
+        ts_utc_ms BIGINT
+      );
+
+      CREATE TABLE IF NOT EXISTS logs (
+        id SERIAL PRIMARY KEY,
+        timestamp BIGINT,
+        level TEXT,
+        component TEXT,
+        message TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS bars_1s (
+        amibroker_ticker TEXT,
+        ts_utc_ms BIGINT,
+        open REAL,
+        high REAL,
+        low REAL,
+        close REAL,
+        volume REAL,
+        open_interest REAL,
+        PRIMARY KEY (amibroker_ticker, ts_utc_ms)
+      );
+    `)
+  } catch (err) {
+    console.error('[POSTGRES] Failed to initialize schema:', err)
+  } finally {
+    client.release()
+  }
+}
+
 async function syncCaches() {
   try {
+    await initSchema()
+
     const bRes = await pool.query('SELECT * FROM brokers ORDER BY created_at ASC')
     brokersCache.length = 0
     bRes.rows.forEach((r: any) => brokersCache.push(r))

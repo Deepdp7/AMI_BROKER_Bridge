@@ -102,4 +102,57 @@ router.post('/trigger', (req, res) => {
   })
 })
 
+/**
+ * POST /api/backfill/today
+ * Body: { ticker: string }
+ * Force-fetches today's bars for a given ticker, even during live market.
+ * Used by the "Refresh Today" button in the UI.
+ */
+router.post('/today', async (req, res) => {
+  const { ticker } = req.body as { ticker?: string }
+
+  if (!ticker) {
+    return res.status(400).json({ error: 'ticker is required' })
+  }
+
+  const upperTicker = ticker.toUpperCase()
+
+  const symbols = stmts.getSymbols.all() as any[]
+  const sym = symbols.find(
+    s => (s.amiBrokerTicker || s.amibroker_ticker) === upperTicker
+  )
+
+  if (!sym) {
+    return res.status(404).json({ error: `Symbol ${upperTicker} not found.` })
+  }
+
+  const brokerId = sym.brokerId || sym.broker_id
+  if (!brokerId || brokerId === 'orphaned') {
+    return res.status(400).json({ error: `Symbol ${upperTicker} has no active broker.` })
+  }
+
+  // Build a gap from midnight IST today to now
+  const nowMs = Date.now()
+  const nowIST = new Date(nowMs + 5.5 * 3600 * 1000)
+  const midnightIST = Date.UTC(
+    nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate()
+  ) - (5.5 * 3600 * 1000)
+
+  const brokerToken = sym.rawSymbol || sym.raw_symbol || sym.instrumentId || sym.instrument_id || upperTicker
+  // Cancel any existing queued tasks for this ticker first
+  backfillQueue.cancel(upperTicker)
+  // Re-enqueue as a forced gap-fill for today
+  backfillQueue.enqueueGapFill(upperTicker, brokerId, brokerToken, midnightIST, nowMs, true)
+
+  console.log(`[BackfillAPI] Force today-backfill for ${upperTicker} from ${new Date(midnightIST).toISOString().slice(0, 16)} IST`)
+  return res.json({
+    ok: true,
+    message: `Force today-backfill triggered for ${upperTicker}`,
+    ticker: upperTicker,
+    fromDate: new Date(midnightIST).toISOString().slice(0, 10),
+    toDate: new Date(nowMs).toISOString().slice(0, 10),
+  })
+})
+
 export default router
+

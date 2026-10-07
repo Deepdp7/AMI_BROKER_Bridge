@@ -143,7 +143,7 @@ class BackfillQueueService extends EventEmitter {
    * Enqueue a targeted gap-fill for a specific date range.
    * Used by GapDetector results.
    */
-  public enqueueGapFill(ticker: string, brokerId: string, brokerToken: string | number = '', fromMs: number, toMs: number) {
+  public enqueueGapFill(ticker: string, brokerId: string, brokerToken: string | number = '', fromMs: number, toMs: number, forceEvenDuringMarket = false) {
     const gapKey = `${ticker}:gap:${fromMs}`
     if (this.activeTickers.has(gapKey)) return
     
@@ -168,21 +168,34 @@ class BackfillQueueService extends EventEmitter {
         const targetTo   = new Date(toMs)
         const depthDays = Math.max(1, Math.ceil((toMs - fromMs) / (24 * 3600 * 1000)))
 
-        // Skip same-day gaps ONLY if market is currently open (9:15–15:30 IST).
-        // After market close, Fyers has full historical data for today — allow the fill.
+        // Skip same-day gaps ONLY if the gap is very recent (< 5 min ago).
+        // Past intra-day gaps (e.g. app was closed during trading) must always be filled.
+        // After market close, Fyers has full historical data for today — always allow the fill.
+        // forceEvenDuringMarket=true bypasses all skip logic (used by manual "Refresh Today" button).
         const isSameDay = gapFrom.toISOString().split('T')[0] === targetTo.toISOString().split('T')[0]
-        if (isSameDay) {
-          const nowIST = new Date(Date.now() + 5.5 * 3600 * 1000)
+        if (isSameDay && !forceEvenDuringMarket) {
+          const nowMs = Date.now()
+          const nowIST = new Date(nowMs + 5.5 * 3600 * 1000)
           const istHHMM = nowIST.getUTCHours() * 100 + nowIST.getUTCMinutes()
           const isMarketOpen = istHHMM >= 915 && istHHMM < 1530  // 9:15 AM to 3:30 PM IST
           if (isMarketOpen) {
-            // During live market: skip (data is incomplete, live ticks handle it)
-            this.activeTickers.delete(gapKey)
-            this.activeTickers.delete(ticker)
-            return
+            // Only skip if the gap STARTS within the last 5 minutes — live ticks handle those.
+            // If gap starts more than 5 minutes ago, it means the app was closed — fill it!
+            const fiveMinAgoMs = nowMs - 5 * 60 * 1000
+            if (gapFrom.getTime() >= fiveMinAgoMs) {
+              // Very recent gap — live ticks will cover it, skip
+              this.activeTickers.delete(gapKey)
+              this.activeTickers.delete(ticker)
+              return
+            }
+            // Past intra-day gap (app was closed) — fill it even during live market
+            console.log(`[BackfillQueue] Intra-day gap fill (app was closed during market): ${ticker} ${gapFrom.toISOString().slice(0, 16)} → ${targetTo.toISOString().slice(0, 16)}`)
+          } else {
+            // After market close: always allow
+            console.log(`[BackfillQueue] Same-day gap fill allowed (market closed): ${ticker} ${gapFrom.toISOString().slice(0, 16)} → ${targetTo.toISOString().slice(0, 16)}`)
           }
-          // After market close: fall through and fetch today's completed bars
-          console.log(`[BackfillQueue] Same-day gap fill allowed (market closed): ${ticker} ${gapFrom.toISOString().slice(0, 16)} → ${targetTo.toISOString().slice(0, 16)}`)
+        } else if (forceEvenDuringMarket) {
+          console.log(`[BackfillQueue] FORCE today-backfill (manual): ${ticker} ${gapFrom.toISOString().slice(0, 16)} → ${targetTo.toISOString().slice(0, 16)}`)
         }
 
         this.queue.push({
@@ -354,6 +367,11 @@ class BackfillQueueService extends EventEmitter {
         if (csvLines.length > 0) {
           // Upsert to postgres (async - must be awaited!)
           await upsertBarsToHistory(safeTicker, csvLines)
+
+          // Push bars to AmiBroker via IPC for ALL backfill tasks:
+          // - gap-fill tasks: push immediately so chart updates live
+          // - initial 365-day backfill: also push so historical data appears in AmiBroker chart
+          this.emit('bars_gap_filled', { ticker: task.ticker, csvLines })
 
           // Also load recent bars (last 3 days) into RAM for live chart serving
           const cutoffMs = Date.now() - 3 * 24 * 60 * 60 * 1000

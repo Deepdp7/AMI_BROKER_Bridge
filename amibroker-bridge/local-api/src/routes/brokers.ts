@@ -424,7 +424,7 @@ router.get('/search', searchHandler)
 router.get('/:id/search', searchHandler)
 
 // POST /api/brokers/:id/symbols — Add symbols to stream
-router.post('/:id/symbols', (req, res) => {
+router.post('/:id/symbols', async (req, res) => {
   try {
     const { id } = req.params
     const { tickers, symbols } = req.body as { tickers?: string[], symbols?: any[] }
@@ -440,20 +440,38 @@ router.post('/:id/symbols', (req, res) => {
 
     for (const sym of normalizedSymbols) {
       try {
+        // Use the instrumentId from search result as the raw_symbol (e.g. NSE:ITC26OCTFUT)
+        // If instrumentId is missing or same as ticker, resolve it properly
+        let rawSymbol = sym.instrumentId || sym.ticker
+        const adapter = brokerManager.getAdapter(id) as any
+        if ((!rawSymbol || rawSymbol === sym.ticker) && adapter?.resolveSymbol) {
+          rawSymbol = await adapter.resolveSymbol(sym.ticker, sym.exchange)
+        }
+
         stmts.insertSymbol.run({
           broker_id: id,
-          instrument_id: sym.instrumentId || sym.ticker,
+          instrument_id: rawSymbol,
           amibroker_ticker: sym.ticker,
           exchange: sym.exchange || 'NSE',
           instrument_type: sym.instrumentType || 'EQ',
-          raw_symbol: sym.instrumentId || sym.ticker,
+          raw_symbol: rawSymbol,
           created_at: now,
         })
-        feedSimulator.addSymbolByTicker(sym.ticker, id, sym.exchange, sym.instrumentType, sym.instrumentId || sym.ticker)
-        brokerManager.subscribe(id, [sym.instrumentId || sym.ticker])
+
+        feedSimulator.addSymbolByTicker(sym.ticker, id, sym.exchange, sym.instrumentType, rawSymbol)
+
+        // Await subscribe so we know it actually succeeded
+        try {
+          await brokerManager.subscribe(id, [rawSymbol])
+          console.log(`[ADD_SYMBOL] "${sym.ticker}" → "${rawSymbol}" subscribed to live feed.`)
+        } catch (subErr) {
+          console.error(`[ADD_SYMBOL] Failed to subscribe "${sym.ticker}" → "${rawSymbol}":`, subErr)
+        }
+
         const settings = require('../db').getAllSettings() as any
         const backfillDepth = Number(settings?.backfillDepthDays) || 365
-        require('../services/BackfillQueue').backfillQueue.enqueue(sym.ticker, id, sym.instrumentId || sym.ticker, backfillDepth)
+        require('../services/BackfillQueue').backfillQueue.enqueue(sym.ticker, id, rawSymbol, backfillDepth)
+        console.log(`[ADD_SYMBOL] "${sym.ticker}" backfill queued (${backfillDepth} days).`)
         added++
         
         const psScript = `
@@ -466,16 +484,20 @@ router.post('/:id/symbols', (req, res) => {
           } catch {}
           exit 0
         `
-        exec(`powershell -Command "${psScript.replace(/\n/g, ';')}"`, (err) => {
+        exec(`powershell -Command "${psScript.replace(/\n/g, ';')}"`, (_err) => {
           // ignore OLE errors if AmiBroker is closed
         })
-      } catch { /* ignore dups */ }
+      } catch (symErr) {
+        console.error(`[ADD_SYMBOL] Error adding symbol "${sym.ticker}":`, symErr)
+        /* continue with next symbol */
+      }
     }
     res.json({ added, total: normalizedSymbols.length })
   } catch (e) {
     res.status(500).json({ error: String(e) })
   }
 })
+
 
 // DELETE /api/brokers/:id/symbols/:ticker
 router.delete('/:id/symbols/:ticker', (req, res) => {
@@ -607,6 +629,27 @@ router.post('/:id/symbols/import', (req, res) => {
         added++
       } catch (e: any) {
         errors.push(e.message)
+      }
+    }
+
+    if (added > 0) {
+      // Bulk add symbols to AmiBroker
+      const addedTickers = lines.map((l: string) => (l.split(',')[0] || '').trim().toUpperCase()).filter((t: string) => t && t.length >= 2 && !t.startsWith('//') && t !== 'NAME' && t !== 'TICKER');
+      if (addedTickers.length > 0) {
+        const psScript = `
+          try {
+            $ab = [System.Runtime.InteropServices.Marshal]::GetActiveObject('Broker.Application')
+            if ($null -ne $ab) {
+              $tickers = @('${addedTickers.join("','")}')
+              foreach ($t in $tickers) {
+                $ab.Stocks.Add($t) | Out-Null
+              }
+              $ab.RefreshAll()
+            }
+          } catch {}
+          exit 0
+        `
+        require('child_process').exec(`powershell -Command "${psScript.replace(/\n/g, ';')}"`, () => {})
       }
     }
 

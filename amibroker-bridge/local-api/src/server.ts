@@ -141,6 +141,11 @@ app.get('/api/feed/bars', async (req, res) => {
     return res.type('text/plain').send(cached.data)
   }
 
+  // Strip comma suffix (e.g. RELIANCE,NSE,EQ -> RELIANCE) if user mistakenly imported CSV directly in AmiBroker
+  if (ticker.includes(',')) {
+    ticker = ticker.split(',')[0].trim();
+  }
+
   let brokerId = ''
   const existing = stmts.getSymbols.all() as any[]
   const symRecord = existing.find(s => {
@@ -383,6 +388,13 @@ async function fetchTodayBars(adapter: any, ticker: string) {
       broadcast('log_entry', { level: 'warn', component: 'Backfill', message: `No bars returned for ${ticker} today.` })
     }
   } catch (e: any) {
+    if (e?.code === 429 || e?.message?.includes('429') || e?.message?.includes('request limit')) {
+      throw e // rethrow for rate limiting
+    }
+    if (e?.code === -300 || e?.message?.includes('Invalid symbol')) {
+      console.error(`[Init] Invalid symbol (expired?): ${ticker}`)
+      throw e
+    }
     console.error(`[Init] Failed incremental update for ${ticker}:`, e)
     broadcast('log_entry', { level: 'error', component: 'Backfill', message: `Failed backfill for ${ticker}: ${e.message}` })
   }
@@ -501,10 +513,15 @@ async function initSimulator() {
         }
       }
 
+
       const gaps = await detectGaps(ticker, sym.exchange || 'NSE', '1m', safeTicker, targetFromMs, nowMs)
       
       if (gaps.length > 0) {
         console.log(`[Init] Enqueueing ${gaps.length} missing gap(s) for ${ticker} (${brokerId})`)
+        // FIX: Remove from backfilledTickers so gap-fill is NOT blocked by persisted state.
+        // A ticker saved from a previous session as "backfilled" may now have new gaps.
+        // We must clear it here so enqueueGapFill() can proceed unblocked.
+        backfilledTickers.delete(ticker)
         const brokerToken = sym.rawSymbol || sym.raw_symbol || sym.instrumentId || sym.instrument_id || ticker
         for (const gap of gaps) {
           backfillQueue.enqueueGapFill(ticker, brokerId, brokerToken, gap.fromMs, gap.toMs)
@@ -539,8 +556,14 @@ async function initSimulator() {
         const ticker = sym.amiBrokerTicker || sym.amibroker_ticker
         try {
           await fetchTodayBars(adapter, ticker)
-        } catch (e) { /* ignore per-ticker errors */ }
-        await new Promise(r => setTimeout(r, 200)) // rate-limit
+        } catch (e: any) {
+          if (e?.code === 429 || e?.message?.includes('429') || e?.message?.includes('request limit')) {
+            console.warn(`[Init] Rate limit 429 hit during startup fetch for ${ticker}. Pausing for 10 seconds...`)
+            await new Promise(r => setTimeout(r, 10000))
+          }
+          // -300 already logged in fetchTodayBars, just skip
+        }
+        await new Promise(r => setTimeout(r, 400)) // 400ms rate-limit (2.5 req/sec) to support 900+ symbols smoothly
       }
       console.log('[Init] Startup today-bar fetch complete.')
     }, todayFetchDelay)
@@ -649,6 +672,8 @@ setInterval(() => {
             
             if (gaps.length > 0) {
               console.log(`[Cron] Enqueueing ${gaps.length} missing gap(s) for ${ticker} (${brokerId})`)
+              // FIX: Clear persisted backfill state so enqueueGapFill is not blocked
+              backfilledTickers.delete(ticker)
               for (const gap of gaps) {
                 backfillQueue.enqueueGapFill(ticker, brokerId, brokerToken, gap.fromMs, gap.toMs)
               }
@@ -720,12 +745,37 @@ feedSimulator.on('live_bar_updated', (data: { ticker: string, bar: any }) => {
     console.log(`[IPC_LIVE_BAR] Broadcasted: ${msg.trim()}`);
   }
 
-  ipcClients.forEach(client => {
+ipcClients.forEach(client => {
     try {
       client.write(msg);
     } catch (e) {}
   });
 });
+
+// After gap-fill saves bars, trigger a debounced AmiBroker RefreshAll().
+// This forces AmiBroker to pull the historical data correctly via the HTTP plugin 
+// rather than pushing them as LIVE_BARs (which causes chart gaps).
+let abRefreshTimeout: NodeJS.Timeout | null = null;
+backfillQueue.on('bars_gap_filled', ({ ticker, csvLines }: { ticker: string; csvLines: string[] }) => {
+  if (csvLines.length === 0) return;
+  console.log(`[IPC_GAP_PUSH] Gap-fill saved for ${ticker} (${csvLines.length} bars). Scheduling AmiBroker refresh...`);
+  
+  if (abRefreshTimeout) clearTimeout(abRefreshTimeout);
+  abRefreshTimeout = setTimeout(() => {
+    console.log('[IPC_GAP_PUSH] Executing debounced AmiBroker RefreshAll()...');
+    const psScript = `
+      try {
+        $ab = New-Object -ComObject Broker.Application
+        $ab.RefreshAll()
+      } catch { }
+    `;
+    require('child_process').exec(`powershell -Command "${psScript.replace(/\n/g, ';')}"`, () => {});
+  }, 3000); // 3-second debounce
+})
+
+
+// Track last time we fired a connect-refresh so we don't spam it
+let lastABConnectRefreshAt = 0
 
 const ipcServer = net.createServer((socket) => {
   ipcClients.add(socket);
@@ -733,7 +783,20 @@ const ipcServer = net.createServer((socket) => {
   socket.setNoDelay(true) // Disable Nagle's algorithm for sub-millisecond tick latency
   socket.setKeepAlive(true, 15000)
   let socketBuffer = ''
-  
+
+  // When AmiBroker (re)connects, trigger a RefreshAll() after a short delay.
+  // This ensures AmiBroker pulls any bars that were backfilled while it was closed.
+  const nowMs = Date.now()
+  if (nowMs - lastABConnectRefreshAt > 30_000) { // at most once every 30 seconds
+    lastABConnectRefreshAt = nowMs
+    console.log('[IPC_CONNECT] AmiBroker connected — scheduling RefreshAll() in 5 seconds to sync backfilled data...')
+    setTimeout(() => {
+      console.log('[IPC_CONNECT] Executing RefreshAll() for AmiBroker reconnect...')
+      const psScript = `try { $ab = New-Object -ComObject Broker.Application; $ab.RefreshAll() } catch { }`
+      require('child_process').exec(`powershell -Command "${psScript}"`, () => {})
+    }, 5000)
+  }
+
   socket.on('error', (err) => {
     console.error('[IPC Error]', err.message)
   })
@@ -769,9 +832,52 @@ const ipcServer = net.createServer((socket) => {
           }) || existing.find(s => s.amiBrokerTicker === ticker || s.amibroker_ticker === ticker)
           
           if (!symRecord) {
+            // AUTO-REGISTER: Symbol not in DB but AmiBroker is requesting it.
+            // This happens when user manually types a symbol directly in AmiBroker.
+            // Find the first active broker and auto-add so streaming works.
+            const activeBrokers = stmts.getBrokers.all() as any[]
+            const activeBroker = activeBrokers.find((b: any) => brokerManager.getAdapter(b.id))
+            if (activeBroker && ticker && ticker.trim().length >= 2) {
+              const adapter = brokerManager.getAdapter(activeBroker.id)
+              if (adapter) {
+                console.log(`[IPC_AUTO_REG] AmiBroker requested unknown symbol "${ticker}" — auto-registering...`)
+                try {
+                  const resolvedToken = (adapter as any).resolveSymbol ? await (adapter as any).resolveSymbol(ticker) : ticker
+                  const exchMatch = resolvedToken.match(/^([A-Z]+):/)
+                  const exchange = exchMatch ? exchMatch[1] : 'NSE'
+                  const instrType = /FUT|CE|PE/.test(resolvedToken) ? 'FUT' : 'EQ'
+
+                  stmts.insertSymbol.run({
+                    broker_id: activeBroker.id,
+                    instrument_id: resolvedToken,
+                    amibroker_ticker: ticker,
+                    exchange,
+                    instrument_type: instrType,
+                    raw_symbol: resolvedToken,
+                    created_at: Date.now(),
+                  })
+
+                  feedSimulator.addInstrument({
+                    ticker, exchange: exchange as any, instrumentType: instrType as any,
+                    basePrice: 0, volatility: 0, avgVolume: 0,
+                    brokerId: activeBroker.id, brokerToken: resolvedToken,
+                  })
+
+                  await brokerManager.subscribe(activeBroker.id, [resolvedToken])
+
+                  const settings = getAllSettings() as any
+                  const backfillDepth = Number(settings?.backfillDepthDays) || 365
+                  backfillQueue.enqueue(ticker, activeBroker.id, resolvedToken, backfillDepth)
+                  console.log(`[IPC_AUTO_REG] "${ticker}" → "${resolvedToken}" registered, subscribed, backfill queued.`)
+                } catch (autoRegErr) {
+                  console.error(`[IPC_AUTO_REG] Failed to auto-register "${ticker}":`, autoRegErr)
+                }
+              }
+            }
             socket.write('END\n')
             continue
           }
+
           brokerId = symRecord.brokerId || symRecord.broker_id
 
           // Fetch real historical data from memory/disk (zero parse CSV)
