@@ -756,9 +756,8 @@ ipcClients.forEach(client => {
 // This forces AmiBroker to pull the historical data correctly via the HTTP plugin 
 // rather than pushing them as LIVE_BARs (which causes chart gaps).
 let abRefreshTimeout: NodeJS.Timeout | null = null;
-backfillQueue.on('bars_gap_filled', ({ ticker, csvLines }: { ticker: string; csvLines: string[] }) => {
-  if (csvLines.length === 0) return;
-  console.log(`[IPC_GAP_PUSH] Gap-fill saved for ${ticker} (${csvLines.length} bars). Scheduling AmiBroker refresh...`);
+backfillQueue.on('backfill_completed', ({ ticker }: { ticker: string }) => {
+  console.log(`[IPC_GAP_PUSH] Backfill completed for ${ticker}. Scheduling AmiBroker refresh...`);
   
   if (abRefreshTimeout) clearTimeout(abRefreshTimeout);
   abRefreshTimeout = setTimeout(() => {
