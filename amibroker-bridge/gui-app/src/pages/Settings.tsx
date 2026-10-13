@@ -32,8 +32,8 @@ function SettingRow({ label, description, children }: { label: string; descripti
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: '0.875rem', color: '#e2eaf4', fontWeight: 500 }}>{label}</div>
-        {description && <div style={{ fontSize: '0.75rem', color: '#6b8099', marginTop: '0.2rem' }}>{description}</div>}
+        <div style={{ fontSize: '0.875rem', color: '#eceef2', fontWeight: 500 }}>{label}</div>
+        {description && <div style={{ fontSize: '0.75rem', color: '#8b9199', marginTop: '0.2rem' }}>{description}</div>}
       </div>
       <div style={{ flexShrink: 0 }}>
         {children}
@@ -142,11 +142,11 @@ export function SettingsPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#e2eaf4', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#eceef2', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <SettingsIcon size={20} style={{ color: '#00d4aa' }} />
             Settings & Integration
           </h1>
-          <p style={{ fontSize: '0.8rem', color: '#6b8099', margin: '0.25rem 0 0' }}>Configure DataBridge Pro behavior and AmiBroker connection</p>
+          <p style={{ fontSize: '0.8rem', color: '#8b9199', margin: '0.25rem 0 0' }}>Configure DataBridge Pro behavior and AmiBroker connection</p>
         </div>
         <button
           id="save-settings-btn"
@@ -161,7 +161,7 @@ export function SettingsPage() {
       {/* AmiBroker Connection Card */}
       <div className="glass-card" style={{
         padding: '1.25rem',
-        background: 'linear-gradient(135deg, rgba(56,126,209,0.12) 0%, rgba(10,22,40,0.6) 100%)',
+        background: 'linear-gradient(135deg, rgba(56,126,209,0.12) 0%, rgba(23,23,23,0.6) 100%)',
         border: '1px solid rgba(56,126,209,0.3)',
       }}>
         <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -169,13 +169,13 @@ export function SettingsPage() {
           AmiBroker Plugin Connection Info
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '0.75rem' }}>
-          <div style={{ background: 'rgba(5,12,20,0.6)', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.25rem' }}>Local Feed API URL</div>
+          <div style={{ background: 'rgba(12,12,12,0.6)', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ fontSize: '0.72rem', color: '#a1a7b0', marginBottom: '0.25rem' }}>Local Feed API URL</div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
               <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem', color: '#38bdf8', fontWeight: 600 }}>http://127.0.0.1:7890</span>
               <button
                 onClick={() => copyToClipboard('http://127.0.0.1:7890', 'url')}
-                style={{ background: 'none', border: 'none', color: copiedUrl ? '#00d4aa' : '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px', fontSize: '0.75rem' }}
+                style={{ background: 'none', border: 'none', color: copiedUrl ? '#00d4aa' : '#a1a7b0', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px', fontSize: '0.75rem' }}
               >
                 <Copy size={13} />
                 {copiedUrl ? 'Copied' : 'Copy'}
@@ -183,13 +183,13 @@ export function SettingsPage() {
             </div>
           </div>
 
-          <div style={{ background: 'rgba(5,12,20,0.6)', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.25rem' }}>IPC TCP Streaming Port</div>
+          <div style={{ background: 'rgba(12,12,12,0.6)', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ fontSize: '0.72rem', color: '#a1a7b0', marginBottom: '0.25rem' }}>IPC TCP Streaming Port</div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
               <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem', color: '#00d4aa', fontWeight: 600 }}>7891 (Localhost)</span>
               <button
                 onClick={() => copyToClipboard('7891', 'port')}
-                style={{ background: 'none', border: 'none', color: copiedPort ? '#00d4aa' : '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px', fontSize: '0.75rem' }}
+                style={{ background: 'none', border: 'none', color: copiedPort ? '#00d4aa' : '#a1a7b0', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px', fontSize: '0.75rem' }}
               >
                 <Copy size={13} />
                 {copiedPort ? 'Copied' : 'Copy'}
@@ -272,11 +272,11 @@ export function SettingsPage() {
                 className="input-field"
                 style={{ width: '120px', fontFamily: 'JetBrains Mono, monospace', colorScheme: 'dark' }}
               />
-              <span style={{ fontSize: '0.75rem', color: '#6b8099' }}>IST</span>
+              <span style={{ fontSize: '0.75rem', color: '#8b9199' }}>IST</span>
             </div>
           </SettingRow>
         )}
-        <div style={{ fontSize: '0.72rem', color: '#4b5e6e', padding: '0.5rem 0 0', lineHeight: 1.5 }}>
+        <div style={{ fontSize: '0.72rem', color: '#5b6169', padding: '0.5rem 0 0', lineHeight: 1.5 }}>
           💡 At the set time, your browser opens Fyers login. After you log in, DataBridge automatically saves the token and resumes data feed — no manual steps needed.
         </div>
       </Section>
@@ -285,7 +285,7 @@ export function SettingsPage() {
       <Section title="Data & History Depth" icon={Database}>
         <SettingRow label="History Depth" description="How far back 1-minute history is downloaded for every symbol. Raising it downloads only the older years that are missing (after Save).">
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.375rem' }}>
-            <div style={{ display: 'flex', gap: '0.25rem', background: 'rgba(10,22,40,0.6)', padding: '3px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display: 'flex', gap: '0.25rem', background: 'rgba(23,23,23,0.6)', padding: '3px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
               {HISTORY_PRESETS.map(p => {
                 const active = settings.backfillDepthDays === p.days
                 return (
@@ -295,7 +295,7 @@ export function SettingsPage() {
                     title={p.title}
                     style={{
                       background: active ? 'rgba(0,212,170,0.15)' : 'transparent',
-                      color: active ? '#00d4aa' : '#94a3b8',
+                      color: active ? '#00d4aa' : '#a1a7b0',
                       border: 'none', borderRadius: '6px', padding: '0.3rem 0.65rem',
                       fontSize: '0.75rem', fontWeight: active ? 700 : 500, cursor: 'pointer',
                       transition: 'background-color 0.15s, color 0.15s',
@@ -306,7 +306,7 @@ export function SettingsPage() {
                 )
               })}
             </div>
-            <span style={{ fontSize: '0.68rem', color: '#4b5e6e' }}>
+            <span style={{ fontSize: '0.68rem', color: '#5b6169' }}>
               {settings.backfillDepthDays} days · ~{Math.round(settings.backfillDepthDays * 0.69 * 375).toLocaleString()} bars per symbol
             </span>
           </div>
@@ -340,7 +340,7 @@ export function SettingsPage() {
               className="input-field"
               style={{ width: '80px', fontFamily: 'JetBrains Mono, monospace' }}
             />
-            <span style={{ fontSize: '0.8rem', color: '#6b8099' }}>days</span>
+            <span style={{ fontSize: '0.8rem', color: '#8b9199' }}>days</span>
           </div>
         </SettingRow>
       </Section>
@@ -350,12 +350,12 @@ export function SettingsPage() {
         <button
           onClick={() => setShowAdvanced(!showAdvanced)}
           style={{
-            background: 'none', border: 'none', color: '#94a3b8',
+            background: 'none', border: 'none', color: '#a1a7b0',
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             width: '100%', padding: 0, fontSize: '0.85rem', fontWeight: 600,
           }}
         >
-          <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#e2eaf4' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#eceef2' }}>
             <Shield size={16} style={{ color: '#00d4aa' }} />
             Advanced Timing Controls
           </span>
@@ -374,7 +374,7 @@ export function SettingsPage() {
                   className="input-field"
                   style={{ width: '70px', fontFamily: 'JetBrains Mono, monospace' }}
                 />
-                <span style={{ fontSize: '0.8rem', color: '#6b8099' }}>sec</span>
+                <span style={{ fontSize: '0.8rem', color: '#8b9199' }}>sec</span>
               </div>
             </SettingRow>
 
@@ -388,7 +388,7 @@ export function SettingsPage() {
                   className="input-field"
                   style={{ width: '70px', fontFamily: 'JetBrains Mono, monospace' }}
                 />
-                <span style={{ fontSize: '0.8rem', color: '#6b8099' }}>sec</span>
+                <span style={{ fontSize: '0.8rem', color: '#8b9199' }}>sec</span>
               </div>
             </SettingRow>
           </div>

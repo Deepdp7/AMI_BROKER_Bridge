@@ -49,6 +49,9 @@ export interface BackfillTask {
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000
+/** Futures history window (days): near-month contracts only have about two months of trading worth keeping */
+export const FUTURES_HISTORY_DAYS = 60
+const FUTURES_RE = /\d{2}(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)FUT$/i
 /** Deepest history the app will request (10 years). Fyers' 1-minute data starts around 2017-18. */
 export const MAX_HISTORY_DAYS = 3650
 
@@ -122,6 +125,8 @@ class BackfillQueueService extends EventEmitter {
           resolvedToken = await adapter.resolveSymbol(ticker, symRecord?.exchange);
         }
         if (!resolvedToken) resolvedToken = ticker;
+        // Futures contracts only trade ~3 months and are tracked for the near month: history = last 2 months
+        if (FUTURES_RE.test(ticker)) depthDays = Math.min(depthDays, FUTURES_HISTORY_DAYS)
         const targetTo = new Date()
         const currentFrom = new Date(Date.now() - depthDays * 24 * 60 * 60 * 1000)
         const totalChunks = Math.ceil(depthDays / this.chunkDaysFor(adapter))

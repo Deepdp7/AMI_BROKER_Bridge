@@ -2,12 +2,12 @@
 
 @theme {
   /* ===== Color Palette ===== */
-  --color-navy-950: #050d1a;
-  --color-navy-900: #0a1628;
-  --color-navy-800: #0f2040;
-  --color-navy-700: #162c58;
-  --color-navy-600: #1e3a70;
-  --color-navy-500: #2a4d8f;
+  --color-navy-950: #0e0e0e;
+  --color-navy-900: #171717;
+  --color-navy-800: #222222;
+  --color-navy-700: #2f2f2f;
+  --color-navy-600: #2c2c2c;
+  --color-navy-500: #3a3a3a;
 
   --color-electric-500: #00d4aa;
   --color-electric-400: #00f5c4;
@@ -21,14 +21,14 @@
   --color-rose-500: #f43f5e;
   --color-rose-400: #fb7185;
 
-  --color-slate-800: #1e2a3a;
-  --color-slate-700: #243044;
-  --color-slate-600: #2e3d54;
-  --color-slate-500: #3d5068;
-  --color-slate-400: #6b8099;
-  --color-slate-300: #94a3b8;
-  --color-slate-200: #cbd5e1;
-  --color-slate-100: #e2eaf4;
+  --color-slate-800: #2a2a2a;
+  --color-slate-700: #313131;
+  --color-slate-600: #3e3e3e;
+  --color-slate-500: #575d66;
+  --color-slate-400: #8b9199;
+  --color-slate-300: #a1a7b0;
+  --color-slate-200: #d1d5db;
+  --color-slate-100: #eceef2;
 
   /* ===== Typography ===== */
   --font-sans: 'Inter', system-ui, sans-serif;
@@ -93,7 +93,7 @@ img, a { -webkit-user-drag: none; }
 
 /* ===== Glass Card ===== */
 .glass-card {
-  background: rgba(15, 32, 64, 0.6);
+  background: rgba(34,34,34, 0.6);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -130,7 +130,7 @@ img, a { -webkit-user-drag: none; }
   background: #f43f5e;
 }
 .status-dot.idle {
-  background: #6b8099;
+  background: #8b9199;
 }
 
 @keyframes pulse-green {
@@ -153,7 +153,7 @@ img, a { -webkit-user-drag: none; }
 /* ===== Button Styles ===== */
 .btn-primary {
   background: linear-gradient(135deg, #00d4aa, #00b38c);
-  color: #050d1a;
+  color: #0e0e0e;
   font-weight: 600;
   padding: 0.625rem 1.25rem;
   border-radius: 0.5rem;
@@ -175,7 +175,7 @@ img, a { -webkit-user-drag: none; }
 }
 
 .btn-secondary {
-  background: rgba(30, 42, 58, 0.8);
+  background: rgba(42,42,42, 0.8);
   color: var(--color-slate-200);
   font-weight: 500;
   padding: 0.625rem 1.25rem;
@@ -190,7 +190,7 @@ img, a { -webkit-user-drag: none; }
   gap: 0.5rem;
 }
 .btn-secondary:hover {
-  background: rgba(46, 61, 84, 0.8);
+  background: rgba(62,62,62, 0.8);
   border-color: rgba(0, 212, 170, 0.2);
 }
 
@@ -216,7 +216,7 @@ img, a { -webkit-user-drag: none; }
 
 /* ===== Input Styles ===== */
 .input-field {
-  background: rgba(10, 22, 40, 0.8);
+  background: rgba(23,23,23, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.5rem;
   color: var(--color-slate-200);
@@ -262,7 +262,7 @@ img, a { -webkit-user-drag: none; }
 }
 .badge-gray {
   background: rgba(107, 128, 153, 0.15);
-  color: #94a3b8;
+  color: #a1a7b0;
   border: 1px solid rgba(107, 128, 153, 0.2);
 }
 
@@ -293,7 +293,7 @@ img, a { -webkit-user-drag: none; }
 
 /* ===== Metric Card ===== */
 .metric-card {
-  background: rgba(15, 32, 64, 0.5);
+  background: rgba(34,34,34, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 0.875rem;
   padding: 1.25rem;
@@ -374,7 +374,7 @@ img, a { -webkit-user-drag: none; }
 
 /* ===== Skeleton Loader ===== */
 .skeleton {
-  background: linear-gradient(90deg, rgba(30,42,58,0.8) 25%, rgba(46,61,84,0.8) 50%, rgba(30,42,58,0.8) 75%);
+  background: linear-gradient(90deg, rgba(42,42,42,0.8) 25%, rgba(62,62,62,0.8) 50%, rgba(42,42,42,0.8) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 0.375rem;
@@ -396,7 +396,7 @@ img, a { -webkit-user-drag: none; }
   position: absolute;
   cursor: pointer;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(30, 42, 58, 0.8);
+  background: rgba(42,42,42, 0.8);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 9999px;
   transition: 0.2s;
@@ -431,8 +431,8 @@ img, a { -webkit-user-drag: none; }
 }
 .log-line.error { color: #fb7185; }
 .log-line.warn { color: #f59e0b; }
-.log-line.info { color: #94a3b8; }
-.log-line.debug { color: #6b8099; }
+.log-line.info { color: #a1a7b0; }
+.log-line.debug { color: #8b9199; }
 
 /* ===== Tooltip ===== */
 .tooltip {
@@ -444,7 +444,7 @@ img, a { -webkit-user-drag: none; }
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(10, 22, 40, 0.95);
+  background: rgba(23,23,23, 0.95);
   color: var(--color-slate-200);
   padding: 0.375rem 0.625rem;
   border-radius: 0.375rem;

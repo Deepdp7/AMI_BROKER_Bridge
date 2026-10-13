@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useAppStore } from '../store/appStore'
 import { api, wsManager, isApiAvailable } from '../api/apiClient'
 import { toast } from '../components/Toast'
+import { setAssistantView } from '../pages/Assistant'
 import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/plugin-notification'
 
 type ApiState = 'checking' | 'connected' | 'offline'
@@ -206,6 +207,18 @@ export function useApiSync() {
       }
     })
 
+    // Pre-market brief finished → notify, with a button that opens it
+    let briefWasGenerating = false
+    const offBrief = wsManager.on('morning_brief', (p: any) => {
+      if (briefWasGenerating && !p?.generating && p?.latest && !p?.lastError) {
+        toast.success('Pre-market brief ready', 'Market mood, stocks in the news and your watchlist for today.', 10000, {
+          label: 'Open brief',
+          onClick: () => { setAssistantView('brief'); window.location.hash = '#/assistant' },
+        })
+      }
+      briefWasGenerating = !!p?.generating
+    })
+
     // Window comes back to the front, or every minute as a safety net: resync quietly
     const onFocus = () => { if (document.visibilityState === 'visible') resyncFromEngine() }
     window.addEventListener('focus', onFocus)
@@ -297,6 +310,7 @@ export function useApiSync() {
       offMarketStatus?.()
       offBackfillFailed?.()
       offResyncTriggers()
+      offBrief()
     }
   }, [apiState])
 

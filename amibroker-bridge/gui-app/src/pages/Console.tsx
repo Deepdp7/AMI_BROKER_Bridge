@@ -10,9 +10,9 @@ const MAX_LINES = 3000
 const LEVEL_COLORS: Record<ConsoleLine['level'], string> = {
   error: '#f43f5e',
   warn: '#f59e0b',
-  info: '#cbd5e1',
-  log: '#cbd5e1',
-  debug: '#6b8099',
+  info: '#d1d5db',
+  log: '#d1d5db',
+  debug: '#8b9199',
 }
 
 // Plain terminal look: text exactly as the engine prints it; only problems are coloured
@@ -112,7 +112,7 @@ export function ConsolePage() {
 
   const toggleStyle = (active: boolean) => ({
     background: active ? 'rgba(0,212,170,0.15)' : 'transparent',
-    color: active ? '#00d4aa' : '#6b8099',
+    color: active ? '#00d4aa' : '#8b9199',
     border: 'none',
     borderRadius: '6px',
     padding: '0.25rem 0.6rem',
@@ -130,7 +130,7 @@ export function ConsolePage() {
             {connected ? 'Engine running' : 'Engine offline'}
           </div>
           <div style={{ position: 'relative', flex: 1 }}>
-            <Search size={14} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#6b8099' }} />
+            <Search size={14} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8b9199' }} />
             <input
               type="text"
               placeholder="Filter output (ticker, error, Backfill...)"
@@ -140,7 +140,7 @@ export function ConsolePage() {
               style={{ paddingLeft: '2.25rem', height: '36px', fontSize: '0.8rem' }}
             />
           </div>
-          <div style={{ display: 'flex', gap: '0.25rem', background: 'rgba(10,22,40,0.6)', padding: '3px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ display: 'flex', gap: '0.25rem', background: 'rgba(23,23,23,0.6)', padding: '3px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
             <button onClick={() => setProblemsOnly(!problemsOnly)} style={toggleStyle(problemsOnly)}>Problems</button>
             <button onClick={() => setHideTicks(!hideTicks)} style={toggleStyle(hideTicks)}>Hide ticks</button>
           </div>
@@ -184,7 +184,7 @@ export function ConsolePage() {
         }}
       >
         {displayed.length === 0 ? (
-          <div style={{ color: '#475569', textAlign: 'center', marginTop: '2rem' }}>
+          <div style={{ color: '#5b6169', textAlign: 'center', marginTop: '2rem' }}>
             {connected ? 'Waiting for engine output...' : 'Data engine is not reachable — it restarts automatically.'}
           </div>
         ) : (

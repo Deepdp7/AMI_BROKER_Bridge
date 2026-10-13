@@ -165,6 +165,7 @@ export type WsMessageType =
   | 'market_status'
   | 'console_lines'
   | 'auto_refresh'
+  | 'morning_brief'
 
 export interface WsMessage<T = unknown> {
   type: WsMessageType

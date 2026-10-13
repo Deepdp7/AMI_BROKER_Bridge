@@ -58,7 +58,7 @@ const COLORS: Record<ToastType, { bg: string; border: string; icon: string; bar:
   success: { bg: 'rgba(0,212,170,0.08)', border: 'rgba(0,212,170,0.2)', icon: '#00d4aa', bar: '#00d4aa' },
   warning: { bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)', icon: '#f59e0b', bar: '#f59e0b' },
   error: { bg: 'rgba(244,63,94,0.08)', border: 'rgba(244,63,94,0.2)', icon: '#f43f5e', bar: '#f43f5e' },
-  info: { bg: 'rgba(107,128,153,0.08)', border: 'rgba(107,128,153,0.2)', icon: '#94a3b8', bar: '#94a3b8' },
+  info: { bg: 'rgba(107,128,153,0.08)', border: 'rgba(107,128,153,0.2)', icon: '#a1a7b0', bar: '#a1a7b0' },
 }
 
 function ToastItem({ t, onDismiss }: { t: Toast; onDismiss: () => void }) {
@@ -94,9 +94,9 @@ function ToastItem({ t, onDismiss }: { t: Toast; onDismiss: () => void }) {
       <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
         <Icon size={18} color={c.icon} style={{ flexShrink: 0, marginTop: 1 }} />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontWeight: 600, fontSize: '0.875rem', color: '#e2eaf4' }}>{t.title}</div>
+          <div style={{ fontWeight: 600, fontSize: '0.875rem', color: '#eceef2' }}>{t.title}</div>
           {t.message && (
-            <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '0.25rem', lineHeight: 1.5 }}>{t.message}</div>
+            <div style={{ fontSize: '0.78rem', color: '#a1a7b0', marginTop: '0.25rem', lineHeight: 1.5 }}>{t.message}</div>
           )}
           {t.action && (
             <button
@@ -115,7 +115,7 @@ function ToastItem({ t, onDismiss }: { t: Toast; onDismiss: () => void }) {
         </div>
         <button
           onClick={onDismiss}
-          style={{ background: 'none', border: 'none', color: '#6b8099', cursor: 'pointer', padding: '2px', flexShrink: 0 }}
+          style={{ background: 'none', border: 'none', color: '#8b9199', cursor: 'pointer', padding: '2px', flexShrink: 0 }}
         >
           <X size={14} />
         </button>

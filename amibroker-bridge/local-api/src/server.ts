@@ -21,6 +21,7 @@ import backfillRouter from './routes/backfill'
 import aiRouter from './routes/ai'
 import { setRuntimeProbe } from './services/ai/AiAssistant'
 import { autoRefresh } from './services/AutoRefresh'
+import { morningBrief } from './services/ai/MorningBrief'
 import { feedSimulator } from './services/feedSimulator'
 import { getAllSettings, rotateOldLogs, stmts, flushPendingBars, upsertBarsToHistory, getLastBarTimestampSec, getOldestBarTimestampSec, syncCachesPromise, loadBarsFromDisk } from './db'
 import { backfillQueue } from './services/BackfillQueue'
@@ -359,6 +360,7 @@ backfillQueue.on('backfill_progress', (payload) => broadcast('backfill_progress'
 backfillQueue.on('backfill_completed', (payload) => broadcast('backfill_completed', payload))
 backfillQueue.on('backfill_failed', (payload) => broadcast('backfill_failed', payload))
 autoRefresh.on('status', (payload) => broadcast('auto_refresh', payload))
+morningBrief.on('status', (payload) => broadcast('morning_brief', payload))
 
 // Fix 3: Auto-open browser when WebSocket JWT expires during streaming
 brokerManager.on('auth_required', (brokerId: string) => {
@@ -523,7 +525,8 @@ async function initSimulator() {
       const expiryDate = new Date(year, month - 1, 28)
       // Futures are listed ~3 months (90 days) before expiry. Give 5 days buffer.
       const listingMs = expiryDate.getTime() - 95 * 24 * 60 * 60 * 1000
-      return listingMs
+      // ...and never deeper than 2 months back
+      return Math.max(listingMs, Date.now() - 60 * 24 * 60 * 60 * 1000)
     }
 
     // Gap scans are database-only, so run a few symbols at a time
@@ -703,7 +706,7 @@ setInterval(() => {
               const month = monthMap[futMatchCron[2].toUpperCase()]
               const expiryDate = new Date(2000 + yearShort, month - 1, 28)
               const listingMs = expiryDate.getTime() - 95 * 24 * 60 * 60 * 1000
-              activeTargetFromMs = Math.max(activeTargetFromMs, listingMs)
+              activeTargetFromMs = Math.max(activeTargetFromMs, listingMs, Date.now() - 60 * 24 * 60 * 60 * 1000)
             } else {
               const oldestSec = await getOldestBarTimestampSec(safeTicker)
               if (oldestSec > 0) {
@@ -769,6 +772,7 @@ server.listen(PORT, HOST, async () => {
   initSimulator()
   // Automatic "Refresh All Today" while the market is open (settings are loaded by now)
   autoRefresh.start(notifyAmiBrokerHistoryChanged)
+  morningBrief.start()
 })
 
 // ===== AmiBroker IPC TCP Server =====

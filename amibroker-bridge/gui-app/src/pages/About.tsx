@@ -32,10 +32,10 @@ export function AboutPage() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: '0 0 16px rgba(0,212,170,0.4)',
           }}>
-            <Zap size={22} style={{ color: '#050c14' }} />
+            <Zap size={22} style={{ color: '#0c0c0c' }} />
           </div>
           <div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#e2eaf4', letterSpacing: '-0.02em' }}>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#eceef2', letterSpacing: '-0.02em' }}>
               DataBridge Pro
             </div>
             <div style={{ fontSize: '0.75rem', color: '#00d4aa', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
@@ -44,7 +44,7 @@ export function AboutPage() {
           </div>
         </div>
 
-        <p style={{ margin: 0, fontSize: '0.875rem', color: '#94a3b8', lineHeight: 1.6, maxWidth: '580px' }}>
+        <p style={{ margin: 0, fontSize: '0.875rem', color: '#a1a7b0', lineHeight: 1.6, maxWidth: '580px' }}>
           Ultra-low latency desktop bridge delivering tick-level streaming and 1-minute historical OHLCV data from top Indian brokers directly into AmiBroker.
         </p>
       </div>
@@ -61,8 +61,8 @@ export function AboutPage() {
             <div className="gradient-text" style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-0.02em' }}>
               {stat.value}
             </div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', marginTop: '0.25rem' }}>{stat.label}</div>
-            <div style={{ fontSize: '0.68rem', color: '#3d5068', marginTop: '0.2rem' }}>{stat.sub}</div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#a1a7b0', marginTop: '0.25rem' }}>{stat.label}</div>
+            <div style={{ fontSize: '0.68rem', color: '#575d66', marginTop: '0.2rem' }}>{stat.sub}</div>
           </div>
         ))}
       </div>
@@ -72,13 +72,13 @@ export function AboutPage() {
         <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#00d4aa', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>
           About
         </div>
-        <p style={{ fontSize: '0.875rem', color: '#94a3b8', lineHeight: 1.7, margin: 0 }}>
+        <p style={{ fontSize: '0.875rem', color: '#a1a7b0', lineHeight: 1.7, margin: 0 }}>
           DataBridge Pro is a high-performance Windows desktop application that connects your broker account to AmiBroker.
           It uses the official AmiBroker Data Plugin (ADK) interface — the same mechanism used by commercial institutional data vendors —
           to feed live 1-second bars and tick data directly into AmiBroker's charting engine in real time.
         </p>
-        <p style={{ fontSize: '0.875rem', color: '#94a3b8', lineHeight: 1.7, marginTop: '0.75rem', marginBottom: 0 }}>
-          The bridge is <strong style={{ color: '#e2eaf4' }}>not a trading terminal</strong>; it is pure market data infrastructure,
+        <p style={{ fontSize: '0.875rem', color: '#a1a7b0', lineHeight: 1.7, marginTop: '0.75rem', marginBottom: 0 }}>
+          The bridge is <strong style={{ color: '#eceef2' }}>not a trading terminal</strong>; it is pure market data infrastructure,
           designed for sustained low-latency throughput: many symbols, continuous 1-second bars, flat memory over 8+ hour sessions.
         </p>
       </div>
@@ -105,8 +105,8 @@ export function AboutPage() {
                 {item.step}
               </div>
               <div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#e2eaf4', marginBottom: '0.2rem' }}>{item.title}</div>
-                <div style={{ fontSize: '0.8rem', color: '#94a3b8', lineHeight: 1.6 }}>{item.desc}</div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#eceef2', marginBottom: '0.2rem' }}>{item.title}</div>
+                <div style={{ fontSize: '0.8rem', color: '#a1a7b0', lineHeight: 1.6 }}>{item.desc}</div>
               </div>
             </div>
           ))}
@@ -125,8 +125,8 @@ export function AboutPage() {
                 <Icon size={18} style={{ color: '#00d4aa' }} />
               </div>
               <div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#e2eaf4' }}>{label}</div>
-                <div style={{ fontSize: '0.72rem', color: '#6b8099' }}>{sub}</div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#eceef2' }}>{label}</div>
+                <div style={{ fontSize: '0.72rem', color: '#8b9199' }}>{sub}</div>
               </div>
             </div>
           ))}
@@ -140,7 +140,7 @@ export function AboutPage() {
             <Shield size={16} style={{ color: '#00d4aa' }} />
             <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#00d4aa', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Security</div>
           </div>
-          <ul style={{ margin: 0, padding: '0 0 0 1rem', fontSize: '0.8rem', color: '#94a3b8', lineHeight: 1.8 }}>
+          <ul style={{ margin: 0, padding: '0 0 0 1rem', fontSize: '0.8rem', color: '#a1a7b0', lineHeight: 1.8 }}>
             <li>Windows DPAPI credential encryption</li>
             <li>Zero plaintext token storage</li>
             <li>TLS 1.3 for all broker API calls</li>
@@ -154,7 +154,7 @@ export function AboutPage() {
             License & Links
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Proprietary Software — All Rights Reserved</div>
+            <div style={{ fontSize: '0.8rem', color: '#a1a7b0' }}>Proprietary Software — All Rights Reserved</div>
             {[
               { label: 'Documentation', href: '#' },
               { label: 'AmiBroker ADK (Official)', href: 'https://amibroker.com/devsite.html' },
@@ -170,7 +170,7 @@ export function AboutPage() {
         </div>
       </div>
 
-      <div style={{ textAlign: 'center', fontSize: '0.72rem', color: '#3d5068', paddingBottom: '1rem' }}>
+      <div style={{ textAlign: 'center', fontSize: '0.72rem', color: '#575d66', paddingBottom: '1rem' }}>
         DataBridge Pro v1.0.0 — Built with Tauri, React, Rust — © 2026
       </div>
     </div>

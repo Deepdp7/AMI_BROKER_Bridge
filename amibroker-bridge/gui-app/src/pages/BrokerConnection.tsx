@@ -97,7 +97,7 @@ function BrokerCard({ broker, onRemove }: { broker: BrokerAccount; onRemove: () 
             <AlertCircle size={18} style={{ color: '#fb923c', flexShrink: 0 }} />
             <div>
               <div style={{ color: '#fb923c', fontWeight: 700, fontSize: '0.85rem' }}>Daily Re-Login Required</div>
-              <div style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.15rem' }}>Tokens expire daily per SEBI rules. Click below to reconnect in 5 seconds.</div>
+              <div style={{ color: '#a1a7b0', fontSize: '0.75rem', marginTop: '0.15rem' }}>Tokens expire daily per SEBI rules. Click below to reconnect in 5 seconds.</div>
             </div>
           </div>
           <button
@@ -139,7 +139,7 @@ function BrokerCard({ broker, onRemove }: { broker: BrokerAccount; onRemove: () 
             {(info as any).tag || 'BR'}
           </div>
           <div>
-            <div style={{ fontWeight: 600, color: '#e2eaf4', marginBottom: '0.25rem' }}>{info.name}</div>
+            <div style={{ fontWeight: 600, color: '#eceef2', marginBottom: '0.25rem' }}>{info.name}</div>
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
               <span className="status-dot" style={{
                 background: broker.status === 'connected' ? '#00d4aa' : broker.status === 'reconnecting' ? '#f59e0b' : '#f43f5e',
@@ -179,12 +179,12 @@ function BrokerCard({ broker, onRemove }: { broker: BrokerAccount; onRemove: () 
             { icon: Clock, label: 'Last Connected', value: formatTime(broker.lastConnectedAt) },
             { icon: Shield, label: 'Auth Method', value: info.authType },
           ].map(({ icon: Icon, label, value }) => (
-            <div key={label} style={{ background: 'rgba(10,22,40,0.4)', borderRadius: '0.5rem', padding: '0.75rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: '#6b8099', fontSize: '0.72rem', marginBottom: '0.375rem' }}>
+            <div key={label} style={{ background: 'rgba(23,23,23,0.4)', borderRadius: '0.5rem', padding: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: '#8b9199', fontSize: '0.72rem', marginBottom: '0.375rem' }}>
                 <Icon size={11} />
                 {label}
               </div>
-              <div style={{ color: '#e2eaf4', fontSize: '0.8rem', fontWeight: 500, fontFamily: 'JetBrains Mono, monospace' }}>{value}</div>
+              <div style={{ color: '#eceef2', fontSize: '0.8rem', fontWeight: 500, fontFamily: 'JetBrains Mono, monospace' }}>{value}</div>
             </div>
           ))}
         </div>
@@ -264,7 +264,7 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 100,
-      background: 'rgba(5, 13, 26, 0.85)',
+      background: 'rgba(14,14,14, 0.85)',
       backdropFilter: 'blur(8px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }} onClick={onClose}>
@@ -275,16 +275,16 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <div>
-            <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#e2eaf4', margin: 0 }}>Add Broker</h2>
-            <p style={{ fontSize: '0.78rem', color: '#6b8099', margin: '0.25rem 0 0' }}>Configure Automatic Connection</p>
+            <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#eceef2', margin: 0 }}>Add Broker</h2>
+            <p style={{ fontSize: '0.78rem', color: '#8b9199', margin: '0.25rem 0 0' }}>Configure Automatic Connection</p>
           </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#6b8099', cursor: 'pointer', padding: '0.25rem' }}>✕</button>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#8b9199', cursor: 'pointer', padding: '0.25rem' }}>✕</button>
         </div>
 
         {step === 'credentials' && (
           <>
             <div style={{ marginBottom: '1.25rem' }}>
-              <label style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '0.375rem' }}>Select Broker</label>
+              <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>Select Broker</label>
               <select
                 value={selectedBrokerType}
                 onChange={e => setSelectedBrokerType(e.target.value)}
@@ -299,7 +299,7 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.25rem' }}>
               <div>
-                <label style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '0.375rem' }}>API Key</label>
+                <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>API Key</label>
                 <input
                   id="kite-api-key"
                   className="input-field"
@@ -310,7 +310,7 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
                 />
               </div>
               <div>
-                <label style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '0.375rem' }}>API Secret</label>
+                <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>API Secret</label>
                 <input
                   id="kite-api-secret"
                   className="input-field"
@@ -327,10 +327,10 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
                 <CheckCircle size={12} style={{ display: 'inline', marginRight: '4px' }} />
                 Redirect URL (Mandatory)
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem', lineHeight: '1.4' }}>
+              <div style={{ fontSize: '0.75rem', color: '#a1a7b0', marginBottom: '0.5rem', lineHeight: '1.4' }}>
                 Copy and paste this exact URL into your {BROKER_INFO[selectedBrokerType]?.name || 'broker'} API app settings for automatic login:
               </div>
-              <code style={{ display: 'block', background: 'rgba(0,0,0,0.3)', padding: '0.5rem', borderRadius: '4px', color: '#e2eaf4', fontSize: '0.8rem', userSelect: 'all', wordBreak: 'break-all' }}>
+              <code style={{ display: 'block', background: 'rgba(0,0,0,0.3)', padding: '0.5rem', borderRadius: '4px', color: '#eceef2', fontSize: '0.8rem', userSelect: 'all', wordBreak: 'break-all' }}>
                 http://127.0.0.1:7890/api/callback/{selectedBrokerType}
               </code>
             </div>
@@ -356,8 +356,8 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
             <div className="animate-spin" style={{ color: '#387ED1', marginBottom: '1rem' }}>
               <RefreshCw size={32} />
             </div>
-            <h3 style={{ color: '#e2eaf4', margin: '0 0 0.5rem', fontSize: '1.1rem' }}>Waiting for Authentication...</h3>
-            <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0, lineHeight: 1.5 }}>
+            <h3 style={{ color: '#eceef2', margin: '0 0 0.5rem', fontSize: '1.1rem' }}>Waiting for Authentication...</h3>
+            <p style={{ color: '#a1a7b0', fontSize: '0.85rem', margin: 0, lineHeight: 1.5 }}>
               A browser window has opened.<br />Please log in to your broker account to complete the setup.
             </p>
           </div>
@@ -384,11 +384,11 @@ export function BrokerConnectionPage() {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#e2eaf4', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#eceef2', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Wifi size={20} style={{ color: '#00d4aa' }} />
             Broker Connection
           </h1>
-          <p style={{ fontSize: '0.8rem', color: '#6b8099', margin: '0.25rem 0 0' }}>
+          <p style={{ fontSize: '0.8rem', color: '#8b9199', margin: '0.25rem 0 0' }}>
             Manage broker accounts and authentication
           </p>
         </div>
@@ -412,8 +412,8 @@ export function BrokerConnectionPage() {
       }}>
         <Shield size={16} style={{ color: '#00d4aa', flexShrink: 0, marginTop: 2 }} />
         <div>
-          <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e2eaf4', marginBottom: '0.25rem' }}>Secure by Design</div>
-          <div style={{ fontSize: '0.75rem', color: '#6b8099', lineHeight: 1.6 }}>
+          <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#eceef2', marginBottom: '0.25rem' }}>Secure by Design</div>
+          <div style={{ fontSize: '0.75rem', color: '#8b9199', lineHeight: 1.6 }}>
             All credentials are protected via Windows DPAPI (per-user encryption). Tokens are never stored in plaintext,
             never logged, and never transmitted outside your machine. DataBridge Pro only connects to the broker's official API endpoints over TLS 1.3.
           </div>
@@ -424,8 +424,8 @@ export function BrokerConnectionPage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
         {brokers.length === 0 ? (
           <div className="glass-card" style={{ padding: '3rem', textAlign: 'center' }}>
-            <WifiOff size={36} style={{ color: '#3d5068', margin: '0 auto 1rem' }} />
-            <div style={{ color: '#6b8099', marginBottom: '1rem' }}>No broker accounts configured</div>
+            <WifiOff size={36} style={{ color: '#575d66', margin: '0 auto 1rem' }} />
+            <div style={{ color: '#8b9199', marginBottom: '1rem' }}>No broker accounts configured</div>
             <button className="btn-primary" onClick={() => setShowModal(true)}>
               <Plus size={14} />
               Add Your First Broker
@@ -448,7 +448,7 @@ export function BrokerConnectionPage() {
 
       {/* Supported Brokers */}
       <div>
-        <div style={{ fontSize: '0.75rem', color: '#3d5068', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
+        <div style={{ fontSize: '0.75rem', color: '#575d66', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
           Supported Brokers
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -463,7 +463,7 @@ export function BrokerConnectionPage() {
           ].map(b => (
             <div key={b.name} className="glass-card" style={{ padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
               <span>{b.emoji}</span>
-              <span style={{ fontSize: '0.8rem', color: '#e2eaf4', fontWeight: 500 }}>{b.name}</span>
+              <span style={{ fontSize: '0.8rem', color: '#eceef2', fontWeight: 500 }}>{b.name}</span>
               <span className={`badge ${b.cls}`} style={{ fontSize: '0.68rem' }}>{b.status}</span>
             </div>
           ))}

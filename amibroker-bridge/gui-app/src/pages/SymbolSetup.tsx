@@ -36,7 +36,7 @@ const SymbolCard = React.memo(({ sym, handleRemove, isSelected, onToggleSelect, 
       id={`symbol-chip-${(sym.ticker || 'unknown').replace(' ', '-')}`}
       className="glass-card-hover"
       style={{
-        background: 'rgba(10,22,40,0.5)',
+        background: 'rgba(23,23,23,0.5)',
         border: '1px solid rgba(255,255,255,0.05)',
         borderRadius: '0.625rem',
         padding: '0.875rem',
@@ -55,7 +55,7 @@ const SymbolCard = React.memo(({ sym, handleRemove, isSelected, onToggleSelect, 
       <div style={{ flex: 1 }}>
         {/* Symbol name + type badge in same row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
-          <span style={{ fontWeight: 700, color: '#e2eaf4', fontSize: '0.88rem', letterSpacing: '0.01em' }}>
+          <span style={{ fontWeight: 700, color: '#eceef2', fontSize: '0.88rem', letterSpacing: '0.01em' }}>
             {sym.ticker}
           </span>
           {/* Instrument Type Badge */}
@@ -80,14 +80,14 @@ const SymbolCard = React.memo(({ sym, handleRemove, isSelected, onToggleSelect, 
 
         {/* Raw broker symbol (e.g. NSE:ABB26SEPFUT) */}
         {sym.rawSymbol && sym.rawSymbol !== sym.ticker && (
-          <div style={{ fontSize: '0.65rem', color: '#4a6080', marginTop: '0.18rem', fontFamily: 'JetBrains Mono, monospace' }}>
+          <div style={{ fontSize: '0.65rem', color: '#5b6169', marginTop: '0.18rem', fontFamily: 'JetBrains Mono, monospace' }}>
             {sym.rawSymbol}
           </div>
         )}
 
         {sym.lastPrice > 0 && (
           <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: '#e2eaf4' }}>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: '#eceef2' }}>
               ₹{sym.lastPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
             </span>
             {sym.changePercent !== 0 && (
@@ -108,9 +108,9 @@ const SymbolCard = React.memo(({ sym, handleRemove, isSelected, onToggleSelect, 
       {!selectionMode && (
         <button
           onClick={(e) => { e.stopPropagation(); handleRemove(sym.ticker) }}
-          style={{ background: 'none', border: 'none', color: '#3d5068', cursor: 'pointer', padding: '2px', transition: 'color 0.15s' }}
+          style={{ background: 'none', border: 'none', color: '#575d66', cursor: 'pointer', padding: '2px', transition: 'color 0.15s' }}
           onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#fb7185'}
-          onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#3d5068'}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#575d66'}
           title="Remove symbol"
         >
           <X size={14} />
@@ -303,11 +303,11 @@ export function SymbolSetupPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#e2eaf4', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#eceef2', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <List size={20} style={{ color: '#00d4aa' }} />
             Symbol Setup
           </h1>
-          <p style={{ fontSize: '0.8rem', color: '#6b8099', margin: '0.25rem 0 0' }}>
+          <p style={{ fontSize: '0.8rem', color: '#8b9199', margin: '0.25rem 0 0' }}>
             {symbols.length} symbols configured — Auto-mapped across connected brokers
           </p>
         </div>
@@ -375,7 +375,7 @@ export function SymbolSetupPage() {
       {/* Local Filter Bar */}
       <div style={{ display: 'flex', gap: '1rem', width: '100%', maxWidth: '500px', alignSelf: 'flex-start' }}>
         <div style={{ position: 'relative', flex: 1 }}>
-          <Search size={14} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#6b8099' }} />
+          <Search size={14} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8b9199' }} />
           <input
             type="text"
             placeholder="Filter added symbols..."
@@ -387,7 +387,7 @@ export function SymbolSetupPage() {
           {localSearch && (
             <button 
               onClick={() => setLocalSearch('')}
-              style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#6b8099', cursor: 'pointer', padding: 0 }}
+              style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#8b9199', cursor: 'pointer', padding: 0 }}
             >
               <X size={14} />
             </button>
@@ -414,7 +414,7 @@ export function SymbolSetupPage() {
           if (groupSymbols.length === 0) return null
           return (
             <div key={ex}>
-              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#94a3b8', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#a1a7b0', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span className="badge badge-gray">{ex}</span>
                 <span>({groupSymbols.length} symbols)</span>
               </div>
@@ -435,9 +435,9 @@ export function SymbolSetupPage() {
         })}
 
         {filteredSymbols.length === 0 && (
-          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', color: '#6b8099' }}>
+          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', color: '#8b9199' }}>
             <List size={32} style={{ margin: '0 auto 0.75rem', opacity: 0.4 }} />
-            <div style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: 600 }}>No symbols found</div>
+            <div style={{ fontSize: '0.9rem', color: '#a1a7b0', fontWeight: 600 }}>No symbols found</div>
             <div style={{ fontSize: '0.75rem', marginTop: '0.25rem' }}>Click "+ Add Symbol" to search and add symbols from your connected broker.</div>
           </div>
         )}
@@ -445,12 +445,12 @@ export function SymbolSetupPage() {
 
       {/* Search Modal */}
       {showSearch && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(5,13,26,0.85)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: '8vh' }} onClick={() => setShowSearch(false)}>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(14,14,14,0.85)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: '8vh' }} onClick={() => setShowSearch(false)}>
           <div className="glass-card animate-fade-in" style={{ width: '540px', maxWidth: '92vw', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
             <div style={{ padding: '1rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '0.75rem' }}>
                 <div style={{ position: 'relative', flex: 1 }}>
-                  <Search size={15} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#6b8099' }} />
+                  <Search size={15} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8b9199' }} />
                   <input
                     id="symbol-search-input"
                     className="input-field"
@@ -463,13 +463,13 @@ export function SymbolSetupPage() {
                   {search && (
                     <button 
                       onClick={() => setSearch('')}
-                      style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#6b8099', cursor: 'pointer', padding: 0 }}
+                      style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#8b9199', cursor: 'pointer', padding: 0 }}
                     >
                       <X size={14} />
                     </button>
                   )}
                 </div>
-                <button onClick={() => setShowSearch(false)} style={{ background: 'none', border: 'none', color: '#6b8099', cursor: 'pointer' }}>
+                <button onClick={() => setShowSearch(false)} style={{ background: 'none', border: 'none', color: '#8b9199', cursor: 'pointer' }}>
                   <X size={18} />
                 </button>
               </div>
@@ -489,7 +489,7 @@ export function SymbolSetupPage() {
                       cursor: 'pointer',
                       transition: 'all 0.15s',
                       background: exchangeFilter === f.value ? 'rgba(0,212,170,0.2)' : 'rgba(255,255,255,0.04)',
-                      color: exchangeFilter === f.value ? '#00d4aa' : '#6b8099',
+                      color: exchangeFilter === f.value ? '#00d4aa' : '#8b9199',
                     }}
                   >
                     {f.label}
@@ -500,16 +500,16 @@ export function SymbolSetupPage() {
 
             <div style={{ maxHeight: '380px', overflowY: 'auto', position: 'relative' }}>
               {isSearching && (
-                <div style={{ padding: '2rem', textAlign: 'center', color: '#6b8099' }}>
+                <div style={{ padding: '2rem', textAlign: 'center', color: '#8b9199' }}>
                   <Loader className="animate-spin" size={24} style={{ margin: '0 auto', marginBottom: '0.5rem', color: '#00d4aa' }} />
                   Searching master contracts...
                 </div>
               )}
               {!isSearching && searchResults.length === 0 && search.length >= 2 && (
-                <div style={{ padding: '2rem', textAlign: 'center', color: '#6b8099' }}>No matching symbols found.</div>
+                <div style={{ padding: '2rem', textAlign: 'center', color: '#8b9199' }}>No matching symbols found.</div>
               )}
               {!isSearching && search.length < 2 && (
-                <div style={{ padding: '1.5rem', textAlign: 'center', color: '#6b8099', fontSize: '0.8rem' }}>
+                <div style={{ padding: '1.5rem', textAlign: 'center', color: '#8b9199', fontSize: '0.8rem' }}>
                   Type symbol name to search all Indian market contracts.
                 </div>
               )}
@@ -540,8 +540,8 @@ export function SymbolSetupPage() {
                         {sym.exchange || 'NSE'}
                       </div>
                       <div>
-                        <div style={{ fontWeight: 600, color: '#e2eaf4', fontSize: '0.875rem' }}>{sym.ticker}</div>
-                        <div style={{ fontSize: '0.72rem', color: '#6b8099' }}>{sym.name || sym.instrumentType}</div>
+                        <div style={{ fontWeight: 600, color: '#eceef2', fontSize: '0.875rem' }}>{sym.ticker}</div>
+                        <div style={{ fontSize: '0.72rem', color: '#8b9199' }}>{sym.name || sym.instrumentType}</div>
                       </div>
                     </div>
                     <div>

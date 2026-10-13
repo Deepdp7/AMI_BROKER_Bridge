@@ -42,8 +42,11 @@ async function groqFetch(pathname: string, init: RequestInit, apiKey = process.e
   })
   if (!res.ok) {
     const body: any = await res.json().catch(() => ({}))
-    const err = new GroqError(res.status, body?.error?.message || `HTTP ${res.status}`, body?.error?.code)
-    ;(err as any).retryAfterSec = Number(res.headers.get('retry-after')) || 0
+    const message: string = body?.error?.message || `HTTP ${res.status}`
+    const err = new GroqError(res.status, message, body?.error?.code)
+    // Groq says when the per-minute window frees up, in the header and/or the message ("try again in 12.5s")
+    const fromMsg = /try again in (?:(\d+)m)?([\d.]+)s/i.exec(message)
+    ;(err as any).retryAfterSec = Number(res.headers.get('retry-after')) || (fromMsg ? Number(fromMsg[1] || 0) * 60 + Number(fromMsg[2]) : 0)
     throw err
   }
   return res
@@ -76,7 +79,8 @@ async function complete(model: string, messages: Msg[], emit: (e: AssistantEvent
     temperature: 0.3,
   }
   // gpt-oss models reason before answering; keep their reasoning out of the reply
-  if (model.startsWith('openai/gpt-oss')) { body.reasoning_effort = 'medium'; body.include_reasoning = false }
+  // Low effort keeps reasoning tokens (which count toward Groq's per-minute token limit) small
+  if (model.startsWith('openai/gpt-oss')) { body.reasoning_effort = 'low'; body.include_reasoning = false }
 
   const res = await groqFetch('/chat/completions', { method: 'POST', body: JSON.stringify(body), signal })
   const reader = res.body!.getReader()
@@ -118,25 +122,40 @@ export async function chatGroq(conversationId: string | undefined, userText: str
   const id = conversationId && conversations.has(conversationId) ? conversationId : randomUUID()
   emit({ type: 'conversation', id })
 
-  const history = conversations.get(id) ?? [{ role: 'system', content: SYSTEM_PROMPT } as Msg]
+  // Earlier turns' tool output is already summarised in the answers; shorten it so every
+  // request stays well inside the free tier's per-minute token budget
+  const history = (conversations.get(id) ?? [{ role: 'system', content: SYSTEM_PROMPT } as Msg])
+    .map(m => (m.role === 'tool' && m.content.length > 400 ? { ...m, content: m.content.slice(0, 400) + '…(truncated)' } : m))
   const messages: Msg[] = [...history, { role: 'user', content: userText }]
   if (!resolvedModel && !process.env.GROQ_MODEL) await verifyGroqKey(process.env.GROQ_API_KEY || '').catch(() => {})
   const model = getGroqModel()
   let retries = 0
 
-  for (let round = 0; round < MAX_TOOL_ROUNDS; round++) {
+  // Rate-limit waits and malformed-call retries don't use up tool rounds
+  for (let round = 0; round < MAX_TOOL_ROUNDS;) {
     let result: Awaited<ReturnType<typeof complete>>
     try {
       result = await complete(model, messages, emit, signal)
     } catch (err: any) {
       if (signal.aborted) return
-      // Model produced a malformed tool call, or a short rate-limit wait: retry the round
-      const retryable = err instanceof GroqError && (err.code === 'tool_use_failed' || (err.status === 429 && (err as any).retryAfterSec <= 20))
-      if (!retryable || retries++ >= 2) throw err
-      if (err.status === 429) await new Promise(r => setTimeout(r, ((err as any).retryAfterSec || 5) * 1000))
+      // Model produced a malformed tool call, or the per-minute token budget is used up:
+      // wait for Groq's window to reset (up to ~1 min) and retry the round
+      const waitSec = err instanceof GroqError && err.status === 429 ? Math.ceil((err as any).retryAfterSec || 15) : 0
+      const retryable = err instanceof GroqError && (err.code === 'tool_use_failed' || (err.status === 429 && waitSec <= 65))
+      if (!retryable || retries++ >= 3) throw err
+      if (waitSec) {
+        emit({ type: 'tool', name: 'rate_limit', label: `Groq free-tier limit — continuing in ${waitSec}s` })
+        await new Promise<void>(resolve => {
+          const t = setTimeout(resolve, waitSec * 1000)
+          signal.addEventListener('abort', () => { clearTimeout(t); resolve() }, { once: true })
+        })
+        if (signal.aborted) return
+      }
       continue
     }
 
+    round++
+    retries = 0
     messages.push({ role: 'assistant', content: result.text || null, ...(result.calls.length ? { tool_calls: result.calls } : {}) })
 
     if (result.calls.length === 0) {
@@ -154,7 +173,7 @@ export async function chatGroq(conversationId: string | undefined, userText: str
     for (const { c, input } of parsed) emit({ type: 'tool', name: c.function.name, label: toolLabel(c.function.name, input) })
     const outputs = await Promise.all(parsed.map(async ({ c, input }) => {
       try {
-        const r = await runTool(c.function.name, input)
+        const r = await runTool(c.function.name, input, { emit })
         return r.isError ? `ERROR: ${r.content}` : r.content
       } catch (err: any) {
         return `ERROR: Tool failed: ${err?.message || err}`
@@ -164,4 +183,29 @@ export async function chatGroq(conversationId: string | undefined, userText: str
     parsed.forEach(({ c }, i) => messages.push({ role: 'tool', tool_call_id: c.id, content: outputs[i] }))
   }
   emit({ type: 'error', message: 'Stopped after too many tool calls. Please ask a more specific question.' })
+}
+
+/** One tool-free completion (e.g. writing the morning brief from pre-gathered data). Waits out short rate limits. */
+export async function writeTextGroq(system: string, user: string, signal: AbortSignal): Promise<string> {
+  if (!resolvedModel && !process.env.GROQ_MODEL) await verifyGroqKey(process.env.GROQ_API_KEY || '').catch(() => {})
+  const model = getGroqModel()
+  const body: Record<string, unknown> = {
+    model,
+    messages: [{ role: 'system', content: system }, { role: 'user', content: user }],
+    max_completion_tokens: 4000,
+    temperature: 0.2,
+  }
+  // A single call, so it can afford more reasoning than the tool loop (better faithfulness)
+  if (model.startsWith('openai/gpt-oss')) { body.reasoning_effort = 'medium'; body.include_reasoning = false }
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const res = await groqFetch('/chat/completions', { method: 'POST', body: JSON.stringify(body), signal })
+      const data: any = await res.json()
+      return String(data?.choices?.[0]?.message?.content || '')
+    } catch (err: any) {
+      const waitSec = err instanceof GroqError && err.status === 429 ? Math.ceil((err as any).retryAfterSec || 15) : 0
+      if (!waitSec || waitSec > 65 || attempt >= 3 || signal.aborted) throw err
+      await new Promise(r => setTimeout(r, waitSec * 1000))
+    }
+  }
 }

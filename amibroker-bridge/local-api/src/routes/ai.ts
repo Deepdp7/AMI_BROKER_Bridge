@@ -5,6 +5,9 @@
  *   POST   /api/ai/key               — { apiKey } Groq (gsk_…) or Anthropic (sk-ant-…) key, saved to %APPDATA%\DataBridgePro\.env
  *   POST   /api/ai/chat              — { message, conversationId? } → Server-Sent Events stream
  *   DELETE /api/ai/conversation/:id  — forget a conversation
+ *   GET    /api/ai/brief             — pre-market brief status + latest brief
+ *   POST   /api/ai/brief             — generate the brief now (returns immediately; result over WS)
+ *   POST   /api/ai/brief/settings    — { enabled?, time? (HH:MM IST) }
  */
 import { Router } from 'express'
 import fs from 'fs'
@@ -13,6 +16,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { DATA_DIR } from '../db'
 import { chat, getAiProvider, resetConversation, CLAUDE_MODEL, type AssistantEvent } from '../services/ai/AiAssistant'
 import { chatGroq, getGroqModel, resetGroqConversation, verifyGroqKey, GroqError } from '../services/ai/GroqAssistant'
+import { morningBrief } from '../services/ai/MorningBrief'
 
 const router = Router()
 
@@ -56,6 +60,24 @@ router.post('/key', async (req, res) => {
     res.status(400).json({ error: 'That does not look like a Groq key (gsk_…) or an Anthropic key (sk-ant-…).' })
   } catch (err: any) {
     res.status(500).json({ error: `Could not save the key: ${err?.message || err}` })
+  }
+})
+
+router.get('/brief', (_req, res) => res.json(morningBrief.getStatus()))
+
+router.post('/brief', (_req, res) => {
+  const st = morningBrief.getStatus()
+  if (st.generating) return res.status(409).json({ error: 'A brief is already being generated' })
+  morningBrief.generate('manual').catch(() => { /* reported via status.lastError */ })
+  res.status(202).json({ ok: true })
+})
+
+router.post('/brief/settings', (req, res) => {
+  try {
+    morningBrief.configure({ enabled: req.body?.enabled, time: req.body?.time, scope: req.body?.scope })
+    res.json(morningBrief.getStatus())
+  } catch (err: any) {
+    res.status(400).json({ error: err?.message || String(err) })
   }
 })
 

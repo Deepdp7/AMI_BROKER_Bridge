@@ -13,8 +13,8 @@ const LEVEL_ICONS: Record<LogLevel, React.ElementType> = {
 const LEVEL_COLORS: Record<LogLevel, string> = {
   error: '#f43f5e',
   warn: '#f59e0b',
-  info: '#94a3b8',
-  debug: '#6b8099',
+  info: '#a1a7b0',
+  debug: '#8b9199',
 }
 
 export function LogsPage() {
@@ -80,7 +80,7 @@ export function LogsPage() {
       <div className="glass-card" style={{ padding: '1rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '300px' }}>
           <div style={{ position: 'relative', flex: 1 }}>
-            <Search size={14} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#6b8099' }} />
+            <Search size={14} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8b9199' }} />
             <input
               type="text"
               placeholder="Search logs by message or ticker..."
@@ -92,14 +92,14 @@ export function LogsPage() {
           </div>
 
           {/* Quick Level Filter */}
-          <div style={{ display: 'flex', gap: '0.25rem', background: 'rgba(10,22,40,0.6)', padding: '3px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ display: 'flex', gap: '0.25rem', background: 'rgba(23,23,23,0.6)', padding: '3px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
             {(['all', 'info', 'warn', 'error'] as const).map(lvl => (
               <button
                 key={lvl}
                 onClick={() => setLevelFilter(lvl)}
                 style={{
                   background: levelFilter === lvl ? (lvl === 'error' ? 'rgba(244,63,94,0.2)' : 'rgba(0,212,170,0.15)') : 'transparent',
-                  color: levelFilter === lvl ? (lvl === 'error' ? '#f43f5e' : '#00d4aa') : '#6b8099',
+                  color: levelFilter === lvl ? (lvl === 'error' ? '#f43f5e' : '#00d4aa') : '#8b9199',
                   border: 'none',
                   borderRadius: '6px',
                   padding: '0.25rem 0.6rem',
@@ -152,7 +152,7 @@ export function LogsPage() {
         onScroll={handleScroll}
         style={{
           flex: 1,
-          background: 'rgba(5, 12, 20, 0.95)',
+          background: 'rgba(12,12,12, 0.95)',
           border: '1px solid rgba(255,255,255,0.08)',
           borderRadius: '12px',
           padding: '1rem',
@@ -166,12 +166,12 @@ export function LogsPage() {
         }}
       >
         {displayed.length === 0 ? (
-          <div style={{ color: '#475569', textAlign: 'center', marginTop: '2rem' }}>
+          <div style={{ color: '#5b6169', textAlign: 'center', marginTop: '2rem' }}>
             No log entries matching current filter.
           </div>
         ) : (
           displayed.map((l, i) => {
-            const color = LEVEL_COLORS[l.level] || '#94a3b8'
+            const color = LEVEL_COLORS[l.level] || '#a1a7b0'
             return (
               <div
                 key={l.id || i}
@@ -183,7 +183,7 @@ export function LogsPage() {
                   padding: '2px 0',
                 }}
               >
-                <span style={{ color: '#475569', flexShrink: 0, fontSize: '0.72rem' }}>
+                <span style={{ color: '#5b6169', flexShrink: 0, fontSize: '0.72rem' }}>
                   {formatTime(l.ts)}
                 </span>
                 <span style={{
@@ -202,7 +202,7 @@ export function LogsPage() {
                 <span style={{ color: '#38bdf8', fontWeight: 600, flexShrink: 0 }}>
                   [{l.component}]
                 </span>
-                <span style={{ color: '#e2e8f0', wordBreak: 'break-all' }}>
+                <span style={{ color: '#e5e7eb', wordBreak: 'break-all' }}>
                   {l.message}
                 </span>
               </div>

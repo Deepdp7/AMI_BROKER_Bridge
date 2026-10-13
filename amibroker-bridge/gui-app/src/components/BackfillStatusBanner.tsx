@@ -88,7 +88,7 @@ export function BackfillStatusBanner() {
         position: 'relative',
         overflow: 'hidden',
         borderRadius: 14,
-        background: 'linear-gradient(160deg, rgba(10,24,46,0.97) 0%, rgba(6,14,30,0.97) 100%)',
+        background: 'linear-gradient(160deg, rgba(25,25,25,0.97) 0%, rgba(15,15,15,0.97) 100%)',
         border: `1px solid ${allDone ? `${accent}55` : 'rgba(0,212,170,0.22)'}`,
         boxShadow: `0 12px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02), 0 0 24px ${accent}14`,
         backdropFilter: 'blur(14px)',
@@ -111,11 +111,11 @@ export function BackfillStatusBanner() {
             <Icon size={17} color={accent} style={!allDone ? { animation: 'bf-float 1.6s ease-in-out infinite' } : undefined} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: '0.86rem', fontWeight: 650, color: '#e2eaf4' }}>
+            <div style={{ fontSize: '0.86rem', fontWeight: 650, color: '#eceef2' }}>
               {allDone ? (hasFailures ? 'History download finished' : 'History up to date') : 'Downloading history'}
             </div>
-            <div style={{ fontSize: '0.72rem', color: '#7c8fa6', marginTop: 1 }}>
-              <b style={{ color: '#cbd5e1', fontWeight: 650 }}>{doneCount}</b> of {total} symbols
+            <div style={{ fontSize: '0.72rem', color: '#8b9199', marginTop: 1 }}>
+              <b style={{ color: '#d1d5db', fontWeight: 650 }}>{doneCount}</b> of {total} symbols
               {' · '}{totalCandles.toLocaleString()} candles
             </div>
           </div>
@@ -124,7 +124,7 @@ export function BackfillStatusBanner() {
             onClick={close}
             aria-label="Dismiss"
             className="bf-close"
-            style={{ background: 'none', border: 'none', color: '#6b8099', cursor: 'pointer', padding: 4, borderRadius: 6, display: 'flex', marginLeft: 2 }}
+            style={{ background: 'none', border: 'none', color: '#8b9199', cursor: 'pointer', padding: 4, borderRadius: 6, display: 'flex', marginLeft: 2 }}
           >
             <X size={14} />
           </button>
@@ -142,18 +142,18 @@ export function BackfillStatusBanner() {
         </div>
 
         {/* Details */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.625rem', fontSize: '0.7rem', color: '#7c8fa6', minHeight: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.625rem', fontSize: '0.7rem', color: '#8b9199', minHeight: 20 }}>
           {allDone ? (
             <span>{hasFailures ? 'Some symbols could not be downloaded — see Logs.' : `All ${total} symbols are up to date in AmiBroker.`}</span>
           ) : primary ? (
             <span style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              Now <b style={{ color: '#f1f5f9', fontWeight: 650 }}>{primary.ticker}</b>
+              Now <b style={{ color: '#f3f4f6', fontWeight: 650 }}>{primary.ticker}</b>
               {running.length > 1 && <span> +{running.length - 1} more</span>}
             </span>
           ) : null}
           <span style={{ flex: 1 }} />
           {!allDone && pending.length > 0 && (
-            <span style={{ color: '#94a3b8', background: 'rgba(56,189,248,0.08)', border: '1px solid rgba(56,189,248,0.18)', borderRadius: 999, padding: '1px 8px' }}>
+            <span style={{ color: '#a1a7b0', background: 'rgba(56,189,248,0.08)', border: '1px solid rgba(56,189,248,0.18)', borderRadius: 999, padding: '1px 8px' }}>
               {pending.length} queued
             </span>
           )}
@@ -176,7 +176,7 @@ export function BackfillStatusBanner() {
         @keyframes bf-shimmer { from { background-position: 200% 0; } to { background-position: 0 0; } }
         @keyframes bf-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
         @keyframes toast-shrink { from { width: 100%; } to { width: 0%; } }
-        .bf-close:hover { background: rgba(255,255,255,0.06) !important; color: #e2eaf4 !important; }
+        .bf-close:hover { background: rgba(255,255,255,0.06) !important; color: #eceef2 !important; }
       `}</style>
     </div>
   )

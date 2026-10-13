@@ -408,6 +408,23 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
   }
 
 
+  /** Authenticated GET on the Fyers data API (option chain, quotes…), under the shared rate limit. */
+  async dataApi(pathAndQuery: string): Promise<any> {
+    if (!this.accessToken) throw new Error('Fyers is not connected — log in again from Broker Connection')
+    await historyLimiter.acquire()
+    const res = await fetch(`https://api-t1.fyers.in/data/${pathAndQuery}`, {
+      headers: { Authorization: `${this.appId}:${this.accessToken}` },
+      signal: AbortSignal.timeout(15000),
+    })
+    const data: any = await res.json().catch(() => ({}))
+    if (res.status === 429 || data?.code === 429) {
+      historyLimiter.pause(3000)
+      throw Object.assign(new Error('Fyers rate limit — try again in a moment'), { code: 429 })
+    }
+    if (!res.ok || (data?.code && data.code !== 200 && data.s !== 'ok')) throw new Error(data?.message || `Fyers data API error ${res.status}`)
+    return data
+  }
+
   async getHistoricalBars(instrumentToken: string, interval: string, from: Date, to: Date): Promise<Bar[]> {
     if (!this.accessToken) return []
 

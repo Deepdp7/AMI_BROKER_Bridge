@@ -41,7 +41,7 @@ function ApiStatusBadge({ state }: { state: 'checking' | 'connected' | 'offline'
     </div>
   )
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.68rem', color: '#6b8099' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.68rem', color: '#8b9199' }}>
       <WifiOff size={11} />
       API Offline — check :7890
     </div>
@@ -67,7 +67,7 @@ function MainLayout() {
         height: '100vh',
         width: '100vw',
         overflow: 'hidden',
-        background: '#050d1a',
+        background: '#0e0e0e',
         position: 'relative',
       }}
     >
@@ -78,7 +78,7 @@ function MainLayout() {
         zIndex: 0,
         background: [
           'radial-gradient(ellipse 60% 40% at 20% 0%, rgba(0,212,170,0.07) 0%, transparent 70%)',
-          'radial-gradient(ellipse 40% 60% at 80% 100%, rgba(22,44,88,0.5) 0%, transparent 70%)',
+          'radial-gradient(ellipse 40% 60% at 80% 100%, rgba(47,47,47,0.5) 0%, transparent 70%)',
         ].join(', '),
       }} />
 
@@ -100,7 +100,7 @@ function MainLayout() {
       >
         <div style={{
           height: '40px',
-          background: 'rgba(10,22,40,0.7)',
+          background: 'rgba(23,23,23,0.7)',
           borderBottom: '1px solid rgba(255,255,255,0.04)',
           display: 'flex',
           alignItems: 'center',
@@ -113,8 +113,8 @@ function MainLayout() {
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#ffbd2e' }} />
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#28ca41' }} />
           </div>
-          <div style={{ fontSize: '0.75rem', color: '#3d5068', flex: 1 }}>
-            DataBridge Pro · <span style={{ color: '#6b8099' }}>{title}</span>
+          <div style={{ fontSize: '0.75rem', color: '#575d66', flex: 1 }}>
+            DataBridge Pro · <span style={{ color: '#8b9199' }}>{title}</span>
           </div>
           <ApiStatusBadge state={apiState} />
         </div>

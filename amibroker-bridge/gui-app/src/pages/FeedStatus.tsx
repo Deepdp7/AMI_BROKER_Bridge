@@ -71,7 +71,7 @@ function AutoRefreshControl({ api }: { api: string }) {
     : st.nextRunAt && st.nextRunAt < now - 15_000 ? 'Syncing shortly…'
     : st.nextRunAt ? `${st.lastRunAt ? `Synced ${fmtTime(st.lastRunAt)} · ` : ''}next ${fmtTime(st.nextRunAt)}`
     : 'Starts at market open'
-  const dotColor = st.lastError ? '#f59e0b' : on ? '#00d4aa' : '#475569'
+  const dotColor = st.lastError ? '#f59e0b' : on ? '#00d4aa' : '#5b6169'
 
   return (
     <div
@@ -121,36 +121,36 @@ function AutoRefreshControl({ api }: { api: string }) {
 
       <style>{`
         .ar-pill { display: inline-flex; align-items: center; gap: 0.6rem; height: 32px; padding: 0 0.7rem 0 0.45rem;
-          border-radius: 10px; font-size: 0.74rem; color: #94a3b8;
-          background: rgba(15, 27, 46, 0.7); border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 10px; font-size: 0.74rem; color: #a1a7b0;
+          background: rgba(28,28,28, 0.7); border: 1px solid rgba(255,255,255,0.07);
           backdrop-filter: blur(8px); transition: border-color .2s, background .2s; }
         .ar-pill[data-on="true"] { border-color: rgba(0,212,170,0.28);
           background: linear-gradient(135deg, rgba(0,212,170,0.10), rgba(56,189,248,0.05)); }
         .ar-switch { position: relative; width: 30px; height: 18px; border-radius: 999px; border: none; padding: 0;
-          cursor: pointer; background: #2a3a50; transition: background .2s; flex-shrink: 0; }
+          cursor: pointer; background: #3a3a3a; transition: background .2s; flex-shrink: 0; }
         .ar-switch[data-on="true"] { background: linear-gradient(135deg, #00d4aa, #0ea5a0); }
         .ar-switch span { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%;
           background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.35); transition: transform .2s cubic-bezier(.4,0,.2,1); }
         .ar-switch[data-on="true"] span { transform: translateX(12px); }
-        .ar-label { font-weight: 600; color: #e2eaf4; letter-spacing: -0.01em; }
-        .ar-pill[data-on="false"] .ar-label { color: #94a3b8; }
+        .ar-label { font-weight: 600; color: #eceef2; letter-spacing: -0.01em; }
+        .ar-pill[data-on="false"] .ar-label { color: #a1a7b0; }
         .ar-trigger { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 6px;
-          border: 1px solid rgba(255,255,255,0.09); background: rgba(255,255,255,0.04); color: #e2eaf4;
+          border: 1px solid rgba(255,255,255,0.09); background: rgba(255,255,255,0.04); color: #eceef2;
           font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: background .15s, border-color .15s; }
         .ar-trigger:hover:not(:disabled) { background: rgba(255,255,255,0.08); border-color: rgba(0,212,170,0.4); }
         .ar-trigger:disabled { opacity: .45; cursor: not-allowed; }
         .ar-menu { position: fixed; transform: translateX(-50%); z-index: 9999;
-          min-width: 140px; padding: 4px; border-radius: 10px; background: #0d1b2e; opacity: 1;
+          min-width: 140px; padding: 4px; border-radius: 10px; background: #1b1b1b; opacity: 1;
           border: 1px solid rgba(255,255,255,0.09); box-shadow: 0 12px 32px rgba(0,0,0,.55);
           animation: ar-pop .12s ease-out; }
         .ar-menu-title { padding: 6px 10px 4px; font-size: 0.62rem; font-weight: 700; letter-spacing: .08em;
-          text-transform: uppercase; color: #475569; }
+          text-transform: uppercase; color: #5b6169; }
         .ar-option { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px;
-          padding: 6px 10px; border: none; border-radius: 6px; background: transparent; color: #cbd5e1;
+          padding: 6px 10px; border: none; border-radius: 6px; background: transparent; color: #d1d5db;
           font-size: 0.78rem; cursor: pointer; text-align: left; }
         .ar-option:hover { background: rgba(255,255,255,0.06); color: #fff; }
         .ar-option[data-active="true"] { background: rgba(0,212,170,0.14); color: #00d4aa; font-weight: 600; }
-        .ar-status { display: inline-flex; align-items: center; gap: 6px; color: #6b8099; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .ar-status { display: inline-flex; align-items: center; gap: 6px; color: #8b9199; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .ar-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
         .ar-dot[data-pulse="true"] { animation: ar-pulse 1s ease-in-out infinite; }
         @keyframes ar-pop { from { opacity: 0; transform: translateX(-50%) translateY(-4px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
@@ -176,7 +176,7 @@ function PriceCell({ sym }: { sym: SymbolFeed }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-      <div style={{ fontWeight: 600, fontSize: '0.88rem', fontFamily: 'JetBrains Mono, monospace', color: '#e2eaf4' }}>
+      <div style={{ fontWeight: 600, fontSize: '0.88rem', fontFamily: 'JetBrains Mono, monospace', color: '#eceef2' }}>
         ₹{sym.lastPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.72rem', color }}>
@@ -245,9 +245,9 @@ function LastTickTime({ ms }: { ms: number }) {
     const t = setInterval(() => forceUpdate(n => n + 1), 1000)
     return () => clearInterval(t)
   }, [])
-  if (!ms || ms === 0) return <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem', color: '#6b8099' }}>—</span>
+  if (!ms || ms === 0) return <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem', color: '#8b9199' }}>—</span>
   const diff = Math.floor((Date.now() - ms) / 1000)
-  const color = diff < 3 ? '#00d4aa' : diff < 15 ? '#f59e0b' : '#6b8099'
+  const color = diff < 3 ? '#00d4aa' : diff < 15 ? '#f59e0b' : '#8b9199'
   return (
     <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem', color, fontWeight: 500 }}>
       {diff < 1 ? 'Just now' : `${diff}s ago`}
@@ -262,13 +262,13 @@ function StatCard({ label, value, sub, icon: Icon, color = '#00d4aa' }: {
     <div className="metric-card animate-fade-in" style={{ flex: 1, minWidth: '160px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <div style={{ fontSize: '0.72rem', color: '#6b8099', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>
+          <div style={{ fontSize: '0.72rem', color: '#8b9199', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>
             {label}
           </div>
           <div style={{ fontSize: '1.4rem', fontWeight: 700, color, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '-0.03em' }}>
             {value}
           </div>
-          {sub && <div style={{ fontSize: '0.72rem', color: '#4b6078', marginTop: '0.25rem' }}>{sub}</div>}
+          {sub && <div style={{ fontSize: '0.72rem', color: '#5b6169', marginTop: '0.25rem' }}>{sub}</div>}
         </div>
         <div style={{ padding: '0.5rem', borderRadius: '0.5rem', background: `${color}15`, border: `1px solid ${color}30` }}>
           <Icon size={18} color={color} />
@@ -334,11 +334,11 @@ export function FeedStatusPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#e2eaf4', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#eceef2', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Activity size={20} style={{ color: '#00d4aa' }} />
             Live Market Feed Status
           </h1>
-          <p style={{ fontSize: '0.8rem', color: '#6b8099', margin: '0.25rem 0 0' }}>
+          <p style={{ fontSize: '0.8rem', color: '#8b9199', margin: '0.25rem 0 0' }}>
             {marketStatus === 'open'
               ? `Market is OPEN — live data streaming via ${brokerName}`
               : marketStatus === 'closed'
@@ -424,7 +424,7 @@ export function FeedStatusPage() {
       {/* Filter and Search Bar */}
       <div className="glass-card" style={{ padding: '0.75rem 1rem', display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
         <div style={{ position: 'relative', flex: 1, minWidth: '240px' }}>
-          <Search size={14} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#6b8099' }} />
+          <Search size={14} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8b9199' }} />
           <input
             type="text"
             placeholder="Search live symbols by ticker or exchange..."
@@ -443,7 +443,7 @@ export function FeedStatusPage() {
               style={{
                 background: filter === f ? 'rgba(0,212,170,0.15)' : 'rgba(255,255,255,0.04)',
                 border: filter === f ? '1px solid rgba(0,212,170,0.3)' : '1px solid rgba(255,255,255,0.06)',
-                color: filter === f ? '#00d4aa' : '#94a3b8',
+                color: filter === f ? '#00d4aa' : '#a1a7b0',
                 borderRadius: '6px',
                 padding: '0.3rem 0.75rem',
                 fontSize: '0.75rem',
@@ -462,9 +462,9 @@ export function FeedStatusPage() {
       {/* Feed Table Container */}
       <div className="glass-card" style={{ flex: 1, minHeight: '420px', overflow: 'hidden', padding: 0, display: 'flex', flexDirection: 'column' }}>
         {filtered.length === 0 ? (
-          <div style={{ padding: '3.5rem', textAlign: 'center', color: '#6b8099' }}>
+          <div style={{ padding: '3.5rem', textAlign: 'center', color: '#8b9199' }}>
             <Activity size={32} style={{ margin: '0 auto 0.75rem', opacity: 0.3 }} />
-            <div style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: 600 }}>No matching symbols in feed</div>
+            <div style={{ fontSize: '0.9rem', color: '#a1a7b0', fontWeight: 600 }}>No matching symbols in feed</div>
             <div style={{ fontSize: '0.75rem', marginTop: '0.25rem' }}>Add symbols in Symbol Setup or adjust your search filter.</div>
           </div>
         ) : (
@@ -472,21 +472,21 @@ export function FeedStatusPage() {
             <TableVirtuoso
               data={filtered}
               fixedHeaderContent={() => (
-                <tr style={{ background: 'rgba(5, 12, 20, 0.95)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                  <th style={{ padding: '0.75rem 1.25rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '20%' }}>Symbol</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '8%' }}>Exchange</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '14%' }}>LTP / Change</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '12%' }}>20s Trend</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '10%' }}>Last Tick</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '7%' }}>Bars/Min</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '7%' }}>Latency</th>
-                  <th style={{ padding: '0.75rem 1rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '10%', textAlign: 'center' }}>↻ Today</th>
-                  <th style={{ padding: '0.75rem 1.25rem', color: '#6b8099', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '12%', textAlign: 'right' }}>Status</th>
+                <tr style={{ background: 'rgba(12,12,12, 0.95)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                  <th style={{ padding: '0.75rem 1.25rem', color: '#8b9199', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '20%' }}>Symbol</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#8b9199', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '8%' }}>Exchange</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#8b9199', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '14%' }}>LTP / Change</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#8b9199', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '12%' }}>20s Trend</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#8b9199', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '10%' }}>Last Tick</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#8b9199', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '7%' }}>Bars/Min</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#8b9199', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '7%' }}>Latency</th>
+                  <th style={{ padding: '0.75rem 1rem', color: '#8b9199', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '10%', textAlign: 'center' }}>↻ Today</th>
+                  <th style={{ padding: '0.75rem 1.25rem', color: '#8b9199', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '12%', textAlign: 'right' }}>Status</th>
                 </tr>
               )}
               itemContent={(index, sym) => (
                 <>
-                  <td style={{ padding: '0.85rem 1.25rem', fontWeight: 600, color: '#e2eaf4' }}>
+                  <td style={{ padding: '0.85rem 1.25rem', fontWeight: 600, color: '#eceef2' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <span style={{ fontSize: '0.88rem' }}>{sym.ticker || 'Unknown Symbol'}</span>
                       <span className="badge badge-gray" style={{ fontSize: '0.68rem', padding: '0.1rem 0.4rem' }}>
@@ -509,7 +509,7 @@ export function FeedStatusPage() {
                     <LastTickTime ms={sym.lastTickUtcMs} />
                   </td>
                   <td style={{ padding: '0.85rem 1rem' }}>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.82rem', color: sym.barsPerMin > 0 ? '#00d4aa' : '#6b8099' }}>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.82rem', color: sym.barsPerMin > 0 ? '#00d4aa' : '#8b9199' }}>
                       {sym.barsPerMin || 0}/m
                     </span>
                   </td>
