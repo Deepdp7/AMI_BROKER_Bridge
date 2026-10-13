@@ -42,6 +42,14 @@ function SettingRow({ label, description, children }: { label: string; descripti
   )
 }
 
+const HISTORY_PRESETS = [
+  { label: '1Y', days: 365, title: '1 year' },
+  { label: '2Y', days: 730, title: '2 years' },
+  { label: '3Y', days: 1095, title: '3 years' },
+  { label: '5Y', days: 1825, title: '5 years' },
+  { label: 'Max', days: 3650, title: 'Everything the broker has (Fyers 1-minute data goes back to about 2018)' },
+]
+
 export function SettingsPage() {
   const { settings, updateSettings } = useAppStore()
   const [showAdvanced, setShowAdvanced] = useState(false)
@@ -275,18 +283,31 @@ export function SettingsPage() {
 
       {/* Data */}
       <Section title="Data & History Depth" icon={Database}>
-        <SettingRow label="Backfill Depth (days)" description="Historical bar backfill depth for newly added symbols">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <input
-              id="backfill-days"
-              type="range"
-              min={1} max={365}
-              value={settings.backfillDepthDays}
-              onChange={e => updateSettings({ backfillDepthDays: +e.target.value })}
-              style={{ width: '120px', accentColor: '#00d4aa' }}
-            />
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', color: '#00d4aa', fontSize: '0.85rem', minWidth: '36px' }}>
-              {settings.backfillDepthDays}d
+        <SettingRow label="History Depth" description="How far back 1-minute history is downloaded for every symbol. Raising it downloads only the older years that are missing (after Save).">
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.375rem' }}>
+            <div style={{ display: 'flex', gap: '0.25rem', background: 'rgba(10,22,40,0.6)', padding: '3px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+              {HISTORY_PRESETS.map(p => {
+                const active = settings.backfillDepthDays === p.days
+                return (
+                  <button
+                    key={p.days}
+                    onClick={() => updateSettings({ backfillDepthDays: p.days })}
+                    title={p.title}
+                    style={{
+                      background: active ? 'rgba(0,212,170,0.15)' : 'transparent',
+                      color: active ? '#00d4aa' : '#94a3b8',
+                      border: 'none', borderRadius: '6px', padding: '0.3rem 0.65rem',
+                      fontSize: '0.75rem', fontWeight: active ? 700 : 500, cursor: 'pointer',
+                      transition: 'background-color 0.15s, color 0.15s',
+                    }}
+                  >
+                    {p.label}
+                  </button>
+                )
+              })}
+            </div>
+            <span style={{ fontSize: '0.68rem', color: '#4b5e6e' }}>
+              {settings.backfillDepthDays} days · ~{Math.round(settings.backfillDepthDays * 0.69 * 375).toLocaleString()} bars per symbol
             </span>
           </div>
         </SettingRow>

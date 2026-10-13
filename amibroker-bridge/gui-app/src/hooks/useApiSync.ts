@@ -11,6 +11,83 @@ import { isPermissionGranted, requestPermission, sendNotification } from '@tauri
 
 type ApiState = 'checking' | 'connected' | 'offline'
 
+let resyncing: Promise<void> | null = null
+let wsOpenedBefore = false
+
+/**
+ * Pull the engine's current state into the store. Runs at startup and again whenever the
+ * engine reconnects (restart/crash), the window regains focus, and periodically — so the
+ * screens never show a stale snapshot. Later runs keep unsaved Settings edits and logs.
+ */
+export function resyncFromEngine(initial = false): Promise<void> {
+  if (resyncing) return resyncing
+  resyncing = (async () => {
+    const store = useAppStore.getState()
+    const tasks: Promise<unknown>[] = []
+
+    if (initial) {
+      tasks.push(api.getSettings().then(settings => store.updateSettings(settings as any)).catch(() => {}))
+      tasks.push(api.getLogs({ limit: 50 }).then(logs => logs.forEach(l => store.addLog(l as any))).catch(() => {}))
+    }
+
+    tasks.push(api.getBrokers().then(brokers => {
+      if (Array.isArray(brokers)) useAppStore.setState({ brokers: brokers as any })
+    }).catch(() => {}))
+
+    // Symbols: the engine's list is authoritative (drops symbols deleted elsewhere, adds new ones)
+    tasks.push(api.getFeedStatus().then(feedStatus => {
+      const current = new Map(useAppStore.getState().symbols.map(s => [s.ticker, s]))
+      const next = feedStatus.symbols.map((sym: any) => ({
+        ...(current.get(sym.ticker) || {}),
+        ticker: sym.ticker,
+        exchange: sym.exchange,
+        instrumentType: sym.instrumentType,
+        lastPrice: sym.lastPrice,
+        prevClose: sym.prevClose,
+        lastTickUtcMs: sym.lastTickUtcMs,
+        barsPerMin: sym.barsPerMin,
+        internalLatencyMs: sym.internalLatencyMs,
+        status: sym.status,
+        change: sym.change,
+        changePercent: sym.changePercent,
+        volume: sym.volume,
+      }))
+      useAppStore.setState({ symbols: next as any })
+      store.updateCoreStats(feedStatus.coreEngine as any)
+    }).catch(() => {}))
+
+    // Backfill: only downloads still in progress (finished ones would re-open an old notification);
+    // entries already on screen are brought up to date
+    tasks.push(api.getBackfillStatus().then(bfData => {
+      if (!bfData || !Array.isArray(bfData.statuses)) return
+      const shown = useAppStore.getState().backfillStatuses
+      bfData.statuses.forEach((s: any) => {
+        if (s.status === 'pending' || s.status === 'running' || shown[s.ticker]) store.updateBackfillStatus(s.ticker, s)
+      })
+    }).catch(() => {}))
+
+    await Promise.all(tasks)
+    resyncListeners.forEach(fn => { try { fn() } catch { /* ignore */ } })
+  })().finally(() => { resyncing = null })
+  return resyncing
+}
+
+const resyncListeners = new Set<() => void>()
+
+/**
+ * Re-run `load` whenever the app resyncs with the engine (reconnect, window focus, every 60 s).
+ * For page-level data that isn't pushed over the WebSocket.
+ */
+export function useEngineRefresh(load: () => void) {
+  const ref = useRef(load)
+  ref.current = load
+  useEffect(() => {
+    const fn = () => ref.current()
+    resyncListeners.add(fn)
+    return () => { resyncListeners.delete(fn) }
+  }, [])
+}
+
 export function useApiSync() {
   const [apiState, setApiState] = useState<ApiState>('checking')
   const {
@@ -25,71 +102,19 @@ export function useApiSync() {
     let mounted = true
 
     async function init() {
-      const available = await isApiAvailable()
-      if (!mounted) return
-
-      if (!available) {
+      // The data engine starts alongside the UI (and restarts after crashes),
+      // so keep polling until it answers instead of giving up after one try.
+      while (!(await isApiAvailable())) {
+        if (!mounted) return
         setApiState('offline')
-        return
+        await new Promise(r => setTimeout(r, 2000))
       }
+      if (!mounted) return
 
       setApiState('connected')
       toast.success('API Connected', 'Live data feed active on localhost:7890', 3000)
 
-      // Load initial settings
-      try {
-        const settings = await api.getSettings()
-        useAppStore.getState().updateSettings(settings as any)
-      } catch { /* keep defaults */ }
-
-      // Load initial brokers
-      try {
-        const brokers = await api.getBrokers()
-        if (Array.isArray(brokers)) {
-          useAppStore.setState({ brokers: brokers as any })
-        }
-      } catch { /* keep defaults */ }
-
-      // Load initial feed status
-      try {
-        const feedStatus = await api.getFeedStatus()
-        feedStatus.symbols.forEach(sym => {
-          // Add symbol if not already in store
-          if (!useAppStore.getState().symbols.find(s => s.ticker === sym.ticker)) {
-            addSymbol({
-              ticker: sym.ticker,
-              exchange: sym.exchange as any,
-              instrumentType: sym.instrumentType as any,
-              lastPrice: sym.lastPrice,
-              prevClose: sym.prevClose,
-              lastTickUtcMs: sym.lastTickUtcMs,
-              barsPerMin: sym.barsPerMin,
-              internalLatencyMs: sym.internalLatencyMs,
-              status: sym.status as any,
-              change: sym.change,
-              changePercent: sym.changePercent,
-              volume: sym.volume,
-            })
-          } else {
-            updateSymbolFeed(sym.ticker, sym as any)
-          }
-        })
-        updateCoreStats(feedStatus.coreEngine as any)
-      } catch { /* keep mock */ }
-
-      // Load initial logs (last 50)
-      try {
-        const logs = await api.getLogs({ limit: 50 })
-        logs.forEach(l => addLog(l as any))
-      } catch { /* keep mock */ }
-
-      // Load initial backfill statuses
-      try {
-        const bfData = await api.getBackfillStatus()
-        if (bfData && Array.isArray(bfData.statuses)) {
-          bfData.statuses.forEach((s: any) => updateBackfillStatus(s.ticker, s))
-        }
-      } catch { /* keep mock */ }
+      await resyncFromEngine(true)
 
       // Connect WebSocket for live updates
       wsManager.connect()
@@ -164,6 +189,9 @@ export function useApiSync() {
 
     const offOpen = wsManager.on('open', () => {
       setApiState('connected')
+      // Reconnected (engine restarted): refresh everything, but don't repeat the market toast
+      if (wsOpenedBefore) { resyncFromEngine(); return }
+      wsOpenedBefore = true
       // Compute initial market status immediately from the IST clock
       // (no need to wait 60s for the server to broadcast)
       const now = new Date()
@@ -177,6 +205,17 @@ export function useApiSync() {
         toast.info('Market Closed', 'NSE market is closed. Live streaming will auto-start at 09:15 IST.', 6000)
       }
     })
+
+    // Window comes back to the front, or every minute as a safety net: resync quietly
+    const onFocus = () => { if (document.visibilityState === 'visible') resyncFromEngine() }
+    window.addEventListener('focus', onFocus)
+    document.addEventListener('visibilitychange', onFocus)
+    const resyncTimer = window.setInterval(() => { if (document.visibilityState === 'visible') resyncFromEngine() }, 60_000)
+    const offResyncTriggers = () => {
+      window.removeEventListener('focus', onFocus)
+      document.removeEventListener('visibilitychange', onFocus)
+      window.clearInterval(resyncTimer)
+    }
 
     const offClose = wsManager.on('close', () => {
       if (apiState === 'connected') {
@@ -208,11 +247,16 @@ export function useApiSync() {
       if (payload?.ticker) {
         // Update store to show completed
         updateBackfillStatus(payload.ticker, { ...payload, status: 'completed', progress: 100 })
-        // We no longer clear from banner after 10 seconds to keep overall total intact
-        if (await ensureNotificationPermission()) {
+        // One notification per batch (not one per symbol): when nothing is pending or running
+        const all = Object.values(useAppStore.getState().backfillStatuses)
+        const busy = all.some(st => st.status === 'pending' || st.status === 'running')
+        if (!busy && all.length > 0 && await ensureNotificationPermission()) {
+          const done = all.filter(st => st.status === 'completed')
+          const failed = all.length - done.length
+          const candles = done.reduce((n, st) => n + (st.candlesFetched || 0), 0)
           sendNotification({
-            title: 'Plugin status',
-            body: `DataBridge Pro | Backfill Complete: ${payload.ticker} (${(payload.candlesFetched || 0).toLocaleString()} candles)`
+            title: 'DataBridge Pro',
+            body: `History download complete: ${done.length} symbol(s), ${candles.toLocaleString()} candles${failed ? ` · ${failed} failed` : ''}`
           })
         }
       }
@@ -252,6 +296,7 @@ export function useApiSync() {
       offBackfillCompleted?.()
       offMarketStatus?.()
       offBackfillFailed?.()
+      offResyncTriggers()
     }
   }, [apiState])
 

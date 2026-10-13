@@ -11,9 +11,11 @@
  */
 
 import { Router } from 'express'
-import { backfillQueue, backfillStatusMap } from '../services/BackfillQueue'
-import { stmts } from '../db'
+import { backfillQueue, backfillStatusMap, MAX_HISTORY_DAYS } from '../services/BackfillQueue'
+import { stmts, getAllSettings } from '../db'
 import { backfilledTickers } from '../shared/backfillState'
+import { clearVerifiedThrough } from '../shared/coverageState'
+import { autoRefresh } from '../services/AutoRefresh'
 
 const router = Router()
 
@@ -88,9 +90,10 @@ router.post('/trigger', (req, res) => {
 
   // Remove from backfilled set so it is eligible for re-download
   backfilledTickers.delete(upperTicker)
+  clearVerifiedThrough(upperTicker)
   backfillStatusMap.delete(upperTicker)
 
-  const depth = Math.max(1, Math.min(Number(depthDays) || 365, 365))
+  const depth = Math.max(1, Math.min(Number(depthDays) || Number((getAllSettings() as any).backfillDepthDays) || 365, MAX_HISTORY_DAYS))
   backfillQueue.enqueue(upperTicker, brokerId, sym.rawSymbol || sym.raw_symbol || sym.instrumentId || sym.instrument_id || upperTicker, depth)
 
   console.log(`[BackfillAPI] Manual trigger for ${upperTicker} (depth=${depth}d)`)
@@ -100,6 +103,25 @@ router.post('/trigger', (req, res) => {
     ticker: upperTicker,
     depthDays: depth,
   })
+})
+
+/**
+ * GET  /api/backfill/auto — automatic today-refresh status
+ * POST /api/backfill/auto — { enabled?: boolean, intervalMin?: number }
+ */
+router.get('/auto', (_req, res) => res.json(autoRefresh.getStatus()))
+
+router.post('/auto', (req, res) => {
+  const { enabled, intervalMin } = req.body as { enabled?: boolean; intervalMin?: number }
+  try {
+    autoRefresh.configure({
+      enabled: typeof enabled === 'boolean' ? enabled : undefined,
+      intervalMin: intervalMin !== undefined ? Number(intervalMin) : undefined,
+    })
+    res.json(autoRefresh.getStatus())
+  } catch (err: any) {
+    res.status(400).json({ error: err.message })
+  }
 })
 
 /**

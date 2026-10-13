@@ -44,6 +44,66 @@ static void WriteBarToQuotation(struct Quotation* pQ, int idx, const Bar& b) {
     pQ[idx].DateTime.PackDate.Year     = tm_out.tm_year + 1900;
 }
 
+static double QuotationToUnix(const struct Quotation& q) {
+    struct tm tv; memset(&tv, 0, sizeof(tv));
+    tv.tm_sec  = q.DateTime.PackDate.Second;
+    tv.tm_min  = q.DateTime.PackDate.Minute;
+    tv.tm_hour = q.DateTime.PackDate.Hour;
+    tv.tm_mday = q.DateTime.PackDate.Day;
+    tv.tm_mon  = q.DateTime.PackDate.Month - 1;
+    tv.tm_year = q.DateTime.PackDate.Year - 1900;
+    tv.tm_isdst = -1;
+    time_t t = mktime(&tv);
+    return (t == (time_t)-1) ? 0 : (double)t;
+}
+
+// Index of the quotation in pQ[0..count) whose minute equals `minute`, or -1 (binary search).
+static int FindQuotationByMinute(const struct Quotation* pQ, int count, double minute) {
+    int lo = 0, hi = count - 1;
+    while (lo <= hi) {
+        int mid = (lo + hi) / 2;
+        double m = floor(QuotationToUnix(pQ[mid]) / 60.0) * 60.0;
+        if (m == minute) return mid;
+        if (m < minute) lo = mid + 1; else hi = mid - 1;
+    }
+    return -1;
+}
+
+// Merge ascending bars into pQ[0..count): a bar in the same minute as an existing
+// quotation overwrites it (broker history correcting live-built candles), newer bars are
+// appended, and older bars with no matching quotation are ignored. When the array is
+// full the oldest quotations are shifted out. Returns the new number of valid quotations.
+static int MergeBars(struct Quotation* pQ, int count, int nSize, const std::vector<Bar>& bars) {
+    double lastMin = count > 0 ? floor(QuotationToUnix(pQ[count - 1]) / 60.0) * 60.0 : -1;
+    std::vector<const Bar*> fresh;
+    for (const Bar& b : bars) {
+        if (b.timestamp <= 0 || b.close <= 0) continue;
+        double bMin = floor(b.timestamp / 60.0) * 60.0;
+        if (bMin < lastMin) {
+            int idx = FindQuotationByMinute(pQ, count, bMin);
+            if (idx >= 0) WriteBarToQuotation(pQ, idx, b);
+            continue;
+        }
+        if (bMin == lastMin) {
+            if (!fresh.empty()) fresh.back() = &b;
+            else if (count > 0) WriteBarToQuotation(pQ, count - 1, b);
+            continue;
+        }
+        fresh.push_back(&b);
+        lastMin = bMin;
+    }
+    if (fresh.empty()) return count;
+
+    if (fresh.size() > (size_t)nSize) fresh.erase(fresh.begin(), fresh.end() - nSize);
+    int overflow = count + (int)fresh.size() - nSize;
+    if (overflow > 0) {
+        memmove(pQ, pQ + overflow, (size_t)(count - overflow) * sizeof(struct Quotation));
+        count -= overflow;
+    }
+    for (const Bar* b : fresh) WriteBarToQuotation(pQ, count++, *b);
+    return count;
+}
+
 static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, int nSize, struct Quotation* pQuotes) {
     if (!pszTicker || !pQuotes || nSize <= 0) return 0;
     UpdateActiveSymbol(pszTicker);
@@ -52,15 +112,7 @@ static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, in
     double since = 0;
     int startIndex = 0;
     if (nLastValid >= 0 && nLastValid < nSize) {
-        struct tm tv; memset(&tv, 0, sizeof(tv));
-        tv.tm_sec  = pQuotes[nLastValid].DateTime.PackDate.Second;
-        tv.tm_min  = pQuotes[nLastValid].DateTime.PackDate.Minute;
-        tv.tm_hour = pQuotes[nLastValid].DateTime.PackDate.Hour;
-        tv.tm_mday = pQuotes[nLastValid].DateTime.PackDate.Day;
-        tv.tm_mon  = pQuotes[nLastValid].DateTime.PackDate.Month - 1;
-        tv.tm_year = pQuotes[nLastValid].DateTime.PackDate.Year - 1900;
-        time_t t = mktime(&tv);
-        if (t != (time_t)-1) since = (double)t;
+        since = QuotationToUnix(pQuotes[nLastValid]);
         startIndex = nLastValid + 1;
     }
 
@@ -69,20 +121,44 @@ static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, in
     // and after every WM_USER_STREAMING_UPDATE we send.
     if (nLastValid >= 0) {
         Bar live; memset(&live, 0, sizeof(Bar));
-        bool hasLive = GetCachedLiveBar(pszTicker, live);
+        bool hasLive = GetCachedLiveBar(pszTicker, live) && live.timestamp > 0 && live.close > 0;
+        double liveMin  = hasLive ? floor(live.timestamp / 60.0) * 60.0 : 0;
+        double sinceMin = floor(since / 60.0) * 60.0;
 
-        if (hasLive && live.timestamp > 0 && live.close > 0) {
-            double liveMin  = floor(live.timestamp  / 60.0) * 60.0;
-            double sinceMin = floor(since / 60.0) * 60.0;
+        // --- CATCH-UP PATH: fetch bars AmiBroker missed ---
+        // AmiBroker keeps its own local database, so after AmiBroker or the bridge was
+        // closed it already has bars (nLastValid >= 0) but nothing for the downtime.
+        // Re-sync once per bridge connection, when the bridge reports new history
+        // (SYNC|ticker), or when the live bar jumps over minutes we never received.
+        bool liveSkipsMinutes = hasLive && liveMin > sinceMin + 60;
+        bool fullSync = IsBridgeConnected() && NeedsHistorySync(pszTicker);
+        if (fullSync || (IsBridgeConnected() && liveSkipsMinutes && TryBeginGapCheck(pszTicker))) {
+            std::vector<Bar> missed;
+            // Full sync (reconnect / bridge announced new history): re-fetch the last 24h so
+            // broker-corrected candles overwrite live-built ones. Gap check: just the tail;
+            // since-1 so the server also re-sends AmiBroker's last (possibly partial) candle.
+            double from = fullSync ? since - 86400 : since - 1;
+            int got = FetchBarsFromAPI(pszTicker, nSize, from > 0 ? from : 0, missed);
+            if (got >= 0) {
+                MarkHistorySynced(pszTicker);
+                int count = MergeBars(pQuotes, nLastValid + 1, nSize, missed);
+                if (count != nLastValid + 1) {
+                    char logBuf[160];
+                    sprintf_s(logBuf, "[SYNC] %s caught up %d missed bar(s)", pszTicker, count - (nLastValid + 1));
+                    LogPlugin(logBuf);
+                }
+                return count;
+            }
+        }
 
+        if (hasLive) {
             if (liveMin == sinceMin) {
                 // Update last bar in-place (same candle, price moved)
                 WriteBarToQuotation(pQuotes, nLastValid, live);
                 return nLastValid + 1;
-            } else if (liveMin > sinceMin && startIndex < nSize) {
-                // New minute candle
-                WriteBarToQuotation(pQuotes, startIndex, live);
-                return startIndex + 1;
+            } else if (liveMin > sinceMin) {
+                // New minute candle (MergeBars shifts out the oldest bar if the array is full)
+                return MergeBars(pQuotes, startIndex, nSize, std::vector<Bar>{ live });
             }
         }
         // No new live data - return what AmiBroker already has
@@ -93,25 +169,15 @@ static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, in
     // Only runs when nLastValid = -1 (first time symbol is loaded,
     // or after Flush Cache). AmiBroker expects this to take time.
     std::vector<Bar> outBars;
-    int count = FetchBarsFromAPI(pszTicker, nSize, since, outBars);
-    if (count <= 0) return 0;
-    if (count > nSize) count = nSize;
+    if (FetchBarsFromAPI(pszTicker, nSize, since, outBars) <= 0) return 0;
+    MarkHistorySynced(pszTicker);
 
-    for (int i = 0; i < count; i++) {
-        WriteBarToQuotation(pQuotes, i, outBars[i]);
-    }
-
-    // Also append live bar if it's newer than what we fetched
+    // Also merge the live bar (replaces the last candle if same minute, appends if newer)
     Bar live; memset(&live, 0, sizeof(Bar));
-    if (GetCachedLiveBar(pszTicker, live) && live.timestamp > 0 && live.close > 0 && count < nSize) {
-        double lastFetched = outBars.empty() ? 0 : outBars.back().timestamp;
-        if (live.timestamp > lastFetched) {
-            WriteBarToQuotation(pQuotes, count, live);
-            count++;
-        } else if (!outBars.empty() && (long long)live.timestamp / 60 == (long long)lastFetched / 60) {
-            WriteBarToQuotation(pQuotes, count - 1, live); // update last bar
-        }
+    if (GetCachedLiveBar(pszTicker, live) && live.timestamp > 0 && live.close > 0) {
+        outBars.push_back(live);
     }
+    int count = MergeBars(pQuotes, 0, nSize, outBars);
 
     char logBuf[128];
     sprintf_s(logBuf, "[GQE] %s nLV=%d returned=%d", pszTicker, nLastValid, count);

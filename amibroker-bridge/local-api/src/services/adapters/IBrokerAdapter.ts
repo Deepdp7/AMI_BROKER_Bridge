@@ -42,6 +42,9 @@ export interface SessionInfo {
 }
 
 export interface IBrokerAdapter extends EventEmitter {
+  /** Largest date range (days) of 1-minute history one request may cover, if the broker caps it */
+  readonly maxIntradayHistoryDays?: number
+
   // Lifecycle
   connect(credentials: BrokerCredentials): Promise<SessionInfo>
   disconnect(): Promise<void>

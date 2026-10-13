@@ -148,6 +148,7 @@ export function LogsPage() {
       {/* Terminal View Log Console */}
       <div
         ref={logContainerRef}
+        className="selectable"
         onScroll={handleScroll}
         style={{
           flex: 1,

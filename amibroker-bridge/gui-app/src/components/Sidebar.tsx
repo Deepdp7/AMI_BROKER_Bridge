@@ -1,6 +1,6 @@
 import {
   Activity, Wifi, List, Settings, FileText, Info,
-  Zap, ChevronRight, RefreshCw, AlertCircle, Heart
+  Zap, ChevronRight, RefreshCw, AlertCircle, Heart, Terminal, Sparkles
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -8,10 +8,12 @@ import clsx from 'clsx'
 
 const NAV_ITEMS = [
   { id: 'feed-status', label: 'Feed Status', icon: Activity },
+  { id: 'assistant', label: 'AI Assistant', icon: Sparkles },
   { id: 'broker-connection', label: 'Broker Connection', icon: Wifi },
   { id: 'symbol-setup', label: 'Symbol Setup', icon: List },
   { id: 'settings', label: 'Settings', icon: Settings },
   { id: 'logs', label: 'Logs & Diagnostics', icon: FileText },
+  { id: 'console', label: 'Live Console', icon: Terminal },
   { id: 'about', label: 'About', icon: Info },
 ]
 
@@ -87,7 +89,7 @@ export function Sidebar() {
                 id={`nav-${item.id}`}
                 onClick={() => navigate(`/${item.id}`)}
                 className={clsx('nav-link', isActive && 'active')}
-                style={{ background: 'none', border: isActive ? undefined : 'none', width: '100%', textAlign: 'left' }}
+                style={{ width: '100%', textAlign: 'left' }}
               >
                 <Icon size={15} />
                 <span style={{ fontSize: '0.8375rem' }}>{item.label}</span>

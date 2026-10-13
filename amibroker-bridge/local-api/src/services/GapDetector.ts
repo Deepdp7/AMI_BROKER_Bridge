@@ -28,20 +28,37 @@ export interface GapRange {
  * Fetch all timestamps from PostgreSQL for a given symbol.
  * Returns sorted ascending array of Unix seconds.
  */
-async function readHistoryTimestamps(safeTicker: string, originalTicker: string): Promise<number[]> {
+/**
+ * Adjacent stored bars more than `intervalSec` apart, plus the first/last bar in range.
+ * Computed in Postgres (index-only scan + LAG), so multi-year histories never load
+ * every timestamp into the engine.
+ */
+async function readGapCandidates(ticker: string, fromMs: number, toMs: number, intervalSec: number) {
   try {
-    // amibroker_ticker might have been replaced to safeTicker in arguments, so we should query originalTicker
-    // Actually, gap detector uses safeTicker primarily for files, but PG needs amibroker_ticker.
-    const res = await pool.query(`
-      SELECT ts_utc_ms FROM bars_1s 
-      WHERE amibroker_ticker = $1 
-      ORDER BY ts_utc_ms ASC
-    `, [originalTicker])
-    
-    return res.rows.map(r => Math.floor(Number(r.ts_utc_ms) / 1000))
+    const [pairs, bounds] = await Promise.all([
+      pool.query(`
+        SELECT prev, ts FROM (
+          SELECT ts_utc_ms AS ts, LAG(ts_utc_ms) OVER (ORDER BY ts_utc_ms) AS prev
+          FROM bars_1s WHERE amibroker_ticker = $1 AND ts_utc_ms >= $2 AND ts_utc_ms <= $3
+        ) t
+        WHERE prev IS NOT NULL AND ts - prev > $4
+        ORDER BY ts
+      `, [ticker, fromMs, toMs, intervalSec * 1000]),
+      pool.query(`
+        SELECT MIN(ts_utc_ms) AS first, MAX(ts_utc_ms) AS last
+        FROM bars_1s WHERE amibroker_ticker = $1 AND ts_utc_ms >= $2 AND ts_utc_ms <= $3
+      `, [ticker, fromMs, toMs]),
+    ])
+    const toSec = (v: any) => Math.floor(Number(v) / 1000)
+    const b = bounds.rows[0]
+    return {
+      pairs: pairs.rows.map(r => [toSec(r.prev), toSec(r.ts)] as [number, number]),
+      firstSec: b?.first != null ? toSec(b.first) : null,
+      lastSec: b?.last != null ? toSec(b.last) : null,
+    }
   } catch (err) {
-    console.error(`[GapDetector] Failed to read timestamps from postgres for ${originalTicker}:`, err)
-    return []
+    console.error(`[GapDetector] Failed to read gaps from postgres for ${ticker}:`, err)
+    return null
   }
 }
 
@@ -65,49 +82,30 @@ export async function detectGaps(
   maxGaps = 100
 ): Promise<GapRange[]> {
   const intervalSec = INTERVAL_SECONDS[interval] ?? 60
-  let timestamps = await readHistoryTimestamps(safeTicker, ticker)
+  const ranged = !!(targetFromMs && targetToMs)
+  const fromSec = ranged ? Math.floor(targetFromMs! / 1000) : 0
+  const toSec = ranged ? Math.floor(targetToMs! / 1000) : Math.floor(Date.now() / 1000) + 86400
 
-  if (targetFromMs && targetToMs) {
-    const fromSec = Math.floor(targetFromMs / 1000)
-    const toSec = Math.floor(targetToMs / 1000)
+  const found = await readGapCandidates(ticker, fromSec * 1000, toSec * 1000, intervalSec)
+  if (!found) return []
 
-    timestamps = timestamps.filter(ts => ts >= fromSec && ts <= toSec)
-
-    if (timestamps.length > 0) {
-      if (timestamps[0] > fromSec) timestamps.unshift(fromSec)
-      if (timestamps[timestamps.length - 1] < toSec) timestamps.push(toSec)
-    } else {
-      timestamps = [fromSec, toSec]
-    }
-
-    // Re-sort after injection (guards against any ordering edge cases)
-    // and deduplicate to avoid zero-length gaps when injected boundary = existing bar
-    timestamps.sort((a, b) => a - b)
-    timestamps = timestamps.filter((ts, i) => i === 0 || ts !== timestamps[i - 1])
+  // Candidate holes: before the first bar, between bars, after the last bar (range edges only when ranged)
+  const pairs: [number, number][] = []
+  if (found.firstSec === null) {
+    if (ranged) pairs.push([fromSec, toSec])
+  } else {
+    if (ranged && found.firstSec > fromSec) pairs.push([fromSec, found.firstSec])
+    pairs.push(...found.pairs)
+    if (ranged && found.lastSec! < toSec) pairs.push([found.lastSec!, toSec])
   }
 
-  if (timestamps.length < 2) return []
-
   const gaps: GapRange[] = []
-
-  for (let i = 0; i < timestamps.length - 1 && gaps.length < maxGaps; i++) {
-    // Yield every 5000 iterations to prevent blocking the event loop on huge arrays
-    if (i % 5000 === 0) {
-      await new Promise(r => setTimeout(r, 0))
-    }
-
-    const prevSec = timestamps[i]
-    const nextSec = timestamps[i + 1]
-    const prevMs = prevSec * 1000
-    const nextMs = nextSec * 1000
-
+  for (const [prevSec, nextSec] of pairs) {
+    if (gaps.length >= maxGaps) break
     // More than 1 interval apart?
     if (nextSec - prevSec <= intervalSec) continue
-
-    const trueGap = getTrueGapRange(prevMs, nextMs, intervalSec, exchange)
-    if (trueGap) {
-      gaps.push(trueGap)
-    }
+    const trueGap = getTrueGapRange(prevSec * 1000, nextSec * 1000, intervalSec, exchange)
+    if (trueGap) gaps.push(trueGap)
   }
 
   const MAX_MERGE_DISTANCE_MS = 60 * 24 * 3600 * 1000; // 60 days

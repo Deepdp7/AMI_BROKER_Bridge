@@ -1,0 +1,12 @@
+{
+  "name": "ami-broker-bridge",
+  "private": true,
+  "description": "Forwards to the DataBridge Pro project in ./amibroker-bridge",
+  "scripts": {
+    "dev": "pnpm --dir amibroker-bridge run dev",
+    "dev:web": "pnpm --dir amibroker-bridge run dev:web",
+    "build": "pnpm --dir amibroker-bridge run build",
+    "test": "pnpm --dir amibroker-bridge run test",
+    "postinstall": "pnpm --dir amibroker-bridge install"
+  }
+}

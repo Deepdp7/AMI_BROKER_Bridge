@@ -43,16 +43,44 @@ export const BARS_DIR = '' // No longer used, but kept exported for legacy refer
 export const DATA_DIR = path.join(os.homedir(), 'AppData', 'Roaming', 'DataBridgePro')
 
 // ===== PostgreSQL Connection Pool =====
-export const pool = new Pool({
+// Credentials come from .env (PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD) — see loadEnv() above.
+const pgConfig = {
   host: process.env.PGHOST || 'localhost',
   port: parseInt(process.env.PGPORT || '5432'),
-  database: process.env.PGDATABASE || 'databridgepro',
+  database: process.env.PGDATABASE || 'AMI_BROKER-Bridge',
   user: process.env.PGUSER || 'postgres',
   password: process.env.PGPASSWORD || '987498',
-  max: 20, // max connections
+}
+
+export const pool = new Pool({
+  ...pgConfig,
+  max: 12, // max connections (backfill workers + live flush + API reads)
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 15000,
 })
+
+/**
+ * Create the configured database if it does not exist yet (fresh install).
+ * Connects to the built-in "postgres" maintenance DB with the same credentials.
+ */
+async function ensureDatabaseExists() {
+  try {
+    const probe = await pool.connect()
+    probe.release()
+    return
+  } catch (err: any) {
+    if (err?.code !== '3D000') throw err // 3D000 = invalid_catalog_name (database missing)
+  }
+  console.log(`[POSTGRES] Database "${pgConfig.database}" not found — creating it...`)
+  const admin = new Pool({ ...pgConfig, database: 'postgres', max: 1 })
+  try {
+    const quoted = '"' + pgConfig.database.replace(/"/g, '""') + '"'
+    await admin.query(`CREATE DATABASE ${quoted}`)
+    console.log(`[POSTGRES] Database "${pgConfig.database}" created.`)
+  } finally {
+    await admin.end()
+  }
+}
 
 // Test connection on startup
 pool.query('SELECT 1').then(() => {
@@ -173,6 +201,7 @@ async function initSchema() {
 
 async function syncCaches() {
   try {
+    await ensureDatabaseExists()
     await initSchema()
 
     const bRes = await pool.query('SELECT * FROM brokers ORDER BY created_at ASC')
@@ -216,21 +245,20 @@ setInterval(async () => {
     await client.query('BEGIN')
     for (const [ticker, bars] of currentAppends.entries()) {
       if (bars.length === 0) continue
-      const barRows = bars.map(b => `('${ticker.replace(/'/g, "''")}', ${b.ts_utc_ms}, ${b.open}, ${b.high}, ${b.low}, ${b.close}, ${b.volume}, ${b.open_interest || null})`)
-      
-      // Batch insert in chunks of 5000
-      for (let i = 0; i < barRows.length; i += 5000) {
-        const chunk = barRows.slice(i, i + 5000)
+      for (let i = 0; i < bars.length; i += 5000) {
+        const chunk = bars.slice(i, i + 5000)
         await client.query(`
           INSERT INTO bars_1s (amibroker_ticker, ts_utc_ms, open, high, low, close, volume, open_interest)
-          VALUES ${chunk.join(',')}
+          SELECT $1, t.ts, t.o, t.h, t.l, t.c, t.v, t.oi
+          FROM unnest($2::bigint[], $3::real[], $4::real[], $5::real[], $6::real[], $7::real[], $8::real[]) AS t(ts, o, h, l, c, v, oi)
           ON CONFLICT (amibroker_ticker, ts_utc_ms) DO NOTHING
-        `)
+        `, [ticker, chunk.map(b => b.ts_utc_ms), chunk.map(b => b.open), chunk.map(b => b.high),
+            chunk.map(b => b.low), chunk.map(b => b.close), chunk.map(b => b.volume), chunk.map(b => b.open_interest || null)])
       }
     }
     await client.query('COMMIT')
   } catch (err) {
-    await client.query('ROLLBACK')
+    await client.query('ROLLBACK').catch(() => {})
     console.error('[POSTGRES] Failed to flush bars batch:', err)
     // Re-queue failed bars
     for (const [ticker, bars] of currentAppends.entries()) {
@@ -256,46 +284,70 @@ export function insertBarBatch(barsToInsert: any[]) {
 }
 
 // BUG #4 FIX: Implement actual PostgreSQL upsert (was empty stub — backfill data was silently discarded)
-export async function upsertBarsToHistory(amibrokerTicker: string, csvLines: string[]): Promise<void> {
-  if (csvLines.length === 0) return
+// Broker history is authoritative: it replaces bars built from live ticks for the same minute
+// (live-tick bars in the flush above use DO NOTHING, so they never overwrite history).
+/** Upserts broker history bars; returns how many rows were inserted or actually changed. */
+export async function upsertBarsToHistory(amibrokerTicker: string, csvLines: string[]): Promise<number> {
+  // Skip the still-forming minute: a partial history bar would block the live bar for that
+  // minute (live inserts never overwrite history), leaving it with partial volume.
+  const currentMinuteSec = Math.floor(Date.now() / 60000) * 60
+  // One row per minute (last wins): a statement may not upsert the same key twice
+  const byMinute = new Map<string, string>()
+  for (const line of csvLines) {
+    const tsSec = line.slice(0, line.indexOf(','))
+    if (Number(tsSec) < currentMinuteSec) byMinute.set(tsSec, line)
+  }
+  csvLines = [...byMinute.values()]
+  if (csvLines.length === 0) return 0
 
+  let changed = 0
   const client = await pool.connect()
   try {
     await client.query('BEGIN')
-    // Insert in chunks of 1000 rows to avoid massive single queries
-    for (let i = 0; i < csvLines.length; i += 1000) {
-      const chunk = csvLines.slice(i, i + 1000)
-      const rows = chunk.map(line => {
-        const parts = line.split(',')
-        const tsSec = Number(parts[0])
-        const open = Number(parts[1])
-        const high = Number(parts[2])
-        const low = Number(parts[3])
-        const close = Number(parts[4])
-        const volume = Number(parts[5])
-        return `('${amibrokerTicker.replace(/'/g, "''")}', ${tsSec * 1000}, ${open}, ${high}, ${low}, ${close}, ${volume}, NULL)`
-      }).filter(r => r !== null)
-      if (rows.length > 0) {
-        await client.query(`
-          INSERT INTO bars_1s (amibroker_ticker, ts_utc_ms, open, high, low, close, volume, open_interest)
-          VALUES ${rows.join(',')}
-          ON CONFLICT (amibroker_ticker, ts_utc_ms) DO NOTHING
-        `)
+    // Larger chunks via typed arrays: no SQL string building, one plan, far fewer bytes parsed
+    for (let i = 0; i < csvLines.length; i += 5000) {
+      const chunk = csvLines.slice(i, i + 5000)
+      const ts: number[] = [], o: number[] = [], h: number[] = [], l: number[] = [], c: number[] = [], v: number[] = []
+      for (const line of chunk) {
+        const p = line.split(',')
+        ts.push(Number(p[0]) * 1000); o.push(Number(p[1])); h.push(Number(p[2])); l.push(Number(p[3])); c.push(Number(p[4])); v.push(Number(p[5]))
       }
+      // Identical rows are skipped (no write, not counted) so callers know whether anything changed
+      const res = await client.query(`
+        INSERT INTO bars_1s AS b (amibroker_ticker, ts_utc_ms, open, high, low, close, volume, open_interest)
+        SELECT $1, t.ts, t.o, t.h, t.l, t.c, t.v, NULL
+        FROM unnest($2::bigint[], $3::real[], $4::real[], $5::real[], $6::real[], $7::real[]) AS t(ts, o, h, l, c, v)
+        ON CONFLICT (amibroker_ticker, ts_utc_ms) DO UPDATE SET
+          open = EXCLUDED.open, high = EXCLUDED.high, low = EXCLUDED.low,
+          close = EXCLUDED.close, volume = EXCLUDED.volume
+        WHERE (b.open, b.high, b.low, b.close, b.volume)
+          IS DISTINCT FROM (EXCLUDED.open, EXCLUDED.high, EXCLUDED.low, EXCLUDED.close, EXCLUDED.volume)
+      `, [amibrokerTicker, ts, o, h, l, c, v])
+      changed += res.rowCount ?? 0
     }
     await client.query('COMMIT')
-
-    // Do not double-insert into RAM/disk queue!
-    // BackfillQueue.ts handles loading recent 3 days into RAM manually.
-    // By skipping this, we prevent a huge memory spike and double-inserting all history.
-
+    return changed
   } catch (err) {
-    await client.query('ROLLBACK')
+    await client.query('ROLLBACK').catch(() => {})
     console.error('[POSTGRES] upsertBarsToHistory failed:', err)
     throw err
   } finally {
     client.release()
   }
+}
+
+/**
+ * Repairs broker bars whose high/low are inconsistent with open/close (Fyers' older
+ * 1-minute history has whole days with high and low swapped): high/low become the
+ * max/min of the four prices. Bars with missing or non-positive prices are left as-is
+ * so validateBar still rejects them.
+ */
+export function repairBar<T extends { open: number; high: number; low: number; close: number }>(b: T): T {
+  const { open, high, low, close } = b
+  if (![open, high, low, close].every(v => Number.isFinite(v) && v > 0)) return b
+  const hi = Math.max(open, high, low, close)
+  const lo = Math.min(open, high, low, close)
+  return hi === high && lo === low ? b : { ...b, high: hi, low: lo }
 }
 
 export function validateBar(open: number, high: number, low: number, close: number, volume: number): boolean {
@@ -539,28 +591,42 @@ export const stmts = {
     }
   },
 
+  // CSV for the AmiBroker plugin, built inside Postgres: no per-row JS objects, so multi-year
+  // requests (hundreds of thousands of bars) stay fast. Newest `limit` bars, ascending.
+  // Volume is rounded to an integer (real::text would print 1.2e+06).
   getBarsCsvByTickerAsync: {
     get: async (amibrokerTicker: string, limit: number = 50000): Promise<string> => {
       try {
-        const res = await pool.query(
-          'SELECT * FROM bars_1s WHERE amibroker_ticker = $1 ORDER BY ts_utc_ms DESC LIMIT $2',
-          [amibrokerTicker, limit]
-        )
-        if (res.rows.length === 0) return ''
-        const lines: string[] = []
-        for (let i = res.rows.length - 1; i >= 0; i--) {
-          const r = res.rows[i]
-          const tsSec = Math.floor(Number(r.ts_utc_ms) / 1000)
-          lines.push(`${tsSec},${r.open},${r.high},${r.low},${r.close},${r.volume}`)
-        }
-        return lines.join('\n')
+        const res = await pool.query(`
+          SELECT string_agg((ts_utc_ms / 1000)::text || ',' || open::text || ',' || high::text || ',' || low::text
+                            || ',' || close::text || ',' || round(volume)::bigint::text, E'\n' ORDER BY ts_utc_ms) AS csv
+          FROM (SELECT * FROM bars_1s WHERE amibroker_ticker = $1 ORDER BY ts_utc_ms DESC LIMIT $2) t
+        `, [amibrokerTicker, limit])
+        return res.rows[0]?.csv || ''
       } catch (err) {
         console.error('[POSTGRES] Failed to get bars CSV:', err)
         return ''
       }
     }
   },
-  
+
+  // Bars strictly newer than `sinceSec` (newest `limit` of them), ascending CSV
+  getBarsCsvSinceAsync: {
+    get: async (amibrokerTicker: string, sinceSec: number, limit: number = 50000): Promise<string> => {
+      try {
+        const res = await pool.query(`
+          SELECT string_agg((ts_utc_ms / 1000)::text || ',' || open::text || ',' || high::text || ',' || low::text
+                            || ',' || close::text || ',' || round(volume)::bigint::text, E'\n' ORDER BY ts_utc_ms) AS csv
+          FROM (SELECT * FROM bars_1s WHERE amibroker_ticker = $1 AND ts_utc_ms > $2 ORDER BY ts_utc_ms DESC LIMIT $3) t
+        `, [amibrokerTicker, Math.floor(sinceSec) * 1000, limit])
+        return res.rows[0]?.csv || ''
+      } catch (err) {
+        console.error('[POSTGRES] Failed to get bars CSV since:', err)
+        return ''
+      }
+    }
+  },
+
   getLastHistoryTs: {
     get: (amibrokerTicker: string): number => {
       // Needs to be awaited. We'll update getHsmTokens backfill check.
@@ -604,14 +670,9 @@ export function fullForceClean() {
   barsMemCache.clear()
 }
 
-export function deduplicateAndCompactDiskBars(ticker: string) {
-  // Database does this natively. We can just delete old bars.
-  const cutoffMs = Date.now() - (365 * 24 * 60 * 60 * 1000)
-  pool.query(`
-    DELETE FROM bars_1s 
-    WHERE amibroker_ticker = $1 
-    AND ts_utc_ms < $2
-  `, [ticker, cutoffMs]).catch(console.error)
+export function deduplicateAndCompactDiskBars(_ticker: string) {
+  // Postgres dedupes via the primary key. History is never pruned here: it used to delete
+  // everything older than 365 days, which wiped multi-year downloads.
 }
 
 export function flushPendingBars() {

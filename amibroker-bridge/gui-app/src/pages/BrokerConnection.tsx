@@ -328,7 +328,7 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
                 Redirect URL (Mandatory)
               </div>
               <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem', lineHeight: '1.4' }}>
-                Copy and paste this exact URL into your Kite Developer App settings for automatic login:
+                Copy and paste this exact URL into your {BROKER_INFO[selectedBrokerType]?.name || 'broker'} API app settings for automatic login:
               </div>
               <code style={{ display: 'block', background: 'rgba(0,0,0,0.3)', padding: '0.5rem', borderRadius: '4px', color: '#e2eaf4', fontSize: '0.8rem', userSelect: 'all', wordBreak: 'break-all' }}>
                 http://127.0.0.1:7890/api/callback/{selectedBrokerType}

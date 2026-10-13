@@ -6,6 +6,7 @@ import { feedSimulator } from '../services/feedSimulator'
 import { brokerManager } from '../services/BrokerManager'
 import { FyersAdapter } from '../services/adapters/FyersAdapter'
 import { backfilledTickers } from '../shared/backfillState'
+import { clearVerifiedThrough } from '../shared/coverageState'
 import { backfillQueue } from '../services/BackfillQueue'
 import type { BrokerAccount } from '../types'
 
@@ -510,6 +511,7 @@ router.delete('/:id/symbols/:ticker', (req, res) => {
     brokerManager.unsubscribe(id, [ticker])
     // Clear from backfill Set and cancel any ongoing queue tasks
     backfilledTickers.delete(ticker)
+    clearVerifiedThrough(ticker)
     backfillQueue.cancel(ticker)
     res.json({ ok: true })
   } catch (e) {

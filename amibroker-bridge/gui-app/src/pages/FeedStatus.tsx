@@ -1,9 +1,164 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { useAppStore } from '../store/appStore'
 import type { SymbolFeed } from '../store/appStore'
-import { Activity, TrendingUp, TrendingDown, Minus, Search, Cpu, HardDrive, Clock, Zap, Radio, Globe, RefreshCw } from 'lucide-react'
+import { Activity, TrendingUp, TrendingDown, Minus, Search, Cpu, HardDrive, Clock, Zap, Radio, Globe, RefreshCw, ChevronDown, Check } from 'lucide-react'
 import { LineChart, Line, ResponsiveContainer, Tooltip } from 'recharts'
 import { TableVirtuoso } from 'react-virtuoso'
+import { wsManager } from '../api/apiClient'
+import { useEngineRefresh } from '../hooks/useApiSync'
+
+interface AutoRefreshStatus {
+  enabled: boolean
+  intervalMin: number
+  running: boolean
+  lastRunAt: number | null
+  lastRunSymbols: number
+  nextRunAt: number | null
+  lastError: string | null
+  progressDone?: number
+  progressTotal?: number
+  waitingFor?: 'history-download' | null
+}
+
+const fmtTime = (ms: number) => new Date(ms).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false })
+
+/** On/off + interval for the automatic "Refresh All Today" that runs during market hours. */
+function AutoRefreshControl({ api }: { api: string }) {
+  const [st, setSt] = useState<AutoRefreshStatus | null>(null)
+
+  const load = () => fetch(`${api}/api/backfill/auto`).then(r => r.json()).then(setSt).catch(() => {})
+  useEffect(() => {
+    load()
+    const off = wsManager.on('auto_refresh', (p: any) => setSt(p))
+    return () => { off() }
+  }, [api])
+  // Engine restarted / window refocused: reload instead of showing a stale schedule
+  useEngineRefresh(load)
+
+  // Re-evaluate the label as time passes (e.g. a due sync that hasn't reported yet)
+  const [now, setNow] = useState(Date.now())
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 5000)
+    return () => clearInterval(t)
+  }, [])
+
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const [menuPos, setMenuPos] = useState({ top: 0, left: 0 })
+
+  // Close the interval menu on outside click / Escape
+  useEffect(() => {
+    if (!menuOpen) return
+    const onDown = (e: MouseEvent) => { const t = e.target as Node; if (!menuRef.current?.contains(t) && !triggerRef.current?.contains(t)) setMenuOpen(false) }
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMenuOpen(false) }
+    document.addEventListener('mousedown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey) }
+  }, [menuOpen])
+
+  const update = (body: Partial<Pick<AutoRefreshStatus, 'enabled' | 'intervalMin'>>) =>
+    fetch(`${api}/api/backfill/auto`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(r => r.json()).then(setSt).catch(() => {})
+
+  if (!st) return null
+  const on = st.enabled
+  const intervalLabel = (m: number) => (m === 1 ? '1 min' : `${m} min`)
+  const detail = !on ? 'Paused'
+    : st.running ? (st.progressTotal ? `Syncing ${st.progressDone ?? 0}/${st.progressTotal}…` : 'Syncing…')
+    : st.waitingFor === 'history-download' ? 'Waiting for history download…'
+    : st.nextRunAt && st.nextRunAt < now - 15_000 ? 'Syncing shortly…'
+    : st.nextRunAt ? `${st.lastRunAt ? `Synced ${fmtTime(st.lastRunAt)} · ` : ''}next ${fmtTime(st.nextRunAt)}`
+    : 'Starts at market open'
+  const dotColor = st.lastError ? '#f59e0b' : on ? '#00d4aa' : '#475569'
+
+  return (
+    <div
+      className="ar-pill"
+      title={st.lastError ? `Last error: ${st.lastError}` : "Automatically re-downloads today's exact 1-minute bars from the broker for all symbols during market hours and updates AmiBroker"}
+      data-on={on}
+    >
+      <button className="ar-switch" data-on={on} onClick={() => update({ enabled: !on })} aria-pressed={on} aria-label="Toggle auto-refresh">
+        <span />
+      </button>
+      <span className="ar-label">Auto-refresh</span>
+
+      <div style={{ position: 'relative' }}>
+        <button ref={triggerRef} className="ar-trigger" disabled={!on} onClick={() => {
+          const r = triggerRef.current?.getBoundingClientRect()
+          if (r) setMenuPos({ top: r.bottom + 6, left: r.left + r.width / 2 })
+          setMenuOpen(o => !o)
+        }} aria-haspopup="listbox" aria-expanded={menuOpen}>
+          {intervalLabel(st.intervalMin)}
+          <ChevronDown size={12} style={{ transition: 'transform 0.15s', transform: menuOpen ? 'rotate(180deg)' : 'none' }} />
+        </button>
+        {menuOpen && createPortal(
+          <div ref={menuRef} className="ar-menu" role="listbox" style={{ top: menuPos.top, left: menuPos.left }}>
+            <div className="ar-menu-title">Refresh every</div>
+            {[1, 2, 3, 5, 10, 15, 30].map(m => (
+              <button
+                key={m}
+                role="option"
+                aria-selected={m === st.intervalMin}
+                className="ar-option"
+                data-active={m === st.intervalMin}
+                onClick={() => { update({ intervalMin: m }); setMenuOpen(false) }}
+              >
+                {intervalLabel(m)}
+                {m === st.intervalMin && <Check size={13} />}
+              </button>
+            ))}
+          </div>,
+          document.body
+        )}
+      </div>
+
+      <span className="ar-status">
+        <span className="ar-dot" data-pulse={on && st.running} style={{ background: dotColor, boxShadow: on ? `0 0 6px ${dotColor}` : 'none' }} />
+        {detail}
+      </span>
+
+      <style>{`
+        .ar-pill { display: inline-flex; align-items: center; gap: 0.6rem; height: 32px; padding: 0 0.7rem 0 0.45rem;
+          border-radius: 10px; font-size: 0.74rem; color: #94a3b8;
+          background: rgba(15, 27, 46, 0.7); border: 1px solid rgba(255,255,255,0.07);
+          backdrop-filter: blur(8px); transition: border-color .2s, background .2s; }
+        .ar-pill[data-on="true"] { border-color: rgba(0,212,170,0.28);
+          background: linear-gradient(135deg, rgba(0,212,170,0.10), rgba(56,189,248,0.05)); }
+        .ar-switch { position: relative; width: 30px; height: 18px; border-radius: 999px; border: none; padding: 0;
+          cursor: pointer; background: #2a3a50; transition: background .2s; flex-shrink: 0; }
+        .ar-switch[data-on="true"] { background: linear-gradient(135deg, #00d4aa, #0ea5a0); }
+        .ar-switch span { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%;
+          background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.35); transition: transform .2s cubic-bezier(.4,0,.2,1); }
+        .ar-switch[data-on="true"] span { transform: translateX(12px); }
+        .ar-label { font-weight: 600; color: #e2eaf4; letter-spacing: -0.01em; }
+        .ar-pill[data-on="false"] .ar-label { color: #94a3b8; }
+        .ar-trigger { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 6px;
+          border: 1px solid rgba(255,255,255,0.09); background: rgba(255,255,255,0.04); color: #e2eaf4;
+          font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: background .15s, border-color .15s; }
+        .ar-trigger:hover:not(:disabled) { background: rgba(255,255,255,0.08); border-color: rgba(0,212,170,0.4); }
+        .ar-trigger:disabled { opacity: .45; cursor: not-allowed; }
+        .ar-menu { position: fixed; transform: translateX(-50%); z-index: 9999;
+          min-width: 140px; padding: 4px; border-radius: 10px; background: #0d1b2e; opacity: 1;
+          border: 1px solid rgba(255,255,255,0.09); box-shadow: 0 12px 32px rgba(0,0,0,.55);
+          animation: ar-pop .12s ease-out; }
+        .ar-menu-title { padding: 6px 10px 4px; font-size: 0.62rem; font-weight: 700; letter-spacing: .08em;
+          text-transform: uppercase; color: #475569; }
+        .ar-option { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px;
+          padding: 6px 10px; border: none; border-radius: 6px; background: transparent; color: #cbd5e1;
+          font-size: 0.78rem; cursor: pointer; text-align: left; }
+        .ar-option:hover { background: rgba(255,255,255,0.06); color: #fff; }
+        .ar-option[data-active="true"] { background: rgba(0,212,170,0.14); color: #00d4aa; font-weight: 600; }
+        .ar-status { display: inline-flex; align-items: center; gap: 6px; color: #6b8099; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .ar-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .ar-dot[data-pulse="true"] { animation: ar-pulse 1s ease-in-out infinite; }
+        @keyframes ar-pop { from { opacity: 0; transform: translateX(-50%) translateY(-4px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+        @keyframes ar-pulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+      `}</style>
+    </div>
+  )
+}
 // Mini sparkline data store
 const sparkData: Record<string, number[]> = {}
 
@@ -214,6 +369,7 @@ export function FeedStatusPage() {
             <span className={`status-dot ${streamingCount > 0 ? 'connected' : ''}`} style={{ width: 6, height: 6 }} />
             {streamingCount} / {symbols.length} Streaming
           </span>
+          <AutoRefreshControl api={API} />
           {/* Global Refresh All Today button */}
           <button
             onClick={refreshAllToday}

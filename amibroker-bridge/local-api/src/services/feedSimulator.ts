@@ -46,6 +46,8 @@ export class FeedSimulator extends EventEmitter {
   private latencyHistory: number[] = []
   private brokerId = 'zerodha-1'
   private pendingStatusUpdates = new Map<string, SymbolFeedStatus>()
+  // Last cumulative day volume seen per instrument (broker sends running totals)
+  private lastCumVolume = new Map<string, number>()
   private feedUpdateThrottleTimer: ReturnType<typeof setTimeout> | null = null
 
   private _scheduleFeedBroadcast(status: SymbolFeedStatus, _now: number) {
@@ -187,7 +189,7 @@ export class FeedSimulator extends EventEmitter {
 
   // BUG #5 FIX: processRealTick now handles key mismatch between Fyers resolved format
   // (e.g. "NSE:BPCL-EQ") and instruments Map key (e.g. "fyers-xxx:BPCL")
-  processRealTick(tick: { instrumentId: string, lastPrice: number, volume: number, timestamp: number, openInterest?: number }, brokerId: string) {
+  processRealTick(tick: { instrumentId: string, lastPrice: number, volume: number, totalVolume?: number, timestamp: number, openInterest?: number }, brokerId: string) {
     // First try: exact Map lookup using the raw brokerToken (tick.instrumentId)
     let key = `${brokerId}:${tick.instrumentId}`
     let inst = this.instruments.get(key)
@@ -252,7 +254,20 @@ export class FeedSimulator extends EventEmitter {
     if (!bar) return
 
     const newPrice = tick.lastPrice
-    const tickQty = tick.volume || 0
+    // Volume traded since the previous update. The feed sends periodic snapshots, not
+    // every trade, so summing last-traded-qty misses most volume; diff the day's running
+    // total instead. Fall back to last-traded-qty only for feeds without a running total.
+    let tickQty = tick.volume || 0
+    if (typeof tick.totalVolume === 'number' && tick.totalVolume >= 0) {
+      const prevCum = this.lastCumVolume.get(key)
+      this.lastCumVolume.set(key, tick.totalVolume)
+      if (prevCum === undefined) tickQty = 0             // first update after (re)connect: baseline only
+      else {
+        let delta = tick.totalVolume - prevCum
+        if (delta < -(2 ** 30)) delta += 2 ** 32          // int32 wrap on very heavy volume
+        tickQty = delta > 0 ? delta : 0                   // negative = new session reset
+      }
+    }
 
     // New 1s bucket?
     if (bucket !== bar.bucketMs) {
@@ -288,7 +303,7 @@ export class FeedSimulator extends EventEmitter {
     status.lastTickUtcMs = now
     status.change = +(newPrice - prevClose).toFixed(2)
     status.changePercent = +((newPrice - prevClose) / prevClose * 100).toFixed(2)
-    status.volume += tickQty
+    status.volume = typeof tick.totalVolume === 'number' ? tick.totalVolume : status.volume + tickQty
     status.status = 'RECEIVING' as any
     status.internalLatencyMs = Math.round(Math.random() * 5 + 5)
 

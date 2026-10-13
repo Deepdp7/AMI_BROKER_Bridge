@@ -7,8 +7,14 @@ import fs from 'fs'
 import path from 'path'
 import readline from 'readline'
 import { FyersHSMClient } from './FyersHSMClient'
+import { RateLimiter } from '../RateLimiter'
+
+// Fyers data API caps (10/s, 200/min per app); stay a little under them across all callers
+const historyLimiter = new RateLimiter(8, 180)
 
 export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
+  /** Fyers serves at most 100 days of intraday candles per history request */
+  readonly maxIntradayHistoryDays = 95
   private connected = false
   private accessToken: string = ''
   private appId: string = ''
@@ -425,11 +431,13 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
     const fromStr = formatIST(from)
     const toStr = formatIST(to)
 
+    await historyLimiter.acquire()
     const url = `https://api-t1.fyers.in/data/history?symbol=${encodeURIComponent(safeToken)}&resolution=${resolution}&date_format=1&range_from=${fromStr}&range_to=${toStr}&cont_flag=0`
 
     try {
       const controller = new AbortController()
-      const timeout = setTimeout(() => controller.abort(), 10000)
+      // 100-day 1-minute chunks are ~25k candles; give them time to arrive
+      const timeout = setTimeout(() => controller.abort(), 30000)
 
       const res = await fetch(url, {
         headers: {
@@ -448,6 +456,7 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
           if (res.status === 429 || res.status === 401 || res.status === 403 || res.status === 400) {
             const fetchErr = new Error(`HTTP ${res.status}: ${res.statusText}`) as any;
             fetchErr.code = res.status === 429 ? 429 : -16;
+            if (res.status === 429) historyLimiter.pause(3000);
             throw fetchErr;
           }
           return []
@@ -466,6 +475,7 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
         return []
       } else if (data.code === 429 || (data.message && String(data.message).includes('request limit'))) {
         console.warn(`[FyersAdapter] Rate limit 429 reached for ${instrumentToken}`)
+        historyLimiter.pause(3000)
         const err: any = new Error(`429 request limit reached: ${data.message || ''}`)
         err.code = 429
         throw err
@@ -487,6 +497,10 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
         if (e?.code === -16 || e?.message?.includes('Auth') || e?.message?.includes('authenticate')) {
           throw e;
         }
+        // Timeouts / network drops must be retried by the caller, not treated as "no data"
+        // (that would silently skip the whole chunk)
+        if (e?.name === 'AbortError') throw Object.assign(new Error(`timeout fetching history for ${instrumentToken}`), { name: 'AbortError' })
+        if (e?.name === 'TypeError' || e?.code === 'ECONNRESET' || e?.cause) throw e
       console.error(`[FyersAdapter] Error fetching historical bars for ${instrumentToken}:`, e)
       return []
     }

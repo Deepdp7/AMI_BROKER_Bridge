@@ -2,8 +2,10 @@
  * DataBridge Pro — Local API Server
  * Express app + WebSocket server, bound to localhost:7890 only (§41, §57)
  * WebSocket pushes: feed_update, log_entry, broker_status, health_update,
- *                   backfill_progress, backfill_completed, backfill_failed
+ *                   backfill_progress, backfill_completed, backfill_failed, console_lines
  */
+// MUST stay first: captures console output for the in-app Live Console (and the AI assistant)
+import { consoleEvents, type ConsoleLine } from './services/ConsoleCapture'
 import express = require('express')
 import cors = require('cors')
 import http = require('http')
@@ -16,10 +18,14 @@ import settingsRouter from './routes/settings'
 import logsRouter from './routes/logs'
 import systemRouter from './routes/system'
 import backfillRouter from './routes/backfill'
+import aiRouter from './routes/ai'
+import { setRuntimeProbe } from './services/ai/AiAssistant'
+import { autoRefresh } from './services/AutoRefresh'
 import { feedSimulator } from './services/feedSimulator'
-import { getAllSettings, rotateOldLogs, stmts, flushPendingBars, getLastBarTimestampSec, getOldestBarTimestampSec, syncCachesPromise, loadBarsFromDisk } from './db'
+import { getAllSettings, rotateOldLogs, stmts, flushPendingBars, upsertBarsToHistory, getLastBarTimestampSec, getOldestBarTimestampSec, syncCachesPromise, loadBarsFromDisk } from './db'
 import { backfillQueue } from './services/BackfillQueue'
 import { backfilledTickers } from './shared/backfillState'
+import { getVerifiedThroughMs } from './shared/coverageState'
 import { detectGaps, formatGapSummary } from './services/GapDetector'
 import type { WsMessage, AppSettings } from './types'
 
@@ -85,6 +91,7 @@ app.use('/api/logs', logsRouter)
 app.use('/api/diagnostics', logsRouter) // export endpoint also on this prefix
 app.use('/api/system', systemRouter)
 app.use('/api/backfill', backfillRouter)
+app.use('/api/ai', aiRouter)
 
 // /api/symbols endpoint to prevent UI crash
 app.get('/api/symbols', (_req, res) => {
@@ -111,7 +118,8 @@ setInterval(() => {
 // This endpoint is called directly by the DataBridgePro.dll C++ plugin
 app.get('/api/feed/bars', async (req, res) => {
   let ticker = String(req.query.ticker || '')
-  const limit = Math.min(Number(req.query.limit) || 5000, 150000)
+  // Up to ~16 years of 1-minute bars (AmiBroker's own database size setting is the real cap)
+  const limit = Math.min(Number(req.query.limit) || 5000, 1_500_000)
 
   // Defensive fix for unencoded '&' in symbol names (e.g. M&M -> ?ticker=M&M&limit=5000)
   if (req.url && req.url.includes('ticker=')) {
@@ -161,7 +169,10 @@ app.get('/api/feed/bars', async (req, res) => {
   }
   brokerId = symRecord.brokerId || symRecord.broker_id
 
-  let csv = await stmts.getBarsCsvByTickerAsync.get(ticker, limit)
+  // Catch-up requests from the plugin pass `since`: filter in SQL instead of loading `limit` rows
+  let csv = since > 0
+    ? await stmts.getBarsCsvSinceAsync.get(ticker, since, limit)
+    : await stmts.getBarsCsvByTickerAsync.get(ticker, limit)
 
   if (!backfilledTickers.has(ticker) && brokerId) {
     // Enqueue to the centralized rate-limited 1-year backfill queue
@@ -287,6 +298,22 @@ wss.on('connection', (ws, req) => {
   })
 })
 
+// ===== Live engine console → WebSocket (batched, the Live Console page renders these) =====
+let pendingConsoleLines: ConsoleLine[] = []
+let consoleFlushTimer: NodeJS.Timeout | null = null
+consoleEvents.on('line', (line: ConsoleLine) => {
+  if (wsClients.size === 0) return
+  pendingConsoleLines.push(line)
+  if (!consoleFlushTimer) {
+    consoleFlushTimer = setTimeout(() => {
+      consoleFlushTimer = null
+      const lines = pendingConsoleLines
+      pendingConsoleLines = []
+      broadcast('console_lines', { lines })
+    }, 250)
+  }
+})
+
 // ===== Wire up feed simulator events to WebSocket =====
 feedSimulator.on('feed_update', (payload) => {
   broadcast('feed_update', payload)
@@ -331,6 +358,7 @@ brokerManager.on('symbol_resolved', (data: any) => {
 backfillQueue.on('backfill_progress', (payload) => broadcast('backfill_progress', payload))
 backfillQueue.on('backfill_completed', (payload) => broadcast('backfill_completed', payload))
 backfillQueue.on('backfill_failed', (payload) => broadcast('backfill_failed', payload))
+autoRefresh.on('status', (payload) => broadcast('auto_refresh', payload))
 
 // Fix 3: Auto-open browser when WebSocket JWT expires during streaming
 brokerManager.on('auth_required', (brokerId: string) => {
@@ -352,6 +380,13 @@ brokerManager.on('auth_required', (brokerId: string) => {
     })
   }
 })
+
+/** Runs `fn` over `items` with at most `limit` in flight. */
+async function forEachLimit<T>(items: T[], limit: number, fn: (item: T) => Promise<void>) {
+  let next = 0
+  const worker = async () => { while (next < items.length) await fn(items[next++]) }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker))
+}
 
 // Helper: get today's date string in IST (Asia/Kolkata = UTC+5:30)
 function todayIST(): string {
@@ -380,9 +415,10 @@ async function fetchTodayBars(adapter: any, ticker: string) {
         open: b.open, high: b.high, low: b.low, close: b.close, volume: b.volume,
         open_interest: null
       }))
-      stmts.insertBarsToDiskOnly.run(barsToInsert)
+      await upsertBarsToHistory(ticker, bars.map((b: any) => `${Math.floor(b.ts / 1000)},${b.open},${b.high},${b.low},${b.close},${b.volume}`))
       stmts.insertBarsToRamOnly.run(barsToInsert)
       console.log(`[Init] Incremental update: added ${bars.length} bars for ${ticker} (today)`)
+      notifyAmiBrokerHistoryChanged(ticker)
       broadcast('log_entry', { level: 'success', component: 'Backfill', message: `Added ${bars.length} bars for ${ticker} (today)` })
     } else {
       broadcast('log_entry', { level: 'warn', component: 'Backfill', message: `No bars returned for ${ticker} today.` })
@@ -490,11 +526,12 @@ async function initSimulator() {
       return listingMs
     }
 
-    for (const sym of symbols) {
-      if (sym.brokerId === 'orphaned') continue
+    // Gap scans are database-only, so run a few symbols at a time
+    await forEachLimit(symbols, 4, async (sym: any) => {
+      if (sym.brokerId === 'orphaned') return
       const ticker = sym.amiBrokerTicker || sym.amibroker_ticker
       const brokerId = sym.brokerId || sym.broker_id
-      if (!brokerId) continue
+      if (!brokerId) return
       const safeTicker = ticker.replace(/[^a-zA-Z0-9_-]/g, '_')
 
       const backfillDepth = Number(settings?.backfillDepthDays) || 365
@@ -513,9 +550,14 @@ async function initSimulator() {
         }
       }
 
+      // Only scan what a previous gap pass has not already verified. Without this,
+      // minutes with no trades (illiquid futures) and the pre-listing period are
+      // re-detected as "gaps" on every start and merged into one huge re-download.
+      const verifiedMs = getVerifiedThroughMs(ticker)
+      if (verifiedMs) targetFromMs = Math.max(targetFromMs, verifiedMs)
 
       const gaps = await detectGaps(ticker, sym.exchange || 'NSE', '1m', safeTicker, targetFromMs, nowMs)
-      
+
       if (gaps.length > 0) {
         console.log(`[Init] Enqueueing ${gaps.length} missing gap(s) for ${ticker} (${brokerId})`)
         // FIX: Remove from backfilledTickers so gap-fill is NOT blocked by persisted state.
@@ -523,18 +565,19 @@ async function initSimulator() {
         // We must clear it here so enqueueGapFill() can proceed unblocked.
         backfilledTickers.delete(ticker)
         const brokerToken = sym.rawSymbol || sym.raw_symbol || sym.instrumentId || sym.instrument_id || ticker
-        for (const gap of gaps) {
-          backfillQueue.enqueueGapFill(ticker, brokerId, brokerToken, gap.fromMs, gap.toMs)
-        }
+        backfillQueue.enqueueGapPass(ticker, brokerId, brokerToken, gaps, nowMs)
       } else {
+        backfillQueue.enqueueGapPass(ticker, brokerId, '', [], nowMs)
         const lastTsSec = await getLastBarTimestampSec(safeTicker)
         const lastDateStr = lastTsSec ? new Date(lastTsSec * 1000).toISOString().slice(0, 16) : 'N/A'
         console.log(`[Init] Ticker ${ticker} is up to date on disk (last bar: ${lastDateStr}).`)
         backfilledTickers.add(ticker)
       }
-      
-      await new Promise(r => setTimeout(r, 100))
-    }
+    })
+
+    // History depth may have been raised since the last run: fetch any older years still missing
+    backfillQueue.extendAllHistory(Number(settings?.backfillDepthDays) || 365)
+      .catch(err => console.error('[Init] History extension failed:', err))
 
     // === Startup today-bar fetch ===
     // After gap detection, always fetch today's bars for every symbol.
@@ -548,24 +591,24 @@ async function initSimulator() {
       if (istHHMM < 915) return
 
       const allSyms = stmts.getSymbols.all() as any[]
-      for (const sym of allSyms) {
-        if ((sym.brokerId || sym.broker_id) === 'orphaned') continue
+      const started = Date.now()
+      // Parallel; the broker adapter's shared rate limiter keeps requests within its limits
+      await forEachLimit(allSyms, 6, async (sym: any) => {
+        if ((sym.brokerId || sym.broker_id) === 'orphaned') return
         const brokerId = sym.brokerId || sym.broker_id
         const adapter = brokerManager.getAdapter(brokerId)
-        if (!adapter) continue
+        if (!adapter) return
         const ticker = sym.amiBrokerTicker || sym.amibroker_ticker
         try {
           await fetchTodayBars(adapter, ticker)
         } catch (e: any) {
+          // 429s already pause the shared limiter; -300 already logged in fetchTodayBars — just skip
           if (e?.code === 429 || e?.message?.includes('429') || e?.message?.includes('request limit')) {
-            console.warn(`[Init] Rate limit 429 hit during startup fetch for ${ticker}. Pausing for 10 seconds...`)
-            await new Promise(r => setTimeout(r, 10000))
+            console.warn(`[Init] Rate limit 429 hit during startup fetch for ${ticker}.`)
           }
-          // -300 already logged in fetchTodayBars, just skip
         }
-        await new Promise(r => setTimeout(r, 400)) // 400ms rate-limit (2.5 req/sec) to support 900+ symbols smoothly
-      }
-      console.log('[Init] Startup today-bar fetch complete.')
+      })
+      console.log(`[Init] Startup today-bar fetch complete in ${((Date.now() - started) / 1000).toFixed(1)}s.`)
     }, todayFetchDelay)
 
 
@@ -667,18 +710,19 @@ setInterval(() => {
                 activeTargetFromMs = Math.max(activeTargetFromMs, oldestSec * 1000)
               }
             }
-            
+            const verifiedMs = getVerifiedThroughMs(ticker)
+            if (verifiedMs) activeTargetFromMs = Math.max(activeTargetFromMs, verifiedMs)
+
             const gaps = await detectGaps(ticker, sym.exchange || 'NSE', '1m', safeTicker, activeTargetFromMs, nowMs)
-            
+
             if (gaps.length > 0) {
               console.log(`[Cron] Enqueueing ${gaps.length} missing gap(s) for ${ticker} (${brokerId})`)
               // FIX: Clear persisted backfill state so enqueueGapFill is not blocked
               backfilledTickers.delete(ticker)
-              for (const gap of gaps) {
-                backfillQueue.enqueueGapFill(ticker, brokerId, brokerToken, gap.fromMs, gap.toMs)
-              }
+              backfillQueue.enqueueGapPass(ticker, brokerId, brokerToken, gaps, nowMs)
             } else {
               backfilledTickers.add(ticker)
+              backfillQueue.enqueueGapPass(ticker, brokerId, brokerToken, [], nowMs)
             }
             
             // Yield the event loop and allow GC to breathe so UI/API remains responsive
@@ -723,6 +767,8 @@ server.listen(PORT, HOST, async () => {
   // so AmiBroker can read historical data immediately on startup
   loadBarsFromDisk()
   initSimulator()
+  // Automatic "Refresh All Today" while the market is open (settings are loaded by now)
+  autoRefresh.start(notifyAmiBrokerHistoryChanged)
 })
 
 // ===== AmiBroker IPC TCP Server =====
@@ -732,6 +778,7 @@ declare global {
 }
 
 const ipcClients = new Set<net.Socket>()
+setRuntimeProbe(() => ({ amibrokerConnections: ipcClients.size }))
 
 feedSimulator.on('live_bar_updated', (data: { ticker: string, bar: any }) => {
   const { ticker, bar } = data;
@@ -756,11 +803,29 @@ ipcClients.forEach(client => {
 // This forces AmiBroker to pull the historical data correctly via the HTTP plugin 
 // rather than pushing them as LIVE_BARs (which causes chart gaps).
 let abRefreshTimeout: NodeJS.Timeout | null = null;
+
+/**
+ * Tell the AmiBroker plugin that new historical bars were stored for `ticker`.
+ * The plugin then re-fetches everything after its last bar (fills downtime gaps),
+ * immediately for open charts, otherwise the next time the symbol is viewed.
+ */
+function notifyAmiBrokerHistoryChanged(ticker: string) {
+  const msg = `SYNC|${ticker}\n`
+  ipcClients.forEach(client => {
+    try { client.write(msg) } catch {}
+  })
+}
+
 backfillQueue.on('backfill_completed', ({ ticker }: { ticker: string }) => {
+  notifyAmiBrokerHistoryChanged(ticker)
+  // Only refresh via COM when AmiBroker is running with our plugin connected —
+  // COM activation would otherwise LAUNCH a hidden AmiBroker instance.
+  if (ipcClients.size === 0) return
   console.log(`[IPC_GAP_PUSH] Backfill completed for ${ticker}. Scheduling AmiBroker refresh...`);
-  
+
   if (abRefreshTimeout) clearTimeout(abRefreshTimeout);
   abRefreshTimeout = setTimeout(() => {
+    if (ipcClients.size === 0) return
     console.log('[IPC_GAP_PUSH] Executing debounced AmiBroker RefreshAll()...');
     const psScript = `
       try {
@@ -790,6 +855,7 @@ const ipcServer = net.createServer((socket) => {
     lastABConnectRefreshAt = nowMs
     console.log('[IPC_CONNECT] AmiBroker connected — scheduling RefreshAll() in 5 seconds to sync backfilled data...')
     setTimeout(() => {
+      if (ipcClients.size === 0) return // AmiBroker closed again; don't COM-launch it
       console.log('[IPC_CONNECT] Executing RefreshAll() for AmiBroker reconnect...')
       const psScript = `try { $ab = New-Object -ComObject Broker.Application; $ab.RefreshAll() } catch { }`
       require('child_process').exec(`powershell -Command "${psScript}"`, () => {})
@@ -923,6 +989,22 @@ ipcServer.on('error', (err: any) => {
 ipcServer.listen(7891, '127.0.0.1', () => {
   console.log('[IPC] AmiBroker TCP Server listening on 127.0.0.1:7891')
 })
+
+// ===== Parent watchdog =====
+// The desktop app runs this engine as a hidden background process and passes its PID.
+// If the app is killed (Task Manager, crash) shut down too instead of lingering invisibly.
+const parentPid = Number(process.env.DATABRIDGE_PARENT_PID) || 0
+if (parentPid > 0) {
+  setInterval(() => {
+    try {
+      process.kill(parentPid, 0)
+    } catch (err: any) {
+      if (err?.code === 'EPERM') return // process exists, just not signalable
+      console.log('[Server] DataBridge Pro app is no longer running — stopping data engine.')
+      process.exit(0)
+    }
+  }, 5000).unref()
+}
 
 
 

@@ -1,202 +1,182 @@
 /**
  * BackfillStatusBanner
- * Redesigned: Shows overall backfill progress across all symbols.
- * Format: "Backfilling 127 / 400 symbols · 32% · RELIANCE → 450 candles · +273 in queue"
+ * History-download progress as a notification card: slides in from the top-right when a
+ * download batch starts, shows overall progress, turns green when done and slides away on
+ * its own. The ✕ hides it until the next batch. Rendered at the top of the toast stack.
  */
+import { useEffect, useRef, useState } from 'react'
+import { DownloadCloud, CheckCircle2, AlertTriangle, X } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
+
+const DONE_LINGER_MS = 6000
+const ANIM_MS = 450
 
 export function BackfillStatusBanner() {
   const backfillStatuses = useAppStore(s => s.backfillStatuses)
+  const clearFinished = useAppStore(s => s.clearFinishedBackfills)
 
   const allItems = Object.values(backfillStatuses) as any[]
-
-  const completed  = allItems.filter(s => s.status === 'completed').length
-  const failed     = allItems.filter(s => s.status === 'failed').length
-  const running    = allItems.filter(s => s.status === 'running')
-  const pending    = allItems.filter(s => s.status === 'pending')
-  const active     = [...running, ...pending]
-  const total      = allItems.length
-
-  if (total === 0) return null
-
+  const total = allItems.length
+  const completed = allItems.filter(s => s.status === 'completed').length
+  const failed = allItems.filter(s => s.status === 'failed').length
+  const running = allItems.filter(s => s.status === 'running')
+  const pending = allItems.filter(s => s.status === 'pending')
+  const activeCount = running.length + pending.length
+  const allDone = total > 0 && activeCount === 0
   const primary = running[0] || pending[0]
   const doneCount = completed + failed
-
-  // Overall progress: weighted average of each symbol's own progress (0–100)
-  // Completed = 100, failed = 0 (penalize), running/pending = their chunk %
-  const overallPct = total > 0
-    ? Math.round(allItems.reduce((sum, s) => {
-        if (s.status === 'completed') return sum + 100
-        if (s.status === 'failed')    return sum + 0
-        return sum + Math.min(99, s.progress || 0)
-      }, 0) / total)
-    : 0
   const totalCandles = allItems.reduce((sum, s) => sum + (s.candlesFetched || 0), 0)
-  const queueSize   = active.length
+  const overallPct = total > 0
+    ? Math.round(allItems.reduce((sum, s) => sum + (s.status === 'completed' ? 100 : s.status === 'failed' ? 0 : Math.min(99, s.progress || 0)), 0) / total)
+    : 0
 
-  // If everything is done
-  const allDone = queueSize === 0 && total > 0
+  // mounted: in the DOM; shown: slid in. Split so the card can animate out before unmounting.
+  const [mounted, setMounted] = useState(false)
+  const [shown, setShown] = useState(false)
+  const [dismissed, setDismissed] = useState(false)
+  const wasActive = useRef(false)
+
+  // A new batch starting re-opens a card the user closed
+  useEffect(() => {
+    if (activeCount > 0 && !wasActive.current) setDismissed(false)
+    wasActive.current = activeCount > 0
+  }, [activeCount])
+
+  const wantVisible = total > 0 && !dismissed
+
+  useEffect(() => {
+    if (wantVisible) {
+      setMounted(true)
+      const raf = requestAnimationFrame(() => requestAnimationFrame(() => setShown(true)))
+      return () => cancelAnimationFrame(raf)
+    }
+    setShown(false)
+    const t = setTimeout(() => setMounted(false), ANIM_MS)
+    return () => clearTimeout(t)
+  }, [wantVisible])
+
+  // Finished: linger, slide out, then forget the batch so the next one starts from zero
+  useEffect(() => {
+    if (!allDone || !mounted) return
+    const t = setTimeout(() => {
+      setShown(false)
+      setTimeout(() => { clearFinished(); setMounted(false) }, ANIM_MS)
+    }, DONE_LINGER_MS)
+    return () => clearTimeout(t)
+  }, [allDone, mounted, clearFinished])
+
+  const close = () => {
+    setShown(false)
+    setTimeout(() => {
+      setDismissed(true)
+      if (allDone) clearFinished()
+    }, ANIM_MS)
+  }
+
+  if (!mounted) return null
+
+  const hasFailures = allDone && failed > 0
+  const accent = allDone ? (hasFailures ? '#f59e0b' : '#22c55e') : '#00d4aa'
+  const Icon = allDone ? (hasFailures ? AlertTriangle : CheckCircle2) : DownloadCloud
 
   return (
     <div
       id="backfill-status-banner"
+      role="status"
       style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 9999,
-        background: 'linear-gradient(90deg, rgba(6,15,35,0.98) 0%, rgba(8,22,50,0.98) 100%)',
-        borderTop: '1.5px solid rgba(0,212,170,0.25)',
-        backdropFilter: 'blur(12px)',
-        boxShadow: '0 -4px 20px rgba(0,0,0,0.6)',
+        width: 360,
+        position: 'relative',
+        overflow: 'hidden',
+        borderRadius: 14,
+        background: 'linear-gradient(160deg, rgba(10,24,46,0.97) 0%, rgba(6,14,30,0.97) 100%)',
+        border: `1px solid ${allDone ? `${accent}55` : 'rgba(0,212,170,0.22)'}`,
+        boxShadow: `0 12px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02), 0 0 24px ${accent}14`,
+        backdropFilter: 'blur(14px)',
+        transform: shown ? 'translateX(0)' : 'translateX(calc(100% + 2rem))',
+        opacity: shown ? 1 : 0,
+        transition: `transform ${ANIM_MS}ms cubic-bezier(0.22, 1.2, 0.36, 1), opacity ${ANIM_MS}ms ease, border-color 0.4s ease`,
       }}
     >
-      {/* Main bar */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 14,
-        padding: '7px 18px',
-        fontSize: '0.72rem',
-        minHeight: 36,
-      }}>
+      {/* Accent strip */}
+      <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 3, background: accent, transition: 'background 0.4s ease' }} />
 
-        {/* Pulse dot */}
-        <span style={{
-          width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
-          background: allDone ? '#22c55e' : '#00d4aa',
-          boxShadow: `0 0 8px ${allDone ? '#22c55e' : '#00d4aa'}`,
-          animation: !allDone ? 'bfpulse 1.2s ease-in-out infinite' : 'none',
-          display: 'inline-block',
-        }} />
-
-        {/* Label */}
-        <span style={{ color: '#00d4aa', fontWeight: 700, flexShrink: 0, letterSpacing: '0.03em' }}>
-          BACKFILL
-        </span>
-
-        {/* X / Y symbols */}
-        <span style={{ color: '#e2e8f0', fontWeight: 600, flexShrink: 0, fontSize: '0.78rem' }}>
-          <span style={{ color: '#38bdf8', fontWeight: 800 }}>{doneCount}</span>
-          <span style={{ color: '#475569' }}> / </span>
-          <span style={{ color: '#cbd5e1' }}>{total}</span>
-          <span style={{ color: '#64748b', fontWeight: 400 }}> symbols</span>
-        </span>
-
-        {/* Separator */}
-        <span style={{ color: '#1e3a5f', fontSize: '1rem' }}>|</span>
-
-        {/* Big progress bar */}
-        <div style={{
-          flex: 1,
-          height: 6,
-          background: 'rgba(255,255,255,0.06)',
-          borderRadius: 4,
-          overflow: 'hidden',
-          position: 'relative',
-          maxWidth: 280,
-        }}>
+      <div style={{ padding: '0.875rem 0.875rem 0.875rem 1.1rem' }}>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
           <div style={{
-            height: '100%',
-            width: `${overallPct}%`,
-            background: allDone
-              ? 'linear-gradient(90deg, #22c55e, #16a34a)'
-              : 'linear-gradient(90deg, #00d4aa, #0ea5e9)',
-            borderRadius: 4,
-            transition: 'width 0.5s ease',
+            width: 32, height: 32, borderRadius: 9, flexShrink: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: `${accent}1f`, border: `1px solid ${accent}40`,
+          }}>
+            <Icon size={17} color={accent} style={!allDone ? { animation: 'bf-float 1.6s ease-in-out infinite' } : undefined} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: '0.86rem', fontWeight: 650, color: '#e2eaf4' }}>
+              {allDone ? (hasFailures ? 'History download finished' : 'History up to date') : 'Downloading history'}
+            </div>
+            <div style={{ fontSize: '0.72rem', color: '#7c8fa6', marginTop: 1 }}>
+              <b style={{ color: '#cbd5e1', fontWeight: 650 }}>{doneCount}</b> of {total} symbols
+              {' · '}{totalCandles.toLocaleString()} candles
+            </div>
+          </div>
+          <span style={{ fontSize: '0.95rem', fontWeight: 800, color: accent, fontVariantNumeric: 'tabular-nums' }}>{overallPct}%</span>
+          <button
+            onClick={close}
+            aria-label="Dismiss"
+            className="bf-close"
+            style={{ background: 'none', border: 'none', color: '#6b8099', cursor: 'pointer', padding: 4, borderRadius: 6, display: 'flex', marginLeft: 2 }}
+          >
+            <X size={14} />
+          </button>
+        </div>
+
+        {/* Progress */}
+        <div style={{ marginTop: '0.75rem', height: 6, borderRadius: 999, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+          <div style={{
+            height: '100%', width: `${overallPct}%`, borderRadius: 999,
+            background: allDone ? accent : 'linear-gradient(90deg, #00d4aa, #0ea5e9)',
+            backgroundSize: '200% 100%',
+            animation: !allDone ? 'bf-shimmer 1.8s linear infinite' : undefined,
+            transition: 'width 0.5s ease, background 0.4s ease',
           }} />
         </div>
 
-        {/* Percentage */}
-        <span style={{
-          color: allDone ? '#22c55e' : '#00d4aa',
-          fontWeight: 800,
-          fontSize: '0.82rem',
-          minWidth: 36,
-          flexShrink: 0,
-        }}>
-          {overallPct}%
-        </span>
-
-        {/* Separator */}
-        {primary && <span style={{ color: '#1e3a5f', fontSize: '1rem' }}>|</span>}
-
-        {/* Current ticker being processed */}
-        {primary && (
-          <span style={{ color: '#94a3b8', flexShrink: 0, fontSize: '0.7rem' }}>
-            <span style={{ color: '#64748b' }}>Now: </span>
-            <span style={{ color: '#f8fafc', fontWeight: 700 }}>{primary.ticker}</span>
-            <span style={{ color: '#475569' }}> ({Math.min(100, primary.progress || 0)}%)</span>
-          </span>
-        )}
-
-        {/* Separator */}
-        <span style={{ color: '#1e3a5f', fontSize: '1rem' }}>|</span>
-
-        {/* Total candles */}
-        <span style={{ color: '#64748b', flexShrink: 0, fontSize: '0.7rem' }}>
-          <span style={{ color: '#38bdf8', fontWeight: 700 }}>{totalCandles.toLocaleString()}</span>
-          <span style={{ color: '#475569' }}> candles</span>
-        </span>
-
-        {/* Queue badge */}
-        {queueSize > 1 && (
-          <span style={{
-            color: '#94a3b8',
-            background: 'rgba(56,189,248,0.08)',
-            padding: '2px 10px',
-            borderRadius: 10,
-            border: '1px solid rgba(56,189,248,0.15)',
-            flexShrink: 0,
-            fontSize: '0.7rem',
-          }}>
-            +{queueSize - 1} queued
-          </span>
-        )}
-
-        {/* Failed badge */}
-        {failed > 0 && (
-          <span style={{
-            color: '#f87171',
-            background: 'rgba(248,113,113,0.08)',
-            padding: '2px 10px',
-            borderRadius: 10,
-            border: '1px solid rgba(248,113,113,0.15)',
-            flexShrink: 0,
-            fontSize: '0.7rem',
-          }}>
-            {failed} failed
-          </span>
-        )}
-
-        {/* Done state */}
-        {allDone && (
-          <span style={{ color: '#22c55e', marginLeft: 'auto', flexShrink: 0, fontWeight: 600 }}>
-            ✓ All {total} symbols up-to-date
-          </span>
-        )}
+        {/* Details */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.625rem', fontSize: '0.7rem', color: '#7c8fa6', minHeight: 20 }}>
+          {allDone ? (
+            <span>{hasFailures ? 'Some symbols could not be downloaded — see Logs.' : `All ${total} symbols are up to date in AmiBroker.`}</span>
+          ) : primary ? (
+            <span style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              Now <b style={{ color: '#f1f5f9', fontWeight: 650 }}>{primary.ticker}</b>
+              {running.length > 1 && <span> +{running.length - 1} more</span>}
+            </span>
+          ) : null}
+          <span style={{ flex: 1 }} />
+          {!allDone && pending.length > 0 && (
+            <span style={{ color: '#94a3b8', background: 'rgba(56,189,248,0.08)', border: '1px solid rgba(56,189,248,0.18)', borderRadius: 999, padding: '1px 8px' }}>
+              {pending.length} queued
+            </span>
+          )}
+          {failed > 0 && (
+            <span style={{ color: '#f87171', background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.2)', borderRadius: 999, padding: '1px 8px' }}>
+              {failed} failed
+            </span>
+          )}
+        </div>
       </div>
 
-      {/* Thin animated progress line at very bottom */}
-      <div style={{ height: 2, background: 'rgba(255,255,255,0.04)', position: 'relative' }}>
-        <div style={{
-          position: 'absolute',
-          left: 0, top: 0, height: '100%',
-          width: `${overallPct}%`,
-          background: allDone
-            ? 'linear-gradient(90deg, #22c55e, #16a34a)'
-            : 'linear-gradient(90deg, #00d4aa, #0ea5e9, #8b5cf6)',
-          transition: 'width 0.5s ease',
-          boxShadow: '0 0 6px rgba(0,212,170,0.6)',
-        }} />
-      </div>
+      {/* Auto-dismiss countdown once finished */}
+      {allDone && shown && (
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 2, background: 'rgba(255,255,255,0.04)' }}>
+          <div style={{ height: '100%', background: accent, animation: `toast-shrink ${DONE_LINGER_MS}ms linear forwards` }} />
+        </div>
+      )}
 
       <style>{`
-        @keyframes bfpulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.3; transform: scale(0.85); }
-        }
+        @keyframes bf-shimmer { from { background-position: 200% 0; } to { background-position: 0 0; } }
+        @keyframes bf-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+        @keyframes toast-shrink { from { width: 100%; } to { width: 0%; } }
+        .bf-close:hover { background: rgba(255,255,255,0.06) !important; color: #e2eaf4 !important; }
       `}</style>
     </div>
   )

@@ -6,11 +6,12 @@ import { BrokerConnectionPage } from './pages/BrokerConnection'
 import { SymbolSetupPage } from './pages/SymbolSetup'
 import { SettingsPage } from './pages/Settings'
 import { LogsPage } from './pages/Logs'
+import { ConsolePage } from './pages/Console'
+import { AssistantPage } from './pages/Assistant'
 import { AboutPage } from './pages/About'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { ToastContainer } from './components/Toast'
 import { MasterDownloadOverlay } from './components/MasterDownloadOverlay'
-import { BackfillStatusBanner } from './components/BackfillStatusBanner'
 import { useApiSync } from './hooks/useApiSync'
 import { Wifi, WifiOff, Loader } from 'lucide-react'
 import { useEffect } from 'react'
@@ -21,6 +22,8 @@ const PAGE_TITLES: Record<string, string> = {
   '/symbol-setup': 'Symbol Setup',
   '/settings': 'Settings',
   '/logs': 'Logs & Diagnostics',
+  '/console': 'Live Console',
+  '/assistant': 'AI Assistant',
   '/about': 'About',
 }
 
@@ -49,8 +52,6 @@ function MainLayout() {
   const { apiState } = useApiSync()
   const location = useLocation()
   const title = PAGE_TITLES[location.pathname] || 'DataBridge Pro'
-  const backfillStatuses = useAppStore(s => s.backfillStatuses)
-  const hasBanner = Object.keys(backfillStatuses).length > 0
 
   // Update Zustand activePage for backward compatibility if needed
   const { setActivePage } = useAppStore()
@@ -124,7 +125,6 @@ function MainLayout() {
             flex: 1, width: '100%', position: 'relative',
             overflowY: 'auto', overflowX: 'hidden',
             display: 'flex', flexDirection: 'column',
-            paddingBottom: hasBanner ? '44px' : 0,
           }}
         >
           <ErrorBoundary key={location.pathname} fallbackTitle={`Error in ${title}`}>
@@ -135,6 +135,8 @@ function MainLayout() {
                 <Route path="/symbol-setup" element={<SymbolSetupPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/logs" element={<LogsPage />} />
+                <Route path="/console" element={<ConsolePage />} />
+                <Route path="/assistant" element={<AssistantPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="*" element={<Navigate to="/feed-status" replace />} />
               </Routes>
@@ -145,7 +147,6 @@ function MainLayout() {
 
       <MasterDownloadOverlay />
       <ToastContainer />
-      <BackfillStatusBanner />
       <style>{`
         @keyframes spin {
           from { transform: rotate(0deg); }

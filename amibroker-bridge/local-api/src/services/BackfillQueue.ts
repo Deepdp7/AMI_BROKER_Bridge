@@ -21,11 +21,13 @@ import {
   deduplicateAndCompactDiskBars,
   upsertBarsToHistory,
   validateBar,
+  repairBar,
   getAllSettings,
   getOldestBarTimestampSec
 } from '../db'
 import { brokerManager } from './BrokerManager'
 import { backfilledTickers } from '../shared/backfillState'
+import { getVerifiedThroughMs, setVerifiedThroughMs, getHistoryFloorMs, setHistoryFloorMs } from '../shared/coverageState'
 import { detectGaps, formatGapSummary } from './GapDetector'
 import type { BackfillStatus, BackfillJobStatus } from '../types'
 import path from 'path'
@@ -41,6 +43,21 @@ export interface BackfillTask {
   depthDays: number
   isGapFill: boolean        // True if this is a gap-fill task (not initial/incremental)
   gapFrom?: Date            // For gap fills: the exact start of the gap
+  pass?: GapPass            // Gap-detection pass this task belongs to
+  skippedChunk?: boolean    // A chunk was given up after max retries (range not fully filled)
+  floorMs?: number          // On full success, history is known complete back to here
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000
+/** Deepest history the app will request (10 years). Fyers' 1-minute data starts around 2017-18. */
+export const MAX_HISTORY_DAYS = 3650
+
+/** All gaps found by one detection scan of a ticker; when every one fills, the scan range is verified. */
+interface GapPass {
+  ticker: string
+  scanToMs: number
+  remaining: number
+  ok: boolean
 }
 
 // ===== Exported status store (used by /api/backfill routes) =====
@@ -48,7 +65,10 @@ export const backfillStatusMap = new Map<string, BackfillStatus>()
 
 class BackfillQueueService extends EventEmitter {
   private queue: BackfillTask[] = []
-  private isProcessing = false
+  private readonly CONCURRENCY = 6   // parallel chunk downloads; the adapter's rate limiter keeps them within broker limits
+  private workers = 0
+  private busyTickers = new Set<string>()
+  private kickTimer: NodeJS.Timeout | null = null
   private activeTickers = new Set<string>()
   private consecutiveAuthErrors = 0
   private tokenPausedUntil = 0
@@ -84,6 +104,9 @@ class BackfillQueueService extends EventEmitter {
     
     let safeBrokerToken = typeof brokerToken === 'string' ? brokerToken : String(brokerToken)
     if (this.activeTickers.has(ticker) || backfilledTickers.has(ticker)) return
+    // History already downloaded and verified once — newer gaps are handled by the
+    // startup/daily gap passes. (Manual re-download and symbol delete clear the watermark.)
+    if (getVerifiedThroughMs(ticker)) return
 
     const adapter = brokerManager.getAdapter(brokerId)
     if (!adapter) return
@@ -101,8 +124,7 @@ class BackfillQueueService extends EventEmitter {
         if (!resolvedToken) resolvedToken = ticker;
         const targetTo = new Date()
         const currentFrom = new Date(Date.now() - depthDays * 24 * 60 * 60 * 1000)
-        const settings = getAllSettings() as any
-        const totalChunks = Math.ceil(depthDays / (Number(settings?.historyChunkDays) || 30))
+        const totalChunks = Math.ceil(depthDays / this.chunkDaysFor(adapter))
 
         this.queue.push({
           ticker,
@@ -113,6 +135,7 @@ class BackfillQueueService extends EventEmitter {
           retryCount: 0,
           depthDays,
           isGapFill: false,
+          floorMs: currentFrom.getTime(),
         })
 
         backfillStatusMap.set(ticker, {
@@ -143,14 +166,14 @@ class BackfillQueueService extends EventEmitter {
    * Enqueue a targeted gap-fill for a specific date range.
    * Used by GapDetector results.
    */
-  public enqueueGapFill(ticker: string, brokerId: string, brokerToken: string | number = '', fromMs: number, toMs: number, forceEvenDuringMarket = false) {
+  public enqueueGapFill(ticker: string, brokerId: string, brokerToken: string | number = '', fromMs: number, toMs: number, forceEvenDuringMarket = false, pass?: GapPass, floorMs?: number) {
     const gapKey = `${ticker}:gap:${fromMs}`
-    if (this.activeTickers.has(gapKey)) return
+    if (this.activeTickers.has(gapKey)) { this.settlePass(pass, false); return }
     
     let safeBrokerToken = typeof brokerToken === 'string' ? brokerToken : String(brokerToken)
 
     const adapter = brokerManager.getAdapter(brokerId)
-    if (!adapter) return
+    if (!adapter) { this.settlePass(pass, false); return }
 
     this.activeTickers.add(gapKey)
     this.activeTickers.add(ticker)
@@ -186,6 +209,7 @@ class BackfillQueueService extends EventEmitter {
               // Very recent gap — live ticks will cover it, skip
               this.activeTickers.delete(gapKey)
               this.activeTickers.delete(ticker)
+              this.settlePass(pass, true)
               return
             }
             // Past intra-day gap (app was closed) — fill it even during live market
@@ -208,17 +232,19 @@ class BackfillQueueService extends EventEmitter {
           depthDays,
           isGapFill: true,
           gapFrom,
+          pass,
+          floorMs,
         })
 
         const existingStatus = backfillStatusMap.get(ticker)
-        if (!existingStatus || existingStatus.status !== 'completed') {
+        if (!existingStatus || existingStatus.status !== 'completed' || floorMs !== undefined) {
           backfillStatusMap.set(ticker, {
             ticker,
             brokerId,
             status: 'pending',
             progress: 0,
-            candlesFetched: existingStatus?.candlesFetched || 0,
-            totalChunks: 1, // Gap fills are usually small
+            candlesFetched: floorMs !== undefined ? 0 : existingStatus?.candlesFetched || 0,
+            totalChunks: Math.max(1, Math.ceil(depthDays / this.chunkDaysFor(adapter))),
             completedChunks: 0,
             fromDate: gapFrom.toISOString().split('T')[0],
             toDate: targetTo.toISOString().split('T')[0],
@@ -233,8 +259,72 @@ class BackfillQueueService extends EventEmitter {
       } catch (err) {
         console.error(`[BackfillQueue] Failed to enqueue gap-fill for ${ticker}:`, err)
         this.activeTickers.delete(gapKey)
+        this.settlePass(pass, false)
       }
     })
+  }
+
+  /**
+   * Make history reach back `depthDays`: when the depth setting grows (e.g. 1 → 5 years),
+   * download only the older range that is missing, below the oldest stored bar.
+   * Returns true if a download was queued.
+   */
+  public async extendHistory(ticker: string, brokerId: string, brokerToken: string | number, depthDays: number): Promise<boolean> {
+    const desiredFromMs = Date.now() - depthDays * DAY_MS
+    const floor = getHistoryFloorMs(ticker)
+    if (floor !== undefined && floor <= desiredFromMs + DAY_MS) return false   // already asked the broker
+    if (!brokerManager.getAdapter(brokerId)) return false
+    const oldestSec = await getOldestBarTimestampSec(ticker)
+    if (!oldestSec) return false   // nothing stored yet — the normal full backfill covers the whole depth
+    const oldestMs = oldestSec * 1000
+    if (oldestMs - desiredFromMs < 3 * DAY_MS) {
+      setHistoryFloorMs(ticker, desiredFromMs)
+      return false
+    }
+    console.log(`[Backfill] ${ticker} : Extending history back to ${new Date(desiredFromMs).toISOString().slice(0, 10)} (${Math.round((oldestMs - desiredFromMs) / DAY_MS)} days)`)
+    this.enqueueGapFill(ticker, brokerId, brokerToken, desiredFromMs, oldestMs, false, undefined, desiredFromMs)
+    return true
+  }
+
+  /** extendHistory for every tracked symbol (after the depth setting grows, and at startup). */
+  public async extendAllHistory(depthDays: number): Promise<number> {
+    let queued = 0
+    for (const sym of stmts.getSymbols.all() as any[]) {
+      const brokerId = sym.brokerId || sym.broker_id
+      const ticker = sym.amiBrokerTicker || sym.amibroker_ticker
+      if (!brokerId || brokerId === 'orphaned' || !ticker) continue
+      // Futures contracts only exist for ~3 months; their depth is capped elsewhere
+      if (/\d{2}(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)FUT$/i.test(ticker)) continue
+      const token = sym.rawSymbol || sym.raw_symbol || sym.instrumentId || sym.instrument_id || ticker
+      if (await this.extendHistory(ticker, brokerId, token, depthDays)) queued++
+    }
+    if (queued) console.log(`[Backfill] Downloading older history for ${queued} symbol(s) (depth ${depthDays} days)`)
+    return queued
+  }
+
+  /**
+   * Enqueue every gap found by one detection scan of `ticker` that ended at `scanToMs`.
+   * When all of them complete without errors (or there were none), the ticker's coverage
+   * watermark advances to `scanToMs` so the next scan starts there.
+   */
+  public enqueueGapPass(ticker: string, brokerId: string, brokerToken: string | number, gaps: { fromMs: number, toMs: number }[], scanToMs: number) {
+    if (gaps.length === 0) {
+      setVerifiedThroughMs(ticker, scanToMs)
+      return
+    }
+    const pass: GapPass = { ticker, scanToMs, remaining: gaps.length, ok: true }
+    for (const gap of gaps) {
+      this.enqueueGapFill(ticker, brokerId, brokerToken, gap.fromMs, gap.toMs, false, pass)
+    }
+  }
+
+  private settlePass(pass: GapPass | undefined, ok: boolean) {
+    if (!pass) return
+    if (!ok) pass.ok = false
+    pass.remaining--
+    if (pass.remaining === 0 && pass.ok) {
+      setVerifiedThroughMs(pass.ticker, pass.scanToMs)
+    }
   }
 
   public enqueueBatch(items: { ticker: string; brokerId: string; brokerToken?: string; depthDays?: number }[]) {
@@ -259,9 +349,7 @@ class BackfillQueueService extends EventEmitter {
     this.tokenPausedUntil = 0
     this.tokenPermanentlyPaused = false
     console.log('[BackfillQueue] Auth resumed. Restarting queue...')
-    if (!this.isProcessing && this.queue.length > 0) {
-      this.processNext()
-    }
+    this.processNext()
   }
 
   /**
@@ -282,8 +370,9 @@ class BackfillQueueService extends EventEmitter {
     return updated
   }
 
-  private async processNext() {
-    if (this.isProcessing || this.queue.length === 0) return
+  /** Starts workers (up to CONCURRENCY) for queued tasks. Safe to call at any time. */
+  private processNext() {
+    if (this.queue.length === 0) return
 
     // Permanently paused — don't retry until manual re-auth (resumeAfterAuth called)
     if (this.tokenPermanentlyPaused) {
@@ -295,36 +384,73 @@ class BackfillQueueService extends EventEmitter {
     if (Date.now() < this.tokenPausedUntil) {
       const waitMs = this.tokenPausedUntil - Date.now()
       console.warn(`[BackfillQueue] Token paused. Waiting ${Math.round(waitMs/1000)}s before resuming...`)
-      setTimeout(() => {
-        if (!this.isProcessing) this.processNext()
-      }, waitMs + 500)
+      this.kickLater(waitMs + 500)
       return
     }
 
-    this.isProcessing = true
+    while (this.workers < this.CONCURRENCY && this.nextRunnable()) {
+      this.workers++
+      this.runWorker()
+        .catch(err => { console.error(`[BackfillQueue] FATAL error in queue execution:`, err); return 'idle' as const })
+        .then(result => {
+          this.workers--
+          if (this.queue.length === 0) return
+          if (result === 'stalled') this.kickLater(5000) // broker not connected yet
+          else if (result === 'paused') this.kickLater(Math.max(0, this.tokenPausedUntil - Date.now()) + 500)
+          else this.kickLater(10)
+        })
+    }
+  }
 
-    try {
-      const task = this.queue[0]
+  private kickLater(ms: number) {
+    if (this.kickTimer) return
+    this.kickTimer = setTimeout(() => { this.kickTimer = null; this.processNext() }, ms)
+  }
+
+  /** First queued task whose ticker isn't already being fetched (one chunk per ticker at a time). */
+  private nextRunnable(): BackfillTask | undefined {
+    return this.queue.find(t => !this.busyTickers.has(t.ticker))
+  }
+
+  private removeTask(task: BackfillTask) {
+    const i = this.queue.indexOf(task)
+    if (i >= 0) this.queue.splice(i, 1)
+  }
+
+  /** Chunk size: the broker's own per-request cap when it declares one, else the setting. */
+  private chunkDaysFor(adapter: any): number {
+    const settings = getAllSettings() as any
+    return Number(adapter?.maxIntradayHistoryDays) || Number(settings?.historyChunkDays) || 30
+  }
+
+  private async runWorker(): Promise<'idle' | 'stalled' | 'paused'> {
+    for (;;) {
+      if (this.tokenPermanentlyPaused || Date.now() < this.tokenPausedUntil) return 'paused'
+      const task = this.nextRunnable()
+      if (!task) return 'idle'
+      this.busyTickers.add(task.ticker)
+      try {
+        if (!(await this.processChunk(task))) return 'stalled'
+      } finally {
+        this.busyTickers.delete(task.ticker)
+      }
+    }
+  }
+
+  /** Fetches and stores one chunk of `task`. Returns false if its broker isn't connected. */
+  private async processChunk(task: BackfillTask): Promise<boolean> {
+    {
       const adapter = brokerManager.getAdapter(task.brokerId)
 
       if (!adapter) {
-        // BUG #7 FIX: Remove from activeTickers so it can be re-enqueued later
-        // Broker not connected yet — push task to back and retry after delay
-        const failedTask = this.queue.shift()
-        if (failedTask) {
-          // Only re-queue if not already at the back (avoid infinite spin when no adapter ever connects)
-          this.queue.push(failedTask)
-        }
-        this.isProcessing = false
-        // Remove from activeTickers temporarily so external callers can re-trigger
-        // The task is still in the queue so it will process once adapter connects
-        setTimeout(() => this.processNext(), 5000) // longer wait for broker to come up
-        return
+        // Broker not connected yet — move the task to the back; it runs once the adapter connects
+        this.removeTask(task)
+        this.queue.push(task)
+        return false
       }
 
       const settings = getAllSettings() as any
-      const chunkDays = Number(settings?.historyChunkDays) || 30
-      const delayMs   = Number(settings?.maxBackfillRpsDelayMs) || 150
+      const chunkDays = this.chunkDaysFor(adapter)
       const maxRetries = Number(settings?.maxBackfillRetries) || 3
 
       try {
@@ -342,7 +468,7 @@ class BackfillQueueService extends EventEmitter {
       const toStr   = currentTo.toISOString().split('T')[0]
       console.log(`[BackfillQueue] Fetching ${task.ticker} (${task.brokerToken}) [${this.queue.length} in queue] from ${fromStr} to ${toStr}...`)
 
-      const bars = await adapter.getHistoricalBars(task.brokerToken, '1m', task.currentFrom, currentTo)
+      const bars = ((await adapter.getHistoricalBars(task.brokerToken, '1m', task.currentFrom, currentTo)) || []).map(repairBar)
 
       if (bars && bars.length > 0) {
         const safeTicker = task.ticker.replace(/[^a-zA-Z0-9_-]/g, '_')
@@ -366,7 +492,7 @@ class BackfillQueueService extends EventEmitter {
 
         if (csvLines.length > 0) {
           // Upsert to postgres (async - must be awaited!)
-          await upsertBarsToHistory(safeTicker, csvLines)
+          await upsertBarsToHistory(task.ticker, csvLines)
 
           // Push bars to AmiBroker via IPC for ALL backfill tasks:
           // - gap-fill tasks: push immediately so chart updates live
@@ -421,7 +547,8 @@ class BackfillQueueService extends EventEmitter {
         const finalStatus = backfillStatusMap.get(task.ticker)
         const totalFetched = finalStatus ? finalStatus.candlesFetched : 0
 
-        if (totalFetched === 0) {
+        // A gap / older-history range with no bars just means the broker has nothing there
+        if (totalFetched === 0 && !task.isGapFill) {
           console.error(`[BackfillQueue] ${depthLabel} for ${task.ticker} FAILED/SKIPPED: Invalid symbol or no data returned (0 bars).`)
           
           if (finalStatus) {
@@ -463,7 +590,7 @@ class BackfillQueueService extends EventEmitter {
             const listingMs = expiryDate.getTime() - 95 * 24 * 60 * 60 * 1000
             originalFromMs = Math.max(originalFromMs, listingMs)
           } else {
-            const oldestSec = await getOldestBarTimestampSec(safeTicker)
+            const oldestSec = await getOldestBarTimestampSec(task.ticker)
             if (oldestSec > 0) {
               originalFromMs = Math.max(originalFromMs, oldestSec * 1000)
             }
@@ -472,10 +599,8 @@ class BackfillQueueService extends EventEmitter {
           const gaps = await detectGaps(task.ticker, exchange, '1m', safeTicker, originalFromMs, Date.now())
             if (gaps.length > 0) {
               console.log(formatGapSummary(task.ticker, gaps))
-              for (const gap of gaps) {
-                this.enqueueGapFill(task.ticker, task.brokerId, task.brokerToken, gap.fromMs, gap.toMs)
-              }
             }
+            this.enqueueGapPass(task.ticker, task.brokerId, task.brokerToken, gaps, Date.now())
           }
 
           // Mark complete
@@ -490,7 +615,10 @@ class BackfillQueueService extends EventEmitter {
           }
         }
 
-        this.queue.shift()
+        if (task.floorMs !== undefined && !task.skippedChunk) setHistoryFloorMs(task.ticker, task.floorMs)
+        this.removeTask(task)
+        // 0 bars for a gap means the broker has nothing there — still verified, unless a chunk was skipped
+        this.settlePass(task.pass, !task.skippedChunk)
         if (task.isGapFill && task.gapFrom) {
           this.activeTickers.delete(`${task.ticker}:gap:${task.gapFrom.getTime()}`)
         }
@@ -499,8 +627,7 @@ class BackfillQueueService extends EventEmitter {
         }
       }
 
-      // Rate-limit pacing
-      await new Promise(r => setTimeout(r, delayMs))
+      // Pacing is done by the adapter's shared rate limiter
 
     } catch (err: any) {
       // ===== Auth Error (-16): Token invalid/expired =====
@@ -515,15 +642,13 @@ class BackfillQueueService extends EventEmitter {
         if (this.consecutiveAuthErrors >= this.MAX_ABSOLUTE_AUTH_ERRORS) {
           this.tokenPermanentlyPaused = true
           console.error(`[BackfillQueue] Token permanently invalid (${this.consecutiveAuthErrors} auth errors). Queue stopped. Re-authenticate to resume.`)
-          this.isProcessing = false
-          return
+          return true
         }
 
         if (this.consecutiveAuthErrors >= this.MAX_CONSECUTIVE_AUTH_ERRORS) {
           this.tokenPausedUntil = Date.now() + this.TOKEN_PAUSE_MS
           console.error(`[BackfillQueue] Token appears invalid (${this.consecutiveAuthErrors} consecutive auth errors). Pausing queue for 60s. Re-authenticate to resume.`)
-          this.isProcessing = false
-          return // Stop processing — don't burn retries on dead token
+          return true // workers see the pause and stop — don't burn retries on dead token
         }
 
         // Brief pause before next attempt
@@ -538,7 +663,7 @@ class BackfillQueueService extends EventEmitter {
 
         this.consecutiveAuthErrors = 0 // Real rate limit or timeout — reset auth error counter
         task.retryCount++
-        const backoffMs = Math.min(2000 * Math.pow(2, task.retryCount - 1), 30000)
+        const backoffMs = Math.min(3000 * Math.pow(2, task.retryCount - 1), 60000)
         console.warn(`[BackfillQueue] Rate limit (429) for ${task.ticker}. Backoff ${backoffMs}ms (Retry #${task.retryCount})`)
 
         const existing = backfillStatusMap.get(task.ticker)
@@ -546,10 +671,12 @@ class BackfillQueueService extends EventEmitter {
           backfillStatusMap.set(task.ticker, { ...existing, retryCount: task.retryCount })
         }
 
-        if (task.retryCount > maxRetries) {
-          console.error(`[BackfillQueue] Max retries (${maxRetries}) exceeded for ${task.ticker} chunk. Skipping.`)
+        // Rate limits are temporary: wait them out (up to ~5 min) instead of skipping data
+        if (task.retryCount > Math.max(maxRetries, 8)) {
+          console.error(`[BackfillQueue] Rate-limit retries exhausted for ${task.ticker} chunk. Skipping.`)
           task.currentFrom = new Date(task.currentFrom.getTime() + chunkDays * 24 * 60 * 60 * 1000)
           task.retryCount = 0
+          task.skippedChunk = true
           if (task.currentFrom >= task.targetTo) {
             this._failTask(task, 'Max retries exceeded (rate limit)')
           }
@@ -575,6 +702,7 @@ class BackfillQueueService extends EventEmitter {
           console.error(`[BackfillQueue] Max retries (${maxRetries}) exceeded for general error. Skipping chunk for ${task.ticker}.`)
           task.currentFrom = new Date(task.currentFrom.getTime() + chunkDays * 24 * 60 * 60 * 1000)
           task.retryCount = 0
+          task.skippedChunk = true
 
           if (task.currentFrom >= task.targetTo) {
             this._failTask(task, err?.message || 'Unknown error')
@@ -584,15 +712,8 @@ class BackfillQueueService extends EventEmitter {
         await new Promise(r => setTimeout(r, 500))
       }
       }
-    } catch (fatalErr) {
-      console.error(`[BackfillQueue] FATAL error in queue execution:`, fatalErr)
-    } finally {
-      this.isProcessing = false
-      if (this.queue.length > 0) {
-        // Use setTimeout to avoid max call stack size exceeded on immediate synchronous failures
-        setTimeout(() => this.processNext(), 10)
-      }
     }
+    return true
   }
 
   private _failTask(task: BackfillTask, error: string) {
@@ -606,7 +727,8 @@ class BackfillQueueService extends EventEmitter {
       })
       this.emit('backfill_failed', { ticker: task.ticker, error, ...backfillStatusMap.get(task.ticker) })
     }
-    this.queue.shift()
+    this.removeTask(task)
+    this.settlePass(task.pass, false)
     if (task.isGapFill && task.gapFrom) {
       this.activeTickers.delete(`${task.ticker}:gap:${task.gapFrom.getTime()}`)
     }

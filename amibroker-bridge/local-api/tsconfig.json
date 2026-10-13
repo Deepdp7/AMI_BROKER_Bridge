@@ -10,7 +10,6 @@
                             "strict":  true,
                             "esModuleInterop":  true,
                             "allowSyntheticDefaultImports": true,
-                            "downlevelIteration": true,
                             "skipLibCheck":  true,
                             "resolveJsonModule":  true,
                             "sourceMap":  true,

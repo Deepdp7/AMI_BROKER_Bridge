@@ -10,7 +10,7 @@ export default defineConfig({
   // Prevent Vite from obscuring Rust errors
   clearScreen: false,
   server: {
-    port: 5174,
+    port: 5173,
     strictPort: true,
     watch: {
       // Ignore src-tauri so we don't reload when rust files change

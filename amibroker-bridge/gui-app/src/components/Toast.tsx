@@ -4,6 +4,7 @@
  */
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { CheckCircle, AlertTriangle, XCircle, Info, X } from 'lucide-react'
+import { BackfillStatusBanner } from './BackfillStatusBanner'
 
 export type ToastType = 'success' | 'warning' | 'error' | 'info'
 
@@ -152,14 +153,12 @@ export function ToastContainer() {
     return () => { listeners.delete(handleUpdate) }
   }, [handleUpdate])
 
-  if (toasts.length === 0) return null
-
   return (
     <div
       id="toast-container"
       style={{
         position: 'fixed',
-        top: '1rem',
+        top: '3.25rem', // below the title bar
         right: '1rem',
         zIndex: 9999,
         display: 'flex',
@@ -174,6 +173,8 @@ export function ToastContainer() {
           to { width: 0%; }
         }
       `}</style>
+      {/* History-download progress sits at the top of the notification stack */}
+      <div style={{ pointerEvents: 'auto' }}><BackfillStatusBanner /></div>
       {toasts.map(t => (
         <div key={t.id} style={{ pointerEvents: 'auto' }}>
           <ToastItem t={t} onDismiss={() => toast.dismiss(t.id)} />

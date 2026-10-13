@@ -96,6 +96,8 @@ interface AppStore {
   backfillStatuses: Record<string, { ticker: string; progress: number; status: string; candlesFetched: number; completedChunks: number; totalChunks: number }>
   updateBackfillStatus: (ticker: string, data: any) => void
   clearBackfillStatus: (ticker: string) => void
+  /** Drop completed/failed entries (after the finished-batch notification is gone) */
+  clearFinishedBackfills: () => void
 
   // UI State
   activePage: string
@@ -188,6 +190,9 @@ export const useAppStore = create<AppStore>()(
   backfillStatuses: {},
   updateBackfillStatus: (ticker, data) => set((prev) => ({
     backfillStatuses: { ...prev.backfillStatuses, [ticker]: data }
+  })),
+  clearFinishedBackfills: () => set((prev) => ({
+    backfillStatuses: Object.fromEntries(Object.entries(prev.backfillStatuses).filter(([, st]) => st.status === 'pending' || st.status === 'running')),
   })),
   clearBackfillStatus: (ticker) => set((prev) => {
     const { [ticker]: _, ...rest } = prev.backfillStatuses

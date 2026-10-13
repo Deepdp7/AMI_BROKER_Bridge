@@ -4,6 +4,15 @@ import path from 'path'
 
 const router = Router()
 
+// GET /api/system/console?limit=2000&after=<seq>
+// Recent engine console output for the Live Console page (live lines arrive via WS 'console_lines')
+router.get('/console', (req, res) => {
+  const { getConsoleLines } = require('../services/ConsoleCapture')
+  const limit = Number(req.query.limit) || 2000
+  const after = Number(req.query.after) || 0
+  res.json({ lines: getConsoleLines(limit, after) })
+})
+
 // GET /api/system/pick-folder
 router.get('/pick-folder', (req, res) => {
   const psScript = `
@@ -57,6 +66,7 @@ router.post('/clean-database', (req, res) => {
 
     // 2. Wipe DB data (symbols, history, mappings, logs)
     cleanDatabase()
+    require('../shared/coverageState').clearVerifiedThrough()
 
     res.json({ ok: true })
   } catch (err: any) {
@@ -82,6 +92,7 @@ router.post('/full-force-clean', (req, res) => {
 
     // 2. Factory wipe DB and cache
     fullForceClean()
+    require('../shared/coverageState').clearVerifiedThrough()
 
     // 3. Return success, then kill the process to allow Tauri/Supervisor to restart it empty
     res.json({ ok: true })

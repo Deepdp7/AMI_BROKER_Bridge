@@ -163,10 +163,18 @@ export const api = {
     return apiFetch<LogEntry[]>(`/logs${qs}`)
   },
   exportDiagnostics: () => apiFetch<{ url: string; filename: string }>('/diagnostics/export', { method: 'POST' }),
+  getConsole: (limit = 2000) => apiFetch<{ lines: ConsoleLine[] }>(`/system/console?limit=${limit}`),
+}
+
+export interface ConsoleLine {
+  seq: number
+  ts: number
+  level: 'log' | 'info' | 'warn' | 'error' | 'debug'
+  text: string
 }
 
 // ===== WebSocket Manager =====
-type WsEventType = 'feed_update' | 'log_entry' | 'broker_status' | 'health_update' | 'open' | 'close' | 'error' | 'backfill_progress' | 'backfill_completed' | 'backfill_failed' | 'master_sync_progress' | 'master_sync_complete' | 'market_status'
+type WsEventType = 'feed_update' | 'log_entry' | 'broker_status' | 'health_update' | 'open' | 'close' | 'error' | 'backfill_progress' | 'backfill_completed' | 'backfill_failed' | 'master_sync_progress' | 'master_sync_complete' | 'market_status' | 'console_lines' | 'auto_refresh'
 type WsListener = (payload: unknown) => void
 
 class WebSocketManager {

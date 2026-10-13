@@ -20,7 +20,8 @@ import { EventEmitter } from 'events'
 export interface HSMMappedTick {
   instrumentId: string // e.g. NSE:BRITANNIA-EQ
   lastPrice: number
-  volume: number
+  volume: number          // last traded quantity (size of the latest trade only)
+  totalVolume?: number    // cumulative volume traded today (vol_traded_today)
   timestamp: number
   open?: number
   high?: number
@@ -72,7 +73,7 @@ export class FyersHSMClient extends EventEmitter {
   private indexData = new Map<number, any>() // topic_id -> normalized snapshot
 
   // Dedup state: token -> { ltp, timestamp }
-  private lastTickState = new Map<string, { ltp: number, time: number }>()
+  private lastTickState = new Map<string, { ltp: number, time: number, vol?: number }>()
 
   private lastMessageTime = 0
   private watchdogTimer: NodeJS.Timeout | null = null
@@ -574,10 +575,11 @@ export class FyersHSMClient extends EventEmitter {
 
     // Dedup logic
     const dedup = this.lastTickState.get(dbTicker)
-    if (dedup && dedup.ltp === ltp && dedup.time === tsMs) {
+    const cumVol = typeof rawData.vol_traded_today === 'number' ? rawData.vol_traded_today : undefined
+    if (dedup && dedup.ltp === ltp && dedup.time === tsMs && dedup.vol === cumVol) {
       return // Duplicate
     }
-    this.lastTickState.set(dbTicker, { ltp, time: tsMs })
+    this.lastTickState.set(dbTicker, { ltp, time: tsMs, vol: cumVol })
     
     const stat = this.tickStats.get(dbTicker) || { ticks: 0, lastTime: 0 }
     stat.ticks++
@@ -588,6 +590,7 @@ export class FyersHSMClient extends EventEmitter {
       instrumentId: dbTicker,
       lastPrice: ltp,
       volume: rawData.last_traded_qty || 0,
+      totalVolume: cumVol,
       timestamp: tsMs,
       open: rawData.open_price !== undefined ? rawData.open_price / totalDivisor : undefined,
       high: rawData.high_price !== undefined ? rawData.high_price / totalDivisor : undefined,

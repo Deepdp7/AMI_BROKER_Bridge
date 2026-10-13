@@ -163,6 +163,8 @@ export type WsMessageType =
   | 'backfill_completed'
   | 'backfill_failed'
   | 'market_status'
+  | 'console_lines'
+  | 'auto_refresh'
 
 export interface WsMessage<T = unknown> {
   type: WsMessageType
