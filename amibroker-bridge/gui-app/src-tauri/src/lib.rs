@@ -9,6 +9,9 @@ use std::time::{Duration, Instant};
 
 use tauri::Manager;
 
+#[cfg(windows)]
+mod window_chrome;
+
 /// Loopback port used only to detect a second copy of the app and bring the first one forward.
 const SINGLE_INSTANCE_PORT: u16 = 7892;
 const SINGLE_INSTANCE_HELLO: &[u8] = b"DATABRIDGE\n";
@@ -198,12 +201,22 @@ pub fn run() {
     let backend = Arc::new(Backend::new());
     let backend_for_exit = backend.clone();
 
-    tauri::Builder::default()
+    let builder = tauri::Builder::default()
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
-        .manage(backend.clone())
-        .invoke_handler(tauri::generate_handler![restart_backend])
+        .manage(backend.clone());
+
+    // `generate_handler!` takes a plain list, so the platform split happens here
+    #[cfg(windows)]
+    let builder = builder.invoke_handler(tauri::generate_handler![
+        restart_backend,
+        window_chrome::set_maximize_button_rect
+    ]);
+    #[cfg(not(windows))]
+    let builder = builder.invoke_handler(tauri::generate_handler![restart_backend]);
+
+    builder
         .setup(move |app| {
             if cfg!(debug_assertions) {
                 app.handle().plugin(
@@ -211,6 +224,11 @@ pub fn run() {
                         .level(log::LevelFilter::Info)
                         .build(),
                 )?;
+            }
+
+            #[cfg(windows)]
+            if let Some(window) = app.get_webview_window("main") {
+                window_chrome::install(&window);
             }
 
             if let Some(listener) = instance_lock {

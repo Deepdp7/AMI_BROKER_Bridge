@@ -29,6 +29,10 @@ static bool          g_ipcConnected = false;
 static unsigned      g_connGeneration = 0;
 static std::map<std::string, unsigned>  g_syncedGeneration;
 static std::map<std::string, ULONGLONG> g_lastGapCheck;
+// Bumped by every SYNC|ticker, so an announcement arriving during a fetch is not lost
+static std::map<std::string, unsigned>  g_syncEpoch;
+// Oldest bar time announced (SYNC|ticker|fromSec) since the ticker last synced
+static std::map<std::string, double>    g_syncFrom;
 
 static void LogDebug(const char* msg) {
     FILE* fp;
@@ -65,9 +69,18 @@ bool NeedsHistorySync(const std::string& ticker) {
     return it == g_syncedGeneration.end() || it->second != g_connGeneration;
 }
 
-void MarkHistorySynced(const std::string& ticker) {
+double BeginHistorySync(const std::string& ticker, unsigned& epoch) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
+    epoch = g_syncEpoch[ticker];
+    auto it = g_syncFrom.find(ticker);
+    return it == g_syncFrom.end() ? 0 : it->second;
+}
+
+void MarkHistorySynced(const std::string& ticker, unsigned epoch) {
+    std::lock_guard<std::mutex> lk(g_pollerMutex);
+    if (g_syncEpoch[ticker] != epoch) return;   // newer history announced meanwhile: sync again
     g_syncedGeneration[ticker] = g_connGeneration;
+    g_syncFrom.erase(ticker);
 }
 
 bool TryBeginGapCheck(const std::string& ticker) {
@@ -104,8 +117,10 @@ static void NotifyAmiBroker(const std::string& ticker, const Bar& b) {
     }
 }
 
-// SYNC|TICKER  -> bridge stored new history for TICKER (gap-fill / backfill finished)
-// SYNC_ALL     -> force every ticker to re-sync
+// SYNC|TICKER          -> bridge stored new recent history for TICKER
+// SYNC|TICKER|FROMSEC  -> bridge stored history for TICKER starting at FROMSEC (unix seconds),
+//                         possibly older than AmiBroker's last bar (a downtime hole)
+// SYNC_ALL             -> force every ticker to re-sync
 static void HandleSyncMessage(const std::string& line) {
     if (line.rfind("SYNC_ALL", 0) == 0) {
         std::lock_guard<std::mutex> lk(g_pollerMutex);
@@ -113,14 +128,25 @@ static void HandleSyncMessage(const std::string& line) {
         LogDebug("[SYNC] all tickers marked for history re-sync");
         return;
     }
-    std::string ticker = line.substr(5);
-    if (!ticker.empty() && ticker.back() == '\r') ticker.pop_back();
+    std::string rest = line.substr(5);
+    if (!rest.empty() && rest.back() == '\r') rest.pop_back();
+    double fromSec = 0;
+    size_t bar = rest.find('|');
+    std::string ticker = rest.substr(0, bar);
+    if (bar != std::string::npos) {
+        try { fromSec = std::stod(rest.substr(bar + 1)); } catch (...) { fromSec = 0; }
+    }
     if (ticker.empty()) return;
 
     Bar live{}; bool hasLive = false;
     {
         std::lock_guard<std::mutex> lk(g_pollerMutex);
         g_syncedGeneration.erase(ticker);
+        ++g_syncEpoch[ticker];
+        if (fromSec > 0) {
+            auto it = g_syncFrom.find(ticker);
+            if (it == g_syncFrom.end() || fromSec < it->second) g_syncFrom[ticker] = fromSec;
+        }
         auto it = g_lastKnownBars.find(ticker);
         if (it != g_lastKnownBars.end()) { live = it->second; hasLive = true; }
     }

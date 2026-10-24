@@ -3,6 +3,7 @@ import { useAppStore } from '../store/appStore'
 import type { SymbolFeed } from '../store/appStore'
 import { api, BASE_URL } from '../api/apiClient'
 import { toast } from '../components/Toast'
+import Select from '../components/Select'
 import { List, Search, Plus, Trash2, TrendingUp, TrendingDown, CheckCircle, X, Loader, Upload, Download, Filter } from 'lucide-react'
 
 
@@ -394,17 +395,17 @@ export function SymbolSetupPage() {
           )}
         </div>
         
-        <select
+        <Select
           value={localTypeFilter}
-          onChange={e => setLocalTypeFilter(e.target.value)}
-          className="input-field"
-          style={{ height: '32px', fontSize: '0.8rem', padding: '0 2rem 0 0.75rem', minWidth: '140px', cursor: 'pointer' }}
-        >
-          <option value="ALL">All Types</option>
-          {instrumentTypes.map(t => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
+          onChange={setLocalTypeFilter}
+          width={150}
+          height={32}
+          fontSize="0.8rem"
+          options={[
+            { value: 'ALL', label: 'All Types' },
+            ...instrumentTypes.map(t => ({ value: t, label: t })),
+          ]}
+        />
       </div>
 
       {/* Symbols Grouped by Exchange */}

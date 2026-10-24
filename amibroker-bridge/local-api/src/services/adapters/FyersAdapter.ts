@@ -9,8 +9,32 @@ import readline from 'readline'
 import { FyersHSMClient } from './FyersHSMClient'
 import { RateLimiter } from '../RateLimiter'
 
-// Fyers data API caps (10/s, 200/min per app); stay a little under them across all callers
-const historyLimiter = new RateLimiter(8, 180)
+// Fyers history API, Standard plan (measured 2026-10-25): bursts of 5/s pass, but no more than
+// 50 requests are accepted in any 60 s; past that it answers -360 ("5 requests/second"). Shared
+// by every caller (backfill workers, auto-refresh, startup fetches).
+const historyLimiter = new RateLimiter(4, 48)
+
+/** Fyers' "too many requests" answers: classic 429 and the plan limit (-360, "5 requests/second") */
+function isFyersRateLimit(data: any): boolean {
+  return data?.code === 429 || data?.code === -360 || /request limit|requests\/second|plan limit/i.test(String(data?.message || ''))
+}
+
+/** Expiry time (UTC ms) from the access token's JWT `exp`, or null if it can't be read. */
+export function fyersTokenExpiryMs(accessToken: string): number | null {
+  try {
+    const jwt = accessToken.includes(':') ? accessToken.split(':')[1] : accessToken
+    const payload = JSON.parse(Buffer.from(jwt.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8'))
+    return typeof payload.exp === 'number' ? payload.exp * 1000 : null
+  } catch {
+    return null // not a JWT we can read — let the broker decide
+  }
+}
+
+/** True when the access token has expired (or is within a minute of it). */
+export function isFyersTokenExpired(accessToken: string): boolean {
+  const exp = fyersTokenExpiryMs(accessToken)
+  return exp !== null && exp < Date.now() + 60_000
+}
 
 export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
   /** Fyers serves at most 100 days of intraday candles per history request */
@@ -22,6 +46,25 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
   private masterContracts: InstrumentInfo[] | null = null
   private masterCache: Map<string, { id: string, hsm: string }> | null = null;
   private loadMasterCachePromise: Promise<void> | null = null;
+  private expiryTimer: NodeJS.Timeout | null = null
+
+  /**
+   * Fyers tokens die at a fixed time (06:00 IST the next morning). Report it the moment it
+   * happens: nothing else notices while the market is closed, and the app kept showing
+   * "Connected" with a dead token until the user found no data at 09:15.
+   */
+  private scheduleExpiry() {
+    if (this.expiryTimer) clearTimeout(this.expiryTimer)
+    this.expiryTimer = null
+    const exp = fyersTokenExpiryMs(this.accessToken)
+    if (exp === null) return
+    this.expiryTimer = setTimeout(() => {
+      this.expiryTimer = null
+      console.log('[FyersAdapter] Access token expired')
+      this.emit('auth_failed')
+    }, Math.min(Math.max(0, exp - Date.now()), 2 ** 31 - 1))
+    this.expiryTimer.unref()
+  }
 
   async connect(credentials: BrokerCredentials): Promise<SessionInfo> {
     const cleanApiKey = credentials.apiKey ? credentials.apiKey.trim() : ''
@@ -33,9 +76,16 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
     }
 
     if (credentials.accessToken) {
+      // Fyers tokens die every day. Fail here so the caller marks the broker auth_required
+      // instead of registering an adapter whose history calls and stream can never work.
+      if (isFyersTokenExpired(credentials.accessToken)) {
+        const err: any = new Error('Token expired — log in to Fyers again')
+        err.code = 'TOKEN_EXPIRED'
+        throw err
+      }
       this.appId = cleanApiKey
       this.accessToken = credentials.accessToken
-      
+
       if (!this.hsmClient) {
         this.hsmClient = new FyersHSMClient(this.accessToken)
         this.hsmClient.on('log_entry', (msg) => (this as any).emit('log_entry', msg))
@@ -54,7 +104,8 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
       } else {
         this.hsmClient.connect()
       }
-      
+      this.scheduleExpiry()
+
       return { accountId: 'FYERS_USER', accessToken: this.accessToken }
     }
 
@@ -111,11 +162,14 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
     } else {
       this.hsmClient.connect()
     }
-    
+    this.scheduleExpiry()
+
     return { accountId: 'FYERS_USER', accessToken: this.accessToken }
   }
 
   async disconnect(): Promise<void> {
+    if (this.expiryTimer) clearTimeout(this.expiryTimer)
+    this.expiryTimer = null
     if (this.hsmClient) {
       this.hsmClient.disconnect()
     }
@@ -473,7 +527,7 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
           if (res.status === 429 || res.status === 401 || res.status === 403 || res.status === 400) {
             const fetchErr = new Error(`HTTP ${res.status}: ${res.statusText}`) as any;
             fetchErr.code = res.status === 429 ? 429 : -16;
-            if (res.status === 429) historyLimiter.pause(3000);
+            if (res.status === 429) historyLimiter.limited();
             throw fetchErr;
           }
           return []
@@ -490,9 +544,9 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
         }))
       } else if (data.s === 'no_data') {
         return []
-      } else if (data.code === 429 || (data.message && String(data.message).includes('request limit'))) {
-        console.warn(`[FyersAdapter] Rate limit 429 reached for ${instrumentToken}`)
-        historyLimiter.pause(3000)
+      } else if (isFyersRateLimit(data)) {
+        historyLimiter.limited()
+        console.warn(`[FyersAdapter] Rate limit reached for ${instrumentToken} (${data.code} ${data.message || ''}): pausing, now ${historyLimiter.perMinuteBudget} requests/min`)
         const err: any = new Error(`429 request limit reached: ${data.message || ''}`)
         err.code = 429
         throw err
@@ -505,12 +559,16 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
           }
           const genericErr = new Error(`Fyers API Error: ${data.message || ''}`) as any;
           genericErr.code = data.code || -1;
+          genericErr.fromApi = true;
           throw genericErr;
         }
     } catch (e: any) {
         if (e?.code === 429 || e?.message?.includes('429') || e?.message?.includes('request limit')) {
           throw e;
         }
+        // A broker error is not "no data": returning [] made gap-fills mark the range verified
+        // and never fetch it again. The caller retries, and leaves the range open if it gives up.
+        if (e?.fromApi) throw e
         if (e?.code === -16 || e?.message?.includes('Auth') || e?.message?.includes('authenticate')) {
           throw e;
         }

@@ -38,7 +38,8 @@ export interface BackfillTask {
   brokerId: string
   brokerToken: string
   targetTo: Date            // Absolute newest date we want (end boundary)
-  currentFrom: Date         // Current chunk start (walks forwards)
+  currentFrom: Date         // Oldest date we want (start boundary)
+  cursorTo?: Date           // End of the next chunk: walks backwards from targetTo (newest first)
   retryCount: number
   depthDays: number
   isGapFill: boolean        // True if this is a gap-fill task (not initial/incremental)
@@ -71,6 +72,7 @@ class BackfillQueueService extends EventEmitter {
   private readonly CONCURRENCY = 6   // parallel chunk downloads; the adapter's rate limiter keeps them within broker limits
   private workers = 0
   private busyTickers = new Set<string>()
+  private priorityTickers = new Set<string>()  // open in AmiBroker: download before the rest
   private kickTimer: NodeJS.Timeout | null = null
   private activeTickers = new Set<string>()
   private consecutiveAuthErrors = 0
@@ -338,7 +340,19 @@ class BackfillQueueService extends EventEmitter {
     }
   }
 
+  /**
+   * AmiBroker is loading this ticker (a chart, scan or exploration): move its downloads to the
+   * front and keep them there until done. Cheap when the ticker has nothing queued.
+   */
+  public prioritize(ticker: string) {
+    if (!this.queue.some(t => t.ticker === ticker)) return
+    this.priorityTickers.add(ticker)
+    const mine = this.queue.filter(t => t.ticker === ticker)
+    this.queue = [...mine, ...this.queue.filter(t => t.ticker !== ticker)]
+  }
+
   public cancel(ticker: string) {
+    this.priorityTickers.delete(ticker)
     this.queue = this.queue.filter(t => t.ticker !== ticker)
     this.activeTickers.delete(ticker)
     backfillStatusMap.delete(ticker)
@@ -445,7 +459,22 @@ class BackfillQueueService extends EventEmitter {
   /** Fetches and stores one chunk of `task`. Returns false if its broker isn't connected. */
   private async processChunk(task: BackfillTask): Promise<boolean> {
     {
-      const adapter = brokerManager.getAdapter(task.brokerId)
+      let adapter = brokerManager.getAdapter(task.brokerId)
+
+      if (!adapter) {
+        // The symbol may have moved to another broker (broker removed and re-added): follow it.
+        // Without this, tasks of a removed broker cycled forever and held the ticker's lock.
+        const owner = (stmts.getSymbols.all() as any[]).find(s => s.amiBrokerTicker === task.ticker)?.brokerId
+        if (!owner) {
+          this._dropTask(task, 'symbol no longer tracked')
+          return true
+        }
+        if (owner !== task.brokerId && owner !== 'orphaned') {
+          console.log(`[BackfillQueue] ${task.ticker}: task moved ${task.brokerId} → ${owner}`)
+          task.brokerId = owner
+          adapter = brokerManager.getAdapter(owner)
+        }
+      }
 
       if (!adapter) {
         // Broker not connected yet — move the task to the back; it runs once the adapter connects
@@ -458,22 +487,22 @@ class BackfillQueueService extends EventEmitter {
       const chunkDays = this.chunkDaysFor(adapter)
       const maxRetries = Number(settings?.maxBackfillRetries) || 3
 
-      try {
-        // Determine chunk window (working forwards from currentFrom)
-      let currentTo = new Date(task.currentFrom.getTime() + chunkDays * 24 * 60 * 60 * 1000)
-      if (currentTo > task.targetTo) currentTo = task.targetTo
+      // Chunk window, newest first: charts get the recent months before the older years
+      const currentTo = task.cursorTo ?? task.targetTo
+      const chunkFrom = new Date(Math.max(task.currentFrom.getTime(), currentTo.getTime() - chunkDays * DAY_MS))
 
+      try {
       const status = backfillStatusMap.get(task.ticker)
       if (status && status.status !== 'running') {
         backfillStatusMap.set(task.ticker, { ...status, status: 'running', startedAt: status.startedAt || Date.now() })
         this.emit('backfill_progress', { ticker: task.ticker, ...backfillStatusMap.get(task.ticker) })
       }
 
-      const fromStr = task.currentFrom.toISOString().split('T')[0]
+      const fromStr = chunkFrom.toISOString().split('T')[0]
       const toStr   = currentTo.toISOString().split('T')[0]
       console.log(`[BackfillQueue] Fetching ${task.ticker} (${task.brokerToken}) [${this.queue.length} in queue] from ${fromStr} to ${toStr}...`)
 
-      const bars = ((await adapter.getHistoricalBars(task.brokerToken, '1m', task.currentFrom, currentTo)) || []).map(repairBar)
+      const bars = ((await adapter.getHistoricalBars(task.brokerToken, '1m', chunkFrom, currentTo)) || []).map(repairBar)
 
       if (bars && bars.length > 0) {
         const safeTicker = task.ticker.replace(/[^a-zA-Z0-9_-]/g, '_')
@@ -496,29 +525,11 @@ class BackfillQueueService extends EventEmitter {
         }
 
         if (csvLines.length > 0) {
-          // Upsert to postgres (async - must be awaited!)
           await upsertBarsToHistory(task.ticker, csvLines)
 
-          // Push bars to AmiBroker via IPC for ALL backfill tasks:
-          // - gap-fill tasks: push immediately so chart updates live
-          // - initial 365-day backfill: also push so historical data appears in AmiBroker chart
-          this.emit('bars_gap_filled', { ticker: task.ticker, csvLines })
-
-          // Also load recent bars (last 3 days) into RAM for live chart serving
-          const cutoffMs = Date.now() - 3 * 24 * 60 * 60 * 1000
-          const recentBars = bars.filter(b => b.ts > cutoffMs)
-          if (recentBars.length > 0) {
-            stmts.insertBarsToRamOnly.run(recentBars.map(b => ({
-              amibroker_ticker: task.ticker,
-              ts_utc_ms: b.ts,
-              open: b.open,
-              high: b.high,
-              low: b.low,
-              close: b.close,
-              volume: b.volume,
-              open_interest: null,
-            })))
-          }
+          // Tell AmiBroker after every chunk (not only when the whole task ends), with the
+          // oldest bar stored, so an open chart shows each piece of history as it lands
+          this.emit('bars_gap_filled', { ticker: task.ticker, fromSec: Number(csvLines[0].slice(0, csvLines[0].indexOf(','))) })
         }
 
         console.log(`[BackfillQueue] Saved ${csvLines.length} bars for ${task.ticker} (${fromStr} to ${toStr})`)
@@ -540,12 +551,20 @@ class BackfillQueueService extends EventEmitter {
         }
       }
 
-      // Advance chunk window forwards
-      task.currentFrom = currentTo
+      // Next chunk is the one just older than this
+      task.cursorTo = chunkFrom
       task.retryCount = 0
 
-      // Check if task is complete
-      if (task.currentFrom >= task.targetTo) {
+      if (chunkFrom > task.currentFrom) {
+        // More to fetch: go to the back of the line (unless a chart is waiting for this ticker),
+        // so every symbol gets its newest months before any symbol gets its oldest years
+        if (!this.priorityTickers.has(task.ticker)) {
+          this.removeTask(task)
+          this.queue.push(task)
+        }
+      } else {
+        // Task complete
+        if (!this.queue.some(t => t !== task && t.ticker === task.ticker)) this.priorityTickers.delete(task.ticker)
         const safeTicker = task.ticker.replace(/[^a-zA-Z0-9_-]/g, '_')
         const depthLabel = task.isGapFill ? 'Gap-fill' : `${task.depthDays}-Day Backfill`
         
@@ -668,21 +687,22 @@ class BackfillQueueService extends EventEmitter {
 
         this.consecutiveAuthErrors = 0 // Real rate limit or timeout — reset auth error counter
         task.retryCount++
-        const backoffMs = Math.min(3000 * Math.pow(2, task.retryCount - 1), 60000)
-        console.warn(`[BackfillQueue] Rate limit (429) for ${task.ticker}. Backoff ${backoffMs}ms (Retry #${task.retryCount})`)
+        // The shared limiter already holds every request until the broker's window clears
+        const backoffMs = 1000
+        console.warn(`[BackfillQueue] Rate limit / timeout for ${task.ticker}. Retrying (#${task.retryCount})`)
 
         const existing = backfillStatusMap.get(task.ticker)
         if (existing) {
           backfillStatusMap.set(task.ticker, { ...existing, retryCount: task.retryCount })
         }
 
-        // Rate limits are temporary: wait them out (up to ~5 min) instead of skipping data
+        // Rate limits are temporary: wait them out instead of skipping data
         if (task.retryCount > Math.max(maxRetries, 8)) {
           console.error(`[BackfillQueue] Rate-limit retries exhausted for ${task.ticker} chunk. Skipping.`)
-          task.currentFrom = new Date(task.currentFrom.getTime() + chunkDays * 24 * 60 * 60 * 1000)
+          task.cursorTo = chunkFrom
           task.retryCount = 0
           task.skippedChunk = true
-          if (task.currentFrom >= task.targetTo) {
+          if (chunkFrom <= task.currentFrom) {
             this._failTask(task, 'Max retries exceeded (rate limit)')
           }
         }
@@ -705,11 +725,11 @@ class BackfillQueueService extends EventEmitter {
 
         if (task.retryCount > maxRetries) {
           console.error(`[BackfillQueue] Max retries (${maxRetries}) exceeded for general error. Skipping chunk for ${task.ticker}.`)
-          task.currentFrom = new Date(task.currentFrom.getTime() + chunkDays * 24 * 60 * 60 * 1000)
+          task.cursorTo = chunkFrom
           task.retryCount = 0
           task.skippedChunk = true
 
-          if (task.currentFrom >= task.targetTo) {
+          if (chunkFrom <= task.currentFrom) {
             this._failTask(task, err?.message || 'Unknown error')
           }
         }
@@ -719,6 +739,19 @@ class BackfillQueueService extends EventEmitter {
       }
     }
     return true
+  }
+
+  /** Removes a task that can never run (its symbol is gone) without reporting a failure. */
+  private _dropTask(task: BackfillTask, reason: string) {
+    this.removeTask(task)
+    if (!this.queue.some(t => t.ticker === task.ticker)) this.priorityTickers.delete(task.ticker)
+    this.settlePass(task.pass, false)
+    if (task.isGapFill && task.gapFrom) this.activeTickers.delete(`${task.ticker}:gap:${task.gapFrom.getTime()}`)
+    if (!this.queue.some(t => t.ticker === task.ticker)) {
+      this.activeTickers.delete(task.ticker)
+      backfillStatusMap.delete(task.ticker)
+    }
+    console.log(`[BackfillQueue] Dropped task for ${task.ticker}: ${reason}`)
   }
 
   private _failTask(task: BackfillTask, error: string) {
@@ -733,6 +766,7 @@ class BackfillQueueService extends EventEmitter {
       this.emit('backfill_failed', { ticker: task.ticker, error, ...backfillStatusMap.get(task.ticker) })
     }
     this.removeTask(task)
+    if (!this.queue.some(t => t.ticker === task.ticker)) this.priorityTickers.delete(task.ticker)
     this.settlePass(task.pass, false)
     if (task.isGapFill && task.gapFrom) {
       this.activeTickers.delete(`${task.ticker}:gap:${task.gapFrom.getTime()}`)

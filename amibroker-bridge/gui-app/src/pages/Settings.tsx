@@ -4,6 +4,7 @@ import { Settings as SettingsIcon, FolderOpen, Shield, ChevronDown, ChevronUp, S
 import { open } from '@tauri-apps/plugin-dialog'
 import { api, isApiAvailable } from '../api/apiClient'
 import { toast } from '../components/Toast'
+import Select from '../components/Select'
 
 function Toggle({ checked, onChange, id }: { checked: boolean; onChange: (v: boolean) => void; id: string }) {
   return (
@@ -233,16 +234,16 @@ export function SettingsPage() {
           <Toggle id="auto-update" checked={settings.autoUpdate} onChange={v => updateSettings({ autoUpdate: v })} />
         </SettingRow>
         <SettingRow label="Update Channel" description="Stable is recommended for active trading">
-          <select
+          <Select
             id="update-channel"
             value={settings.updateChannel}
-            onChange={e => updateSettings({ updateChannel: e.target.value as any })}
-            className="input-field"
-            style={{ width: '120px' }}
-          >
-            <option value="stable">Stable</option>
-            <option value="beta">Beta</option>
-          </select>
+            onChange={v => updateSettings({ updateChannel: v as any })}
+            width={140}
+            options={[
+              { value: 'stable', label: 'Stable' },
+              { value: 'beta', label: 'Beta' },
+            ]}
+          />
         </SettingRow>
       </Section>
 
@@ -316,18 +317,18 @@ export function SettingsPage() {
       {/* Logging */}
       <Section title="Diagnostics & Logging" icon={Activity}>
         <SettingRow label="Log Level" description="Verbosity of runtime logs (info recommended)">
-          <select
+          <Select
             id="log-level"
             value={settings.logLevel}
-            onChange={e => updateSettings({ logLevel: e.target.value as any })}
-            className="input-field"
-            style={{ width: '120px' }}
-          >
-            <option value="error">Error Only</option>
-            <option value="warn">Warnings</option>
-            <option value="info">Info</option>
-            <option value="debug">Debug</option>
-          </select>
+            onChange={v => updateSettings({ logLevel: v as any })}
+            width={140}
+            options={[
+              { value: 'error', label: 'Error Only' },
+              { value: 'warn', label: 'Warnings' },
+              { value: 'info', label: 'Info' },
+              { value: 'debug', label: 'Debug' },
+            ]}
+          />
         </SettingRow>
         <SettingRow label="Log Retention (days)" description="Automatically purge diagnostic logs older than this">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

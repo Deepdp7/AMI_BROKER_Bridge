@@ -121,6 +121,30 @@ export class FeedSimulator extends EventEmitter {
     }
   }
 
+  /**
+   * Re-key a symbol to another broker account (broker removed and re-added) keeping its feed
+   * state; ticks from the new broker are matched by `${brokerId}:${token}`. Returns false if
+   * the symbol isn't loaded at all.
+   */
+  moveSymbolToBroker(ticker: string, toBrokerId: string): boolean {
+    for (const [oldKey, inst] of this.instruments) {
+      if (inst.ticker !== ticker) continue
+      if (inst.brokerId === toBrokerId) return true
+      const newKey = `${toBrokerId}:${inst.brokerToken}`
+      inst.brokerId = toBrokerId
+      this.instruments.delete(oldKey)
+      this.instruments.set(newKey, inst)
+      const bar = this.liveBars.get(oldKey)
+      this.liveBars.delete(oldKey)
+      if (bar) this.liveBars.set(newKey, bar)
+      const cum = this.lastCumVolume.get(oldKey)
+      this.lastCumVolume.delete(oldKey)
+      if (cum !== undefined) this.lastCumVolume.set(newKey, cum)
+      return true
+    }
+    return false
+  }
+
   addInstrument(inst: Instrument) {
     const key = `${inst.brokerId}:${inst.brokerToken}`
     this.instruments.set(key, inst)

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { exec } from 'child_process'
 import path from 'path'
+import { cleanDatabase, fullForceClean } from '../db'
 
 const router = Router()
 
@@ -54,7 +55,7 @@ router.post('/clean-database', (req, res) => {
   try {
     const { feedSimulator } = require('../services/feedSimulator')
     const { backfillQueue, backfillStatusMap } = require('../services/BackfillQueue')
-    const { cleanDatabase } = require('../db')
+
 
     console.log('[SystemAPI] Executing Clean Database...')
 
@@ -80,7 +81,7 @@ router.post('/full-force-clean', (req, res) => {
   try {
     const { feedSimulator } = require('../services/feedSimulator')
     const { backfillQueue, backfillStatusMap } = require('../services/BackfillQueue')
-    const { fullForceClean } = require('../db')
+
 
     console.log('[SystemAPI] Executing Full Force Clean (Factory Reset)...')
 

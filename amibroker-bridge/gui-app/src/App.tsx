@@ -1,6 +1,7 @@
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAppStore } from './store/appStore'
 import { Sidebar } from './components/Sidebar'
+import { TitleBar } from './components/TitleBar'
 import { FeedStatusPage } from './pages/FeedStatus'
 import { BrokerConnectionPage } from './pages/BrokerConnection'
 import { SymbolSetupPage } from './pages/SymbolSetup'
@@ -64,6 +65,7 @@ function MainLayout() {
       id="app-root"
       style={{
         display: 'flex',
+        flexDirection: 'column',
         height: '100vh',
         width: '100vw',
         overflow: 'hidden',
@@ -71,79 +73,62 @@ function MainLayout() {
         position: 'relative',
       }}
     >
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        pointerEvents: 'none',
-        zIndex: 0,
-        background: [
-          'radial-gradient(ellipse 60% 40% at 20% 0%, rgba(0,212,170,0.07) 0%, transparent 70%)',
-          'radial-gradient(ellipse 40% 60% at 80% 100%, rgba(47,47,47,0.5) 0%, transparent 70%)',
-        ].join(', '),
-      }} />
+      <TitleBar page={title} status={<ApiStatusBadge state={apiState} />} />
 
-      <div style={{ position: 'relative', zIndex: 1, flexShrink: 0 }}>
-        <Sidebar />
-      </div>
-
-      <main
-        id="main-content"
-        style={{
-          flex: 1,
-          height: '100%',
-          overflow: 'hidden',
-          position: 'relative',
-          zIndex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+      <div style={{ flex: 1, minHeight: 0, display: 'flex', position: 'relative' }}>
         <div style={{
-          height: '40px',
-          background: 'rgba(23,23,23,0.7)',
-          borderBottom: '1px solid rgba(255,255,255,0.04)',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 1rem',
-          gap: '0.5rem',
-          flexShrink: 0,
-        }}>
-          <div style={{ display: 'flex', gap: '6px', marginRight: '0.5rem' }}>
-            <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#ff5f57' }} />
-            <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#ffbd2e' }} />
-            <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#28ca41' }} />
-          </div>
-          <div style={{ fontSize: '0.75rem', color: '#575d66', flex: 1 }}>
-            DataBridge Pro · <span style={{ color: '#8b9199' }}>{title}</span>
-          </div>
-          <ApiStatusBadge state={apiState} />
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          zIndex: 0,
+          background: [
+            'radial-gradient(ellipse 60% 40% at 20% 0%, rgba(0,212,170,0.07) 0%, transparent 70%)',
+            'radial-gradient(ellipse 40% 60% at 80% 100%, rgba(47,47,47,0.5) 0%, transparent 70%)',
+          ].join(', '),
+        }} />
+
+        <div style={{ position: 'relative', zIndex: 1, flexShrink: 0 }}>
+          <Sidebar />
         </div>
 
-        <div
-          id="route-container"
+        <main
+          id="main-content"
           style={{
-            flex: 1, width: '100%', position: 'relative',
-            overflowY: 'auto', overflowX: 'hidden',
-            display: 'flex', flexDirection: 'column',
+            flex: 1,
+            height: '100%',
+            overflow: 'hidden',
+            position: 'relative',
+            zIndex: 1,
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
-          <ErrorBoundary key={location.pathname} fallbackTitle={`Error in ${title}`}>
-            <div className="animate-fade-in" style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column' }}>
-              <Routes>
-                <Route path="/feed-status" element={<FeedStatusPage />} />
-                <Route path="/broker-connection" element={<BrokerConnectionPage />} />
-                <Route path="/symbol-setup" element={<SymbolSetupPage />} />
-                <Route path="/settings" element={<SettingsPage />} />
-                <Route path="/logs" element={<LogsPage />} />
-                <Route path="/console" element={<ConsolePage />} />
-                <Route path="/assistant" element={<AssistantPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="*" element={<Navigate to="/feed-status" replace />} />
-              </Routes>
-            </div>
-          </ErrorBoundary>
-        </div>
-      </main>
+          <div
+            id="route-container"
+            style={{
+              flex: 1, width: '100%', position: 'relative',
+              overflowY: 'auto', overflowX: 'hidden',
+              display: 'flex', flexDirection: 'column',
+            }}
+          >
+            <ErrorBoundary key={location.pathname} fallbackTitle={`Error in ${title}`}>
+              <div className="animate-fade-in" style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column' }}>
+                <Routes>
+                  <Route path="/feed-status" element={<FeedStatusPage />} />
+                  <Route path="/broker-connection" element={<BrokerConnectionPage />} />
+                  <Route path="/symbol-setup" element={<SymbolSetupPage />} />
+                  <Route path="/settings" element={<SettingsPage />} />
+                  <Route path="/logs" element={<LogsPage />} />
+                  <Route path="/console" element={<ConsolePage />} />
+                  <Route path="/assistant" element={<AssistantPage />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="*" element={<Navigate to="/feed-status" replace />} />
+                </Routes>
+              </div>
+            </ErrorBoundary>
+          </div>
+        </main>
+      </div>
 
       <MasterDownloadOverlay />
       <ToastContainer />

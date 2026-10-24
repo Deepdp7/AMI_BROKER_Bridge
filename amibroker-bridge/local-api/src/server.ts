@@ -23,7 +23,7 @@ import { setRuntimeProbe } from './services/ai/AiAssistant'
 import { autoRefresh } from './services/AutoRefresh'
 import { morningBrief } from './services/ai/MorningBrief'
 import { feedSimulator } from './services/feedSimulator'
-import { getAllSettings, rotateOldLogs, stmts, flushPendingBars, upsertBarsToHistory, getLastBarTimestampSec, getOldestBarTimestampSec, syncCachesPromise, loadBarsFromDisk } from './db'
+import { getAllSettings, rotateOldLogs, stmts, flushPendingBars, upsertBarsToHistory, getLastBarTimestampSec, getOldestBarTimestampSec, syncCachesPromise } from './db'
 import { backfillQueue } from './services/BackfillQueue'
 import { backfilledTickers } from './shared/backfillState'
 import { getVerifiedThroughMs } from './shared/coverageState'
@@ -118,6 +118,8 @@ setInterval(() => {
 // Returns CSV: timestamp_unix_sec,open,high,low,close,volume
 // This endpoint is called directly by the DataBridgePro.dll C++ plugin
 app.get('/api/feed/bars', async (req, res) => {
+  // Never serve a half-imported database (first start after the PostgreSQL → SQLite move)
+  await syncCachesPromise
   let ticker = String(req.query.ticker || '')
   // Up to ~16 years of 1-minute bars (AmiBroker's own database size setting is the real cap)
   const limit = Math.min(Number(req.query.limit) || 5000, 1_500_000)
@@ -163,19 +165,25 @@ app.get('/api/feed/bars', async (req, res) => {
     const bId = s.brokerId || s.broker_id
     return brokerManager.getAdapter(bId) !== undefined
   }) || existing.find(s => s.amiBrokerTicker === ticker || s.amibroker_ticker === ticker)
-  
-  if (!symRecord) {
-    console.log(`[API] AmiBroker requested unknown symbol ${ticker}, ignoring. Please add it via the UI.`)
-    return res.type('text/plain').send('END\n')
-  }
-  brokerId = symRecord.brokerId || symRecord.broker_id
 
   // Catch-up requests from the plugin pass `since`: filter in SQL instead of loading `limit` rows
   let csv = since > 0
     ? await stmts.getBarsCsvSinceAsync.get(ticker, since, limit)
     : await stmts.getBarsCsvByTickerAsync.get(ticker, limit)
 
-  if (!backfilledTickers.has(ticker) && brokerId) {
+  if (!symRecord) {
+    // Not mapped to a broker (no live ticks / backfill), but stored history is still served:
+    // a lost symbol mapping must never blank a chart that has years of bars in the database.
+    if (!csv) console.log(`[API] AmiBroker requested unknown symbol ${ticker}, ignoring. Please add it via the UI.`)
+    csv = csv ? csv + '\nEND' : 'END\n'
+    feedResponseCache.set(cacheKey, { ts: Date.now(), data: csv })
+    return res.type('text/plain').send(csv)
+  }
+  brokerId = symRecord.brokerId || symRecord.broker_id
+  // AmiBroker is loading this symbol: its pending downloads go first
+  backfillQueue.prioritize(ticker)
+
+  if (!backfilledTickers.has(ticker) && brokerId && brokerId !== 'orphaned') {
     // Enqueue to the centralized rate-limited 1-year backfill queue
     const settings = getAllSettings() as any
     const backfillDepth = Number(settings?.backfillDepthDays) || 365
@@ -329,7 +337,7 @@ feedSimulator.on('broker_status', (status) => {
 })
 
 import { brokerManager } from './services/BrokerManager'
-import { pendingLogins } from './routes/brokers'
+import { activateBroker, openBrokerLogin, startPeriodicCatchUp } from './services/BrokerLifecycle'
 
 brokerManager.on('tick', (tick: any) => {
   feedSimulator.processRealTick(tick, tick.brokerId)
@@ -362,25 +370,10 @@ backfillQueue.on('backfill_failed', (payload) => broadcast('backfill_failed', pa
 autoRefresh.on('status', (payload) => broadcast('auto_refresh', payload))
 morningBrief.on('status', (payload) => broadcast('morning_brief', payload))
 
-// Fix 3: Auto-open browser when WebSocket JWT expires during streaming
+// Auto-open the login page when the token dies while streaming (deduped per broker)
 brokerManager.on('auth_required', (brokerId: string) => {
-  stmts.updateBrokerStatus.run('auth_required', null, brokerId)
+  openBrokerLogin(brokerId, 'Live stream token expired')
   broadcast('broker_status', { id: brokerId, status: 'auth_required' })
-  const broker = stmts.getBrokerById.get(brokerId) as any
-  const creds = stmts.getCredentials.get(brokerId) as any
-  if (broker?.broker_type === 'fyers' && creds?.apiKey) {
-    if (!creds.apiSecret) {
-      console.log(`[Auth] Fyers token expired but API Secret is missing in DB for ${brokerId}. Cannot auto-reauth. Please re-add the broker.`)
-      return
-    }
-    pendingLogins.set(broker.broker_type, { apiKey: creds.apiKey, apiSecret: creds.apiSecret })
-    const redirectUrl = encodeURIComponent('http://127.0.0.1:7890/api/callback/fyers')
-    const loginUrl = `https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${creds.apiKey}&redirect_uri=${redirectUrl}&response_type=code&state=fyers`
-    console.log(`[Auth] WebSocket token expired for ${brokerId}. Auto-opening Fyers login in browser...`)
-    exec(`start "" "${loginUrl}"`, (err) => {
-      if (err) console.error('[Auth] Failed to open browser:', err.message)
-    })
-  }
 })
 
 /** Runs `fn` over `items` with at most `limit` in flight. */
@@ -412,15 +405,9 @@ async function fetchTodayBars(adapter: any, ticker: string) {
     
     const bars = await adapter.getHistoricalBars(brokerToken, '1m', from, to)
     if (bars && bars.length > 0) {
-      const barsToInsert = bars.map((b: any) => ({
-        amibroker_ticker: ticker, ts_utc_ms: b.ts,
-        open: b.open, high: b.high, low: b.low, close: b.close, volume: b.volume,
-        open_interest: null
-      }))
       await upsertBarsToHistory(ticker, bars.map((b: any) => `${Math.floor(b.ts / 1000)},${b.open},${b.high},${b.low},${b.close},${b.volume}`))
-      stmts.insertBarsToRamOnly.run(barsToInsert)
       console.log(`[Init] Incremental update: added ${bars.length} bars for ${ticker} (today)`)
-      notifyAmiBrokerHistoryChanged(ticker)
+      notifyAmiBrokerHistoryChanged(ticker, Math.floor(bars[0].ts / 1000))
       broadcast('log_entry', { level: 'success', component: 'Backfill', message: `Added ${bars.length} bars for ${ticker} (today)` })
     } else {
       broadcast('log_entry', { level: 'warn', component: 'Backfill', message: `No bars returned for ${ticker} today.` })
@@ -455,132 +442,37 @@ async function initSimulator() {
       }
     })
 
-    // Auto-connect real brokers using saved credentials FIRST
-    const brokers = stmts.getBrokers.all() as any[]
+    // Auto-connect real brokers using saved credentials. A working connection takes over the
+    // symbol list, subscribes live ticks and queues the catch-up (missed days) — see
+    // BrokerLifecycle. An expired token opens the login page once; the OAuth callback then
+    // does the same activation, so the catch-up runs as soon as the user has logged in.
+    const brokers = [...(stmts.getBrokers.all() as any[])]
+    const needLogin: any[] = []
     for (const b of brokers) {
+      if (!stmts.getBrokerById.get(b.id)) continue // merged into an account activated above
       const creds = stmts.getCredentials.get(b.id)
-      if (creds && creds.accessToken) {
-        console.log(`[Init] Auto-connecting broker ${b.id}...`)
-        try {
-          await brokerManager.connectBroker(b.id, b.broker_type, {
-            apiKey: creds.apiKey,
-            apiSecret: creds.apiSecret || '',
-            accessToken: creds.accessToken
-          })
-          const adapter = brokerManager.getAdapter(b.id) as any
-          const brokerSymbols = symbols
-            .filter(s => (s.brokerId || s.broker_id) === b.id)
-            .map(s => s.rawSymbol || s.raw_symbol)
-
-          if (brokerSymbols.length > 0) {
-            try {
-              await brokerManager.subscribe(b.id, brokerSymbols)
-            } catch (subErr) {
-              console.error(`[Init] Failed to subscribe symbols for ${b.id}:`, subErr)
-            }
-          }
-        } catch (err: any) {
-          console.error(`[Init] Failed to auto-connect broker ${b.id}:`, err?.message || err)
-          stmts.updateBrokerStatus.run('auth_required', null, b.id)
-          broadcast('broker_status', { id: b.id, status: 'auth_required' })
-          if (b.broker_type === 'fyers' && creds?.apiKey) {
-            if (!creds.apiSecret) {
-              console.log(`[Init] Token expired but API Secret is missing in DB for ${b.id}. Cannot auto-reauth. Please re-add the broker.`)
-              continue
-            }
-            pendingLogins.set(b.broker_type, { apiKey: creds.apiKey, apiSecret: creds.apiSecret })
-            const redirectUrl = encodeURIComponent('http://127.0.0.1:7890/api/callback/fyers')
-            const loginUrl = `https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${creds.apiKey}&redirect_uri=${redirectUrl}&response_type=code&state=fyers`
-            console.log(`[Init] Token expired. Auto-opening Fyers login in browser...`)
-            exec(`start "" "${loginUrl}"`, (e) => {
-              if (e) console.error('[Init] Failed to open browser:', e.message)
-            })
-          }
-        }
+      if (!creds?.accessToken) continue
+      console.log(`[Init] Auto-connecting broker ${b.id}...`)
+      try {
+        await brokerManager.connectBroker(b.id, b.broker_type, {
+          apiKey: creds.apiKey,
+          apiSecret: creds.apiSecret || '',
+          clientId: b.account_id || undefined,
+          accessToken: creds.accessToken
+        })
+      } catch (err: any) {
+        console.error(`[Init] Failed to auto-connect broker ${b.id}:`, err?.message || err)
+        needLogin.push(b)
+        continue
       }
+      await activateBroker(b.id, b.broker_type)
     }
-
-    // Smart incremental backfill on startup:
-
-    /**
-     * For Futures contracts (e.g. INDHOTEL26SEPFUT), parse the expiry month/year
-     * from the ticker name and return an approximate listing start date (expiry - 95 days).
-     * This prevents gap-fills from going back 1 year for contracts that were only
-     * listed ~3 months before expiry.
-     */
-    function getFuturesListingStartMs(ticker: string): number | null {
-      const match = /\d{2}(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)FUT$/i.exec(ticker)
-      if (!match) return null
-      const fullMatch = /^.*?(\d{2})(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)FUT$/i.exec(ticker)
-      if (!fullMatch) return null
-      const yearShort = parseInt(fullMatch[1], 10)
-      const monthStr = fullMatch[2].toUpperCase()
-      const monthMap: Record<string, number> = {
-        JAN: 1, FEB: 2, MAR: 3, APR: 4, MAY: 5, JUN: 6,
-        JUL: 7, AUG: 8, SEP: 9, OCT: 10, NOV: 11, DEC: 12
-      }
-      const month = monthMap[monthStr]
-      const year = 2000 + yearShort
-      // Approximate expiry = last day of expiry month
-      const expiryDate = new Date(year, month - 1, 28)
-      // Futures are listed ~3 months (90 days) before expiry. Give 5 days buffer.
-      const listingMs = expiryDate.getTime() - 95 * 24 * 60 * 60 * 1000
-      // ...and never deeper than 2 months back
-      return Math.max(listingMs, Date.now() - 60 * 24 * 60 * 60 * 1000)
+    // Only accounts still needed: one merged into a connected account needs no login
+    for (const b of needLogin) {
+      if (!stmts.getBrokerById.get(b.id)) continue
+      openBrokerLogin(b.id, 'Saved token expired')
+      broadcast('broker_status', { id: b.id, status: 'auth_required' })
     }
-
-    // Gap scans are database-only, so run a few symbols at a time
-    await forEachLimit(symbols, 4, async (sym: any) => {
-      if (sym.brokerId === 'orphaned') return
-      const ticker = sym.amiBrokerTicker || sym.amibroker_ticker
-      const brokerId = sym.brokerId || sym.broker_id
-      if (!brokerId) return
-      const safeTicker = ticker.replace(/[^a-zA-Z0-9_-]/g, '_')
-
-      const backfillDepth = Number(settings?.backfillDepthDays) || 365
-      const nowMs = Date.now()
-      let targetFromMs = nowMs - (backfillDepth * 24 * 60 * 60 * 1000)
-
-      // For futures contracts, don't backfill before the contract was listed
-      const futuresListingMs = getFuturesListingStartMs(ticker)
-      if (futuresListingMs !== null) {
-        targetFromMs = Math.max(targetFromMs, futuresListingMs)
-      } else {
-        // For non-futures: also cap by oldest existing bar (prevents useless gap-fills)
-        const oldestSec = await getOldestBarTimestampSec(safeTicker)
-        if (oldestSec > 0) {
-          targetFromMs = Math.max(targetFromMs, oldestSec * 1000)
-        }
-      }
-
-      // Only scan what a previous gap pass has not already verified. Without this,
-      // minutes with no trades (illiquid futures) and the pre-listing period are
-      // re-detected as "gaps" on every start and merged into one huge re-download.
-      const verifiedMs = getVerifiedThroughMs(ticker)
-      if (verifiedMs) targetFromMs = Math.max(targetFromMs, verifiedMs)
-
-      const gaps = await detectGaps(ticker, sym.exchange || 'NSE', '1m', safeTicker, targetFromMs, nowMs)
-
-      if (gaps.length > 0) {
-        console.log(`[Init] Enqueueing ${gaps.length} missing gap(s) for ${ticker} (${brokerId})`)
-        // FIX: Remove from backfilledTickers so gap-fill is NOT blocked by persisted state.
-        // A ticker saved from a previous session as "backfilled" may now have new gaps.
-        // We must clear it here so enqueueGapFill() can proceed unblocked.
-        backfilledTickers.delete(ticker)
-        const brokerToken = sym.rawSymbol || sym.raw_symbol || sym.instrumentId || sym.instrument_id || ticker
-        backfillQueue.enqueueGapPass(ticker, brokerId, brokerToken, gaps, nowMs)
-      } else {
-        backfillQueue.enqueueGapPass(ticker, brokerId, '', [], nowMs)
-        const lastTsSec = await getLastBarTimestampSec(safeTicker)
-        const lastDateStr = lastTsSec ? new Date(lastTsSec * 1000).toISOString().slice(0, 16) : 'N/A'
-        console.log(`[Init] Ticker ${ticker} is up to date on disk (last bar: ${lastDateStr}).`)
-        backfilledTickers.add(ticker)
-      }
-    })
-
-    // History depth may have been raised since the last run: fetch any older years still missing
-    backfillQueue.extendAllHistory(Number(settings?.backfillDepthDays) || 365)
-      .catch(err => console.error('[Init] History extension failed:', err))
 
     // === Startup today-bar fetch ===
     // After gap detection, always fetch today's bars for every symbol.
@@ -652,7 +544,6 @@ setInterval(() => {
 
 // ===== Cron Jobs =====
 let isDailyCronRunning = false
-let isGapDetectionRunning = false
 setInterval(() => {
   try {
     const settings = getAllSettings() as unknown as AppSettings
@@ -672,69 +563,7 @@ setInterval(() => {
         }
       }
 
-      console.log('[Cron] Triggering daily historical backfill maintenance for ALL configured symbols...')
-      const symbols = stmts.getSymbols.all() as any[]
-      const nowMs = Date.now()
-      const backfillDepth = Number(settings?.backfillDepthDays) || 365
-      const targetFromMs = nowMs - (backfillDepth * 24 * 60 * 60 * 1000)
-      
-      if (isGapDetectionRunning) {
-        console.log('[Cron] Gap detection is already running, skipping this minute.')
-        return
-      }
-      isGapDetectionRunning = true
-
-      // Using async IIFE so we don't block the setInterval callback
-      ;(async () => {
-        try {
-          for (const sym of symbols) {
-            const brokerId = sym.brokerId || sym.broker_id
-            if (brokerId === 'orphaned' || !brokerId) continue
-            
-            const ticker = sym.amiBrokerTicker || sym.amibroker_ticker
-            if (!ticker) continue
-            
-            const safeTicker = ticker.replace(/[^a-zA-Z0-9_-]/g, '_')
-            const brokerToken = sym.rawSymbol || sym.raw_symbol || sym.instrumentId || sym.instrument_id || ticker
-            
-            // Detect gaps — respect futures listing date
-            let activeTargetFromMs = targetFromMs
-            const futMatchCron = /^.*?(\d{2})(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)FUT$/i.exec(ticker)
-            if (futMatchCron) {
-              const yearShort = parseInt(futMatchCron[1], 10)
-              const monthMap: Record<string, number> = { JAN:1,FEB:2,MAR:3,APR:4,MAY:5,JUN:6,JUL:7,AUG:8,SEP:9,OCT:10,NOV:11,DEC:12 }
-              const month = monthMap[futMatchCron[2].toUpperCase()]
-              const expiryDate = new Date(2000 + yearShort, month - 1, 28)
-              const listingMs = expiryDate.getTime() - 95 * 24 * 60 * 60 * 1000
-              activeTargetFromMs = Math.max(activeTargetFromMs, listingMs, Date.now() - 60 * 24 * 60 * 60 * 1000)
-            } else {
-              const oldestSec = await getOldestBarTimestampSec(safeTicker)
-              if (oldestSec > 0) {
-                activeTargetFromMs = Math.max(activeTargetFromMs, oldestSec * 1000)
-              }
-            }
-            const verifiedMs = getVerifiedThroughMs(ticker)
-            if (verifiedMs) activeTargetFromMs = Math.max(activeTargetFromMs, verifiedMs)
-
-            const gaps = await detectGaps(ticker, sym.exchange || 'NSE', '1m', safeTicker, activeTargetFromMs, nowMs)
-
-            if (gaps.length > 0) {
-              console.log(`[Cron] Enqueueing ${gaps.length} missing gap(s) for ${ticker} (${brokerId})`)
-              // FIX: Clear persisted backfill state so enqueueGapFill is not blocked
-              backfilledTickers.delete(ticker)
-              backfillQueue.enqueueGapPass(ticker, brokerId, brokerToken, gaps, nowMs)
-            } else {
-              backfilledTickers.add(ticker)
-              backfillQueue.enqueueGapPass(ticker, brokerId, brokerToken, [], nowMs)
-            }
-            
-            // Yield the event loop and allow GC to breathe so UI/API remains responsive
-            await new Promise(r => setTimeout(r, 100))
-          }
-        } finally {
-          isGapDetectionRunning = false
-        }
-      })()
+      // Missing-bar checks run every 30 min and after sleep (startPeriodicCatchUp)
     }
   } catch { /* ignore */ }
 }, 60 * 1000) // Check every minute
@@ -766,10 +595,8 @@ server.listen(PORT, HOST, async () => {
     ],
   }))
   await syncCachesPromise
-  // BUG #2 FIX: Load last 3 days of bars from PostgreSQL into RAM cache
-  // so AmiBroker can read historical data immediately on startup
-  loadBarsFromDisk()
   initSimulator()
+  startPeriodicCatchUp()
   // Automatic "Refresh All Today" while the market is open (settings are loaded by now)
   autoRefresh.start(notifyAmiBrokerHistoryChanged)
   morningBrief.start()
@@ -809,16 +636,34 @@ ipcClients.forEach(client => {
 let abRefreshTimeout: NodeJS.Timeout | null = null;
 
 /**
- * Tell the AmiBroker plugin that new historical bars were stored for `ticker`.
- * The plugin then re-fetches everything after its last bar (fills downtime gaps),
- * immediately for open charts, otherwise the next time the symbol is viewed.
+ * Tell the AmiBroker plugin that new historical bars were stored for `ticker`, from `fromSec`
+ * on when known ("SYNC|TICKER|fromSec"). The plugin re-fetches from there and merges the bars
+ * in, also into the middle of its chart (a downtime hole), immediately for open charts,
+ * otherwise the next time the symbol is viewed. Notices are coalesced per ticker for 1 s, so a
+ * multi-chunk download sends one notice with the oldest start instead of one per chunk.
  */
-function notifyAmiBrokerHistoryChanged(ticker: string) {
-  const msg = `SYNC|${ticker}\n`
-  ipcClients.forEach(client => {
-    try { client.write(msg) } catch {}
-  })
+const pendingSyncFrom = new Map<string, number>() // ticker -> oldest fromSec (0 = none given)
+let syncFlushTimer: NodeJS.Timeout | null = null
+function notifyAmiBrokerHistoryChanged(ticker: string, fromSec = 0) {
+  // Keep the oldest start that was given: a notice without one ("recent bars changed") is
+  // already covered by the plugin's default re-read of the last 24 h
+  const prev = pendingSyncFrom.get(ticker) ?? 0
+  pendingSyncFrom.set(ticker, prev && fromSec ? Math.min(prev, fromSec) : prev || fromSec)
+  if (syncFlushTimer) return
+  syncFlushTimer = setTimeout(() => {
+    syncFlushTimer = null
+    const batch = [...pendingSyncFrom]
+    pendingSyncFrom.clear()
+    const msg = batch.map(([t, from]) => (from > 0 ? `SYNC|${t}|${from}\n` : `SYNC|${t}\n`)).join('')
+    ipcClients.forEach(client => {
+      try { client.write(msg) } catch {}
+    })
+  }, 1000)
 }
+
+backfillQueue.on('bars_gap_filled', ({ ticker, fromSec }: { ticker: string, fromSec: number }) => {
+  notifyAmiBrokerHistoryChanged(ticker, fromSec)
+})
 
 backfillQueue.on('backfill_completed', ({ ticker }: { ticker: string }) => {
   notifyAmiBrokerHistoryChanged(ticker)

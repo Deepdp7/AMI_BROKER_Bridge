@@ -5,11 +5,12 @@
  * Every number the assistant quotes comes from here (computed from the bars the
  * bridge already stores), never from the model's own memory.
  *
- * Candles are resampled in SQL from the 1-minute bars in bars_1s:
+ * Candles are resampled (on a database reader thread) from the stored 1-minute bars:
  *   intraday buckets are anchored at the NSE open (09:15 IST), daily buckets at IST midnight.
  * The in-progress live bar (not yet persisted) is merged on top.
  */
-import { pool, stmts } from '../../db'
+import { stmts } from '../../db'
+import { readCandles, readHighLow } from '../../dbReader'
 import { feedSimulator } from '../feedSimulator'
 
 export const TIMEFRAMES = ['1m', '5m', '15m', '30m', '1h', '1d'] as const
@@ -84,25 +85,7 @@ function lookbackMs(tf: Timeframe, count: number): number {
 export async function getCandles(sym: SymbolRecord, tf: Timeframe, count: number): Promise<Candle[]> {
   const { ms, origin } = TF[tf]
   const fromMs = Date.now() - lookbackMs(tf, count)
-  const res = await pool.query(
-    `SELECT b AS bucket,
-            (array_agg(open  ORDER BY ts_utc_ms ASC))[1]  AS open,
-            MAX(high) AS high, MIN(low) AS low,
-            (array_agg(close ORDER BY ts_utc_ms DESC))[1] AS close,
-            SUM(volume) AS volume
-       FROM (SELECT ts_utc_ms, open, high, low, close, volume,
-                    div(ts_utc_ms - $3::bigint, $2::bigint) * $2::bigint + $3::bigint AS b
-               FROM bars_1s
-              WHERE amibroker_ticker = $1 AND ts_utc_ms >= $4::bigint) t
-      GROUP BY b
-      ORDER BY b DESC
-      LIMIT $5`,
-    [sym.ticker, ms, origin, fromMs, count],
-  )
-  const candles: Candle[] = res.rows.reverse().map((r: any) => ({
-    t: Number(r.bucket), open: Number(r.open), high: Number(r.high),
-    low: Number(r.low), close: Number(r.close), volume: Number(r.volume),
-  }))
+  const candles: Candle[] = await readCandles(sym.ticker, fromMs, ms, origin, count)
 
   // Merge the in-progress live bar (current minute, not yet persisted)
   const live = feedSimulator.getLiveBar(sym.ticker, sym.brokerId)
@@ -317,10 +300,7 @@ export async function getQuote(sym: SymbolRecord) {
   const price = live && live.close > 0 ? live.close : (today ?? prev)?.close
   if (!price) return { ticker: sym.ticker, error: 'No data stored yet for this symbol — history may still be downloading.' }
 
-  const yr = await pool.query(
-    'SELECT MAX(high) AS hi, MIN(low) AS lo FROM bars_1s WHERE amibroker_ticker = $1 AND ts_utc_ms >= $2::bigint',
-    [sym.ticker, Date.now() - 365 * 86_400_000],
-  )
+  const yr = await readHighLow(sym.ticker, Date.now() - 365 * 86_400_000)
   const prevClose = prev?.close ?? null
   return {
     ticker: sym.ticker,
@@ -333,7 +313,7 @@ export async function getQuote(sym: SymbolRecord) {
     change: prevClose ? r2(price - prevClose) : null,
     changePct: prevClose ? r2(((price - prevClose) / prevClose) * 100) : null,
     today: today ? { open: r2(today.open), high: r2(Math.max(today.high, price)), low: r2(Math.min(today.low, price)), volume: Math.round(today.volume) } : null,
-    week52: { high: r2(Number(yr.rows[0]?.hi)), low: r2(Number(yr.rows[0]?.lo)) },
+    week52: { high: r2(yr.hi), low: r2(yr.lo) },
   }
 }
 

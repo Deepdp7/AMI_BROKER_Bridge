@@ -157,7 +157,9 @@ export class FyersHSMClient extends EventEmitter {
   public connect() {
     if (this.isConnecting || this.ws?.readyState === WebSocket.OPEN) return
     
-    if (!this.hsmKey && !this.extractHsmKey()) {
+    // Re-read the token on every (re)connect: it expires daily, and a cached key let the stream
+    // reconnect with a dead token forever without ever reporting it
+    if (!this.extractHsmKey()) {
       this.emit('auth_failed')
       return
     }

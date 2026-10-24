@@ -1,14 +1,28 @@
 /**
- * DataBridge Pro — PostgreSQL Data Store
- * Fully migrates away from the in-memory/JSON/CSV SQLite-emulator
- * Uses pg connection pool and asynchronous batched writes
+ * DataBridge Pro — Local Data Store (SQLite)
+ *
+ * One file, %APPDATA%\DataBridgePro\databridge.db, through Node's built-in SQLite: nothing to
+ * install on a client PC. Brokers, symbols and settings are cached in memory for the
+ * synchronous fast paths and written through; bars live only on disk.
+ *
+ * bars: one row per ticker-minute, keyed (tid, ts) WITHOUT ROWID so a ticker's bars sit
+ * together in time order. ts is unix seconds; prices are integers in 1/10000 units (exact for
+ * exchange ticks, and about half the size of REAL). Roughly 40 bytes per bar on disk.
+ *
+ * Heavy reads (multi-year chart loads, gap scans, candles) run in reader worker threads —
+ * see dbReader.ts — so live ticks never wait behind them. Writes stay here: one Fyers chunk
+ * (~25k bars) commits in ~25 ms.
+ *
+ * Earlier versions stored everything in PostgreSQL; pgImport.ts copies that data over once.
  */
 import path from 'path'
 import os from 'os'
 import fs from 'fs'
-import { Pool } from 'pg'
 import dotenv from 'dotenv'
-import type { AppSettings, ExchangeRegistry, BrokerAccount, SymbolMap, LogEntry, Bar1s, ConnectionEvent } from './types'
+import type { DatabaseSync as DatabaseSyncT } from 'node:sqlite'
+import type { AppSettings, ExchangeRegistry } from './types'
+import { readBarsCsv, setReaderDbFile } from './dbReader'
+import { importFromPostgresIfNeeded } from './pgImport'
 
 // ===== Env Resolution =====
 // When running as an installed SEA/Tauri binary, process.cwd() is the install
@@ -41,53 +55,130 @@ import type { AppSettings, ExchangeRegistry, BrokerAccount, SymbolMap, LogEntry,
 export const BARS_DIR = '' // No longer used, but kept exported for legacy references if any
 // BUG #13 FIX: Use proper AppData path, not empty string which resolves to CWD
 export const DATA_DIR = path.join(os.homedir(), 'AppData', 'Roaming', 'DataBridgePro')
+export const DB_FILE = process.env.DATABRIDGE_DB_PATH || path.join(DATA_DIR, 'databridge.db')
 
-// ===== PostgreSQL Connection Pool =====
-// Credentials come from .env (PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD) — see loadEnv() above.
-const pgConfig = {
-  host: process.env.PGHOST || 'localhost',
-  port: parseInt(process.env.PGPORT || '5432'),
-  database: process.env.PGDATABASE || 'AMI_BROKER-Bridge',
-  user: process.env.PGUSER || 'postgres',
-  password: process.env.PGPASSWORD || '987498',
-}
-
-export const pool = new Pool({
-  ...pgConfig,
-  max: 12, // max connections (backfill workers + live flush + API reads)
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 15000,
-})
-
-/**
- * Create the configured database if it does not exist yet (fresh install).
- * Connects to the built-in "postgres" maintenance DB with the same credentials.
- */
-async function ensureDatabaseExists() {
+/** Loads node:sqlite without its one-off "experimental feature" warning (it only confuses users). */
+export function loadSqlite(): typeof import('node:sqlite') {
+  const emitWarning = process.emitWarning
+  process.emitWarning = ((w: any, ...rest: any[]) => {
+    if (!/SQLite/.test(String(w?.message ?? w))) (emitWarning as any).call(process, w, ...rest)
+  }) as typeof process.emitWarning
   try {
-    const probe = await pool.connect()
-    probe.release()
-    return
-  } catch (err: any) {
-    if (err?.code !== '3D000') throw err // 3D000 = invalid_catalog_name (database missing)
-  }
-  console.log(`[POSTGRES] Database "${pgConfig.database}" not found — creating it...`)
-  const admin = new Pool({ ...pgConfig, database: 'postgres', max: 1 })
-  try {
-    const quoted = '"' + pgConfig.database.replace(/"/g, '""') + '"'
-    await admin.query(`CREATE DATABASE ${quoted}`)
-    console.log(`[POSTGRES] Database "${pgConfig.database}" created.`)
+    return require('node:sqlite')
   } finally {
-    await admin.end()
+    process.emitWarning = emitWarning
   }
 }
 
-// Test connection on startup
-pool.query('SELECT 1').then(() => {
-  console.log('[POSTGRES] Connected successfully')
-}).catch((err: Error) => {
-  console.error('[POSTGRES] Connection failed. The system will retry dynamically.', err.message)
-})
+fs.mkdirSync(path.dirname(DB_FILE), { recursive: true })
+const { DatabaseSync } = loadSqlite()
+export const sqlite: DatabaseSyncT = new DatabaseSync(DB_FILE)
+// WAL: the reader workers read while this connection writes. NORMAL: no fsync per commit
+// (an app crash loses nothing; a power cut can lose the last second of bars).
+const SCHEMA = `
+  PRAGMA busy_timeout = 5000;
+  PRAGMA journal_mode = WAL;
+  PRAGMA synchronous = NORMAL;
+  PRAGMA temp_store = MEMORY;
+
+  CREATE TABLE IF NOT EXISTS brokers (
+    id TEXT PRIMARY KEY,
+    broker_type TEXT,
+    label TEXT,
+    credential_ref TEXT,
+    api_key TEXT,
+    api_secret TEXT,
+    access_token TEXT,
+    status TEXT,
+    health_score INTEGER,
+    reconnect_count_1h INTEGER,
+    account_id TEXT,
+    created_at INTEGER,
+    last_connected_at INTEGER
+  );
+
+  CREATE TABLE IF NOT EXISTS symbols (
+    instrument_id TEXT,
+    broker_id TEXT,
+    amibroker_ticker TEXT,
+    exchange TEXT,
+    instrument_type TEXT,
+    raw_symbol TEXT,
+    created_at INTEGER,
+    PRIMARY KEY (instrument_id, broker_id),
+    UNIQUE (broker_id, amibroker_ticker)
+  );
+
+  CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS connection_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    broker_id TEXT,
+    event_type TEXT,
+    detail TEXT,
+    ts_utc_ms INTEGER
+  );
+  CREATE INDEX IF NOT EXISTS connection_events_broker_ts ON connection_events (broker_id, ts_utc_ms);
+
+  CREATE TABLE IF NOT EXISTS logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    timestamp INTEGER,
+    level TEXT,
+    component TEXT,
+    message TEXT
+  );
+  CREATE INDEX IF NOT EXISTS logs_timestamp ON logs (timestamp);
+
+  CREATE TABLE IF NOT EXISTS tickers (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE
+  );
+
+  CREATE TABLE IF NOT EXISTS bars (
+    tid INTEGER NOT NULL,
+    ts INTEGER NOT NULL,
+    open INTEGER,
+    high INTEGER,
+    low INTEGER,
+    close INTEGER,
+    volume INTEGER,
+    oi INTEGER,
+    PRIMARY KEY (tid, ts)
+  ) WITHOUT ROWID;
+`
+
+// Another engine process can hold the file for a moment (the desktop app restarting a crashed
+// engine); switching to WAL then fails at once with "database is locked" instead of waiting
+for (let attempt = 1; ; attempt++) {
+  try {
+    sqlite.exec(SCHEMA)
+    break
+  } catch (err: any) {
+    if (!/locked|busy/i.test(String(err?.message)) || attempt >= 50) throw err
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200) // startup only: sleep 200 ms
+  }
+}
+
+setReaderDbFile(DB_FILE)
+
+/** Runs `fn` in one transaction (one disk commit for many rows). Not re-entrant. */
+function tx<T>(fn: () => T): T {
+  sqlite.exec('BEGIN')
+  try {
+    const result = fn()
+    sqlite.exec('COMMIT')
+    return result
+  } catch (err) {
+    sqlite.exec('ROLLBACK')
+    throw err
+  }
+}
+
+/** node:sqlite rejects `undefined` parameters */
+const n = (v: unknown) => (v === undefined ? null : v) as any
 
 // ===== Exchange Registry (static) =====
 export const exchangeRegistry: ExchangeRegistry[] = [
@@ -122,218 +213,168 @@ const defaultSettings: AppSettings = {
 const brokersCache: any[] = []
 const symbolsCache: any[] = []
 const settingsCache = new Map<string, unknown>(Object.entries(defaultSettings))
-const barsMemCache = new Map<string, Map<number, Bar1s>>()
+const tickerIds = new Map<string, number>()
 
-// Asynchronous Batch Writers (to keep event loop non-blocking)
-const pendingBarsAppends = new Map<string, any[]>() // key: amibroker_ticker, value: bar objects
+const q = {
+  insertTicker: sqlite.prepare('INSERT OR IGNORE INTO tickers (name) VALUES (?)'),
+  getTickerId: sqlite.prepare('SELECT id FROM tickers WHERE name = ?'),
+  // Live-tick bars never overwrite broker history
+  insertLiveBar: sqlite.prepare('INSERT OR IGNORE INTO bars (tid, ts, open, high, low, close, volume, oi) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'),
+  // Broker history is authoritative; identical rows are skipped (no write, changes = 0)
+  upsertHistoryBar: sqlite.prepare(`
+    INSERT INTO bars (tid, ts, open, high, low, close, volume, oi) VALUES (?, ?, ?, ?, ?, ?, ?, NULL)
+    ON CONFLICT (tid, ts) DO UPDATE SET
+      open = excluded.open, high = excluded.high, low = excluded.low, close = excluded.close, volume = excluded.volume
+    WHERE (open, high, low, close, volume) IS NOT (excluded.open, excluded.high, excluded.low, excluded.close, excluded.volume)
+  `),
+  lastBarTs: sqlite.prepare('SELECT ts FROM bars WHERE tid = ? ORDER BY ts DESC LIMIT 1'),
+  oldestBarTs: sqlite.prepare('SELECT ts FROM bars WHERE tid = ? ORDER BY ts ASC LIMIT 1'),
+  deleteTickerBars: sqlite.prepare('DELETE FROM bars WHERE tid = ?'),
 
-async function initSchema() {
-  const client = await pool.connect()
-  try {
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS brokers (
-        id TEXT PRIMARY KEY,
-        broker_type TEXT,
-        label TEXT,
-        credential_ref TEXT,
-        api_key TEXT,
-        api_secret TEXT,
-        access_token TEXT,
-        status TEXT,
-        health_score INTEGER,
-        reconnect_count_1h INTEGER,
-        account_id TEXT,
-        created_at BIGINT,
-        last_connected_at BIGINT
-      );
+  upsertBroker: sqlite.prepare(`
+    INSERT INTO brokers (id, broker_type, label, credential_ref, status, health_score, reconnect_count_1h, account_id, created_at, last_connected_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT (id) DO UPDATE SET broker_type = excluded.broker_type, label = excluded.label
+  `),
+  updateBrokerStatus: sqlite.prepare('UPDATE brokers SET status = ?, last_connected_at = ? WHERE id = ?'),
+  updateBrokerHealth: sqlite.prepare('UPDATE brokers SET health_score = ?, reconnect_count_1h = ? WHERE id = ?'),
+  updateCredentials: sqlite.prepare('UPDATE brokers SET api_key = ?, api_secret = ?, access_token = ? WHERE id = ?'),
+  updateAccountId: sqlite.prepare('UPDATE brokers SET account_id = ? WHERE id = ?'),
+  deleteBroker: sqlite.prepare('DELETE FROM brokers WHERE id = ?'),
 
-      CREATE TABLE IF NOT EXISTS symbols (
-        instrument_id TEXT,
-        broker_id TEXT,
-        amibroker_ticker TEXT,
-        exchange TEXT,
-        instrument_type TEXT,
-        raw_symbol TEXT,
-        created_at BIGINT,
-        PRIMARY KEY (instrument_id, broker_id),
-        UNIQUE (broker_id, amibroker_ticker)
-      );
+  upsertSymbol: sqlite.prepare(`
+    INSERT INTO symbols (broker_id, instrument_id, amibroker_ticker, exchange, instrument_type, raw_symbol, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT (broker_id, amibroker_ticker) DO UPDATE SET raw_symbol = excluded.raw_symbol
+  `),
+  deleteSymbol: sqlite.prepare('DELETE FROM symbols WHERE broker_id = ? AND amibroker_ticker = ?'),
+  deleteDuplicateSymbols: sqlite.prepare(`
+    DELETE FROM symbols WHERE broker_id = ? AND EXISTS (
+      SELECT 1 FROM symbols t WHERE t.broker_id = ?
+        AND (t.amibroker_ticker = symbols.amibroker_ticker OR t.instrument_id = symbols.instrument_id))
+  `),
+  moveSymbols: sqlite.prepare('UPDATE symbols SET broker_id = ? WHERE broker_id = ?'),
 
-      CREATE TABLE IF NOT EXISTS settings (
-        key TEXT PRIMARY KEY,
-        value TEXT
-      );
+  upsertSetting: sqlite.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT (key) DO UPDATE SET value = excluded.value'),
 
-      CREATE TABLE IF NOT EXISTS connection_events (
-        id SERIAL PRIMARY KEY,
-        broker_id TEXT,
-        event_type TEXT,
-        detail TEXT,
-        ts_utc_ms BIGINT
-      );
+  insertEvent: sqlite.prepare('INSERT INTO connection_events (broker_id, event_type, detail, ts_utc_ms) VALUES (?, ?, ?, ?)'),
+  recentEvents: sqlite.prepare('SELECT * FROM connection_events WHERE broker_id = ? ORDER BY ts_utc_ms DESC LIMIT ?'),
+  eventsSince: sqlite.prepare('SELECT * FROM connection_events WHERE ts_utc_ms > ?'),
 
-      CREATE TABLE IF NOT EXISTS logs (
-        id SERIAL PRIMARY KEY,
-        timestamp BIGINT,
-        level TEXT,
-        component TEXT,
-        message TEXT
-      );
-
-      CREATE TABLE IF NOT EXISTS bars_1s (
-        amibroker_ticker TEXT,
-        ts_utc_ms BIGINT,
-        open REAL,
-        high REAL,
-        low REAL,
-        close REAL,
-        volume REAL,
-        open_interest REAL,
-        PRIMARY KEY (amibroker_ticker, ts_utc_ms)
-      );
-    `)
-  } catch (err) {
-    console.error('[POSTGRES] Failed to initialize schema:', err)
-  } finally {
-    client.release()
-  }
+  insertLog: sqlite.prepare('INSERT INTO logs (timestamp, level, component, message) VALUES (?, ?, ?, ?)'),
 }
+
+function loadCaches() {
+  brokersCache.length = 0
+  brokersCache.push(...(sqlite.prepare('SELECT * FROM brokers ORDER BY created_at ASC').all() as any[]))
+
+  symbolsCache.length = 0
+  for (const r of sqlite.prepare('SELECT * FROM symbols').all() as any[]) {
+    symbolsCache.push({
+      brokerId: r.broker_id, instrumentId: r.instrument_id,
+      amiBrokerTicker: r.amibroker_ticker, exchange: r.exchange,
+      instrumentType: r.instrument_type, rawSymbol: r.raw_symbol, createdAt: r.created_at,
+    })
+  }
+
+  // Stored values are JSON text; callers parse them (getAllSettings) and coerce numbers
+  for (const r of sqlite.prepare('SELECT * FROM settings').all() as any[]) settingsCache.set(r.key, r.value)
+
+  tickerIds.clear()
+  for (const r of sqlite.prepare('SELECT id, name FROM tickers').all() as any[]) tickerIds.set(r.name, Number(r.id))
+}
+loadCaches()
 
 async function syncCaches() {
   try {
-    await ensureDatabaseExists()
-    await initSchema()
-
-    const bRes = await pool.query('SELECT * FROM brokers ORDER BY created_at ASC')
-    brokersCache.length = 0
-    bRes.rows.forEach((r: any) => brokersCache.push(r))
-
-    const sRes = await pool.query('SELECT * FROM symbols')
-    symbolsCache.length = 0
-    sRes.rows.forEach((r: any) => symbolsCache.push({
-      brokerId: r.broker_id, instrumentId: r.instrument_id,
-      amiBrokerTicker: r.amibroker_ticker, exchange: r.exchange,
-      instrumentType: r.instrument_type, rawSymbol: r.raw_symbol, createdAt: r.created_at
-    }))
-
-    const setRes = await pool.query('SELECT * FROM settings')
-    setRes.rows.forEach((r: any) => settingsCache.set(r.key, r.value))
+    if (await importFromPostgresIfNeeded(sqlite)) loadCaches()
   } catch (err) {
-    console.error('[POSTGRES] Failed to sync caches on startup:', err)
+    console.error('[DB] PostgreSQL import failed (continuing with the local database):', err)
   }
 }
 
-// Initiate first sync
+// Resolves once older PostgreSQL data (if any) has been imported; callers await it before
+// serving bars so AmiBroker never syncs from a half-imported database.
 export const syncCachesPromise = syncCaches()
 
-export function invalidateDiskBarsCache(safeTicker: string) {
-  // no-op in postgres
+// ===== Bars =====
+const PRICE_SCALE = 10000
+const px = (p: number) => Math.round(p * PRICE_SCALE)
+
+/** Ticker id, created on first write */
+function tickerId(name: string): number {
+  let id = tickerIds.get(name)
+  if (id === undefined) {
+    q.insertTicker.run(name)
+    id = Number((q.getTickerId.get(name) as any).id)
+    tickerIds.set(name, id)
+  }
+  return id
 }
 
-let isFlushingBars = false
-// Periodically flush bar appends asynchronously
-setInterval(async () => {
-  if (isFlushingBars) return
+export function invalidateDiskBarsCache(_safeTicker: string) {
+  // no-op: reads always come from the database
+}
+
+// Live bars are buffered and committed together every 2 s
+const pendingBarsAppends = new Map<string, any[]>() // key: amibroker_ticker, value: bar objects
+
+function flushLiveBars() {
   if (pendingBarsAppends.size === 0) return
-  
-  isFlushingBars = true
-  const currentAppends = new Map(pendingBarsAppends)
+  const batch = new Map(pendingBarsAppends)
   pendingBarsAppends.clear()
-
-  const client = await pool.connect()
   try {
-    await client.query('BEGIN')
-    for (const [ticker, bars] of currentAppends.entries()) {
-      if (bars.length === 0) continue
-      for (let i = 0; i < bars.length; i += 5000) {
-        const chunk = bars.slice(i, i + 5000)
-        await client.query(`
-          INSERT INTO bars_1s (amibroker_ticker, ts_utc_ms, open, high, low, close, volume, open_interest)
-          SELECT $1, t.ts, t.o, t.h, t.l, t.c, t.v, t.oi
-          FROM unnest($2::bigint[], $3::real[], $4::real[], $5::real[], $6::real[], $7::real[], $8::real[]) AS t(ts, o, h, l, c, v, oi)
-          ON CONFLICT (amibroker_ticker, ts_utc_ms) DO NOTHING
-        `, [ticker, chunk.map(b => b.ts_utc_ms), chunk.map(b => b.open), chunk.map(b => b.high),
-            chunk.map(b => b.low), chunk.map(b => b.close), chunk.map(b => b.volume), chunk.map(b => b.open_interest || null)])
+    tx(() => {
+      for (const [ticker, bars] of batch) {
+        const tid = tickerId(ticker)
+        for (const b of bars) {
+          q.insertLiveBar.run(tid, Math.floor(b.ts_utc_ms / 1000), px(b.open), px(b.high), px(b.low), px(b.close), Math.round(b.volume || 0), b.open_interest == null ? null : Math.round(b.open_interest))
+        }
       }
-    }
-    await client.query('COMMIT')
+    })
   } catch (err) {
-    await client.query('ROLLBACK').catch(() => {})
-    console.error('[POSTGRES] Failed to flush bars batch:', err)
-    // Re-queue failed bars
-    for (const [ticker, bars] of currentAppends.entries()) {
-      let existing = pendingBarsAppends.get(ticker) || []
-      pendingBarsAppends.set(ticker, [...existing, ...bars])
-    }
-  } finally {
-    isFlushingBars = false
-    client.release()
+    console.error('[DB] Failed to write live bars (will retry):', err)
+    for (const [ticker, bars] of batch) pendingBarsAppends.set(ticker, [...bars, ...(pendingBarsAppends.get(ticker) || [])])
   }
-}, 2000)
+}
+setInterval(flushLiveBars, 2000).unref()
 
-// ===== Migration Stubs =====
 export function insertBarBatch(barsToInsert: any[]) {
-  // Push into pendingBarsAppends
   for (const bar of barsToInsert) {
     const ticker = bar.amibroker_ticker || bar.ticker
     if (!ticker) continue
-    let existing = pendingBarsAppends.get(ticker) || []
+    let existing = pendingBarsAppends.get(ticker)
+    if (!existing) pendingBarsAppends.set(ticker, existing = [])
     existing.push(bar)
-    pendingBarsAppends.set(ticker, existing)
   }
 }
 
-// BUG #4 FIX: Implement actual PostgreSQL upsert (was empty stub — backfill data was silently discarded)
-// Broker history is authoritative: it replaces bars built from live ticks for the same minute
-// (live-tick bars in the flush above use DO NOTHING, so they never overwrite history).
-/** Upserts broker history bars; returns how many rows were inserted or actually changed. */
+/**
+ * Upserts broker history bars ("tsSec,open,high,low,close,volume" lines); returns how many rows
+ * were inserted or actually changed. Broker history replaces bars built from live ticks for
+ * the same minute (live inserts never overwrite history).
+ */
 export async function upsertBarsToHistory(amibrokerTicker: string, csvLines: string[]): Promise<number> {
   // Skip the still-forming minute: a partial history bar would block the live bar for that
   // minute (live inserts never overwrite history), leaving it with partial volume.
   const currentMinuteSec = Math.floor(Date.now() / 60000) * 60
-  // One row per minute (last wins): a statement may not upsert the same key twice
-  const byMinute = new Map<string, string>()
+  // One row per minute (last wins)
+  const byMinute = new Map<number, string[]>()
   for (const line of csvLines) {
-    const tsSec = line.slice(0, line.indexOf(','))
-    if (Number(tsSec) < currentMinuteSec) byMinute.set(tsSec, line)
+    const p = line.split(',')
+    const tsSec = Number(p[0])
+    if (tsSec < currentMinuteSec) byMinute.set(tsSec, p)
   }
-  csvLines = [...byMinute.values()]
-  if (csvLines.length === 0) return 0
+  if (byMinute.size === 0) return 0
 
-  let changed = 0
-  const client = await pool.connect()
-  try {
-    await client.query('BEGIN')
-    // Larger chunks via typed arrays: no SQL string building, one plan, far fewer bytes parsed
-    for (let i = 0; i < csvLines.length; i += 5000) {
-      const chunk = csvLines.slice(i, i + 5000)
-      const ts: number[] = [], o: number[] = [], h: number[] = [], l: number[] = [], c: number[] = [], v: number[] = []
-      for (const line of chunk) {
-        const p = line.split(',')
-        ts.push(Number(p[0]) * 1000); o.push(Number(p[1])); h.push(Number(p[2])); l.push(Number(p[3])); c.push(Number(p[4])); v.push(Number(p[5]))
-      }
-      // Identical rows are skipped (no write, not counted) so callers know whether anything changed
-      const res = await client.query(`
-        INSERT INTO bars_1s AS b (amibroker_ticker, ts_utc_ms, open, high, low, close, volume, open_interest)
-        SELECT $1, t.ts, t.o, t.h, t.l, t.c, t.v, NULL
-        FROM unnest($2::bigint[], $3::real[], $4::real[], $5::real[], $6::real[], $7::real[]) AS t(ts, o, h, l, c, v)
-        ON CONFLICT (amibroker_ticker, ts_utc_ms) DO UPDATE SET
-          open = EXCLUDED.open, high = EXCLUDED.high, low = EXCLUDED.low,
-          close = EXCLUDED.close, volume = EXCLUDED.volume
-        WHERE (b.open, b.high, b.low, b.close, b.volume)
-          IS DISTINCT FROM (EXCLUDED.open, EXCLUDED.high, EXCLUDED.low, EXCLUDED.close, EXCLUDED.volume)
-      `, [amibrokerTicker, ts, o, h, l, c, v])
-      changed += res.rowCount ?? 0
+  return tx(() => {
+    const tid = tickerId(amibrokerTicker)
+    let changed = 0
+    for (const [tsSec, p] of byMinute) {
+      changed += Number(q.upsertHistoryBar.run(tid, tsSec, px(Number(p[1])), px(Number(p[2])), px(Number(p[3])), px(Number(p[4])), Math.round(Number(p[5]) || 0)).changes)
     }
-    await client.query('COMMIT')
     return changed
-  } catch (err) {
-    await client.query('ROLLBACK').catch(() => {})
-    console.error('[POSTGRES] upsertBarsToHistory failed:', err)
-    throw err
-  } finally {
-    client.release()
-  }
+  })
 }
 
 /**
@@ -362,81 +403,160 @@ export function validateBar(open: number, high: number, low: number, close: numb
   return true
 }
 
+export async function getLastBarTimestampSec(amibrokerTicker: string): Promise<number> {
+  const tid = tickerIds.get(amibrokerTicker)
+  if (tid === undefined) return 0
+  const row = q.lastBarTs.get(tid) as any
+  return row ? Number(row.ts) : 0
+}
+
+export async function getOldestBarTimestampSec(amibrokerTicker: string): Promise<number> {
+  const tid = tickerIds.get(amibrokerTicker)
+  if (tid === undefined) return 0
+  const row = q.oldestBarTs.get(tid) as any
+  return row ? Number(row.ts) : 0
+}
+
+// ===== Settings =====
 export function upsertSettings(k: string | Record<string, unknown>, v?: string) {
   if (typeof k === 'object') {
-    for (const [key, value] of Object.entries(k)) {
-      const strValue = JSON.stringify(value)
-      settingsCache.set(key, value)
-      pool.query('INSERT INTO settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = $2', [key, strValue]).catch((e: Error) => console.error(e))
-    }
+    tx(() => {
+      for (const [key, value] of Object.entries(k)) {
+        settingsCache.set(key, value)
+        q.upsertSetting.run(key, JSON.stringify(value))
+      }
+    })
   } else if (v !== undefined) {
     settingsCache.set(k, v)
-    pool.query('INSERT INTO settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = $2', [k, v]).catch((e: Error) => console.error(e))
+    q.upsertSetting.run(k, v)
   }
 }
 
-// ===== Prepared statement emulators =====
-// We return synchronously from memory for fast paths where AmiBroker requires synchronous responses,
-// and asynchronously execute the postgres statements.
+// ===== Symbol ownership =====
+/** broker_id of symbols whose broker was removed; the next broker that connects adopts them */
+export const ORPHANED = 'orphaned'
+
+function reassignSymbols(fromId: string, toId: string): Array<{ ticker: string; previousBrokerId: string; record: any }> {
+  if (fromId === toId) return []
+  const moved: Array<{ ticker: string; previousBrokerId: string; record: any }> = []
+  tx(() => {
+    q.deleteDuplicateSymbols.run(fromId, toId)
+    q.moveSymbols.run(toId, fromId)
+  })
+  for (let i = symbolsCache.length - 1; i >= 0; i--) {
+    const s = symbolsCache[i]
+    if (s.brokerId !== fromId) continue
+    // Target already tracks this ticker/instrument: keep its row, drop the duplicate
+    const dup = symbolsCache.some(t => t.brokerId === toId && (t.amiBrokerTicker === s.amiBrokerTicker || t.instrumentId === s.instrumentId))
+    if (dup) { symbolsCache.splice(i, 1); continue }
+    s.brokerId = toId
+    moved.push({ ticker: s.amiBrokerTicker, previousBrokerId: fromId, record: s })
+  }
+  return moved
+}
+
+// ===== Logs (buffered: the engine logs several lines a second during market hours) =====
+const pendingLogs: Array<[number, string, string, string]> = []
+function flushLogs() {
+  if (pendingLogs.length === 0) return
+  const batch = pendingLogs.splice(0)
+  try {
+    tx(() => { for (const l of batch) q.insertLog.run(...l) })
+  } catch (err) {
+    console.error('[DB] Failed to write logs:', err)
+  }
+}
+setInterval(flushLogs, 1000).unref()
+
+export function appendLog(level: string, component: string, message: string) {
+  pendingLogs.push([Date.now(), level, component, message])
+}
+
+/** Most recent log rows, newest first (optionally filtered) */
+export async function queryLogs(opts: { level?: string; component?: string; limit: number }): Promise<any[]> {
+  flushLogs()
+  let sql = 'SELECT * FROM logs WHERE 1=1'
+  const params: any[] = []
+  if (opts.level) { sql += ' AND level = ?'; params.push(opts.level) }
+  if (opts.component) { sql += ' AND component = ?'; params.push(opts.component) }
+  sql += ' ORDER BY timestamp DESC LIMIT ?'
+  params.push(opts.limit)
+  return sqlite.prepare(sql).all(...params) as any[]
+}
+
+export async function getLogs(limit: number = 1000): Promise<any[]> {
+  flushLogs()
+  return sqlite.prepare('SELECT timestamp AS ts, level, component, message FROM logs ORDER BY timestamp DESC LIMIT ?').all(limit) as any[]
+}
+
+export function clearLogs() {
+  pendingLogs.length = 0
+  sqlite.exec('DELETE FROM logs')
+}
+
+export function rotateOldLogs(retentionDays: number = 14) {
+  const cutoffMs = Date.now() - retentionDays * 24 * 60 * 60 * 1000
+  try {
+    sqlite.prepare('DELETE FROM logs WHERE timestamp < ?').run(cutoffMs)
+    sqlite.prepare('DELETE FROM connection_events WHERE ts_utc_ms < ?').run(cutoffMs)
+  } catch (err) {
+    console.error('[DB] Log rotation failed:', err)
+  }
+}
+
+// ===== Prepared statement facade (synchronous where AmiBroker / the routes need it) =====
 export const stmts = {
   // Broker accounts
   getBrokers: { all: () => brokersCache },
   getBrokerById: { get: (id: string) => brokersCache.find(b => b.id === id) },
   insertBroker: {
-    run: (row: any) => { 
-      brokersCache.push(row)
-      pool.query(`
-        INSERT INTO brokers (id, broker_type, label, credential_ref, status, health_score, reconnect_count_1h, account_id, created_at, last_connected_at)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-        ON CONFLICT (id) DO UPDATE SET broker_type = EXCLUDED.broker_type, label = EXCLUDED.label
-      `, [row.id, row.broker_type, row.label, row.credential_ref, row.status, row.health_score, row.reconnect_count_1h, row.account_id, row.created_at, row.last_connected_at]).catch(console.error)
+    run: (row: any) => {
+      q.upsertBroker.run(row.id, n(row.broker_type), n(row.label), n(row.credential_ref), n(row.status), n(row.health_score), n(row.reconnect_count_1h), n(row.account_id), n(row.created_at), n(row.last_connected_at))
+      const existing = brokersCache.find(b => b.id === row.id)
+      if (existing) Object.assign(existing, { broker_type: row.broker_type, label: row.label })
+      else brokersCache.push({ ...row })
     }
   },
   updateBrokerStatus: {
     run: (status: string, lastConnectedAt: number | null, id: string) => {
       const b = brokersCache.find(b => b.id === id)
-      if (b) { b.status = status; b.last_connected_at = lastConnectedAt; }
-      pool.query(`UPDATE brokers SET status = $1, last_connected_at = $2 WHERE id = $3`, [status, lastConnectedAt, id]).catch(console.error)
+      if (b) { b.status = status; b.last_connected_at = lastConnectedAt }
+      q.updateBrokerStatus.run(status, n(lastConnectedAt), id)
+    }
+  },
+  /** Broker's own account id: Kite user id, Dhan Client ID (Dhan needs it to log in and stream) */
+  updateBrokerAccountId: {
+    run: (accountId: string | null, id: string) => {
+      const b = brokersCache.find(b => b.id === id)
+      if (b) b.account_id = accountId
+      q.updateAccountId.run(n(accountId), id)
     }
   },
   updateBrokerHealth: {
     run: (healthScore: number, reconnectCount: number, id: string) => {
       const b = brokersCache.find(b => b.id === id)
       if (b) { b.health_score = healthScore; b.reconnect_count_1h = reconnectCount }
-      pool.query(`UPDATE brokers SET health_score = $1, reconnect_count_1h = $2 WHERE id = $3`, [healthScore, reconnectCount, id]).catch(console.error)
+      q.updateBrokerHealth.run(healthScore, reconnectCount, id)
     }
   },
-  deleteBroker: { 
-    run: (id: string) => { 
+  deleteBroker: {
+    run: (id: string) => {
       const idx = brokersCache.findIndex(b => b.id === id)
       if (idx !== -1) brokersCache.splice(idx, 1)
-      // BUG #3 FIX: Remove symbols from symbolsCache immediately (was a known no-op)
-      for (let i = symbolsCache.length - 1; i >= 0; i--) {
-        if (symbolsCache[i].brokerId === id) {
-          symbolsCache.splice(i, 1)
-        }
-      }
-      // Delete symbols first, then delete broker (FK constraint)
-      pool.query('DELETE FROM symbols WHERE broker_id = $1', [id])
-        .then(() => pool.query('DELETE FROM brokers WHERE id = $1', [id]))
-        .catch(console.error)
-    } 
+      // The symbol list belongs to the user, not to one login: park it as 'orphaned' so the
+      // next broker that connects adopts it (deleting it here wiped every symbol on re-login).
+      reassignSymbols(id, ORPHANED)
+      q.deleteBroker.run(id)
+    }
+  },
+
+  /** Moves every symbol of `fromId` to `toId`; returns the moved records (with their previous broker id). */
+  reassignSymbols: {
+    run: (fromId: string, toId: string) => reassignSymbols(fromId, toId)
   },
 
   adoptOrphanedSymbols: {
-    run: (newBrokerId: string) => {
-      let adopted = 0
-      symbolsCache.forEach(s => {
-        if (s.brokerId === 'orphaned') {
-          s.brokerId = newBrokerId
-          adopted++
-        }
-      })
-      if (adopted > 0) {
-        pool.query(`UPDATE symbols SET broker_id = $1 WHERE broker_id = 'orphaned'`, [newBrokerId]).catch(console.error)
-      }
-      return adopted
-    }
+    run: (newBrokerId: string) => reassignSymbols(ORPHANED, newBrokerId).length
   },
 
   // Credentials
@@ -444,17 +564,16 @@ export const stmts = {
     const b = brokersCache.find(b => b.id === id)
     return b ? { apiKey: b.api_key, apiSecret: b.api_secret, accessToken: b.access_token } : undefined
   }},
-  upsertCredentials: { 
-    run: (id: string, creds: { apiKey: string, apiSecret?: string, accessToken: string }) => { 
+  upsertCredentials: {
+    run: (id: string, creds: { apiKey: string, apiSecret?: string, accessToken: string }) => {
       const b = brokersCache.find(b => b.id === id)
       if (b) {
         b.api_key = creds.apiKey
         b.api_secret = creds.apiSecret
         b.access_token = creds.accessToken
       }
-      pool.query(`UPDATE brokers SET api_key = $1, api_secret = $2, access_token = $3 WHERE id = $4`, 
-        [creds.apiKey, creds.apiSecret, creds.accessToken, id]).catch(console.error)
-    } 
+      q.updateCredentials.run(n(creds.apiKey), n(creds.apiSecret), n(creds.accessToken), id)
+    }
   },
 
   // Symbol map
@@ -462,26 +581,27 @@ export const stmts = {
   getSymbolsByBroker: { all: (brokerId: string) => symbolsCache.filter(s => s.brokerId === brokerId) },
   insertSymbol: {
     run: (s: { broker_id: string; instrument_id: string; amibroker_ticker: string; exchange: string; instrument_type: string; raw_symbol: string; created_at: number }) => {
+      try {
+        q.upsertSymbol.run(s.broker_id, n(s.instrument_id), s.amibroker_ticker, n(s.exchange), n(s.instrument_type), n(s.raw_symbol), n(s.created_at))
+      } catch (err) {
+        console.error(`[DB] Failed to save symbol ${s.amibroker_ticker}:`, err)
+        return
+      }
       const idx = symbolsCache.findIndex(sym => sym.brokerId === s.broker_id && sym.amiBrokerTicker === s.amibroker_ticker)
       const obj = { brokerId: s.broker_id, instrumentId: s.instrument_id, amiBrokerTicker: s.amibroker_ticker, exchange: s.exchange, instrumentType: s.instrument_type, rawSymbol: s.raw_symbol, createdAt: s.created_at }
-      if (idx !== -1) symbolsCache[idx] = obj
+      if (idx !== -1) symbolsCache[idx] = { ...obj, instrumentId: symbolsCache[idx].instrumentId }
       else symbolsCache.push(obj)
-
-      pool.query(`
-        INSERT INTO symbols (broker_id, instrument_id, amibroker_ticker, exchange, instrument_type, raw_symbol, created_at)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        ON CONFLICT (broker_id, amibroker_ticker) DO UPDATE SET raw_symbol = EXCLUDED.raw_symbol
-      `, [s.broker_id, s.instrument_id, s.amibroker_ticker, s.exchange, s.instrument_type, s.raw_symbol, s.created_at]).catch(console.error)
     }
   },
   deleteSymbol: {
     run: (brokerId: string, ticker: string) => {
       const idx = symbolsCache.findIndex(sym => sym.brokerId === brokerId && sym.amiBrokerTicker === ticker)
       if (idx !== -1) symbolsCache.splice(idx, 1)
-      barsMemCache.delete(ticker)
-      pool.query(`DELETE FROM symbols WHERE broker_id = $1 AND amibroker_ticker = $2`, [brokerId, ticker])
-        .then(() => pool.query(`DELETE FROM bars_1s WHERE amibroker_ticker = $1`, [ticker]))
-        .catch(console.error)
+      tx(() => {
+        q.deleteSymbol.run(brokerId, ticker)
+        const tid = tickerIds.get(ticker)
+        if (tid !== undefined) q.deleteTickerBars.run(tid)
+      })
     }
   },
 
@@ -493,118 +613,49 @@ export const stmts = {
   upsertSetting: {
     run: (key: string, value: string) => {
       settingsCache.set(key, JSON.parse(value))
-      pool.query(`
-        INSERT INTO settings (key, value) VALUES ($1, $2)
-        ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value
-      `, [key, value]).catch(console.error)
+      q.upsertSetting.run(key, value)
     }
   },
 
-  // Connection events (Write async, Read from Postgres when needed, but APIs use async methods)
-  // Wait, local-api routes currently call getRecentEvents.all synchronously! We need a small hack to fetch async.
-  // Actually, Express routes can be async, but if the codebase expects synchronous arrays, we will maintain an in-memory queue.
+  // Connection events
   insertEvent: {
     run: (e: { broker_id: string; event_type: string; detail?: string; ts_utc_ms: number }) => {
-      pool.query(`
-        INSERT INTO connection_events (broker_id, event_type, detail, ts_utc_ms)
-        VALUES ($1, $2, $3, $4)
-      `, [e.broker_id, e.event_type, e.detail, e.ts_utc_ms]).catch(console.error)
+      try { q.insertEvent.run(e.broker_id, e.event_type, n(e.detail), e.ts_utc_ms) } catch (err) { console.error('[DB] Failed to save event:', err) }
     }
   },
   getRecentEvents: {
-    // BUG #10 FIX: Return cached empty array synchronously (events are async-only in PG version)
-    // Routes that need live events should call pool.query directly
-    all: (brokerId: string) => [] as any[]
+    all: (brokerId: string, limit: number = 50) => q.recentEvents.all(brokerId, limit) as any[]
   },
   getEventsLast24h: {
-    all: (cutoffMs: number) => [] as any[]
+    all: (cutoffMs: number) => q.eventsSince.all(cutoffMs) as any[]
   },
 
   // Logs
   insertLog: {
     run: (log: { id: string; ts: number; level: string; component: string; message: string }) => {
-      pool.query(`
-        INSERT INTO logs (timestamp, level, component, message)
-        VALUES ($1, $2, $3, $4)
-      `, [log.ts, log.level, log.component, log.message]).catch(console.error)
+      pendingLogs.push([log.ts, log.level, log.component, log.message])
     }
   },
   getLogs: {
-    // BUG #9 NOTE: This is synchronous stub. Use the async getLogs() export below for actual data.
-    all: (limit: number = 1000) => [] as any[]
+    // Synchronous stub kept for old callers; use getLogs() / queryLogs() for data
+    all: (_limit: number = 1000) => [] as any[]
   },
 
   // Bars
   insertBarsToDiskOnly: {
     run: (bars: { amibroker_ticker: string; ts_utc_ms: number; open: number; high: number; low: number; close: number; volume: number; open_interest: number | null }[]) => {
-      if (bars.length === 0) return
-      const ticker = bars[0].amibroker_ticker
-      let appends = pendingBarsAppends.get(ticker)
-      if (!appends) {
-        appends = []
-        pendingBarsAppends.set(ticker, appends)
-      }
-      for (const b of bars) {
-        appends.push(b)
-      }
-    }
-  },
-  insertBarsToRamOnly: {
-    run: (bars: { amibroker_ticker: string; ts_utc_ms: number; open: number; high: number; low: number; close: number; volume: number; open_interest: number | null }[]) => {
-      if (bars.length === 0) return
-      const ticker = bars[0].amibroker_ticker
-      let tickerMap = barsMemCache.get(ticker)
-      if (!tickerMap) {
-        tickerMap = new Map<number, Bar1s>()
-        barsMemCache.set(ticker, tickerMap)
-      }
-      for (const b of bars) {
-        if (!tickerMap.has(b.ts_utc_ms)) {
-          const bar: Bar1s = {
-            amiBrokerTicker: b.amibroker_ticker, tsUtcMs: b.ts_utc_ms,
-            open: b.open, high: b.high, low: b.low, close: b.close, volume: b.volume,
-            openInterest: b.open_interest ?? undefined,
-          }
-          tickerMap.set(b.ts_utc_ms, bar)
-        }
-      }
+      insertBarBatch(bars)
     }
   },
 
-  getBarsCsvByTicker: {
-    // BUG #1 FIX: Build CSV from barsMemCache instead of always returning ""
-    // This is called by AmiBroker DLL (/api/feed/bars) and IPC TCP server
-    get: (amibrokerTicker: string, limit: number = 50000): string => {
-      const tickerMap = barsMemCache.get(amibrokerTicker)
-      if (!tickerMap || tickerMap.size === 0) return ''
-      // Sort ascending by timestamp
-      const tsKeys = Array.from(tickerMap.keys()).sort((a, b) => a - b)
-      const len = Math.min(limit, tsKeys.length)
-      const start = Math.max(0, tsKeys.length - len)
-      const lines: string[] = []
-      for (let i = start; i < tsKeys.length; i++) {
-        const bar = tickerMap.get(tsKeys[i])!
-        const tsSec = Math.floor(bar.tsUtcMs / 1000)
-        lines.push(`${tsSec},${bar.open},${bar.high},${bar.low},${bar.close},${bar.volume}`)
-      }
-      return lines.join('\n')
-    }
-  },
-
-  // CSV for the AmiBroker plugin, built inside Postgres: no per-row JS objects, so multi-year
-  // requests (hundreds of thousands of bars) stay fast. Newest `limit` bars, ascending.
-  // Volume is rounded to an integer (real::text would print 1.2e+06).
+  // CSV for the AmiBroker plugin: "tsSec,open,high,low,close,volume" lines, newest `limit`
+  // bars, ascending. Built inside SQLite in a reader worker.
   getBarsCsvByTickerAsync: {
     get: async (amibrokerTicker: string, limit: number = 50000): Promise<string> => {
       try {
-        const res = await pool.query(`
-          SELECT string_agg((ts_utc_ms / 1000)::text || ',' || open::text || ',' || high::text || ',' || low::text
-                            || ',' || close::text || ',' || round(volume)::bigint::text, E'\n' ORDER BY ts_utc_ms) AS csv
-          FROM (SELECT * FROM bars_1s WHERE amibroker_ticker = $1 ORDER BY ts_utc_ms DESC LIMIT $2) t
-        `, [amibrokerTicker, limit])
-        return res.rows[0]?.csv || ''
+        return await readBarsCsv(amibrokerTicker, 0, limit)
       } catch (err) {
-        console.error('[POSTGRES] Failed to get bars CSV:', err)
+        console.error('[DB] Failed to get bars CSV:', err)
         return ''
       }
     }
@@ -614,136 +665,45 @@ export const stmts = {
   getBarsCsvSinceAsync: {
     get: async (amibrokerTicker: string, sinceSec: number, limit: number = 50000): Promise<string> => {
       try {
-        const res = await pool.query(`
-          SELECT string_agg((ts_utc_ms / 1000)::text || ',' || open::text || ',' || high::text || ',' || low::text
-                            || ',' || close::text || ',' || round(volume)::bigint::text, E'\n' ORDER BY ts_utc_ms) AS csv
-          FROM (SELECT * FROM bars_1s WHERE amibroker_ticker = $1 AND ts_utc_ms > $2 ORDER BY ts_utc_ms DESC LIMIT $3) t
-        `, [amibrokerTicker, Math.floor(sinceSec) * 1000, limit])
-        return res.rows[0]?.csv || ''
+        return await readBarsCsv(amibrokerTicker, Math.floor(sinceSec), limit)
       } catch (err) {
-        console.error('[POSTGRES] Failed to get bars CSV since:', err)
+        console.error('[DB] Failed to get bars CSV since:', err)
         return ''
       }
     }
   },
-
-  getLastHistoryTs: {
-    get: (amibrokerTicker: string): number => {
-      // Needs to be awaited. We'll update getHsmTokens backfill check.
-      return 0
-    }
-  },
-
-  getBarsByTicker: {
-    all: (amibrokerTicker: string, limit: number = 50000) => {
-      // Note: This is called by AmiBroker plugin TCP server. It expects synchronous array return!
-      // But we can't synchronously query postgres.
-      // AmiBroker Bridge's AmiBroker TCP protocol: request -> async response is fine?
-      // Wait, let's look at how server.ts handles getBarsByTicker.
-      const tickerMap = barsMemCache.get(amibrokerTicker)
-      if (tickerMap) {
-        const tsKeys = Array.from(tickerMap.keys()).sort((a, b) => b - a)
-        const bars: any[] = []
-        const len = Math.min(limit, tsKeys.length)
-        for (let i = 0; i < len; i++) {
-          const bar = tickerMap.get(tsKeys[i])!
-          bars.push({
-            amibroker_ticker: bar.amiBrokerTicker,
-            ts_utc_ms: bar.tsUtcMs,
-            open: bar.open, high: bar.high, low: bar.low, close: bar.close, volume: bar.volume,
-            open_interest: bar.openInterest ?? null
-          })
-        }
-        return bars
-      }
-      return []
-    }
-  }
 }
 
+/** Wipes symbols, history, mappings and logs (keeps broker logins and settings). */
+export function cleanDatabase() {
+  pendingBarsAppends.clear()
+  pendingLogs.length = 0
+  sqlite.exec('DELETE FROM symbols; DELETE FROM bars; DELETE FROM tickers; DELETE FROM logs; DELETE FROM connection_events;')
+  symbolsCache.length = 0
+  tickerIds.clear()
+}
+
+/** Factory reset: every table. */
 export function fullForceClean() {
-  pool.query(`
-    TRUNCATE TABLE bars_1s, symbols, brokers, connection_events, logs, settings CASCADE;
-  `).catch(console.error)
+  pendingBarsAppends.clear()
+  pendingLogs.length = 0
+  sqlite.exec('DELETE FROM symbols; DELETE FROM bars; DELETE FROM tickers; DELETE FROM brokers; DELETE FROM settings; DELETE FROM logs; DELETE FROM connection_events;')
   brokersCache.length = 0
   symbolsCache.length = 0
-  barsMemCache.clear()
+  tickerIds.clear()
+  settingsCache.clear()
+  for (const [k, v] of Object.entries(defaultSettings)) settingsCache.set(k, v)
 }
 
 export function deduplicateAndCompactDiskBars(_ticker: string) {
-  // Postgres dedupes via the primary key. History is never pruned here: it used to delete
+  // The (tid, ts) primary key dedupes. History is never pruned here: an old version deleted
   // everything older than 365 days, which wiped multi-year downloads.
 }
 
+/** Writes buffered live bars and logs now (normally every 1–2 s). */
 export function flushPendingBars() {
-  // Let the setInterval handle it
-}
-
-export function loadBarsFromDisk() {
-  // Load the last 3 days of bars for all symbols into memory for AmiBroker
-  console.log('[DB] Loading last 3 days of bars from PostgreSQL into RAM cache...')
-  const cutoff = Date.now() - (3 * 24 * 60 * 60 * 1000)
-  
-  pool.query(`
-    SELECT * FROM bars_1s WHERE ts_utc_ms > $1 ORDER BY ts_utc_ms ASC
-  `, [cutoff]).then((res: any) => {
-    let count = 0
-    for (const row of res.rows) {
-      let tickerMap = barsMemCache.get(row.amibroker_ticker)
-      if (!tickerMap) {
-        tickerMap = new Map<number, Bar1s>()
-        barsMemCache.set(row.amibroker_ticker, tickerMap)
-      }
-      tickerMap.set(Number(row.ts_utc_ms), {
-        amiBrokerTicker: row.amibroker_ticker,
-        tsUtcMs: Number(row.ts_utc_ms),
-        open: Number(row.open),
-        high: Number(row.high),
-        low: Number(row.low),
-        close: Number(row.close),
-        volume: Number(row.volume),
-        openInterest: row.open_interest ? Number(row.open_interest) : undefined
-      })
-      count++
-    }
-    console.log(`[DB] Loaded ${count} bars into RAM cache`)
-  }).catch((err: Error) => {
-    console.error('[DB] Failed to load bars into cache:', err)
-  })
-}
-
-// Log writes
-export function appendLog(level: string, component: string, message: string) {
-  pool.query(`
-    INSERT INTO logs (timestamp, level, component, message)
-    VALUES ($1, $2, $3, $4)
-  `, [Date.now(), level, component, message]).catch(() => {})
-}
-
-// BUG #9 FIX: getLogs now queries PostgreSQL asynchronously
-export async function getLogs(limit: number = 1000): Promise<any[]> {
-  try {
-    const res = await pool.query(
-      'SELECT timestamp as ts, level, component, message FROM logs ORDER BY timestamp DESC LIMIT $1',
-      [limit]
-    )
-    return res.rows
-  } catch (err) {
-    console.error('[POSTGRES] Failed to query logs:', err)
-    return []
-  }
-}
-
-export function clearLogs() {
-  pool.query('TRUNCATE TABLE logs').catch(() => {})
-}
-
-export function rotateOldLogs(retentionDays: number = 14) {
-  const cutoffMs = Date.now() - (retentionDays * 24 * 60 * 60 * 1000)
-  pool.query(`
-    DELETE FROM logs 
-    WHERE timestamp < $1
-  `, [cutoffMs]).catch(() => {})
+  flushLiveBars()
+  flushLogs()
 }
 
 export function getAllSettings(): Record<string, unknown> {
@@ -759,36 +719,14 @@ export function getAllSettings(): Record<string, unknown> {
   return obj
 }
 
-export async function getLastBarTimestampSec(amibrokerTicker: string): Promise<number> {
-  try {
-    const res = await pool.query(`
-      SELECT ts_utc_ms FROM bars_1s 
-      WHERE amibroker_ticker = $1 
-      ORDER BY ts_utc_ms DESC 
-      LIMIT 1
-    `, [amibrokerTicker])
-    if (res.rows.length > 0) {
-      return Math.floor(Number(res.rows[0].ts_utc_ms) / 1000)
-    }
-  } catch (err) {}
-  return 0
+// On exit: commit what is buffered, then close the file cleanly
+let closed = false
+function closeDb() {
+  if (closed) return
+  closed = true
+  try { flushPendingBars() } catch {}
+  try { sqlite.close() } catch {}
 }
-
-export async function getOldestBarTimestampSec(amibrokerTicker: string): Promise<number> {
-  try {
-    const res = await pool.query(`
-      SELECT ts_utc_ms FROM bars_1s 
-      WHERE amibroker_ticker = $1 
-      ORDER BY ts_utc_ms ASC 
-      LIMIT 1
-    `, [amibrokerTicker])
-    if (res.rows.length > 0) {
-      return Math.floor(Number(res.rows[0].ts_utc_ms) / 1000)
-    }
-  } catch (err) {}
-  return 0
-}
-
-// On exit
-process.on('SIGTERM', () => pool.end())
-process.on('SIGINT', () => pool.end())
+process.on('exit', closeDb)
+process.on('SIGTERM', () => { closeDb(); process.exit(0) })
+process.on('SIGINT', () => { closeDb(); process.exit(0) })

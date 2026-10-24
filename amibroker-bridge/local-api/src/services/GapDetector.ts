@@ -14,9 +14,7 @@
  *   }
  */
 
-import path from 'path'
-import fs from 'fs'
-import { BARS_DIR, pool } from '../db'
+import { readGapCandidates as readStoredGaps } from '../dbReader'
 import { getTrueGapRange, INTERVAL_SECONDS } from './MarketCalendar'
 
 export interface GapRange {
@@ -25,39 +23,15 @@ export interface GapRange {
 }
 
 /**
- * Fetch all timestamps from PostgreSQL for a given symbol.
- * Returns sorted ascending array of Unix seconds.
- */
-/**
  * Adjacent stored bars more than `intervalSec` apart, plus the first/last bar in range.
- * Computed in Postgres (index-only scan + LAG), so multi-year histories never load
- * every timestamp into the engine.
+ * Computed in SQLite (primary-key range scan + LAG) on a reader thread, so multi-year
+ * histories never load every timestamp into the engine.
  */
 async function readGapCandidates(ticker: string, fromMs: number, toMs: number, intervalSec: number) {
   try {
-    const [pairs, bounds] = await Promise.all([
-      pool.query(`
-        SELECT prev, ts FROM (
-          SELECT ts_utc_ms AS ts, LAG(ts_utc_ms) OVER (ORDER BY ts_utc_ms) AS prev
-          FROM bars_1s WHERE amibroker_ticker = $1 AND ts_utc_ms >= $2 AND ts_utc_ms <= $3
-        ) t
-        WHERE prev IS NOT NULL AND ts - prev > $4
-        ORDER BY ts
-      `, [ticker, fromMs, toMs, intervalSec * 1000]),
-      pool.query(`
-        SELECT MIN(ts_utc_ms) AS first, MAX(ts_utc_ms) AS last
-        FROM bars_1s WHERE amibroker_ticker = $1 AND ts_utc_ms >= $2 AND ts_utc_ms <= $3
-      `, [ticker, fromMs, toMs]),
-    ])
-    const toSec = (v: any) => Math.floor(Number(v) / 1000)
-    const b = bounds.rows[0]
-    return {
-      pairs: pairs.rows.map(r => [toSec(r.prev), toSec(r.ts)] as [number, number]),
-      firstSec: b?.first != null ? toSec(b.first) : null,
-      lastSec: b?.last != null ? toSec(b.last) : null,
-    }
+    return await readStoredGaps(ticker, Math.floor(fromMs / 1000), Math.floor(toMs / 1000), intervalSec)
   } catch (err) {
-    console.error(`[GapDetector] Failed to read gaps from postgres for ${ticker}:`, err)
+    console.error(`[GapDetector] Failed to read gaps for ${ticker}:`, err)
     return null
   }
 }

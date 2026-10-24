@@ -1,0 +1,130 @@
+/* Custom window title bar (the native one is off: decorations false in tauri.conf.json) */
+.titlebar {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  flex-shrink: 0;
+  padding: 0 14px;
+  gap: 10px;
+  position: relative;
+  z-index: 200; /* above page content and modal backdrops, so the window buttons always work */
+  background:
+    linear-gradient(90deg, rgba(0, 212, 170, 0.06) 0%, transparent 38%),
+    #0a0a0a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+/* ===== Traffic lights (macOS style): 12px circles, 8px apart ===== */
+.titlebar__lights {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 6px;
+}
+.light {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 0.5px solid rgba(0, 0, 0, 0.28);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  transition: filter 0.1s ease, background 0.15s ease;
+}
+/* A larger invisible target so the small circles are easy to hit */
+.light::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+}
+.light svg {
+  width: 8px;
+  height: 8px;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+  pointer-events: none;
+  fill: none;
+  stroke-width: 1.15;
+  stroke-linecap: round;
+}
+.light .light__fill { fill: currentColor; stroke: none; width: 6.5px; height: 6.5px; }
+
+.light--close    { background: #ff5f57; color: #4d0000; }
+.light--minimize { background: #febc2e; color: #995700; }
+.light--maximize { background: #28c840; color: #006500; }
+.light--close svg, .light--minimize svg { stroke: currentColor; }
+
+/* Symbols appear on all three while the pointer is anywhere over the group
+   (is-snap-hover: Windows owns the cursor over the green one for Snap Layouts) */
+.titlebar__lights:hover .light svg,
+.titlebar__lights.is-snap-hover .light svg { opacity: 1; }
+.light:hover { filter: brightness(1.06); }
+.light:active { filter: brightness(0.82); }
+.titlebar__lights.is-snap-hover .light--maximize { filter: brightness(1.06); }
+
+/* Window not focused: the lights go grey, like macOS */
+.titlebar.is-blurred .light {
+  background: #3a3d42;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+.titlebar.is-blurred .titlebar__lights:hover .light--close    { background: #ff5f57; }
+.titlebar.is-blurred .titlebar__lights:hover .light--minimize { background: #febc2e; }
+.titlebar.is-blurred .titlebar__lights:hover .light--maximize { background: #28c840; }
+
+/* ===== Brand, page, status ===== */
+.titlebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none; /* lets the bar underneath take the drag */
+}
+.titlebar__logo {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #00d4aa 0%, #006655 100%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(0, 212, 170, 0.35);
+}
+.titlebar__name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #eceef2;
+  letter-spacing: -0.01em;
+}
+.titlebar__pro {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-left: -3px;
+}
+.titlebar__sep {
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+}
+.titlebar__page {
+  font-size: 0.76rem;
+  color: #8b9199;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.titlebar__spacer { flex: 1; }
+.titlebar__status { display: flex; align-items: center; }
+
+/* Dimmed while another window has focus, like native title bars */
+.titlebar.is-blurred .titlebar__name,
+.titlebar.is-blurred .titlebar__pro,
+.titlebar.is-blurred .titlebar__page,
+.titlebar.is-blurred .titlebar__status { opacity: 0.55; }
+.titlebar.is-blurred .titlebar__logo { filter: saturate(0.4); }

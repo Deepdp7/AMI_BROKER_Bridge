@@ -7,21 +7,42 @@ import {
 } from 'lucide-react'
 import { isApiAvailable, BASE_URL } from '../api/apiClient'
 import { toast } from '../components/Toast'
+import Select from '../components/Select'
+import BrokerLogo from '../components/BrokerLogo'
 
 
-const BROKER_INFO: Record<string, { name: string; tag: string; color: string; description: string; authType: string; apiUrl: string }> = {
+const BROKER_INFO: Record<string, {
+  name: string; tag: string; color: string; description: string; authType: string; apiUrl: string
+  /** Connectable in this version */
+  supported?: boolean
+  /** Where the client creates the API key, shown in the Add Broker dialog */
+  setup?: string
+  keyLabel?: string
+  secretLabel?: string
+}> = {
   zerodha_kite: {
     name: 'Zerodha Kite',
     tag: 'ZK',
     color: '#387ED1',
-    description: "India's largest discount broker. WebSocket streaming, tick-level data.",
-    authType: 'OAuth2 + TOTP',
+    description: 'Kite Connect v3. 1-minute history (60 days per request) + WebSocket tick stream.',
+    authType: 'Browser login (API Key + Secret)',
     apiUrl: 'https://kite.trade',
+    supported: true,
+    setup: 'Create an app on developers.kite.trade (the paid Kite Connect plan — the free Personal plan has no market data). Copy its API key and API secret.',
   },
   angel_one: { name: 'Angel One', tag: 'AO', color: '#E87722', description: 'SmartAPI WebSocket.', authType: 'OAuth2', apiUrl: 'https://smartapi.angelbroking.com' },
   upstox: { name: 'Upstox', tag: 'UP', color: '#6C35DE', description: 'Upstox v2 API.', authType: 'OAuth2', apiUrl: 'https://upstox.com' },
-  fyers: { name: 'Fyers', tag: 'FY', color: '#FF6600', description: 'Fyers API v3. 1-minute historical data + tick stream.', authType: 'OAuth2', apiUrl: 'https://fyers.in' },
-  dhan: { name: 'Dhan', tag: 'DH', color: '#0052FF', description: 'DhanHQ API.', authType: 'API Key + Auth Token', apiUrl: 'https://dhanhq.co' },
+  fyers: {
+    name: 'Fyers', tag: 'FY', color: '#FF6600', description: 'Fyers API v3. 1-minute historical data + tick stream.', authType: 'Browser login (App ID + Secret)', apiUrl: 'https://fyers.in',
+    supported: true,
+    setup: 'Create an app on myapi.fyers.in → Dashboard → Create App. Its App ID (ends in -100) is the API Key, its Secret ID the API Secret.',
+    keyLabel: 'App ID (API Key)', secretLabel: 'Secret ID (API Secret)',
+  },
+  dhan: {
+    name: 'Dhan', tag: 'DH', color: '#0052FF', description: 'DhanHQ v2. 1-minute history (5 years) + live market feed.', authType: 'Browser login (API Key + Secret)', apiUrl: 'https://dhanhq.co',
+    supported: true,
+    setup: 'On web.dhan.co → My Profile → Access DhanHQ APIs, choose "API key" and create one. History and live data need Dhan\'s Data API plan.',
+  },
   flattrade: { name: 'Flattrade', tag: 'FT', color: '#00A859', description: 'Flattrade (Fasttrade) API.', authType: 'API Key', apiUrl: 'https://flattrade.in' },
   shoonya: { name: 'Shoonya', tag: 'SH', color: '#1A365D', description: 'Finvasia Shoonya API.', authType: 'User + Password + TOTP', apiUrl: 'https://shoonya.com' },
 }
@@ -129,15 +150,7 @@ function BrokerCard({ broker, onRemove }: { broker: BrokerAccount; onRemove: () 
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div style={{ display: 'flex', gap: '0.875rem', alignItems: 'flex-start' }}>
-          <div style={{
-            width: '44px', height: '44px', borderRadius: '10px',
-            background: 'rgba(56, 126, 209, 0.15)',
-            border: '1px solid rgba(56,126,209,0.2)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '1.25rem', flexShrink: 0
-          }}>
-            {(info as any).tag || 'BR'}
-          </div>
+          <BrokerLogo brokerType={broker.brokerType} size={44} />
           <div>
             <div style={{ fontWeight: 600, color: '#eceef2', marginBottom: '0.25rem' }}>{info.name}</div>
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
@@ -198,7 +211,10 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
   const [selectedBrokerType, setSelectedBrokerType] = useState('zerodha_kite')
   const [apiKey, setApiKey] = useState('')
   const [apiSecret, setApiSecret] = useState('')
+  const [clientId, setClientId] = useState('')
   const [step, setStep] = useState<'credentials' | 'authenticating' | 'success'>('credentials')
+  const info = BROKER_INFO[selectedBrokerType]
+  const needsClientId = selectedBrokerType === 'dhan'
 
   const handleConnect = async () => {
     setStep('authenticating')
@@ -212,7 +228,7 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
             label: BROKER_INFO[selectedBrokerType].name,
             apiKey,
             apiSecret,
-            redirectUrl: 'http://127.0.0.1:7890/api/callback/' + selectedBrokerType
+            clientId: needsClientId ? clientId.trim() : undefined,
           })
         })
         if (!response.ok) {
@@ -285,21 +301,36 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
           <>
             <div style={{ marginBottom: '1.25rem' }}>
               <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>Select Broker</label>
-              <select
+              <Select
                 value={selectedBrokerType}
-                onChange={e => setSelectedBrokerType(e.target.value)}
-                className="input-field"
-                style={{ width: '100%', appearance: 'none' }}
-              >
-                {Object.entries(BROKER_INFO).map(([key, info]) => (
-                  <option key={key} value={key}>{(info as any).tag || 'BR'} {info.name}</option>
-                ))}
-              </select>
+                onChange={setSelectedBrokerType}
+                options={Object.entries(BROKER_INFO).filter(([, b]) => b.supported).map(([key, b]) => ({
+                  value: key,
+                  label: b.name,
+                  leading: <BrokerLogo brokerType={key} size={24} />,
+                }))}
+              />
+              {info?.setup && (
+                <div style={{ fontSize: '0.74rem', color: '#8b9199', lineHeight: 1.5, marginTop: '0.5rem' }}>{info.setup}</div>
+              )}
             </div>
-            
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.25rem' }}>
+              {needsClientId && (
+                <div>
+                  <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>Dhan Client ID</label>
+                  <input
+                    id="broker-client-id"
+                    className="input-field"
+                    placeholder="10-digit Client ID from your Dhan profile"
+                    value={clientId}
+                    onChange={e => setClientId(e.target.value)}
+                    type="text"
+                  />
+                </div>
+              )}
               <div>
-                <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>API Key</label>
+                <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>{info?.keyLabel || 'API Key'}</label>
                 <input
                   id="kite-api-key"
                   className="input-field"
@@ -310,7 +341,7 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
                 />
               </div>
               <div>
-                <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>API Secret</label>
+                <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>{info?.secretLabel || 'API Secret'}</label>
                 <input
                   id="kite-api-secret"
                   className="input-field"
@@ -342,7 +373,7 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
                 onClick={handleConnect}
                 className="btn-primary"
                 style={{ flex: 1 }}
-                disabled={!apiKey || !apiSecret}
+                disabled={!apiKey || !apiSecret || (needsClientId && !clientId.trim())}
               >
                 <Wifi size={14} />
                 Save & Login
@@ -453,16 +484,16 @@ export function BrokerConnectionPage() {
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           {[
-            { name: 'Zerodha Kite', emoji: '🟢', status: 'Available', cls: 'badge-green' },
-            { name: 'Fyers', emoji: '🟠', status: 'Available', cls: 'badge-green' },
-            { name: 'Dhan', emoji: '🪙', status: 'Available', cls: 'badge-green' },
-            { name: 'Flattrade', emoji: '⚡', status: 'Coming Soon', cls: 'badge-gray' },
-            { name: 'Shoonya', emoji: '⭕', status: 'Coming Soon', cls: 'badge-gray' },
-            { name: 'Upstox', emoji: '🟣', status: 'Coming Soon', cls: 'badge-gray' },
-            { name: 'Angel One', emoji: '🔵', status: 'Coming Soon', cls: 'badge-gray' },
+            { name: 'Zerodha Kite', type: 'zerodha_kite', status: 'Available', cls: 'badge-green' },
+            { name: 'Fyers', type: 'fyers', status: 'Available', cls: 'badge-green' },
+            { name: 'Dhan', type: 'dhan', status: 'Available', cls: 'badge-green' },
+            { name: 'Flattrade', type: 'flattrade', status: 'Coming Soon', cls: 'badge-gray' },
+            { name: 'Shoonya', type: 'shoonya', status: 'Coming Soon', cls: 'badge-gray' },
+            { name: 'Upstox', type: 'upstox', status: 'Coming Soon', cls: 'badge-gray' },
+            { name: 'Angel One', type: 'angel_one', status: 'Coming Soon', cls: 'badge-gray' },
           ].map(b => (
             <div key={b.name} className="glass-card" style={{ padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-              <span>{b.emoji}</span>
+              <BrokerLogo brokerType={b.type} size={26} />
               <span style={{ fontSize: '0.8rem', color: '#eceef2', fontWeight: 500 }}>{b.name}</span>
               <span className={`badge ${b.cls}`} style={{ fontSize: '0.68rem' }}>{b.status}</span>
             </div>

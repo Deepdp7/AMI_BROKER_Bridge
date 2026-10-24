@@ -57,51 +57,78 @@ static double QuotationToUnix(const struct Quotation& q) {
     return (t == (time_t)-1) ? 0 : (double)t;
 }
 
-// Index of the quotation in pQ[0..count) whose minute equals `minute`, or -1 (binary search).
-static int FindQuotationByMinute(const struct Quotation* pQ, int count, double minute) {
-    int lo = 0, hi = count - 1;
-    while (lo <= hi) {
+static double QuotationMinute(const struct Quotation& q) { return floor(QuotationToUnix(q) / 60.0) * 60.0; }
+static double BarMinute(const Bar& b) { return floor(b.timestamp / 60.0) * 60.0; }
+
+// First index in pQ[0..count) whose minute is >= `minute` (binary search).
+static int LowerBoundMinute(const struct Quotation* pQ, int count, double minute) {
+    int lo = 0, hi = count;
+    while (lo < hi) {
         int mid = (lo + hi) / 2;
-        double m = floor(QuotationToUnix(pQ[mid]) / 60.0) * 60.0;
-        if (m == minute) return mid;
-        if (m < minute) lo = mid + 1; else hi = mid - 1;
+        if (QuotationMinute(pQ[mid]) < minute) lo = mid + 1; else hi = mid;
     }
-    return -1;
+    return lo;
 }
 
-// Merge ascending bars into pQ[0..count): a bar in the same minute as an existing
-// quotation overwrites it (broker history correcting live-built candles), newer bars are
-// appended, and older bars with no matching quotation are ignored. When the array is
-// full the oldest quotations are shifted out. Returns the new number of valid quotations.
+// Merge ascending bars into pQ[0..count): a bar in the same minute as an existing quotation
+// overwrites it (broker history correcting live-built candles); bars for minutes AmiBroker
+// does not have are inserted in time order, also in the middle of the array. That is how a
+// hole left while the bridge was closed gets filled even after newer live bars were already
+// appended (they used to be ignored, so the hole stayed in AmiBroker's database for good).
+// Only the part from the first incoming minute on is rebuilt, so the live-tick path stays
+// cheap. When the array is full the oldest quotations are dropped. Returns the new count.
 static int MergeBars(struct Quotation* pQ, int count, int nSize, const std::vector<Bar>& bars) {
-    double lastMin = count > 0 ? floor(QuotationToUnix(pQ[count - 1]) / 60.0) * 60.0 : -1;
-    std::vector<const Bar*> fresh;
+    // Incoming bars: valid, ascending, one per minute (last wins)
+    std::vector<const Bar*> in;
     for (const Bar& b : bars) {
         if (b.timestamp <= 0 || b.close <= 0) continue;
-        double bMin = floor(b.timestamp / 60.0) * 60.0;
-        if (bMin < lastMin) {
-            int idx = FindQuotationByMinute(pQ, count, bMin);
-            if (idx >= 0) WriteBarToQuotation(pQ, idx, b);
-            continue;
+        if (!in.empty()) {
+            double last = BarMinute(*in.back()), m = BarMinute(b);
+            if (m == last) { in.back() = &b; continue; }
+            if (m < last) continue;   // out of order (input is ascending): ignore
         }
-        if (bMin == lastMin) {
-            if (!fresh.empty()) fresh.back() = &b;
-            else if (count > 0) WriteBarToQuotation(pQ, count - 1, b);
-            continue;
-        }
-        fresh.push_back(&b);
-        lastMin = bMin;
+        in.push_back(&b);
     }
-    if (fresh.empty()) return count;
+    if (in.empty()) return count;
 
-    if (fresh.size() > (size_t)nSize) fresh.erase(fresh.begin(), fresh.end() - nSize);
-    int overflow = count + (int)fresh.size() - nSize;
-    if (overflow > 0) {
-        memmove(pQ, pQ + overflow, (size_t)(count - overflow) * sizeof(struct Quotation));
-        count -= overflow;
+    int k = LowerBoundMinute(pQ, count, BarMinute(*in.front()));   // pQ[0..k) stays as it is
+    std::vector<struct Quotation> tail;
+    tail.reserve((size_t)(count - k) + in.size());
+    int i = k;
+    size_t j = 0;
+    while (i < count || j < in.size()) {
+        if (j >= in.size()) { tail.push_back(pQ[i++]); continue; }
+        double bm = BarMinute(*in[j]);
+        if (i < count) {
+            double qm = QuotationMinute(pQ[i]);
+            if (qm < bm) { tail.push_back(pQ[i++]); continue; }
+            if (qm == bm) {
+                struct Quotation q = pQ[i++];
+                WriteBarToQuotation(&q, 0, *in[j++]);
+                tail.push_back(q);
+                continue;
+            }
+        }
+        struct Quotation q;
+        memset(&q, 0, sizeof(q));
+        WriteBarToQuotation(&q, 0, *in[j++]);
+        tail.push_back(q);
     }
-    for (const Bar* b : fresh) WriteBarToQuotation(pQ, count++, *b);
-    return count;
+
+    // Keep the newest nSize quotations: drop from the front (oldest) if needed
+    int total = k + (int)tail.size();
+    int drop = total > nSize ? total - nSize : 0;
+    if (drop >= k) {
+        size_t skip = (size_t)(drop - k);
+        memcpy(pQ, tail.data() + skip, (tail.size() - skip) * sizeof(struct Quotation));
+        return (int)(tail.size() - skip);
+    }
+    if (drop > 0) {
+        memmove(pQ, pQ + drop, (size_t)(k - drop) * sizeof(struct Quotation));
+        k -= drop;
+    }
+    memcpy(pQ + k, tail.data(), tail.size() * sizeof(struct Quotation));
+    return k + (int)tail.size();
 }
 
 static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, int nSize, struct Quotation* pQuotes) {
@@ -134,13 +161,18 @@ static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, in
         bool fullSync = IsBridgeConnected() && NeedsHistorySync(pszTicker);
         if (fullSync || (IsBridgeConnected() && liveSkipsMinutes && TryBeginGapCheck(pszTicker))) {
             std::vector<Bar> missed;
+            unsigned epoch = 0;
+            double announced = BeginHistorySync(pszTicker, epoch);
             // Full sync (reconnect / bridge announced new history): re-fetch the last 24h so
-            // broker-corrected candles overwrite live-built ones. Gap check: just the tail;
-            // since-1 so the server also re-sends AmiBroker's last (possibly partial) candle.
+            // broker-corrected candles overwrite live-built ones, or from the oldest bar the
+            // bridge announced if that is earlier (a downtime hole behind newer live bars).
+            // Gap check: just the tail; since-1 so the server also re-sends AmiBroker's last
+            // (possibly partial) candle.
             double from = fullSync ? since - 86400 : since - 1;
+            if (fullSync && announced > 0 && announced - 60 < from) from = announced - 60;
             int got = FetchBarsFromAPI(pszTicker, nSize, from > 0 ? from : 0, missed);
             if (got >= 0) {
-                MarkHistorySynced(pszTicker);
+                if (fullSync) MarkHistorySynced(pszTicker, epoch);
                 int count = MergeBars(pQuotes, nLastValid + 1, nSize, missed);
                 if (count != nLastValid + 1) {
                     char logBuf[160];
@@ -169,8 +201,10 @@ static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, in
     // Only runs when nLastValid = -1 (first time symbol is loaded,
     // or after Flush Cache). AmiBroker expects this to take time.
     std::vector<Bar> outBars;
+    unsigned epoch = 0;
+    BeginHistorySync(pszTicker, epoch);
     if (FetchBarsFromAPI(pszTicker, nSize, since, outBars) <= 0) return 0;
-    MarkHistorySynced(pszTicker);
+    MarkHistorySynced(pszTicker, epoch);
 
     // Also merge the live bar (replaces the last candle if same minute, appends if newer)
     Bar live; memset(&live, 0, sizeof(Bar));

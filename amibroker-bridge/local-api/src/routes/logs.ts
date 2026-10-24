@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getAllSettings, pool } from '../db'
+import { getAllSettings, queryLogs } from '../db'
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
@@ -14,24 +14,8 @@ router.get('/', async (req, res) => {
     const component = req.query.component as string | undefined
     const limit = Math.min(Number(req.query.limit) || 500, 2000)
 
-    let query = 'SELECT * FROM logs WHERE 1=1'
-    const values: any[] = []
-    let pIdx = 1
-    
-    if (level) {
-      query += ` AND level = $${pIdx++}`
-      values.push(level)
-    }
-    if (component) {
-      query += ` AND component = $${pIdx++}`
-      values.push(component)
-    }
-    
-    query += ` ORDER BY timestamp DESC LIMIT $${pIdx}`
-    values.push(limit)
-
-    const dbRes = await pool.query(query, values)
-    const entries: LogEntry[] = dbRes.rows.map(r => ({
+    const rows = await queryLogs({ level, component, limit })
+    const entries: LogEntry[] = rows.map(r => ({
       id: r.id,
       ts: Number(r.timestamp),
       level: r.level,
@@ -48,8 +32,7 @@ router.get('/', async (req, res) => {
 router.post('/export', async (_req, res) => {
   try {
     const settings = getAllSettings()
-    const dbRes = await pool.query('SELECT * FROM logs ORDER BY timestamp DESC LIMIT 1000')
-    const logs = dbRes.rows
+    const logs = await queryLogs({ limit: 1000 })
 
     const bundle = {
       exportedAt: new Date().toISOString(),

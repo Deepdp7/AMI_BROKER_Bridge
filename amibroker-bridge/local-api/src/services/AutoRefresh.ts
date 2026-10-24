@@ -153,10 +153,6 @@ class AutoRefreshService extends EventEmitter {
           if (good.length > 0) {
             const changed = await upsertBarsToHistory(ticker, good.map(b => `${Math.floor(b.ts / 1000)},${b.open},${b.high},${b.low},${b.close},${b.volume}`))
             if (changed > 0) {
-              stmts.insertBarsToRamOnly.run(good.map(b => ({
-                amibroker_ticker: ticker, ts_utc_ms: b.ts,
-                open: b.open, high: b.high, low: b.low, close: b.close, volume: b.volume, open_interest: null,
-              })))
               // Only make AmiBroker re-read symbols whose data actually changed
               this.notifySync(ticker)
               barsChanged += changed

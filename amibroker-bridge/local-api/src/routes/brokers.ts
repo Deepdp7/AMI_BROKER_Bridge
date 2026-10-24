@@ -1,17 +1,31 @@
 import { Router } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 import { exec } from 'child_process'
-import { stmts } from '../db'
+import { stmts, getAllSettings } from '../db'
 import { feedSimulator } from '../services/feedSimulator'
 import { brokerManager } from '../services/BrokerManager'
 import { FyersAdapter } from '../services/adapters/FyersAdapter'
+import { KiteAdapter } from '../services/adapters/KiteAdapter'
+import { DhanAdapter } from '../services/adapters/DhanAdapter'
+import type { IBrokerAdapter } from '../services/adapters/IBrokerAdapter'
 import { backfilledTickers } from '../shared/backfillState'
 import { clearVerifiedThrough } from '../shared/coverageState'
 import { backfillQueue } from '../services/BackfillQueue'
+import { pendingLogins, activateBroker } from '../services/BrokerLifecycle'
+import { brokerLoginUrl, LOGIN_BROKERS } from '../services/brokerAuth'
 import type { BrokerAccount } from '../types'
 
+export { pendingLogins }
+
 const router = Router()
-const fallbackSearchAdapter = new FyersAdapter()
+
+// Symbol search before an account is logged in: the instrument lists are public
+const searchOnlyAdapters: Record<string, IBrokerAdapter> = {
+  fyers: new FyersAdapter(),
+  zerodha_kite: new KiteAdapter(),
+  dhan: new DhanAdapter(),
+}
+const fallbackSearchAdapter = searchOnlyAdapters.fyers
 
 // GET /api/brokers — List all broker accounts
 router.get('/', (_req, res) => {
@@ -34,24 +48,32 @@ router.get('/', (_req, res) => {
   }
 })
 
-// In-memory store for credentials pending OAuth callback
-export const pendingLogins = new Map<string, { apiKey: string; apiSecret: string }>()
-
 // POST /api/brokers — Add broker + initiate auth
 router.post('/', async (req, res) => {
   try {
-    const { brokerType, label, apiKey: rawApiKey, apiSecret: rawApiSecret, redirectUrl } = req.body as {
-      brokerType: string; label: string; apiKey?: string; apiSecret?: string; redirectUrl?: string
+    const { brokerType, label, apiKey: rawApiKey, apiSecret: rawApiSecret, clientId: rawClientId } = req.body as {
+      brokerType: string; label: string; apiKey?: string; apiSecret?: string; clientId?: string
     }
     if (!brokerType || !label) return res.status(400).json({ error: 'brokerType and label are required' })
+    if (!LOGIN_BROKERS.has(brokerType)) return res.status(400).json({ error: `${label || brokerType} is not supported yet` })
     if (!rawApiKey || !rawApiSecret) return res.status(400).json({ error: 'apiKey and apiSecret are required' })
+    const clientId = (rawClientId || '').trim() || null
+    if (brokerType === 'dhan' && !clientId) return res.status(400).json({ error: 'Dhan Client ID is required' })
 
     const apiKey = rawApiKey.trim()
     const apiSecret = rawApiSecret.trim()
 
     const id = `${brokerType}-${uuidv4().slice(0, 8)}`
-    const credentialRef = `dpapi:${uuidv4()}` 
+    const credentialRef = `dpapi:${uuidv4()}`
     const now = Date.now()
+
+    // Login URL first: Dhan checks the keys here, and a refused key should not leave an account behind
+    let loginUrl: string
+    try {
+      loginUrl = await brokerLoginUrl(brokerType, id, { apiKey, apiSecret, clientId })
+    } catch (err: any) {
+      return res.status(400).json({ error: err?.message || String(err) })
+    }
 
     // 1. Remove any old pending authentication rows for this broker type to avoid stale UUIDs
     try {
@@ -71,28 +93,16 @@ router.post('/', async (req, res) => {
     stmts.insertBroker.run({
       id, broker_type: brokerType, label, credential_ref: credentialRef,
       status: 'auth_required', health_score: 100, reconnect_count_1h: 0,
-      account_id: null, created_at: now, last_connected_at: null
+      account_id: clientId, created_at: now, last_connected_at: null
     })
 
-    // 2. Save credentials in memory for the callback to use
+    // 3. Save credentials in memory for the callback to use
     pendingLogins.set(brokerType, { apiKey, apiSecret })
 
-    // 3. Generate the Login URL
-    let loginUrl = ''
-    if (brokerType === 'zerodha_kite') {
-      loginUrl = `https://kite.zerodha.com/connect/login?v=3&api_key=${apiKey}`
-    } else if (brokerType === 'fyers') {
-      const rUrl = redirectUrl || `http://127.0.0.1:7890/api/callback/fyers`
-      loginUrl = `https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${apiKey}&redirect_uri=${encodeURIComponent(rUrl)}&response_type=code&state=${id}`
-    } else {
-      // Fallback or other brokers
-      loginUrl = `https://example.com/login?api_key=${apiKey}`
-    }
-    
     // Send back the broker object AND the login URL for the frontend to open
     const broker: BrokerAccount = {
       id, brokerType: brokerType as any, label, status: 'auth_required',
-      lastConnectedAt: undefined, accountId: undefined, healthScore: 100,
+      lastConnectedAt: undefined, accountId: clientId ?? undefined, healthScore: 100,
       reconnectCount1h: 0, credentialRef,
     }
     res.status(201).json({ broker, loginUrl })
@@ -106,20 +116,21 @@ router.post('/', async (req, res) => {
 router.get('/callback/:brokerType', async (req, res) => {
   try {
     const { brokerType } = req.params
-    // Fyers uses auth_code, Zerodha uses request_token
-    const requestToken = req.query.request_token as string || req.query.auth_code as string
-    
+    // Fyers sends auth_code, Kite request_token, Dhan tokenId
+    const requestToken = (req.query.request_token || req.query.auth_code || req.query.tokenId) as string
+
     if (!requestToken) {
-      return res.status(400).send('<h1>Error</h1><p>No request_token or auth_code provided in the URL.</p>')
+      return res.status(400).send('<h1>Error</h1><p>No request_token, auth_code or tokenId provided in the URL. Was the login cancelled?</p>')
     }
 
     const state = req.query.state as string
     const rows = stmts.getBrokers.all() as any[]
     
-    let brokerRow = rows.find(r => r.id === state && r.status === 'auth_required')
-    if (!brokerRow) {
-      brokerRow = rows.find(r => r.broker_type === brokerType && r.status === 'auth_required')
-    }
+    // `state` is the broker id. Match it in any status: after one failed attempt the account
+    // is in 'error', and a retried login must still land on it (and keep its symbols).
+    const brokerRow = rows.find(r => r.id === state)
+      || rows.find(r => r.broker_type === brokerType && r.status === 'auth_required')
+      || rows.find(r => r.broker_type === brokerType)
     
     if (!brokerRow) {
       const activeRows = rows.map(r => `${r.id}=${r.status}`).join(', ')
@@ -144,16 +155,16 @@ router.get('/callback/:brokerType', async (req, res) => {
     console.log(`[OAuth] Calling BrokerManager.connectBroker for ${brokerType}...`)
     stmts.insertEvent.run({ broker_id: brokerRow.id, event_type: 'INFO', detail: 'OAuth Callback received successfully. Validating token with broker...', ts_utc_ms: Date.now() })
 
-    const { brokerManager } = require('../services/BrokerManager')
     const now = Date.now()
 
     try {
       const session = await brokerManager.connectBroker(brokerRow.id, brokerType, {
-        apiKey: creds.apiKey, 
-        apiSecret: creds.apiSecret, 
+        apiKey: creds.apiKey,
+        apiSecret: creds.apiSecret,
+        clientId: brokerRow.account_id || undefined,
         requestToken
       })
-      
+
       stmts.insertEvent.run({
         broker_id: brokerRow.id, event_type: 'CONNECTED',
         detail: `OAuth connection successful via ${brokerType}. Account: ${session.accountId}`,
@@ -166,133 +177,19 @@ router.get('/callback/:brokerType', async (req, res) => {
         apiSecret: creds.apiSecret,
         accessToken: session.accessToken
       })
-
-      // Resubscribe to all configured symbols for this broker
-      const syms = stmts.getSymbolsByBroker.all(brokerRow.id) as any[]
-      if (syms.length > 0) {
-        const brokerSyms = syms.map((s: any) => s.rawSymbol || s.raw_symbol || s.instrumentId || s.instrument_id)
-        console.log(`[OAuth] Resubscribing ${brokerSyms.length} symbols for ${brokerType}...`)
-        brokerManager.subscribe(brokerRow.id, brokerSyms).catch((e: any) => {
-          console.error(`[OAuth] Error resubscribing symbols:`, e)
-        })
-      }
-
-      // Adopt any orphaned symbols from a previously deleted broker of the same type
-      // This restores the symbol list when user deletes and re-adds the broker
-      const adoptedCount = stmts.adoptOrphanedSymbols.run(brokerRow.id)
-      if (adoptedCount > 0) {
-        console.log(`[OAuth] Restored ${adoptedCount} orphaned symbols to new broker ${brokerRow.id}`)
-        // Fetch the newly adopted symbols from DB and subscribe
-        const adoptedSymbols = stmts.getSymbolsByBroker.all(brokerRow.id) as any[]
-        const rawSymbols = adoptedSymbols.map(s => s.rawSymbol).filter(Boolean)
-        
-        if (rawSymbols.length > 0) {
-          console.log(`[OAuth] Re-subscribing to ${rawSymbols.length} adopted symbols for ${brokerRow.id}`)
-          try {
-            await brokerManager.subscribe(brokerRow.id, rawSymbols)
-            const { feedSimulator } = require('../server') // Ensure we get the active simulator
-            for (const s of adoptedSymbols) {
-              const bToken = s.instrumentId || s.instrument_id || s.rawSymbol || s.raw_symbol || s.amiBrokerTicker || s.amibroker_ticker
-              if (feedSimulator && s.amiBrokerTicker) feedSimulator.addSymbolByTicker(s.amiBrokerTicker, brokerRow.id, s.exchange, s.instrumentType, bToken)
-            }
-          } catch (e) {
-            console.error('[OAuth] Failed to subscribe adopted symbols:', e)
-          }
-        }
+      if (brokerType !== 'fyers' && session.accountId && session.accountId !== brokerRow.account_id) {
+        stmts.updateBrokerAccountId.run(session.accountId, brokerRow.id)
       }
 
       // We are done with these credentials for the auth phase
       pendingLogins.delete(brokerType)
 
-      // Trigger backfill for ALL symbols of this broker now that we are connected
+      // Take over the symbol list (incl. from a removed / re-added account), subscribe live
+      // ticks and queue the history catch-up for the time the app was closed or logged out
       try {
-        const { backfillQueue } = require('../services/BackfillQueue')
-        const { backfilledTickers } = require('../shared/backfillState')
-        const { getLastBarTimestampSec, getAllSettings } = require('../db')
-        const bsettings = getAllSettings() as any
-        const backfillDepth = Number(bsettings?.backfillDepthDays) || 365
-        const allSyms = stmts.getSymbols.all() as any[]
-        const brokerSyms = allSyms.filter((s: any) => {
-          const bid = s.brokerId || s.broker_id
-          return bid === brokerRow.id && bid !== 'orphaned'
-        })
-        let queuedCount = 0
-        // BUG #6 FIX: getLastBarTimestampSec is async but was called without await
-        // Use Promise.all to handle async calls inside the loop correctly
-        const backfillPromises = brokerSyms.map(async (sym: any) => {
-          const ticker = sym.amiBrokerTicker || sym.amibroker_ticker
-          const brokerToken = sym.instrumentId || sym.instrument_id || sym.rawSymbol || sym.raw_symbol || ticker
-          if (!ticker) return
-          
-          let needsFullBackfill = true
-          const safeTicker = ticker.replace(/[^a-zA-Z0-9_-]/g, '_')
-          
-          if (backfilledTickers.has(ticker)) {
-            needsFullBackfill = false
-          } else {
-            // Software restarted, check DB if we already have deep history
-            const { getOldestBarTimestampSec } = require('../db')
-            const oldestTsSec = await getOldestBarTimestampSec(safeTicker)
-            if (oldestTsSec > 0) {
-              const oldestDays = Math.ceil((Math.floor(Date.now() / 1000) - oldestTsSec) / 86400)
-              // If we have data older than 75% of our backfill depth, consider it fully backfilled
-              if (oldestDays >= (backfillDepth * 0.75)) {
-                needsFullBackfill = false
-                backfilledTickers.add(ticker) // Cache it so we don't check DB again
-              }
-            }
-          }
-
-          if (needsFullBackfill) {
-            // ALWAYS run full backfill if it has never completed a full backfill
-            backfillQueue.enqueue(ticker, brokerRow.id, brokerToken, backfillDepth)
-            queuedCount++
-          } else {
-            // Already fully backfilled; just catch up from last known bar
-            const lastTsSec = await getLastBarTimestampSec(safeTicker)  // BUG #6 FIX: added await
-            if (lastTsSec > 0) {
-              const diffDays = Math.ceil((Math.floor(Date.now() / 1000) - lastTsSec) / 86400)
-              if (diffDays > 0) {
-                backfillQueue.enqueue(ticker, brokerRow.id, brokerToken, diffDays + 1)
-                queuedCount++
-              }
-            }
-          }
-        })
-        await Promise.all(backfillPromises)
-        console.log(`[OAuth] Triggered backfill for ${queuedCount} symbols after ${brokerType} connect`)
-
-        // Migrate any stale queue tasks from old broker IDs to the new one.
-        // This fixes the case where broker is deleted+re-authed while queue is running:
-        // old tasks still hold the old brokerId and its expired token → -16 errors.
-        const allBrokersForMigration = stmts.getBrokers.all() as any[]
-        const oldBrokerIds = allBrokersForMigration
-          .filter(b => b.broker_type === brokerType && b.id !== brokerRow.id)
-          .map(b => b.id)
-        for (const oldId of oldBrokerIds) {
-          backfillQueue.updateBrokerInQueue(oldId, brokerRow.id)
-        }
-
-        // Resume queue in case it was paused due to token expiry
-        backfillQueue.resumeAfterAuth()
-
-      } catch (bfErr) {
-        console.error('[OAuth] Failed to trigger backfill:', bfErr)
-      }
-      
-      // Subscribe to all raw symbols for live ticks
-      try {
-        const allSyms = stmts.getSymbols.all() as any[]
-        const rawSymbols = allSyms
-          .filter((s: any) => (s.brokerId || s.broker_id) === brokerRow.id)
-          .map((s: any) => s.rawSymbol || s.raw_symbol)
-          .filter(Boolean)
-        if (rawSymbols.length > 0) {
-          await brokerManager.subscribe(brokerRow.id, rawSymbols)
-          console.log(`[OAuth] Subscribed to ${rawSymbols.length} symbols for live ticks`)
-        }
-      } catch (subErr) {
-        console.error('[OAuth] Failed to subscribe symbols:', subErr)
+        await activateBroker(brokerRow.id, brokerType)
+      } catch (actErr) {
+        console.error('[OAuth] Failed to activate broker after login:', actErr)
       }
 
       // Success HTML page
@@ -337,19 +234,25 @@ router.get('/callback/:brokerType', async (req, res) => {
 })
 
 // DELETE /api/brokers/:id — Remove broker + wipe credentials
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params
     const broker = stmts.getBrokerById.get(id) as any
     if (!broker) return res.status(404).json({ error: 'Broker not found' })
 
-    // In real impl: CryptUnprotectData + delete from OS vault
+    await brokerManager.disconnectBroker(id).catch(() => {})
+    // In real impl: CryptUnprotectData + delete from OS vault.
+    // Its symbols are kept ('orphaned') for the next account that connects.
     stmts.deleteBroker.run(id)
     stmts.insertEvent.run({
       broker_id: id, event_type: 'DISCONNECTED',
       detail: 'Broker account removed by user. Credentials wiped from OS vault.',
       ts_utc_ms: Date.now(),
     })
+
+    // Another connected account of the same type takes the symbols over right away
+    const heir = (stmts.getBrokers.all() as any[]).find(b => b.broker_type === broker.broker_type && brokerManager.getAdapter(b.id))
+    if (heir) activateBroker(heir.id, heir.broker_type).catch(err => console.error('[Broker] Symbol hand-over failed:', err))
 
     res.json({ ok: true, message: 'Broker removed and credentials wiped' })
   } catch (e) {
@@ -373,21 +276,21 @@ router.post('/:id/reauth', async (req, res) => {
     // Save API key back to pendingLogins so callback can use it
     const { apiSecret } = req.body as { apiSecret?: string }
     const finalApiSecret = apiSecret || creds.apiSecret || ''
-    
-    if (broker.broker_type === 'fyers' && !finalApiSecret) {
+
+    if (!LOGIN_BROKERS.has(broker.broker_type)) {
+      return res.status(400).json({ error: 'Re-auth not supported for this broker type yet' })
+    }
+    if (!finalApiSecret) {
       return res.status(400).json({ error: 'API Secret is missing. Please delete and re-add the broker.' })
     }
 
     pendingLogins.set(broker.broker_type, { apiKey: creds.apiKey, apiSecret: finalApiSecret })
 
-    let loginUrl = ''
-    const redirectUrl = `http://127.0.0.1:7890/api/callback/${broker.broker_type}`
-    if (broker.broker_type === 'fyers') {
-      loginUrl = `https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${creds.apiKey}&redirect_uri=${encodeURIComponent(redirectUrl)}&response_type=code&state=${id}`
-    } else if (broker.broker_type === 'zerodha_kite') {
-      loginUrl = `https://kite.zerodha.com/connect/login?v=3&api_key=${creds.apiKey}`
-    } else {
-      return res.status(400).json({ error: 'Re-auth not supported for this broker type yet' })
+    let loginUrl: string
+    try {
+      loginUrl = await brokerLoginUrl(broker.broker_type, id, { apiKey: creds.apiKey, apiSecret: finalApiSecret, clientId: broker.account_id })
+    } catch (err: any) {
+      return res.status(400).json({ error: err?.message || String(err) })
     }
 
     res.json({ loginUrl })
@@ -405,7 +308,12 @@ const searchHandler = async (req: any, res: any) => {
     const exchange = (req.query.exchange as string)?.trim()
     if (!q || q.length < 2) return res.json([])
 
+    // The account's own broker list (its instrument names), even before it has logged in
     let adapter = id ? brokerManager.getAdapter(id) : undefined
+    if (!adapter && id) {
+      const type = (stmts.getBrokerById.get(id) as any)?.broker_type
+      adapter = searchOnlyAdapters[type]
+    }
     if (!adapter) {
       const all = brokerManager.getAllAdapters()
       if (all.length > 0) adapter = all[0]
@@ -469,9 +377,9 @@ router.post('/:id/symbols', async (req, res) => {
           console.error(`[ADD_SYMBOL] Failed to subscribe "${sym.ticker}" → "${rawSymbol}":`, subErr)
         }
 
-        const settings = require('../db').getAllSettings() as any
+        const settings = getAllSettings() as any
         const backfillDepth = Number(settings?.backfillDepthDays) || 365
-        require('../services/BackfillQueue').backfillQueue.enqueue(sym.ticker, id, rawSymbol, backfillDepth)
+        backfillQueue.enqueue(sym.ticker, id, rawSymbol, backfillDepth)
         console.log(`[ADD_SYMBOL] "${sym.ticker}" backfill queued (${backfillDepth} days).`)
         added++
         
@@ -624,9 +532,9 @@ router.post('/:id/symbols/import', (req, res) => {
         })
         feedSimulator.addSymbolByTicker(ticker, id, exchange, instrumentType, ticker)
         brokerManager.subscribe(id, [ticker])
-        const settings = require('../db').getAllSettings() as any
+        const settings = getAllSettings() as any
         const backfillDepth = Number(settings?.backfillDepthDays) || 365
-        require('../services/BackfillQueue').backfillQueue.enqueue(ticker, id, ticker, backfillDepth)
+        backfillQueue.enqueue(ticker, id, ticker, backfillDepth)
         backfilledTickers.delete(ticker) // ensure fresh fetch
         added++
       } catch (e: any) {

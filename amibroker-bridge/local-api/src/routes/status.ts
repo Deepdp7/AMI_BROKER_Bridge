@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { feedSimulator } from '../services/feedSimulator'
-import { stmts, pool } from '../db'
+import { stmts } from '../db'
 import type { HealthResponse } from '../types'
 
 const router = Router()
@@ -26,12 +26,7 @@ router.get('/health', async (_req, res) => {
     const cutoffMs = Date.now() - 3600 * 1000
 
     for (const broker of rawBrokers) {
-      const dbRes = await pool.query(
-        'SELECT * FROM connection_events WHERE broker_id = $1 ORDER BY ts_utc_ms DESC LIMIT 50', 
-        [broker.id]
-      )
-      
-      const recentEvents = dbRes.rows
+      const recentEvents = stmts.getRecentEvents.all(broker.id, 50)
       const eventsLastHour = recentEvents.filter(e => Number(e.ts_utc_ms) > cutoffMs)
       const reconnects = eventsLastHour.filter((e: any) => e.event_type === 'RECONNECTING').length
       const errors = eventsLastHour.filter((e: any) => e.event_type === 'ERROR').length

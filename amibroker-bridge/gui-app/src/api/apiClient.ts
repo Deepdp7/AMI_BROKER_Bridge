@@ -11,7 +11,7 @@ const WS_URL = 'ws://127.0.0.1:7890/api/status/stream'
 export type BrokerStatus = 'connected' | 'reconnecting' | 'auth_required' | 'disconnected'
 export type FeedStatusType = 'STREAMING' | 'STALE' | 'CLOSED' | 'ERROR'
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug'
-export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers'
+export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan'
 
 export interface BrokerAccount {
   id: string
@@ -117,7 +117,7 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
 export const api = {
   // Brokers
   getBrokers: () => apiFetch<BrokerAccount[]>('/brokers'),
-  addBroker: (payload: { brokerType: BrokerType; label: string; apiKey?: string; apiSecret?: string }) =>
+  addBroker: (payload: { brokerType: BrokerType; label: string; apiKey?: string; apiSecret?: string; clientId?: string }) =>
     apiFetch<BrokerAccount>('/brokers', { method: 'POST', body: JSON.stringify(payload) }),
   removeBroker: (id: string) =>
     apiFetch<{ ok: boolean }>(`/brokers/${id}`, { method: 'DELETE' }),

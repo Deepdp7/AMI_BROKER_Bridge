@@ -1,5 +1,7 @@
 import { IBrokerAdapter, BrokerCredentials, SessionInfo } from './adapters/IBrokerAdapter'
 import { FyersAdapter } from './adapters/FyersAdapter'
+import { KiteAdapter } from './adapters/KiteAdapter'
+import { DhanAdapter } from './adapters/DhanAdapter'
 import { stmts } from '../db'
 import type { LogEntry } from '../types'
 import { v4 as uuidv4 } from 'uuid'
@@ -45,6 +47,12 @@ export class BrokerManager extends EventEmitter {
       case 'fyers':
         adapter = new FyersAdapter()
         break
+      case 'zerodha_kite':
+        adapter = new KiteAdapter()
+        break
+      case 'dhan':
+        adapter = new DhanAdapter()
+        break
       default:
         throw new Error(`Unsupported broker type: ${brokerType}`)
     }
@@ -58,7 +66,12 @@ export class BrokerManager extends EventEmitter {
     })
 
     adapter.on('auth_failed', () => {
-      this.emit('auth_required', brokerId)
+      if (this.activeAdapters.get(brokerId) !== adapter) return // not live (connect itself fails instead)
+      // Token is dead: drop the adapter so downloads wait for the next login instead of failing,
+      // and the app shows "Auth Required" rather than a stale "Connected"
+      this.disconnectBroker(brokerId)
+        .catch(() => {})
+        .finally(() => this.emit('auth_required', brokerId))
     })
 
     adapter.on('connection_state', (state) => {

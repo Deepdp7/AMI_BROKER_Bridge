@@ -13,6 +13,8 @@
 import { exec } from 'child_process'
 import { getAllSettings } from '../db'
 import { stmts } from '../db'
+import { brokerLoginUrl, LOGIN_BROKERS, BROKER_NAMES } from './brokerAuth'
+import { pendingLogins } from './BrokerLifecycle'
 
 // Track which broker+date combos have already been triggered today
 const firedToday = new Set<string>()
@@ -60,9 +62,9 @@ function tick() {
 
   if (currentTime !== targetTime) return
 
-  // Find all connected/saved fyers (or any OAuth) brokers
+  // Every broker that logs in through the browser (Fyers, Kite, Dhan)
   const brokers = stmts.getBrokers.all() as any[]
-  const oauthBrokers = brokers.filter(b => b.broker_type === 'fyers')
+  const oauthBrokers = brokers.filter(b => LOGIN_BROKERS.has(b.broker_type))
 
   const todayStr = getISTDateStr()
   
@@ -79,17 +81,20 @@ function tick() {
       continue
     }
 
-    const redirectUri = encodeURIComponent('http://127.0.0.1:7890/api/callback/fyers')
-    const loginUrl = `https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${creds.apiKey}&redirect_uri=${redirectUri}&response_type=code&state=${broker.id}`
-
     firedToday.add(fireKey)
 
     // Stagger multiple brokers by 3s to avoid browser popup floods and race conditions
-    setTimeout(() => {
-      // Set status to auth_required so the callback handler will accept the incoming auth code
-      stmts.updateBrokerStatus.run('auth_required', broker.last_connected_at || null, broker.id)
-      console.log(`[DailyRelogin] 🔓 Opening Fyers login page for broker ${broker.id} at ${targetTime} IST`)
-      openUrl(loginUrl)
+    setTimeout(async () => {
+      try {
+        const loginUrl = await brokerLoginUrl(broker.broker_type, broker.id, { apiKey: creds.apiKey, apiSecret: creds.apiSecret || '', clientId: broker.account_id })
+        // Set status to auth_required so the callback handler will accept the incoming auth code
+        stmts.updateBrokerStatus.run('auth_required', broker.last_connected_at || null, broker.id)
+        pendingLogins.set(broker.broker_type, { apiKey: creds.apiKey, apiSecret: creds.apiSecret || '' })
+        console.log(`[DailyRelogin] 🔓 Opening ${BROKER_NAMES[broker.broker_type] || broker.broker_type} login page for broker ${broker.id} at ${targetTime} IST`)
+        openUrl(loginUrl)
+      } catch (err: any) {
+        console.error(`[DailyRelogin] Could not start the login for ${broker.id}: ${err?.message || err}`)
+      }
     }, staggerDelayMs)
     
     staggerDelayMs += 3000

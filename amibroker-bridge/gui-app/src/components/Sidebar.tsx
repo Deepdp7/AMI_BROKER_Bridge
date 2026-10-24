@@ -3,6 +3,7 @@ import {
   Zap, ChevronRight, RefreshCw, AlertCircle, Heart, Terminal, Sparkles
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
+import BrokerLogo, { BROKER_NAMES } from './BrokerLogo'
 import { useNavigate, useLocation } from 'react-router-dom'
 import clsx from 'clsx'
 
@@ -106,18 +107,9 @@ export function Sidebar() {
           <div className="glass-card" style={{ padding: '0.75rem', borderRadius: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
               <StatusIcon status={primaryBroker.status} />
+              <BrokerLogo brokerType={primaryBroker.brokerType} size={20} />
               <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#eceef2', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {
-                  {
-                    fyers: 'Fyers',
-                    zerodha_kite: 'Zerodha Kite',
-                    dhan: 'Dhan',
-                    angel_one: 'Angel One',
-                    upstox: 'Upstox',
-                    flattrade: 'Flattrade',
-                    shoonya: 'Shoonya'
-                  }[primaryBroker.brokerType] || 'Broker'
-                }
+                {BROKER_NAMES[primaryBroker.brokerType] || 'Broker'}
               </span>
               <span style={{ fontSize: '0.65rem', color: primaryBroker.status === 'connected' ? '#00d4aa' : '#8b9199' }}>
                 {primaryBroker.status === 'connected' ? 'Live' : primaryBroker.status}
