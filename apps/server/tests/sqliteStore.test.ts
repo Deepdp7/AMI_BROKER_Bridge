@@ -51,6 +51,17 @@ describe('Bars', () => {
     expect(await db.stmts.getBarsCsvByTickerAsync.get('NO_SUCH_TICKER', 100)).toBe('')
   })
 
+  it('stores bar objects the same as CSV lines', async () => {
+    await db.upsertBarsToHistory('ZZOBJ', [
+      { ts: T * 1000, open: 2269.3, high: 2270.05, low: 2268.85, close: 2269.35, volume: 439064 },
+      { ts: (T + 60) * 1000, open: 0.0025, high: 0.005, low: 0.0025, close: 0.005, volume: 12 },
+    ])
+    await db.upsertBarsToHistory('ZZLINE', [line(T, 2269.3, 2270.05, 2268.85, 2269.35, 439064), line(T + 60, 0.0025, 0.005, 0.0025, 0.0050, 12)])
+    expect(await db.stmts.getBarsCsvByTickerAsync.get('ZZOBJ', 50000)).toBe(await db.stmts.getBarsCsvByTickerAsync.get('ZZLINE', 50000))
+    // unchanged bars are not rewritten
+    expect(await db.upsertBarsToHistory('ZZOBJ', [{ ts: T * 1000, open: 2269.3, high: 2270.05, low: 2268.85, close: 2269.35, volume: 439064 }])).toBe(0)
+  })
+
   it('history replaces live-built bars, live bars never replace history, identical rows are not rewritten', async () => {
     db.insertBarBatch([{ amibroker_ticker: 'ZZB', ts_utc_ms: T * 1000, open: 10, high: 11, low: 9, close: 10.5, volume: 3, open_interest: null }])
     db.flushPendingBars()

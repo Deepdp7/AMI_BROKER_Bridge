@@ -29,9 +29,16 @@ import { brokerManager } from '../brokers/BrokerManager'
 import { backfilledTickers } from './state/backfillState'
 import { getVerifiedThroughMs, setVerifiedThroughMs, getHistoryFloorMs, setHistoryFloorMs } from './state/coverageState'
 import { detectGaps, formatGapSummary } from './GapDetector'
+import { learnClosedDays } from './MarketCalendar'
 import type { BackfillStatus, BackfillJobStatus } from '../types'
 import path from 'path'
 import fs from 'fs'
+
+/** Exchange of a tracked symbol (NSE when unknown) */
+function exchangeOf(ticker: string): string {
+  const sym = (stmts.getSymbols.all() as any[]).find(s => (s.amiBrokerTicker || s.amibroker_ticker) === ticker)
+  return sym?.exchange || 'NSE'
+}
 
 export interface BackfillTask {
   ticker: string
@@ -515,32 +522,24 @@ class BackfillQueueService extends EventEmitter {
       if (bars && bars.length > 0) {
         const safeTicker = task.ticker.replace(/[^a-zA-Z0-9_-]/g, '_')
 
-        // Validate and build CSV lines
-        const csvLines: string[] = []
-        let skipped = 0
-
-        for (const b of bars) {
-          const tsSec = Math.floor(b.ts / 1000)
-          if (!validateBar(b.open, b.high, b.low, b.close, b.volume)) {
-            skipped++
-            continue
-          }
-          csvLines.push(`${tsSec},${b.open},${b.high},${b.low},${b.close},${b.volume}`)
-        }
+        // Validate
+        const good = bars.filter(b => validateBar(b.open, b.high, b.low, b.close, b.volume))
+        const skipped = bars.length - good.length
 
         if (skipped > 0) {
           console.warn(`[BackfillQueue] Skipped ${skipped} invalid bars for ${task.ticker}`)
         }
 
-        if (csvLines.length > 0) {
-          await upsertBarsToHistory(task.ticker, csvLines)
+        if (good.length > 0) {
+          await upsertBarsToHistory(task.ticker, good)
+          learnClosedDays(exchangeOf(task.ticker), task.ticker, chunkFrom.getTime(), currentTo.getTime(), good)
 
           // Tell AmiBroker after every chunk (not only when the whole task ends), with the
           // oldest bar stored, so an open chart shows each piece of history as it lands
-          this.emit('bars_gap_filled', { ticker: task.ticker, fromSec: Number(csvLines[0].slice(0, csvLines[0].indexOf(','))) })
+          this.emit('bars_gap_filled', { ticker: task.ticker, fromSec: Math.floor(good[0].ts / 1000) })
         }
 
-        console.log(`[BackfillQueue] Saved ${csvLines.length} bars for ${task.ticker} (${fromStr} to ${toStr})`)
+        console.log(`[BackfillQueue] Saved ${good.length} bars for ${task.ticker} (${fromStr} to ${toStr})`)
 
         // Update status
         const existing = backfillStatusMap.get(task.ticker)
@@ -551,7 +550,7 @@ class BackfillQueueService extends EventEmitter {
             ...existing,
             status: 'running',
             progress,
-            candlesFetched: existing.candlesFetched + csvLines.length,
+            candlesFetched: existing.candlesFetched + good.length,
             completedChunks: completed,
             retryCount: 0,
           })

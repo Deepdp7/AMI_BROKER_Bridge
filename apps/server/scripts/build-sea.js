@@ -15,7 +15,10 @@ console.log('1. Writing sea-config.json');
 fs.writeFileSync(CONFIG_FILE, JSON.stringify({
   main: 'dist/bundle.js',
   output: 'sea-prep.blob',
-  disableExperimentalSEAWarning: true
+  disableExperimentalSEAWarning: true,
+  // Smaller heap: measured on a 6-worker history download, peak memory 294 MB -> 133 MB for
+  // ~3 ms more per saved chunk (Fyers allows one every 7.5 s)
+  execArgv: ['--optimize-for-size'],
 }, null, 2));
 
 console.log('2. Generating sea-prep.blob');

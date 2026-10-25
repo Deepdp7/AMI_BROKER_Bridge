@@ -7,12 +7,13 @@
  *
  * Design principles:
  * - Uses the exchangeRegistry from db.ts as the single source of truth for timings.
- * - Does NOT import any external dependencies (no holidays DB needed for now).
- * - Holiday awareness is future-extensible via the `knownHolidays` set.
+ * - Holidays: a static NSE list plus closed days learned from broker history (closed_days.json).
  * - All timestamps are treated as UTC; IST offset (+5:30 = +19800s) is applied internally.
  */
 
-import { exchangeRegistry } from '../db'
+import fs from 'fs'
+import path from 'path'
+import { exchangeRegistry, DATA_DIR } from '../db'
 
 // IST offset in milliseconds (+5:30)
 const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000
@@ -77,6 +78,140 @@ const NSE_HOLIDAYS_2026 = new Set([
 
 const ALL_NSE_HOLIDAYS = new Set([...NSE_HOLIDAYS_2025, ...NSE_HOLIDAYS_2026])
 
+/** Exchanges that close on NSE's holidays */
+const NSE_CALENDAR = ['NSE', 'BSE', 'NFO', 'BFO', 'CDS']
+
+/** Calendar an exchange follows: the NSE group shares one, every other exchange has its own */
+function calendarOf(exchange: string): string {
+  const ex = (exchange || 'NSE').toUpperCase()
+  return NSE_CALENDAR.includes(ex) ? 'NSE' : ex
+}
+
+// ===== Closed days learned from broker history =====
+// The static list above needs adding to every year; a missed holiday shows up as a gap in every
+// symbol and costs a re-download of up to 90 days each. So the calendar also learns: a weekday
+// is closed when broker history for 2 different symbols has bars before and after it but none
+// on it. One response with bars on a day marks it as traded for good, which also overrides a
+// wrong entry in the static list.
+const CLOSED_DAYS_FILE = path.join(DATA_DIR, 'closed_days.json')
+/** Symbols needed to agree before a day counts as closed (one illiquid symbol can skip a day) */
+const CLOSED_CONFIRMATIONS = 2
+
+interface LearnedCalendar { closed: Map<string, Set<string>>; traded: Set<string> }
+let learned: Map<string, LearnedCalendar> | null = null
+
+function learnedCalendars(): Map<string, LearnedCalendar> {
+  if (learned) return learned
+  learned = new Map()
+  try {
+    const obj = JSON.parse(fs.readFileSync(CLOSED_DAYS_FILE, 'utf8'))
+    for (const [cal, v] of Object.entries<any>(obj)) {
+      learned.set(cal, {
+        closed: new Map(Object.entries<string[]>(v.closed || {}).map(([d, t]) => [d, new Set(t)])),
+        traded: new Set(v.traded || []),
+      })
+    }
+  } catch { /* no file yet */ }
+  return learned
+}
+
+function learnedFor(cal: string): LearnedCalendar {
+  const all = learnedCalendars()
+  let c = all.get(cal)
+  if (!c) all.set(cal, c = { closed: new Map(), traded: new Set() })
+  return c
+}
+
+function saveLearned() {
+  const obj: Record<string, { closed: Record<string, string[]>; traded: string[] }> = {}
+  for (const [cal, c] of learnedCalendars()) {
+    obj[cal] = { closed: Object.fromEntries([...c.closed].map(([d, t]) => [d, [...t]])), traded: [...c.traded].sort() }
+  }
+  try {
+    fs.mkdirSync(DATA_DIR, { recursive: true })
+    fs.writeFileSync(CLOSED_DAYS_FILE + '.part', JSON.stringify(obj), 'utf8')
+    fs.renameSync(CLOSED_DAYS_FILE + '.part', CLOSED_DAYS_FILE)
+  } catch (err) {
+    console.error('[MarketCalendar] Failed to save learned closed days:', err)
+  }
+}
+
+/** True when `dateStr` (IST YYYY-MM-DD) is a known or learned closed day for the exchange */
+function isClosedDate(dateStr: string, exchange: string): boolean {
+  const cal = calendarOf(exchange)
+  const c = learnedCalendars().get(cal)
+  if (c?.traded.has(dateStr)) return false
+  if (cal === 'NSE' && ALL_NSE_HOLIDAYS.has(dateStr)) return true
+  return (c?.closed.get(dateStr)?.size ?? 0) >= CLOSED_CONFIRMATIONS
+}
+
+/** True when the IST day of `utcMs` is a holiday (known or learned) for the exchange; weekends aside */
+export function isClosedDay(utcMs: number, exchange: string): boolean {
+  return isClosedDate(toISTDateStr(utcMs), exchange)
+}
+
+/** Bars spread over at least this long make a day a full trading day; Diwali's Muhurat session is 1 hour */
+const FULL_DAY_SPAN_MS = 3 * 3600_000
+
+/**
+ * Learns closed days from one broker history response for `ticker` covering fromMs..toMs.
+ * Only weekdays between the response's first and last bar day are judged, so a range that
+ * starts before listing or ends today teaches nothing. A day with only a short special
+ * session (Muhurat trading) counts as closed: its few bars are no reason to look for gaps.
+ */
+export function learnClosedDays(exchange: string, ticker: string, fromMs: number, toMs: number, bars: { ts: number }[]) {
+  if (bars.length === 0) return
+  const cal = calendarOf(exchange)
+  const c = learnedFor(cal)
+  const spans = new Map<string, { first: number; last: number }>()
+  let first = Infinity, last = -Infinity
+  for (const b of bars) {
+    if (b.ts < fromMs || b.ts > toMs) continue
+    const d = toISTDateStr(b.ts)
+    const s = spans.get(d)
+    if (!s) spans.set(d, { first: b.ts, last: b.ts })
+    else { if (b.ts < s.first) s.first = b.ts; if (b.ts > s.last) s.last = b.ts }
+    if (b.ts < first) first = b.ts
+    if (b.ts > last) last = b.ts
+  }
+  if (spans.size === 0) return
+  const fullDays = new Set([...spans].filter(([, s]) => s.last - s.first >= FULL_DAY_SPAN_MS).map(([d]) => d))
+
+  let changed = false
+  // Traded days: forget a wrong closure and never learn it again
+  for (const d of fullDays) {
+    if (c.traded.has(d)) continue
+    if (c.closed.has(d) || (cal === 'NSE' && ALL_NSE_HOLIDAYS.has(d))) {
+      c.closed.delete(d)
+      c.traded.add(d)
+      changed = true
+    }
+  }
+  // Empty (or special-session-only) weekdays strictly inside the response
+  const firstDay = toISTDateStr(first), lastDay = toISTDateStr(last)
+  for (let t = Date.parse(firstDay) + 86400_000; ; t += 86400_000) {
+    const d = new Date(t).toISOString().slice(0, 10)
+    if (d >= lastDay) break
+    const dow = new Date(t).getUTCDay()
+    if (dow === 0 || dow === 6 || fullDays.has(d) || c.traded.has(d)) continue
+    if (cal === 'NSE' && ALL_NSE_HOLIDAYS.has(d)) continue
+    let who = c.closed.get(d)
+    if (!who) c.closed.set(d, who = new Set())
+    if (who.size < CLOSED_CONFIRMATIONS && !who.has(ticker)) {
+      who.add(ticker)
+      changed = true
+      if (who.size === CLOSED_CONFIRMATIONS) console.log(`[MarketCalendar] Learned ${cal} closed day ${d} (no trading in ${[...who].join(', ')})`)
+    }
+  }
+  if (changed) saveLearned()
+}
+
+/** Forget everything learned (tests) */
+export function resetLearnedClosedDays() {
+  learned = new Map()
+  try { fs.unlinkSync(CLOSED_DAYS_FILE) } catch {}
+}
+
 /**
  * Returns the IST date string (YYYY-MM-DD) for a UTC millisecond timestamp.
  */
@@ -108,7 +243,7 @@ export function isWeekend(utcMs: number): boolean {
  * Returns true if the IST date for the given timestamp is a known NSE holiday.
  */
 export function isNSEHoliday(utcMs: number): boolean {
-  return ALL_NSE_HOLIDAYS.has(toISTDateStr(utcMs))
+  return isClosedDate(toISTDateStr(utcMs), 'NSE')
 }
 
 /**
@@ -169,9 +304,9 @@ export function getSessionWindowMs(
 export function isMarketSession(utcMs: number, exchange: string): boolean {
   if (isWeekend(utcMs)) return false
 
-  // Use NSE holidays for all NSE-based exchanges (NSE, BSE, NFO, BFO)
+  // NSE-group exchanges share NSE's holidays; others use what was learned for them
   const ex = exchange.toUpperCase()
-  if (['NSE', 'BSE', 'NFO', 'BFO', 'CDS'].includes(ex) && isNSEHoliday(utcMs)) return false
+  if (isClosedDay(utcMs, ex)) return false
 
   const session = getSessionWindowMs(utcMs, exchange)
   if (!session) return true // Unknown exchange — assume always open
@@ -197,7 +332,7 @@ export function getTrueGapRange(
   let lastMissingMs: number | null = null
 
   while (cursor < nextTsMs) {
-    if (isWeekend(cursor) || (['NSE', 'BSE', 'NFO', 'BFO', 'CDS'].includes(exchange.toUpperCase()) && isNSEHoliday(cursor))) {
+    if (isWeekend(cursor) || isClosedDay(cursor, exchange)) {
       // Jump to next day midnight UTC
       const istMs = cursor + IST_OFFSET_MS
       const istDate = new Date(istMs)

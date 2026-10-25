@@ -13,6 +13,7 @@ import { EventEmitter } from 'events'
 import { stmts, upsertBarsToHistory, validateBar, repairBar, getAllSettings, upsertSettings } from '../db'
 import { brokerManager } from '../brokers/BrokerManager'
 import { backfillQueue } from './BackfillQueue'
+import { learnClosedDays } from './MarketCalendar'
 
 export interface AutoRefreshStatus {
   enabled: boolean
@@ -151,7 +152,8 @@ class AutoRefreshService extends EventEmitter {
           const bars: any[] = await adapter.getHistoricalBars(token, '1m', from, to)
           const good = (bars || []).map(repairBar).filter(b => b.ts >= writeFromMs && validateBar(b.open, b.high, b.low, b.close, b.volume))
           if (good.length > 0) {
-            const changed = await upsertBarsToHistory(ticker, good.map(b => `${Math.floor(b.ts / 1000)},${b.open},${b.high},${b.low},${b.close},${b.volume}`))
+            const changed = await upsertBarsToHistory(ticker, good)
+            learnClosedDays(sym.exchange || 'NSE', ticker, from.getTime(), to.getTime(), good)
             if (changed > 0) {
               // Only make AmiBroker re-read symbols whose data actually changed
               this.notifySync(ticker)

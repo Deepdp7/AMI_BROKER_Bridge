@@ -364,29 +364,39 @@ export function insertBarBatch(barsToInsert: any[]) {
   }
 }
 
+/** A broker history bar; `ts` is the minute's start in UTC ms */
+export interface HistoryBar { ts: number; open: number; high: number; low: number; close: number; volume: number }
+
 /**
- * Upserts broker history bars ("tsSec,open,high,low,close,volume" lines); returns how many rows
- * were inserted or actually changed. Broker history replaces bars built from live ticks for
- * the same minute (live inserts never overwrite history).
+ * Upserts broker history bars (bar objects, or "tsSec,open,high,low,close,volume" lines); returns
+ * how many rows were inserted or actually changed. Broker history replaces bars built from live
+ * ticks for the same minute (live inserts never overwrite history).
  */
-export async function upsertBarsToHistory(amibrokerTicker: string, csvLines: string[]): Promise<number> {
+export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<HistoryBar | string>): Promise<number> {
   // Skip the still-forming minute: a partial history bar would block the live bar for that
   // minute (live inserts never overwrite history), leaving it with partial volume.
   const currentMinuteSec = Math.floor(Date.now() / 60000) * 60
-  // One row per minute (last wins)
-  const byMinute = new Map<number, string[]>()
-  for (const line of csvLines) {
-    const p = line.split(',')
-    const tsSec = Number(p[0])
-    if (tsSec < currentMinuteSec) byMinute.set(tsSec, p)
+  // One row per minute (last wins). Bar objects are used as they are: turning a 23k-bar chunk
+  // into text and back made several MB of garbage per chunk, which kept the engine's heap large.
+  const byMinute = new Map<number, HistoryBar>()
+  for (const item of bars) {
+    let bar: HistoryBar
+    if (typeof item === 'string') {
+      const p = item.split(',')
+      bar = { ts: Number(p[0]) * 1000, open: Number(p[1]), high: Number(p[2]), low: Number(p[3]), close: Number(p[4]), volume: Number(p[5]) }
+    } else {
+      bar = item
+    }
+    const tsSec = Math.floor(bar.ts / 1000)
+    if (tsSec < currentMinuteSec) byMinute.set(tsSec, bar)
   }
   if (byMinute.size === 0) return 0
 
   return tx(() => {
     const tid = tickerId(amibrokerTicker)
     let changed = 0
-    for (const [tsSec, p] of byMinute) {
-      changed += Number(q.upsertHistoryBar.run(tid, tsSec, px(Number(p[1])), px(Number(p[2])), px(Number(p[3])), px(Number(p[4])), Math.round(Number(p[5]) || 0)).changes)
+    for (const [tsSec, b] of byMinute) {
+      changed += Number(q.upsertHistoryBar.run(tid, tsSec, px(b.open), px(b.high), px(b.low), px(b.close), Math.round(Number(b.volume) || 0)).changes)
     }
     return changed
   })

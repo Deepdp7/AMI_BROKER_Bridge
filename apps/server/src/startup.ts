@@ -89,7 +89,7 @@ async function fetchTodayBars(adapter: any, ticker: string) {
     
     const bars = await adapter.getHistoricalBars(brokerToken, '1m', from, to)
     if (bars && bars.length > 0) {
-      await upsertBarsToHistory(ticker, bars.map((b: any) => `${Math.floor(b.ts / 1000)},${b.open},${b.high},${b.low},${b.close},${b.volume}`))
+      await upsertBarsToHistory(ticker, bars)
       console.log(`[Init] Incremental update: added ${bars.length} bars for ${ticker} (today)`)
       notifyAmiBrokerHistoryChanged(ticker, Math.floor(bars[0].ts / 1000))
       broadcast('log_entry', { level: 'success', component: 'Backfill', message: `Added ${bars.length} bars for ${ticker} (today)` })
