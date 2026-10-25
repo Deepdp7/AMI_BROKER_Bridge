@@ -343,7 +343,7 @@ export function SymbolSetupPage() {
                 disabled={importing}
                 title="Import symbols from CSV file"
               >
-                {importing ? <Loader size={14} className="animate-spin" /> : <Upload size={14} />}
+                {importing ? <Loader size={14} className="animate-spin" /> : <Download size={14} />}
                 {importing ? 'Importing...' : 'Import CSV'}
               </button>
               <button
@@ -353,7 +353,7 @@ export function SymbolSetupPage() {
                 disabled={symbols.length === 0}
                 title="Export symbols to CSV file"
               >
-                <Download size={14} />
+                <Upload size={14} />
                 Export CSV
               </button>
             </>

@@ -1,0 +1,36 @@
+{
+  "appName": "DataBridge Pro",
+  "version": "1.0.0",
+  "publisher": "",
+  "website": "",
+  "description": "",
+  "appId": "40b13fbe-8488-4299-b657-878eaf9433a9",
+  "sourceDir": "C:\\Users\\ARITRA\\Desktop\\AMI_BROKER_Bridge\\release\\DataBridge Pro",
+  "mainExe": "DataBridge Pro.exe",
+  "extraFiles": [
+    {
+      "source": "C:\\Users\\ARITRA\\Desktop\\AMI_BROKER_Bridge\\release\\plugin\\DataBridgePro.dll",
+      "destination": "Plugins",
+      "onlyIfExists": false,
+      "findProgram": {
+        "name": "AmiBroker",
+        "exe": "Broker.exe"
+      }
+    }
+  ],
+  "icon": "C:\\Users\\ARITRA\\Desktop\\AMI_BROKER_Bridge\\branding\\app-icon\\icon.png",
+  "sidebarImage": "C:\\Users\\ARITRA\\Desktop\\AMI_BROKER_Bridge\\branding\\installer\\sidebar-328x628.bmp",
+  "headerImage": "C:\\Users\\ARITRA\\Desktop\\AMI_BROKER_Bridge\\branding\\installer\\header-300x114.bmp",
+  "licenseFile": "",
+  "scope": "allUsers",
+  "desktopShortcut": true,
+  "startMenuShortcut": true,
+  "runAfterInstall": true,
+  "closeProcesses": [
+    "DataBridge Pro.exe",
+    "local-api.exe"
+  ],
+  "compression": "smallest",
+  "outputDir": "C:\\Users\\ARITRA\\Desktop\\Installers",
+  "outputName": ""
+}

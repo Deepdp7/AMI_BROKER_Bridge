@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAppStore } from '../store/appStore'
 import type { LogLevel } from '../store/appStore'
-import { Search, Trash2, Download, AlertCircle, AlertTriangle, Info, Bug, Pause, Play } from 'lucide-react'
+import { Search, Trash2, Upload, AlertCircle, AlertTriangle, Info, Bug, Pause, Play } from 'lucide-react'
 import { toast } from '../components/ui/Toast'
 
 const LEVEL_ICONS: Record<LogLevel, React.ElementType> = {
@@ -139,7 +139,7 @@ export function LogsPage() {
             className="btn-secondary"
             style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.375rem' }}
           >
-            <Download size={13} />
+            <Upload size={13} />
             Export
           </button>
         </div>
