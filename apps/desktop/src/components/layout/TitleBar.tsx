@@ -7,7 +7,7 @@ import './titlebar.css'
 interface Props {
   /** Name of the open page, shown after the app name */
   page: string
-  /** Right-hand status (API connection) */
+  /** Left-hand status (API connection) */
   status?: ReactNode
 }
 
@@ -82,18 +82,23 @@ export function TitleBar({ page, status }: Props) {
       className={`titlebar${isFocused ? '' : ' is-blurred'}`}
       onMouseDown={native ? onBarMouseDown : undefined}
     >
-      {/* Traffic lights: red quits DataBridge (engine included), yellow minimizes, green maximizes / restores */}
-      {native && (
+      {/* Left: API connection status */}
+      <div className="titlebar__status" data-no-drag>{status}</div>
+
+      {/* Centre: app name | open page */}
+      <div className="titlebar__center">
+        <div className="titlebar__brand">
+          <span className="titlebar__logo"><Zap size={11} fill="#0e0e0e" color="#0e0e0e" /></span>
+          <span className="titlebar__name">DataBridge</span>
+          <span className="titlebar__pro gradient-text">PRO</span>
+        </div>
+        <span className="titlebar__sep" />
+        <span className="titlebar__page">{page}</span>
+      </div>
+
+      {/* Right: minimize, maximize / restore, close (red quits DataBridge, engine included) */}
+      {native ? (
         <div className={`titlebar__lights${snapHover ? ' is-snap-hover' : ''}`} data-no-drag>
-          <button
-            className="light light--close"
-            onClick={() => win?.close().catch(() => {})}
-            aria-label="Close"
-            title="Close DataBridge (stops the data engine; missed data is filled in when you open it again)"
-            tabIndex={-1}
-          >
-            <svg viewBox="0 0 8 8"><path d="M1.6 1.6l4.8 4.8M6.4 1.6L1.6 6.4" /></svg>
-          </button>
           <button
             className="light light--minimize"
             onClick={() => win?.minimize().catch(() => {})}
@@ -119,19 +124,17 @@ export function TitleBar({ page, status }: Props) {
               <svg viewBox="0 0 8 8" className="light__fill"><path d="M2.2 0.8H7.2V5.8ZM0.8 2.2V7.2H5.8Z" /></svg>
             )}
           </button>
+          <button
+            className="light light--close"
+            onClick={() => win?.close().catch(() => {})}
+            aria-label="Close"
+            title="Close DataBridge (stops the data engine; missed data is filled in when you open it again)"
+            tabIndex={-1}
+          >
+            <svg viewBox="0 0 8 8"><path d="M1.6 1.6l4.8 4.8M6.4 1.6L1.6 6.4" /></svg>
+          </button>
         </div>
-      )}
-
-      <div className="titlebar__brand">
-        <span className="titlebar__logo"><Zap size={11} fill="#0e0e0e" color="#0e0e0e" /></span>
-        <span className="titlebar__name">DataBridge</span>
-        <span className="titlebar__pro gradient-text">PRO</span>
-      </div>
-      <span className="titlebar__sep" />
-      <span className="titlebar__page">{page}</span>
-
-      <div className="titlebar__spacer" />
-      {status && <div className="titlebar__status" data-no-drag>{status}</div>}
+      ) : <div />}
     </header>
   )
 }

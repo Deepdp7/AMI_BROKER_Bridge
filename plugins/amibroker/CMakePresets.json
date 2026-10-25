@@ -1,0 +1,17 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "x86",
+      "displayName": "32-bit (AmiBroker)",
+      "description": "MSVC, Win32: client AmiBroker installs are 32-bit, so the DLL must be too",
+      "generator": "Visual Studio 18 2026",
+      "architecture": { "value": "Win32", "strategy": "set" },
+      "binaryDir": "${sourceDir}/build/x86"
+    }
+  ],
+  "buildPresets": [
+    { "name": "release", "displayName": "Release", "configurePreset": "x86", "configuration": "Release" },
+    { "name": "debug", "displayName": "Debug", "configurePreset": "x86", "configuration": "Debug" }
+  ]
+}

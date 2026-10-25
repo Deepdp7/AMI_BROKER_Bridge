@@ -112,7 +112,7 @@ function MainLayout() {
             }}
           >
             <ErrorBoundary key={location.pathname} fallbackTitle={`Error in ${title}`}>
-              <div className="animate-fade-in" style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column' }}>
+              <div className="animate-page-in" style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column' }}>
                 <Routes>
                   <Route path="/feed-status" element={<FeedStatusPage />} />
                   <Route path="/broker-connection" element={<BrokerConnectionPage />} />

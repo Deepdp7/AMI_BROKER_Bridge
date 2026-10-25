@@ -1,6 +1,7 @@
 /* Custom window title bar (the native one is off: decorations false in tauri.conf.json) */
 .titlebar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* status | brand + page (centred) | window buttons */
   align-items: center;
   height: 36px;
   flex-shrink: 0;
@@ -22,7 +23,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-right: 6px;
+  justify-self: end;
 }
 .light {
   position: relative;
@@ -119,8 +120,13 @@
   pointer-events: none;
   white-space: nowrap;
 }
-.titlebar__spacer { flex: 1; }
-.titlebar__status { display: flex; align-items: center; }
+.titlebar__center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+.titlebar__status { display: flex; align-items: center; justify-self: start; }
 
 /* Dimmed while another window has focus, like native title bars */
 .titlebar.is-blurred .titlebar__name,

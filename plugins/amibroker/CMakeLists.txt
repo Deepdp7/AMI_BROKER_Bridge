@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 project(DataBridgeProPlugin VERSION 1.0.0 LANGUAGES CXX)
 
-# AmiBroker on client PCs is 32-bit: configure with the "amd64_x86" (or "x86") VS kit.
+# AmiBroker on client PCs is 32-bit: configure with the "x86" preset (CMakePresets.json).
 if(NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
-    message(WARNING "Building a 64-bit DataBridgePro.dll — it will NOT load in 32-bit AmiBroker. Select the amd64_x86 kit.")
+    message(WARNING "Building a 64-bit DataBridgePro.dll — it will NOT load in 32-bit AmiBroker. Use the x86 preset.")
 endif()
 
 set(CMAKE_CXX_STANDARD 17)
