@@ -3,8 +3,9 @@
  *
  * Makes the WebView behave like a desktop app instead of a browser tab: no reload,
  * print, find, view-source, dev-tools, zoom or back/forward shortcuts, no browser
- * right-click menu, no page text selection or link/image dragging. Text fields keep
- * their normal editing keys and menu, and anything marked `.selectable` can be copied.
+ * right-click menu, no page text selection or link/image dragging, and no browser autofill
+ * ("Saved info", password suggestions) on any field. Text fields keep their normal editing
+ * keys and menu, and anything marked `.selectable` can be copied.
  */
 
 const isEditable = (el: EventTarget | null) =>
@@ -39,7 +40,44 @@ function onKeyDown(e: KeyboardEvent) {
   if (BLOCKED_CTRL_KEYS.has(key) && !(isEditable(e.target) && key === 'f')) e.preventDefault()
 }
 
+const NO_AUTOFILL_TYPES = new Set(['checkbox', 'radio', 'button', 'submit', 'range', 'color', 'file'])
+
+function stopFieldAutofill(el: HTMLInputElement | HTMLTextAreaElement) {
+  if (el instanceof HTMLInputElement && NO_AUTOFILL_TYPES.has(el.type)) return
+  // A field that sets its own autocomplete keeps it
+  if (el.hasAttribute('autocomplete') && el.dataset.autofillSet !== '1') return
+  el.setAttribute('autocomplete', el instanceof HTMLInputElement && el.type === 'password' ? 'new-password' : 'off')
+  el.dataset.autofillSet = '1'
+}
+
+/**
+ * Turns the WebView's autofill off for the fields under `root`: the "Saved info" list that
+ * remembers typed API keys, and the offer to save passwords. "off" covers text fields;
+ * password fields ignore it and need "new-password".
+ */
+export function stopAutofill(root: Element | Document) {
+  if (root instanceof HTMLInputElement || root instanceof HTMLTextAreaElement) stopFieldAutofill(root)
+  root.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea').forEach(stopFieldAutofill)
+}
+
+/** Fields come and go as pages change, so everything added to the page is covered */
+function watchAutofill() {
+  stopAutofill(document)
+  new MutationObserver(records => {
+    for (const r of records) {
+      if (r.type === 'attributes') {
+        // A field switched between text and password needs the other value
+        if (r.target instanceof HTMLInputElement) stopFieldAutofill(r.target)
+      } else {
+        r.addedNodes.forEach(node => { if (node instanceof Element) stopAutofill(node) })
+      }
+    }
+  }).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['type'] })
+}
+
 export function installNativeFeel() {
+  watchAutofill()
+
   // Capture phase so nothing in the page can let a browser shortcut through
   window.addEventListener('keydown', onKeyDown, { capture: true })
 

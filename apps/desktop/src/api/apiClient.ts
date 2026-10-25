@@ -174,7 +174,7 @@ export interface ConsoleLine {
 }
 
 // ===== WebSocket Manager =====
-type WsEventType = 'feed_update' | 'log_entry' | 'broker_status' | 'health_update' | 'open' | 'close' | 'error' | 'backfill_progress' | 'backfill_completed' | 'backfill_failed' | 'master_sync_progress' | 'master_sync_complete' | 'market_status' | 'console_lines' | 'auto_refresh' | 'morning_brief'
+type WsEventType = 'feed_update' | 'log_entry' | 'broker_status' | 'health_update' | 'open' | 'close' | 'error' | 'backfill_progress' | 'backfill_completed' | 'backfill_failed' | 'master_sync_progress' | 'master_sync_complete' | 'master_sync_error' | 'market_status' | 'console_lines' | 'auto_refresh' | 'morning_brief'
 type WsListener = (payload: unknown) => void
 
 class WebSocketManager {

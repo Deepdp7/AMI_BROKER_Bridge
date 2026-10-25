@@ -316,11 +316,10 @@ export function SymbolSetupPage() {
           {selectionMode ? (
             <>
               <button className="btn-secondary" onClick={() => { setSelectionMode(false); setSelectedTickers(new Set()) }}>Cancel</button>
-              <button 
-                className="btn-danger" 
+              <button
+                className="btn-danger btn-danger--solid"
                 onClick={handleDeleteSelected}
                 disabled={selectedTickers.size === 0}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', background: '#f43f5e', color: 'white', border: 'none', borderRadius: '0.375rem', fontWeight: 600, cursor: selectedTickers.size ? 'pointer' : 'not-allowed', opacity: selectedTickers.size ? 1 : 0.5 }}
               >
                 <X size={14} /> Delete Selected ({selectedTickers.size})
               </button>
@@ -330,13 +329,10 @@ export function SymbolSetupPage() {
               <button className="btn-secondary" onClick={() => setSelectionMode(true)} disabled={symbols.length === 0}>
                 Select Multiple
               </button>
-              <button 
-                className="btn-danger" 
-                onClick={handleDeleteAll} 
+              <button
+                className="btn-danger"
+                onClick={handleDeleteAll}
                 disabled={symbols.length === 0}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', background: 'rgba(244, 63, 94, 0.1)', color: '#f43f5e', border: '1px solid rgba(244, 63, 94, 0.2)', borderRadius: '0.375rem', fontWeight: 600, cursor: symbols.length ? 'pointer' : 'not-allowed', transition: 'all 0.2s' }}
-                onMouseEnter={e => symbols.length && ((e.currentTarget as HTMLElement).style.background = 'rgba(244, 63, 94, 0.2)')}
-                onMouseLeave={e => symbols.length && ((e.currentTarget as HTMLElement).style.background = 'rgba(244, 63, 94, 0.1)')}
               >
                 <X size={14} /> Delete All
               </button>

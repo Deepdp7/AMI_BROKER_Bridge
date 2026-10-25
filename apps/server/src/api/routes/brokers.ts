@@ -504,6 +504,9 @@ router.get('/:id/master/status', (req, res) => {
   }
 })
 
+/** Characters a ticker may not contain: they end up inside a PowerShell command line */
+const UNSAFE_TICKER = /['"`;$|<>(){}\\%\r\n]/
+
 // POST /api/brokers/:id/symbols/import — Bulk import symbols from CSV text
 router.post('/:id/symbols/import', (req, res) => {
   try {
@@ -518,6 +521,7 @@ router.post('/:id/symbols/import', (req, res) => {
     const now = Date.now()
     let added = 0
     const errors: string[] = []
+    const addedTickers: string[] = []
 
     for (const line of lines) {
       try {
@@ -531,6 +535,10 @@ router.post('/:id/symbols/import', (req, res) => {
         if (ticker === 'NAME' || ticker === 'TICKER' || ticker.startsWith('//')) continue
         if (/\s/.test(ticker) && !ticker.includes('26') && !ticker.includes('27') && !ticker.includes('28')) continue
         if (ticker.includes('COMPARED') || ticker.includes('AFL') || ticker.includes('PARAMETER')) continue
+        if (UNSAFE_TICKER.test(ticker) || UNSAFE_TICKER.test(exchange) || UNSAFE_TICKER.test(instrumentType)) {
+          errors.push(`Skipped "${ticker.slice(0, 30)}": it has characters that are not allowed in a symbol`)
+          continue
+        }
 
         stmts.insertSymbol.run({
           broker_id: id,
@@ -547,6 +555,7 @@ router.post('/:id/symbols/import', (req, res) => {
         const backfillDepth = Number(settings?.backfillDepthDays) || 365
         backfillQueue.enqueue(ticker, id, ticker, backfillDepth)
         backfilledTickers.delete(ticker) // ensure fresh fetch
+        addedTickers.push(ticker)
         added++
       } catch (e: any) {
         errors.push(e.message)
@@ -554,8 +563,7 @@ router.post('/:id/symbols/import', (req, res) => {
     }
 
     if (added > 0) {
-      // Bulk add symbols to AmiBroker
-      const addedTickers = lines.map((l: string) => (l.split(',')[0] || '').trim().toUpperCase()).filter((t: string) => t && t.length >= 2 && !t.startsWith('//') && t !== 'NAME' && t !== 'TICKER');
+      // Bulk add symbols to AmiBroker (only the ones added above)
       if (addedTickers.length > 0) {
         const psScript = `
           try {

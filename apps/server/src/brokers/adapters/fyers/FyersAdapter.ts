@@ -36,6 +36,9 @@ export function isFyersTokenExpired(accessToken: string): boolean {
   return exp !== null && exp < Date.now() + 60_000
 }
 
+/** Longest one symbol-list file may take to download (the biggest is about 10 MB) */
+const MASTER_DOWNLOAD_TIMEOUT_MS = 120_000
+
 export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
   /** Fyers serves at most 100 days of intraday candles per history request */
   readonly maxIntradayHistoryDays = 95
@@ -323,35 +326,41 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
       const masterDir = path.join(DATA_DIR, 'fyers_master')
       if (!fs.existsSync(masterDir)) fs.mkdirSync(masterDir, { recursive: true })
 
-      let totalProgress = 15
-      for (let i = 0; i < sources.length; i++) {
-        const src = sources[i]
-        let retries = 3
-        while (retries > 0) {
+      // All four at once (about 12 s one after another); each file is written to a .part file
+      // first and renamed when complete, so a cut-off download never counts as today's list
+      let done = 0
+      const failed: string[] = []
+      const report = () => this.emit('master_sync_progress', {
+        brokerId: bId,
+        progress: 15 + Math.round((done / sources.length) * 80),
+        text: done < sources.length ? `Downloading symbol lists (${done} of ${sources.length})...` : 'Saving symbol lists...',
+      })
+      report()
+      await Promise.all(sources.map(async src => {
+        let lastError = ''
+        for (let attempt = 1; attempt <= 3; attempt++) {
           try {
-            this.emit('master_sync_progress', { brokerId: bId, progress: totalProgress, text: `Downloading ${src.ex} symbols...` })
-            this.emit('log_entry', { level: 'info', component: 'FyersAdapter', message: `Downloading ${src.ex} contracts to disk...` })
-            
-            const res = await fetch(src.url)
-            if (res.ok) {
-              const buffer = Buffer.from(await res.arrayBuffer())
-              const filePath = path.join(masterDir, src.file)
-              await fs.promises.writeFile(filePath, buffer)
-              totalProgress += 25
-              this.emit('master_sync_progress', { brokerId: bId, progress: totalProgress, text: `Updated ${src.ex} symbols.` })
-              this.emit('log_entry', { level: 'info', component: 'FyersAdapter', message: `Saved ${src.ex} contracts (${Math.round(buffer.length / 1024)} KB) to disk.` })
-              break // Success, exit retry loop
-            } else {
-              console.error(`Failed to fetch ${src.ex} CSV: ${res.statusText}`)
-              retries--
-              if (retries === 0) throw new Error(`HTTP ${res.status} ${res.statusText}`)
-            }
-          } catch (e) {
-            console.error(`Failed to download ${src.ex} contracts (retries left: ${retries - 1}):`, e)
-            retries--
-            if (retries > 0) await new Promise(r => setTimeout(r, 2000))
+            const res = await fetch(src.url, { signal: AbortSignal.timeout(MASTER_DOWNLOAD_TIMEOUT_MS) })
+            if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
+            const buffer = Buffer.from(await res.arrayBuffer())
+            if (buffer.length < 1000) throw new Error(`only ${buffer.length} bytes`)
+            const filePath = path.join(masterDir, src.file)
+            await fs.promises.writeFile(filePath + '.part', buffer)
+            await fs.promises.rename(filePath + '.part', filePath)
+            this.emit('log_entry', { level: 'info', component: 'FyersAdapter', message: `Saved ${src.ex} contracts (${Math.round(buffer.length / 1024)} KB) to disk.` })
+            done++
+            report()
+            return
+          } catch (e: any) {
+            lastError = e?.name === 'TimeoutError' ? 'timed out' : e?.message || String(e)
+            console.error(`Failed to download ${src.ex} contracts (attempt ${attempt} of 3): ${lastError}`)
+            if (attempt < 3) await new Promise(r => setTimeout(r, 2000 * attempt))
           }
         }
+        failed.push(`${src.ex} (${lastError})`)
+      }))
+      if (failed.length) {
+        throw new Error(`Could not download the Fyers symbol list for ${failed.join(', ')}. Check the internet connection, then try again.`)
       }
 
       this.lastMasterSync = Date.now()
