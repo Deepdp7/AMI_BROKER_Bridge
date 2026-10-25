@@ -11,7 +11,7 @@ const WS_URL = 'ws://127.0.0.1:7890/api/status/stream'
 export type BrokerStatus = 'connected' | 'reconnecting' | 'auth_required' | 'disconnected'
 export type FeedStatusType = 'STREAMING' | 'STALE' | 'CLOSED' | 'ERROR'
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug'
-export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan'
+export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya'
 
 export interface BrokerAccount {
   id: string

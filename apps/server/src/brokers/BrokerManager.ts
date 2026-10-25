@@ -2,6 +2,10 @@ import { IBrokerAdapter, BrokerCredentials, SessionInfo } from './adapters/IBrok
 import { FyersAdapter } from './adapters/fyers/FyersAdapter'
 import { KiteAdapter } from './adapters/kite/KiteAdapter'
 import { DhanAdapter } from './adapters/dhan/DhanAdapter'
+import { FlattradeAdapter } from './adapters/flattrade/FlattradeAdapter'
+import { ShoonyaAdapter } from './adapters/shoonya/ShoonyaAdapter'
+import { UpstoxAdapter } from './adapters/upstox/UpstoxAdapter'
+import { AngelAdapter } from './adapters/angel/AngelAdapter'
 import { stmts } from '../db'
 import type { LogEntry } from '../types'
 import { v4 as uuidv4 } from 'uuid'
@@ -52,6 +56,18 @@ export class BrokerManager extends EventEmitter {
         break
       case 'dhan':
         adapter = new DhanAdapter()
+        break
+      case 'flattrade':
+        adapter = new FlattradeAdapter()
+        break
+      case 'shoonya':
+        adapter = new ShoonyaAdapter()
+        break
+      case 'upstox':
+        adapter = new UpstoxAdapter()
+        break
+      case 'angel_one':
+        adapter = new AngelAdapter()
         break
       default:
         throw new Error(`Unsupported broker type: ${brokerType}`)

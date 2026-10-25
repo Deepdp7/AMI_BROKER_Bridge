@@ -7,11 +7,15 @@
  */
 import { KiteAdapter } from './adapters/kite/KiteAdapter'
 import { DhanAdapter } from './adapters/dhan/DhanAdapter'
+import { FlattradeAdapter } from './adapters/flattrade/FlattradeAdapter'
+import { ShoonyaAdapter } from './adapters/shoonya/ShoonyaAdapter'
+import { UpstoxAdapter } from './adapters/upstox/UpstoxAdapter'
+import { AngelAdapter } from './adapters/angel/AngelAdapter'
 
 /** Broker types the engine can connect */
-export const LOGIN_BROKERS = new Set(['fyers', 'zerodha_kite', 'dhan'])
+export const LOGIN_BROKERS = new Set(['fyers', 'zerodha_kite', 'dhan', 'flattrade', 'shoonya', 'upstox', 'angel_one'])
 
-export const BROKER_NAMES: Record<string, string> = { fyers: 'Fyers', zerodha_kite: 'Kite', dhan: 'Dhan' }
+export const BROKER_NAMES: Record<string, string> = { fyers: 'Fyers', zerodha_kite: 'Kite', dhan: 'Dhan', flattrade: 'Flattrade', shoonya: 'Shoonya', upstox: 'Upstox', angel_one: 'Angel One' }
 
 export function callbackUrl(brokerType: string): string {
   return `http://127.0.0.1:7890/api/callback/${brokerType}`
@@ -33,6 +37,14 @@ export async function brokerLoginUrl(brokerType: string, brokerId: string, creds
       return KiteAdapter.loginUrl(creds.apiKey, brokerId)
     case 'dhan':
       return DhanAdapter.loginUrl(creds.clientId || '', creds.apiKey, creds.apiSecret)
+    case 'flattrade':
+      return FlattradeAdapter.loginUrl(creds.apiKey)
+    case 'shoonya':
+      return ShoonyaAdapter.loginUrl(creds.apiKey)
+    case 'upstox':
+      return UpstoxAdapter.loginUrl(creds.apiKey, brokerId)
+    case 'angel_one':
+      return AngelAdapter.loginUrl(creds.apiKey, brokerId)
     default:
       throw new Error(`${brokerType} is not supported yet`)
   }

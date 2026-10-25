@@ -8,7 +8,7 @@ export type LogLevel = 'error' | 'warn' | 'info' | 'debug'
 
 export interface BrokerAccount {
   id: string
-  brokerType: 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan'
+  brokerType: 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya'
   label: string
   status: BrokerStatus
   lastConnectedAt?: number

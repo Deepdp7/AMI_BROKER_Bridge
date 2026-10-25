@@ -3,7 +3,7 @@
  * Used across all local-api modules
  */
 
-export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan'
+export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya'
 export type BrokerStatus = 'connected' | 'reconnecting' | 'auth_required' | 'disconnected'
 export type FeedStatusType = 'SUBSCRIBED' | 'RECEIVING' | 'STREAMING' | 'STALE' | 'CLOSED' | 'ERROR'
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug'

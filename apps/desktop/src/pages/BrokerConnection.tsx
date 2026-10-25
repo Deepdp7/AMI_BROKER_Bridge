@@ -30,8 +30,17 @@ const BROKER_INFO: Record<string, {
     supported: true,
     setup: 'Create an app on developers.kite.trade (the paid Kite Connect plan — the free Personal plan has no market data). Copy its API key and API secret.',
   },
-  angel_one: { name: 'Angel One', tag: 'AO', color: '#E87722', description: 'SmartAPI WebSocket.', authType: 'OAuth2', apiUrl: 'https://smartapi.angelbroking.com' },
-  upstox: { name: 'Upstox', tag: 'UP', color: '#6C35DE', description: 'Upstox v2 API.', authType: 'OAuth2', apiUrl: 'https://upstox.com' },
+  angel_one: {
+    name: 'Angel One', tag: 'AO', color: '#E87722', description: 'Angel One SmartAPI. 1-minute history (30 days per request) + WebSocket 2.0 feed.', authType: 'Browser login (SmartAPI key)', apiUrl: 'https://smartapi.angelone.in',
+    supported: true,
+    setup: 'On smartapi.angelone.in → My Apps, create an app with the redirect URL below and copy its API Key and Secret Key. You log in on Angel One\'s own page; no PIN or TOTP is typed here.',
+    keyLabel: 'API Key', secretLabel: 'Secret Key',
+  },
+  upstox: {
+    name: 'Upstox', tag: 'UP', color: '#6C35DE', description: 'Upstox API v3. 1-minute history since 2022 + market data feed.', authType: 'Browser login (API Key + Secret)', apiUrl: 'https://upstox.com',
+    supported: true,
+    setup: 'On account.upstox.com/developer/apps, create an app with the redirect URL below and copy its API Key and API Secret.',
+  },
   fyers: {
     name: 'Fyers', tag: 'FY', color: '#FF6600', description: 'Fyers API v3. 1-minute historical data + tick stream.', authType: 'Browser login (App ID + Secret)', apiUrl: 'https://fyers.in',
     supported: true,
@@ -43,8 +52,18 @@ const BROKER_INFO: Record<string, {
     supported: true,
     setup: 'On web.dhan.co → My Profile → Access DhanHQ APIs, choose "API key" and create one. History and live data need Dhan\'s Data API plan.',
   },
-  flattrade: { name: 'Flattrade', tag: 'FT', color: '#00A859', description: 'Flattrade (Fasttrade) API.', authType: 'API Key', apiUrl: 'https://flattrade.in' },
-  shoonya: { name: 'Shoonya', tag: 'SH', color: '#1A365D', description: 'Finvasia Shoonya API.', authType: 'User + Password + TOTP', apiUrl: 'https://shoonya.com' },
+  flattrade: {
+    name: 'Flattrade', tag: 'FT', color: '#00A859', description: 'Flattrade Pi API (v2). 1-minute history + live touchline feed.', authType: 'Browser login (API Key + Secret)', apiUrl: 'https://flattrade.in',
+    supported: true,
+    setup: 'On wall.flattrade.in → Pi → API (v2), create an API key with the redirect URL below and your static IP, wait for approval, then copy the API key and secret key.',
+    keyLabel: 'API Key', secretLabel: 'Secret Key',
+  },
+  shoonya: {
+    name: 'Shoonya', tag: 'SH', color: '#1A365D', description: 'Finvasia Shoonya API. 1-minute history + live touchline feed.', authType: 'Browser login (OAuth Client ID + Secret)', apiUrl: 'https://shoonya.com',
+    supported: true,
+    setup: 'On trade.shoonya.com → profile → API Key, set the redirect URL below and register this PC\'s internet (static) IP address (Shoonya refuses API calls from other IPs). Copy the Client ID and Secret Code.',
+    keyLabel: 'Client ID (OAuth)', secretLabel: 'Secret Code',
+  },
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -214,7 +233,22 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
   const [clientId, setClientId] = useState('')
   const [step, setStep] = useState<'credentials' | 'authenticating' | 'success'>('credentials')
   const info = BROKER_INFO[selectedBrokerType]
-  const needsClientId = selectedBrokerType === 'dhan'
+  const [pastedUrl, setPastedUrl] = useState('')
+  const needsClientId = selectedBrokerType === 'dhan' || selectedBrokerType === 'shoonya'
+  const clientIdField = selectedBrokerType === 'shoonya'
+    ? { label: 'Shoonya User ID', placeholder: 'Your Shoonya login ID, e.g. FA12345' }
+    : { label: 'Dhan Client ID', placeholder: '10-digit Client ID from your Dhan profile' }
+
+  // Shoonya may show its own page after login instead of returning here: the code in that
+  // page's address completes the login the same way the redirect would
+  const submitPastedUrl = async () => {
+    const text = pastedUrl.trim()
+    let code = ''
+    try { code = new URL(text).searchParams.get('code') || '' } catch { code = /^[\w-]+$/.test(text) ? text : '' }
+    if (!code) { toast.error('No Login Code', 'Paste the full address of the page you landed on (it contains code=…).'); return }
+    const res = await fetch(`${BASE_URL}/callback/${selectedBrokerType}?code=${encodeURIComponent(code)}`)
+    if (!res.ok) toast.error('Login Failed', (await res.text()).replace(/<[^>]+>/g, ' ').trim().slice(0, 200))
+  }
 
   const handleConnect = async () => {
     setStep('authenticating')
@@ -318,11 +352,11 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.25rem' }}>
               {needsClientId && (
                 <div>
-                  <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>Dhan Client ID</label>
+                  <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>{clientIdField.label}</label>
                   <input
                     id="broker-client-id"
                     className="input-field"
-                    placeholder="10-digit Client ID from your Dhan profile"
+                    placeholder={clientIdField.placeholder}
                     value={clientId}
                     onChange={e => setClientId(e.target.value)}
                     type="text"
@@ -391,6 +425,24 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
             <p style={{ color: '#a1a7b0', fontSize: '0.85rem', margin: 0, lineHeight: 1.5 }}>
               A browser window has opened.<br />Please log in to your broker account to complete the setup.
             </p>
+            {selectedBrokerType === 'shoonya' && (
+              <div style={{ width: '100%', marginTop: '1.25rem', textAlign: 'left' }}>
+                <div style={{ fontSize: '0.74rem', color: '#8b9199', lineHeight: 1.5, marginBottom: '0.5rem' }}>
+                  Did Shoonya leave you on its own page after logging in? Copy that page's address from the browser and paste it here:
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <input
+                    id="broker-pasted-url"
+                    className="input-field"
+                    placeholder="https://…?code=…"
+                    value={pastedUrl}
+                    onChange={e => setPastedUrl(e.target.value)}
+                    type="text"
+                  />
+                  <button className="btn-secondary" onClick={submitPastedUrl} disabled={!pastedUrl.trim()}>Finish</button>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -487,10 +539,10 @@ export function BrokerConnectionPage() {
             { name: 'Zerodha Kite', type: 'zerodha_kite', status: 'Available', cls: 'badge-green' },
             { name: 'Fyers', type: 'fyers', status: 'Available', cls: 'badge-green' },
             { name: 'Dhan', type: 'dhan', status: 'Available', cls: 'badge-green' },
-            { name: 'Flattrade', type: 'flattrade', status: 'Coming Soon', cls: 'badge-gray' },
-            { name: 'Shoonya', type: 'shoonya', status: 'Coming Soon', cls: 'badge-gray' },
-            { name: 'Upstox', type: 'upstox', status: 'Coming Soon', cls: 'badge-gray' },
-            { name: 'Angel One', type: 'angel_one', status: 'Coming Soon', cls: 'badge-gray' },
+            { name: 'Flattrade', type: 'flattrade', status: 'Available', cls: 'badge-green' },
+            { name: 'Shoonya', type: 'shoonya', status: 'Available', cls: 'badge-green' },
+            { name: 'Upstox', type: 'upstox', status: 'Available', cls: 'badge-green' },
+            { name: 'Angel One', type: 'angel_one', status: 'Available', cls: 'badge-green' },
           ].map(b => (
             <div key={b.name} className="glass-card" style={{ padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
               <BrokerLogo brokerType={b.type} size={26} />

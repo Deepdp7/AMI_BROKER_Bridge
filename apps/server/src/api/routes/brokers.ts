@@ -7,6 +7,10 @@ import { brokerManager } from '../../brokers/BrokerManager'
 import { FyersAdapter } from '../../brokers/adapters/fyers/FyersAdapter'
 import { KiteAdapter } from '../../brokers/adapters/kite/KiteAdapter'
 import { DhanAdapter } from '../../brokers/adapters/dhan/DhanAdapter'
+import { FlattradeAdapter } from '../../brokers/adapters/flattrade/FlattradeAdapter'
+import { ShoonyaAdapter } from '../../brokers/adapters/shoonya/ShoonyaAdapter'
+import { UpstoxAdapter } from '../../brokers/adapters/upstox/UpstoxAdapter'
+import { AngelAdapter } from '../../brokers/adapters/angel/AngelAdapter'
 import type { IBrokerAdapter } from '../../brokers/adapters/IBrokerAdapter'
 import { backfilledTickers } from '../../market/state/backfillState'
 import { clearVerifiedThrough } from '../../market/state/coverageState'
@@ -24,6 +28,10 @@ const searchOnlyAdapters: Record<string, IBrokerAdapter> = {
   fyers: new FyersAdapter(),
   zerodha_kite: new KiteAdapter(),
   dhan: new DhanAdapter(),
+  flattrade: new FlattradeAdapter(),
+  shoonya: new ShoonyaAdapter(),
+  upstox: new UpstoxAdapter(),
+  angel_one: new AngelAdapter(),
 }
 const fallbackSearchAdapter = searchOnlyAdapters.fyers
 
@@ -57,8 +65,9 @@ router.post('/', async (req, res) => {
     if (!brokerType || !label) return res.status(400).json({ error: 'brokerType and label are required' })
     if (!LOGIN_BROKERS.has(brokerType)) return res.status(400).json({ error: `${label || brokerType} is not supported yet` })
     if (!rawApiKey || !rawApiSecret) return res.status(400).json({ error: 'apiKey and apiSecret are required' })
-    const clientId = (rawClientId || '').trim() || null
+    const clientId = (brokerType === 'shoonya' ? (rawClientId || '').trim().toUpperCase() : (rawClientId || '').trim()) || null
     if (brokerType === 'dhan' && !clientId) return res.status(400).json({ error: 'Dhan Client ID is required' })
+    if (brokerType === 'shoonya' && !clientId) return res.status(400).json({ error: 'Shoonya User ID is required' })
 
     const apiKey = rawApiKey.trim()
     const apiSecret = rawApiSecret.trim()
@@ -116,11 +125,12 @@ router.post('/', async (req, res) => {
 router.get('/callback/:brokerType', async (req, res) => {
   try {
     const { brokerType } = req.params
-    // Fyers sends auth_code, Kite request_token, Dhan tokenId
-    const requestToken = (req.query.request_token || req.query.auth_code || req.query.tokenId) as string
+    // Fyers sends auth_code (and code=200, so auth_code goes first), Kite request_token,
+    // Dhan tokenId, Flattrade / Shoonya / Upstox code, Angel One auth_token (+ feed_token, refresh_token)
+    const requestToken = (req.query.request_token || req.query.auth_code || req.query.tokenId || req.query.auth_token || req.query.code) as string
 
     if (!requestToken) {
-      return res.status(400).send('<h1>Error</h1><p>No request_token, auth_code or tokenId provided in the URL. Was the login cancelled?</p>')
+      return res.status(400).send('<h1>Error</h1><p>No login code (request_token, auth_code, tokenId or code) in the URL. Was the login cancelled?</p>')
     }
 
     const state = req.query.state as string
@@ -161,8 +171,11 @@ router.get('/callback/:brokerType', async (req, res) => {
       const session = await brokerManager.connectBroker(brokerRow.id, brokerType, {
         apiKey: creds.apiKey,
         apiSecret: creds.apiSecret,
-        clientId: brokerRow.account_id || undefined,
-        requestToken
+        // Flattrade names the user who logged in (?client=)
+        clientId: (req.query.client as string) || brokerRow.account_id || undefined,
+        requestToken,
+        feedToken: (req.query.feed_token as string) || undefined,
+        refreshToken: (req.query.refresh_token as string) || undefined,
       })
 
       stmts.insertEvent.run({

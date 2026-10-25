@@ -32,7 +32,7 @@ const WEEKLY_MONTH_CODES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'O', 'N
 const INDEX_ALIASES: Record<string, string> = {
   NIFTY: 'NIFTY50', NIFTY50: 'NIFTY50',
   BANKNIFTY: 'NIFTYBANK', NIFTYBANK: 'NIFTYBANK',
-  FINNIFTY: 'FINNIFTY', NIFTYFINSERVICE: 'FINNIFTY',
+  FINNIFTY: 'FINNIFTY', NIFTYFINSERVICE: 'FINNIFTY', NIFTYFINSERVICES: 'FINNIFTY',
   MIDCPNIFTY: 'MIDCPNIFTY', NIFTYMIDSELECT: 'MIDCPNIFTY',
   NIFTYNXT50: 'NIFTYNXT50', NIFTYNEXT50: 'NIFTYNXT50',
   INDIAVIX: 'INDIAVIX',
@@ -56,6 +56,11 @@ const OPT_RE = /\d{2}(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|[1-9OND]\d
 export function indexName(name: string): string {
   const compact = name.toUpperCase().replace(/\s+/g, '')
   return INDEX_ALIASES[compact] || compact
+}
+
+/** True for an index name the alias table knows in any spelling ("Nifty 50", "BANKNIFTY") */
+export function isKnownIndexName(name: string): boolean {
+  return name.toUpperCase().replace(/\s+/g, '') in INDEX_ALIASES
 }
 
 export function indexKey(exchange: 'NSE' | 'BSE' | string, name: string): string {
@@ -154,13 +159,56 @@ export function formatIstDateTime(d: Date): string {
   return new Date(d.getTime() + 5.5 * 3600 * 1000).toISOString().slice(0, 19).replace('T', ' ')
 }
 
-/** Next 06:00 IST after `fromMs` — when Kite (and Fyers) access tokens die */
-export function next0600IstMs(fromMs: number = Date.now()): number {
+/** Next hh:mm IST after `fromMs` */
+export function nextIstTimeMs(hour: number, minute: number, fromMs: number = Date.now()): number {
   const IST = 5.5 * 3600 * 1000
   const ist = new Date(fromMs + IST)
-  let t = Date.UTC(ist.getUTCFullYear(), ist.getUTCMonth(), ist.getUTCDate(), 6, 0, 0) - IST
+  let t = Date.UTC(ist.getUTCFullYear(), ist.getUTCMonth(), ist.getUTCDate(), hour, minute, 0) - IST
   if (t <= fromMs) t += 24 * 3600 * 1000
   return t
+}
+
+/** Next 06:00 IST after `fromMs` — when Kite (and Fyers) access tokens die */
+export function next0600IstMs(fromMs: number = Date.now()): number {
+  return nextIstTimeMs(6, 0, fromMs)
+}
+
+/** NSE cash series that are shares (the rest are bonds, G-secs, T-bills…) */
+export const NSE_SHARE_SERIES = new Set(['EQ', 'BE', 'BZ', 'SM', 'ST', 'SZ'])
+/** BSE groups that are shares (F = debt, G = government securities) */
+export const BSE_SHARE_GROUPS = new Set(['A', 'B', 'T', 'X', 'XT', 'Z', 'M', 'MT'])
+
+/**
+ * Option expiries that are monthly: the last expiry of each month per underlying (the
+ * earlier ones are weeklies). For lists that don't flag weeklies themselves. Keys are
+ * `${group}|${YYYY-MM}`; isMonthlyExpiry() asks the map.
+ */
+export function lastExpiryByMonth(options: Iterable<{ group: string; expiry: string }>): Map<string, string> {
+  const last = new Map<string, string>()
+  for (const { group, expiry } of options) {
+    if (!expiry) continue
+    const k = `${group}|${expiry.slice(0, 7)}`
+    if ((last.get(k) || '') < expiry) last.set(k, expiry)
+  }
+  return last
+}
+
+export function isMonthlyExpiry(last: Map<string, string>, group: string, expiry: string): boolean {
+  return last.get(`${group}|${expiry.slice(0, 7)}`) === expiry
+}
+
+/** "23NOV2026" or "23-NOV-2026" → "2026-11-23", '' if it isn't such a date */
+export function parseDayMonYear(s: string): string {
+  const m = /^(\d{1,2})-?([A-Za-z]{3})-?(\d{4})$/.exec((s || '').trim())
+  if (!m) return ''
+  const month = MONTHS.indexOf(m[2].toUpperCase()) + 1
+  if (!month) return ''
+  return `${m[3]}-${String(month).padStart(2, '0')}-${m[1].padStart(2, '0')}`
+}
+
+/** IST calendar date (YYYY-MM-DD) of a unix ms time */
+export function istDate(ms: number): string {
+  return new Date(ms + 5.5 * 3600 * 1000).toISOString().slice(0, 10)
 }
 
 /** Expiry time (UTC ms) from a JWT `exp`, or null if it can't be read */
