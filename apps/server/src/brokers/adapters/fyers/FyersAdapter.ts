@@ -259,6 +259,8 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
       else if (clean === 'NIFTYNXT50') resolved = 'NSE:NIFTYNXT50-INDEX';
       else if (clean === 'NIFTYFPI') resolved = 'NSE:NIFTYFPI150-INDEX';
       else if (clean === 'SENSEX') resolved = 'BSE:SENSEX-INDEX';
+      else if (clean === 'BANKEX') resolved = 'BSE:BANKEX-INDEX';
+      else if (clean === 'INDIAVIX') resolved = 'NSE:INDIAVIX-INDEX';
       else if (clean.includes(':')) {
         const [exch, sym] = clean.split(':');
         if (exch === 'MCX') resolved = `MCX:${sym}`;

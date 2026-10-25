@@ -75,3 +75,35 @@ describe('Fyers symbol list download', () => {
     expect(a.isDownloadingMaster).toBe(false)
   })
 })
+
+describe('symbol lists in symbols/ resolve to real Fyers symbols', () => {
+  /** Fyers' own symbol lists (NSE_CM / BSE_CM), downloaded for the check; skipped when offline */
+  async function fyersSymbols(): Promise<Set<string> | null> {
+    try {
+      const out = new Set<string>()
+      for (const f of ['NSE_CM', 'BSE_CM']) {
+        const res = await fetch(`https://public.fyers.in/sym_details/${f}.csv`, { signal: AbortSignal.timeout(30_000) })
+        if (!res.ok) return null
+        for (const line of (await res.text()).split('\n')) out.add(line.split(',')[9]?.trim())
+      }
+      return out
+    } catch { return null }
+  }
+
+  it('maps every ticker in indices.csv, nifty50.csv and nifty500.csv to a symbol Fyers lists', async () => {
+    const real = await fyersSymbols()
+    if (!real) return // offline: nothing to compare with
+    const a = new FyersAdapter()
+    const dir = path.resolve(__dirname, '../../../symbols')
+    const unknown: string[] = []
+    for (const file of ['indices.csv', 'nifty50.csv', 'nifty500.csv']) {
+      for (const line of fs.readFileSync(path.join(dir, file), 'utf8').split(/\r?\n/)) {
+        if (!line || line.startsWith('#') || line.startsWith('ticker')) continue
+        const [ticker, exchange] = line.split(',')
+        const resolved = await a.resolveSymbol(ticker, exchange)
+        if (!real.has(resolved)) unknown.push(`${ticker} -> ${resolved}`)
+      }
+    }
+    expect(unknown).toEqual([])
+  }, 90_000)
+})
