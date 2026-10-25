@@ -87,14 +87,11 @@
   pointer-events: none; /* lets the bar underneath take the drag */
 }
 .titlebar__logo {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  display: block;
   border-radius: 5px;
-  background: linear-gradient(135deg, #00d4aa 0%, #006655 100%);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 10px rgba(0, 212, 170, 0.35);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 10px rgba(0, 212, 170, 0.25);
 }
 .titlebar__name {
   font-size: 0.78rem;

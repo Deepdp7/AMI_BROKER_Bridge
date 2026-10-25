@@ -1,0 +1,31 @@
+{
+  "appName": "DataBridge Pro",
+  "version": "1.0.0",
+  "publisher": "",
+  "website": "",
+  "description": "Live and historical market data from Indian brokers into AmiBroker",
+  "appId": "9a228315-591c-45dd-9480-35a4cda5583a",
+  "sourceDir": "C:\\Users\\ARITRA\\Desktop\\AMI_BROKER_Bridge\\release\\DataBridge Pro",
+  "mainExe": "DataBridge Pro.exe",
+  "extraFiles": [
+    {
+      "source": "C:\\Users\\ARITRA\\Desktop\\AMI_BROKER_Bridge\\release\\plugin\\DataBridgePro.dll",
+      "destination": "{ProgramFilesX86}\\AmiBroker\\Plugins",
+      "onlyIfExists": true
+    }
+  ],
+  "icon": "C:\\Users\\ARITRA\\Desktop\\AMI_BROKER_Bridge\\branding\\app-icon\\icon.png",
+  "sidebarImage": "C:\\Users\\ARITRA\\Desktop\\AMI_BROKER_Bridge\\branding\\installer\\sidebar-328x628.bmp",
+  "headerImage": "C:\\Users\\ARITRA\\Desktop\\AMI_BROKER_Bridge\\branding\\installer\\header-300x114.bmp",
+  "licenseFile": "",
+  "scope": "allUsers",
+  "desktopShortcut": true,
+  "startMenuShortcut": true,
+  "runAfterInstall": true,
+  "closeProcesses": [
+    "DataBridge Pro.exe",
+    "local-api.exe"
+  ],
+  "outputDir": "C:\\Users\\ARITRA\\Desktop\\AMI_BROKER_Bridge\\release",
+  "outputName": ""
+}

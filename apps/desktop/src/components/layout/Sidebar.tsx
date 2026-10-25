@@ -1,7 +1,8 @@
 import {
   Activity, Wifi, List, Settings, FileText, Info,
-  Zap, ChevronRight, RefreshCw, AlertCircle, Heart, Terminal, Sparkles
+  ChevronRight, RefreshCw, AlertCircle, Heart, Terminal, Sparkles
 } from 'lucide-react'
+import appIcon from '../../assets/brand/app-icon.png'
 import { useAppStore } from '../../store/appStore'
 import BrokerLogo, { BROKER_NAMES } from '../ui/BrokerLogo'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -55,15 +56,14 @@ export function Sidebar() {
       {/* Logo */}
       <div style={{ padding: '1.125rem 1rem 0.875rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-          <div style={{
-            width: '32px', height: '32px', borderRadius: '8px',
-            background: 'linear-gradient(135deg, #00d4aa 0%, #006655 100%)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(0,212,170,0.35)',
-            flexShrink: 0,
-          }}>
-            <Zap size={16} fill="#0e0e0e" color="#0e0e0e" />
-          </div>
+          <img
+            src={appIcon}
+            alt=""
+            width={32}
+            height={32}
+            draggable={false}
+            style={{ borderRadius: '8px', flexShrink: 0, boxShadow: '0 0 0 1px rgba(255,255,255,0.08), 0 0 16px rgba(0,212,170,0.25)' }}
+          />
           <div>
             <div style={{ fontWeight: 700, fontSize: '0.875rem', color: '#eceef2', letterSpacing: '-0.02em', lineHeight: 1 }}>
               DataBridge

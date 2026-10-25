@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import type { ReactNode, MouseEvent as ReactMouseEvent } from 'react'
-import { Zap } from 'lucide-react'
+import appIcon from '../../assets/brand/app-icon.png'
 import { isTauri, reportMaximizeButtonRect, onMaximizeHover } from '../../lib/nativeWindow'
 import './titlebar.css'
 
@@ -88,7 +88,7 @@ export function TitleBar({ page, status }: Props) {
       {/* Centre: app name | open page */}
       <div className="titlebar__center">
         <div className="titlebar__brand">
-          <span className="titlebar__logo"><Zap size={11} fill="#0e0e0e" color="#0e0e0e" /></span>
+          <img className="titlebar__logo" src={appIcon} alt="" draggable={false} />
           <span className="titlebar__name">DataBridge</span>
           <span className="titlebar__pro gradient-text">PRO</span>
         </div>

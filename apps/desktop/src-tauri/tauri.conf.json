@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "databridge-pro",
+  "productName": "DataBridge Pro",
   "version": "0.1.0",
   "identifier": "com.databridgepro.app",
   "build": {
@@ -35,6 +35,9 @@
     "externalBin": [
       "bin/local-api"
     ],
+    "shortDescription": "Live and historical market data from Indian brokers into AmiBroker",
+    "longDescription": "DataBridge Pro streams live ticks and 1-minute history from Fyers, Zerodha Kite, Dhan, Flattrade, Shoonya, Upstox and Angel One into AmiBroker charts.",
+    "copyright": "© 2026 DataBridge Pro",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -42,6 +45,17 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
+    "windows": {
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "headerImage": "../../../branding/installer/header-150x57.bmp",
+        "sidebarImage": "../../../branding/installer/sidebar-164x314.bmp"
+      },
+      "wix": {
+        "bannerPath": "../../../branding/installer/banner-493x58.bmp",
+        "dialogImagePath": "../../../branding/installer/dialog-493x312.bmp"
+      }
+    },
     "android": {
       "debugApplicationIdSuffix": ".debug"
     }

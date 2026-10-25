@@ -1,4 +1,5 @@
-import { Zap, ExternalLink, Shield, Cpu, Activity, Database, Code } from 'lucide-react'
+import { ExternalLink, Shield, Cpu, Activity, Database, Code } from 'lucide-react'
+import appIcon from '../assets/brand/app-icon.png'
 
 const STACK = [
   { icon: Cpu, label: 'Tauri v2 + Rust', sub: 'Native desktop container & IPC' },
@@ -26,14 +27,14 @@ export function AboutPage() {
         }} />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', marginBottom: '0.75rem' }}>
-          <div style={{
-            width: '40px', height: '40px', borderRadius: '10px',
-            background: 'linear-gradient(135deg, #00d4aa, #0284c7)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(0,212,170,0.4)',
-          }}>
-            <Zap size={22} style={{ color: '#0c0c0c' }} />
-          </div>
+          <img
+            src={appIcon}
+            alt=""
+            width={48}
+            height={48}
+            draggable={false}
+            style={{ borderRadius: '12px', boxShadow: '0 0 0 1px rgba(255,255,255,0.08), 0 0 20px rgba(0,212,170,0.3)' }}
+          />
           <div>
             <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#eceef2', letterSpacing: '-0.02em' }}>
               DataBridge Pro
