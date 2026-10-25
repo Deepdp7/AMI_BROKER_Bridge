@@ -1,12 +1,24 @@
 {
-  "name": "ami-broker-bridge",
+  "name": "databridge-pro",
+  "version": "1.0.0",
   "private": true,
-  "description": "Forwards to the DataBridge Pro project in ./amibroker-bridge",
+  "description": "DataBridge Pro: live and historical Indian market data from Fyers, Zerodha Kite and Dhan into AmiBroker",
   "scripts": {
-    "dev": "pnpm --dir amibroker-bridge run dev",
-    "dev:web": "pnpm --dir amibroker-bridge run dev:web",
-    "build": "pnpm --dir amibroker-bridge run build",
-    "test": "pnpm --dir amibroker-bridge run test",
-    "postinstall": "pnpm --dir amibroker-bridge install"
+    "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run dev:desktop\" --names \"API,APP\" --prefix-colors \"cyan,blue\"",
+    "dev:web": "concurrently \"npm run dev:server\" \"npm run dev:ui\" --names \"API,GUI\" --prefix-colors \"cyan,magenta\"",
+    "dev:server": "npm run dev --prefix apps/server",
+    "dev:ui": "npm run dev --prefix apps/desktop",
+    "dev:desktop": "node scripts/with-msvc.cjs npm run tauri --prefix apps/desktop -- dev --config src-tauri/tauri.dev.conf.json",
+    "build": "npm run build:server && npm run build:desktop",
+    "build:server": "npm run build:bin --prefix apps/server",
+    "build:desktop": "node scripts/with-msvc.cjs npm run tauri --prefix apps/desktop -- build",
+    "build:plugin": "cmd /c plugins\\amibroker\\build.bat",
+    "typecheck": "npm run typecheck --prefix apps/server && npm run typecheck --prefix apps/desktop",
+    "test": "npm run test --prefix apps/server && npm run test --prefix apps/desktop",
+    "install:all": "npm install --prefix apps/server --no-audit --no-fund && npm install --prefix apps/desktop --no-audit --no-fund",
+    "postinstall": "npm run install:all"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
   }
 }

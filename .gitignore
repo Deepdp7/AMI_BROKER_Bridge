@@ -1,10 +1,9 @@
-# Node.js
+# Dependencies
 node_modules/
+
+# Build output
 dist/
 build/
-.env
-
-# Builds and EXEs
 *.exe
 *.dll
 *.obj
@@ -13,12 +12,24 @@ build/
 *.pdb
 *.zip
 *.msi
+apps/server/sea-prep.blob
+apps/desktop/src-tauri/bin/
+
+# Local data and secrets (the engine keeps its database in %APPDATA%\DataBridgePro)
+.env
+*.db
+*.sqlite
+*.log
+
+# Personal files kept out of the repository
+_archive/
+
+# Media
 *.mp4
 
-# Databases
-*.sqlite
-*.db
-
-# OS Files
+# OS / editor
 .DS_Store
 Thumbs.db
+.vscode/*
+!.vscode/settings.json
+.idea/

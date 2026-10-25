@@ -1,3 +1,4 @@
 {
-  "cmake.sourceDirectory": "C:/Users/ARITRA/Desktop/AMI_BROKER_Bridge/amibroker-bridge/amibroker-plugin"
+  "cmake.sourceDirectory": "${workspaceFolder}/plugins/amibroker",
+  "cmake.buildDirectory": "${workspaceFolder}/plugins/amibroker/build"
 }
