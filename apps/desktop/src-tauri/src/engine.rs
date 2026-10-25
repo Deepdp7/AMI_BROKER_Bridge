@@ -99,7 +99,7 @@ fn backend_exe() -> Option<PathBuf> {
         .find(|p| p.exists())
 }
 
-fn spawn_backend(exe: &PathBuf) -> std::io::Result<Child> {
+fn spawn_backend(exe: &PathBuf, secret_key: &str) -> std::io::Result<Child> {
     let mut cmd = Command::new(exe);
     #[cfg(windows)]
     {
@@ -115,16 +115,18 @@ fn spawn_backend(exe: &PathBuf) -> std::io::Result<Child> {
     }
     // Lets the engine exit on its own if this app is killed without a clean shutdown.
     cmd.env("DATABRIDGE_PARENT_PID", std::process::id().to_string());
+    // Encrypts broker credentials in the database; empty = no key, the engine stores them plain
+    cmd.env("DATABRIDGE_SECRET_KEY", secret_key);
     cmd.stdin(Stdio::null()).spawn()
 }
 
 /// Keeps the engine running: restarts it with backoff if it crashes or exits
 /// (e.g. after "Full Force Clean", which exits the engine on purpose).
-fn supervise(backend: Arc<Backend>, exe: PathBuf) {
+fn supervise(backend: Arc<Backend>, exe: PathBuf, secret_key: String) {
     let mut delay = Duration::from_secs(1);
     while !backend.quitting.load(Ordering::SeqCst) {
         let started = Instant::now();
-        match spawn_backend(&exe) {
+        match spawn_backend(&exe, &secret_key) {
             Ok(child) => {
                 supervisor_log(&format!("Data engine started (pid {})", child.id()));
                 *backend.child.lock().unwrap() = Some(child);
@@ -229,6 +231,10 @@ pub(crate) fn start(backend: &Arc<Backend>) {
     let backend = backend.clone();
     std::thread::spawn(move || {
         kill_orphaned_engine();
-        supervise(backend, exe)
+        let secret_key = crate::secret_key::engine_key_hex().unwrap_or_else(|| {
+            supervisor_log("Could not unlock the credential key: broker credentials will be stored unencrypted");
+            String::new()
+        });
+        supervise(backend, exe, secret_key)
     });
 }

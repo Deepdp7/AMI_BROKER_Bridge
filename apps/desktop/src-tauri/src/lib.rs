@@ -1,6 +1,7 @@
 //! DataBridge Pro desktop shell: the window, the tray icon, and the data engine it runs.
 //!
 //!   engine.rs           local-api.exe supervisor (start, restart, clean stop)
+//!   secret_key.rs       DPAPI-locked key the engine encrypts broker credentials with
 //!   single_instance.rs  one app per user; a second launch shows the running window
 //!   tray.rs             notification-area menu
 //!   window_chrome.rs    custom title bar support (Windows 11 Snap Layouts)
@@ -11,6 +12,7 @@ use std::sync::Arc;
 use tauri::Manager;
 
 mod engine;
+mod secret_key;
 mod single_instance;
 mod tray;
 #[cfg(windows)]

@@ -23,6 +23,7 @@ import type { DatabaseSync as DatabaseSyncT } from 'node:sqlite'
 import type { AppSettings, ExchangeRegistry } from '../types'
 import { readBarsCsv, setReaderDbFile } from './reader'
 import { importFromPostgresIfNeeded } from './pgImport'
+import { isSealed, open, seal, secretsEncrypted } from '../lib/secretBox'
 
 // ===== Env Resolution =====
 // When running as an installed SEA/Tauri binary, process.cwd() is the install
@@ -264,9 +265,23 @@ const q = {
   insertLog: sqlite.prepare('INSERT INTO logs (timestamp, level, component, message) VALUES (?, ?, ?, ?)'),
 }
 
+const CREDENTIAL_COLUMNS = ['api_key', 'api_secret', 'access_token'] as const
+
 function loadCaches() {
+  // Credentials are encrypted on disk and plain only in memory; values saved by older
+  // versions (plain text) are encrypted here, once
   brokersCache.length = 0
-  brokersCache.push(...(sqlite.prepare('SELECT * FROM brokers ORDER BY created_at ASC').all() as any[]))
+  let sealedNow = 0
+  for (const row of sqlite.prepare('SELECT * FROM brokers ORDER BY created_at ASC').all() as any[]) {
+    const plainOnDisk = CREDENTIAL_COLUMNS.some(c => row[c] && !isSealed(row[c]))
+    for (const c of CREDENTIAL_COLUMNS) row[c] = open(row[c])
+    if (plainOnDisk && secretsEncrypted()) {
+      q.updateCredentials.run(seal(row.api_key), seal(row.api_secret), seal(row.access_token), row.id)
+      sealedNow++
+    }
+    brokersCache.push(row)
+  }
+  if (sealedNow) console.log(`[Secrets] Encrypted the saved credentials of ${sealedNow} broker account(s)`)
 
   symbolsCache.length = 0
   for (const r of sqlite.prepare('SELECT * FROM symbols').all() as any[]) {
@@ -572,7 +587,7 @@ export const stmts = {
         b.api_secret = creds.apiSecret
         b.access_token = creds.accessToken
       }
-      q.updateCredentials.run(n(creds.apiKey), n(creds.apiSecret), n(creds.accessToken), id)
+      q.updateCredentials.run(seal(n(creds.apiKey)), seal(n(creds.apiSecret)), seal(n(creds.accessToken)), id)
     }
   },
 
