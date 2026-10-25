@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { getVersion } from '@tauri-apps/api/app'
 import { ExternalLink, Shield, Cpu, Activity, Database, Code } from 'lucide-react'
 import appIcon from '../assets/brand/app-icon.png'
 
@@ -9,6 +11,12 @@ const STACK = [
 ]
 
 export function AboutPage() {
+  // From the root package.json, through tauri.conf.json
+  const [version, setVersion] = useState('')
+  useEffect(() => {
+    getVersion().then(setVersion).catch(() => {})
+  }, [])
+
   return (
     <div style={{ maxWidth: '800px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* Header Banner */}
@@ -172,7 +180,7 @@ export function AboutPage() {
       </div>
 
       <div style={{ textAlign: 'center', fontSize: '0.72rem', color: '#575d66', paddingBottom: '1rem' }}>
-        DataBridge Pro v1.0.0 — Built with Tauri, React, Rust — © 2026
+        DataBridge Pro{version && ` v${version}`} — Built with Tauri, React, Rust — © 2026
       </div>
     </div>
   )

@@ -196,20 +196,39 @@ fn engine_listening() -> bool {
     TcpStream::connect_timeout(&([127, 0, 0, 1], ENGINE_PORT).into(), Duration::from_millis(200)).is_ok()
 }
 
+/// Kills an engine orphaned by a previous crash so its ports are free. Only when something
+/// still answers on the engine port: taskkill takes a second or more, and most starts have
+/// nothing to clean up.
+fn kill_orphaned_engine() {
+    if !engine_listening() {
+        return;
+    }
+    supervisor_log("An engine from a previous run is still running: stopping it");
+    #[cfg(windows)]
+    for name in ["local-api.exe", "local-api-x86_64-pc-windows-msvc.exe"] {
+        use std::os::windows::process::CommandExt;
+        const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+        let _ = Command::new("taskkill")
+            .args(["/F", "/IM", name, "/T"])
+            .creation_flags(CREATE_NO_WINDOW)
+            .stdin(Stdio::null())
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .status();
+    }
+}
+
 /// Starts the engine next to the app and keeps it running (release builds; in dev
-/// `npm run dev` starts it).
+/// `npm run dev` starts it). Returns at once: the work happens on a background thread, so
+/// the window opens without waiting for it.
 pub(crate) fn start(backend: &Arc<Backend>) {
     let Some(exe) = backend_exe() else {
         supervisor_log("local-api executable not found next to the app");
         return;
     };
-    #[cfg(windows)]
-    {
-        // Kill engines orphaned by a previous crash so the ports are free.
-        for name in ["local-api.exe", "local-api-x86_64-pc-windows-msvc.exe"] {
-            let _ = Command::new("taskkill").args(["/F", "/IM", name, "/T"]).output();
-        }
-    }
     let backend = backend.clone();
-    std::thread::spawn(move || supervise(backend, exe));
+    std::thread::spawn(move || {
+        kill_orphaned_engine();
+        supervise(backend, exe)
+    });
 }
