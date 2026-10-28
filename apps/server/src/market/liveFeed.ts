@@ -196,17 +196,21 @@ export class LiveFeed extends EventEmitter {
       const now = Date.now()
       
       // Sweep for stale feeds - 60s threshold for low-liquidity stocks
+      const changed: SymbolFeedStatus[] = []
       for (const status of this.feedStatuses.values()) {
         if (status.status === 'RECEIVING' && status.lastTickUtcMs) {
            if (now - status.lastTickUtcMs > 60000) {
              status.status = 'STALE' as any
+             changed.push(status)
            }
         }
       }
 
-      // Emit a heartbeat so the core engine status updates, but DO NOT generate fake prices
+      // Heartbeat: engine stats, plus only the symbols that just went stale. Ticks are sent as
+      // they arrive (_scheduleFeedBroadcast) and a window gets the full list when it connects,
+      // so repeating every symbol each second only made the UI redo all its work for nothing.
       this.emit('feed_update', {
-        symbols: Array.from(this.feedStatuses.values()),
+        symbols: changed,
         coreEngine: this._getCoreStats(),
         timestamp: now,
       })

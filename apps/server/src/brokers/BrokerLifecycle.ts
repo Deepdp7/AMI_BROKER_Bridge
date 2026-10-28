@@ -16,7 +16,8 @@ import { liveFeed } from '../market/liveFeed'
 import { detectGaps } from '../market/GapDetector'
 import { backfilledTickers } from '../market/state/backfillState'
 import { getVerifiedThroughMs, clearVerifiedThrough } from '../market/state/coverageState'
-import { brokerLoginUrl, LOGIN_BROKERS, BROKER_NAMES } from './brokerAuth'
+import { brokerLoginUrl, LOGIN_BROKERS, BROKER_NAMES, isDirectLogin } from './brokerAuth'
+import type { SessionInfo } from './adapters/IBrokerAdapter'
 
 const DAY_MS = 24 * 60 * 60 * 1000
 const MONTHS: Record<string, number> = { JAN: 1, FEB: 2, MAR: 3, APR: 4, MAY: 5, JUN: 6, JUL: 7, AUG: 8, SEP: 9, OCT: 10, NOV: 11, DEC: 12 }
@@ -44,6 +45,12 @@ export function openBrokerLogin(brokerId: string, reason: string): boolean {
   lastLoginOpenAt.set(brokerId, Date.now())
 
   const type = broker.broker_type
+  // Keys alone are enough: log in again here instead of asking the user
+  if (isDirectLogin(type)) {
+    console.log(`[Auth] ${reason} for ${brokerId}. Logging in again with the saved keys...`)
+    loginDirect(brokerId).catch(err => console.error(`[Auth] ${BROKER_NAMES[type] || type} could not log in with the saved keys: ${err?.message || err}`))
+    return true
+  }
   pendingLogins.set(type, { apiKey: creds.apiKey, apiSecret: creds.apiSecret })
   brokerLoginUrl(type, brokerId, { apiKey: creds.apiKey, apiSecret: creds.apiSecret, clientId: broker.account_id })
     .then(loginUrl => {
@@ -54,6 +61,25 @@ export function openBrokerLogin(brokerId: string, reason: string): boolean {
     })
     .catch(err => console.error(`[Auth] ${reason} for ${brokerId}, but the login could not be started: ${err?.message || err}`))
   return true
+}
+
+/**
+ * Logs in a broker that needs only its keys (no browser page), with the keys saved for it,
+ * and makes it usable: the same as a successful browser login.
+ */
+export async function loginDirect(brokerId: string): Promise<SessionInfo> {
+  const broker = stmts.getBrokerById.get(brokerId) as any
+  const creds = stmts.getCredentials.get(brokerId) as any
+  if (!broker || !creds?.apiKey) throw new Error('No saved keys for this broker. Remove it and add it again.')
+  const session = await brokerManager.connectBroker(brokerId, broker.broker_type, {
+    apiKey: creds.apiKey, apiSecret: creds.apiSecret || '', clientId: broker.account_id || undefined,
+  })
+  stmts.upsertCredentials.run(brokerId, { apiKey: creds.apiKey, apiSecret: creds.apiSecret, accessToken: session.accessToken })
+  if (session.accountId && session.accountId !== broker.account_id) stmts.updateBrokerAccountId.run(session.accountId, brokerId)
+  stmts.updateBrokerStatus.run('connected', Date.now(), brokerId)
+  stmts.insertEvent.run({ broker_id: brokerId, event_type: 'CONNECTED', detail: `Logged in with the saved keys. Account: ${session.accountId}`, ts_utc_ms: Date.now() })
+  await activateBroker(brokerId, broker.broker_type)
+  return session
 }
 
 /**
@@ -81,6 +107,8 @@ function takeOverSymbols(brokerId: string, brokerType: string): number {
 
 /** Call once a broker is connected with a working token. */
 export async function activateBroker(brokerId: string, brokerType: string) {
+  // The app's Activity page marks earlier login problems as fixed when it sees this line
+  console.log(`[Broker] ${brokerId}: connected and ready`)
   takeOverSymbols(brokerId, brokerType)
 
   const rawSymbols = (stmts.getSymbolsByBroker.all(brokerId) as any[])
@@ -141,6 +169,62 @@ export function startPeriodicCatchUp() {
 const catchUpRunning = new Set<string>()
 
 /**
+ * Queues what one symbol is missing: everything when nothing is stored, otherwise the gaps
+ * since its coverage watermark (the start of the history when the watermark is cleared).
+ */
+async function catchUpSymbol(sym: any, brokerId: string, depthDays: number, nowMs: number): Promise<'full' | 'gaps' | 'current'> {
+  const ticker = sym.amiBrokerTicker || sym.amibroker_ticker
+  const token = sym.rawSymbol || sym.raw_symbol || sym.instrumentId || sym.instrument_id || ticker
+
+  const oldestSec = await getOldestBarTimestampSec(ticker)
+  if (!oldestSec) {
+    // Nothing stored: full download (stale "done" markers would make enqueue() skip it)
+    backfilledTickers.delete(ticker)
+    if (getVerifiedThroughMs(ticker)) clearVerifiedThrough(ticker)
+    backfillQueue.enqueue(ticker, brokerId, token, depthDays)
+    return 'full'
+  }
+
+  let fromMs = Math.max(nowMs - depthDays * DAY_MS, oldestSec * 1000)
+  const listingMs = futuresListingStartMs(ticker, nowMs)
+  if (listingMs !== null) fromMs = Math.max(fromMs, listingMs)
+  // Only scan what an earlier pass has not verified (no-trade minutes aren't re-fetched)
+  const verifiedMs = getVerifiedThroughMs(ticker)
+  if (verifiedMs) fromMs = Math.max(fromMs, verifiedMs)
+
+  const gaps = await detectGaps(ticker, sym.exchange || 'NSE', '1m', ticker, fromMs, nowMs)
+  if (gaps.length > 0) backfilledTickers.delete(ticker)
+  else backfilledTickers.add(ticker)
+  backfillQueue.enqueueGapPass(ticker, brokerId, token, gaps, nowMs)
+  return gaps.length > 0 ? 'gaps' : 'current'
+}
+
+/**
+ * "Repair" in Symbol Setup: re-checks the whole history of these symbols (not just since the
+ * last check) and queues whatever is missing, older years included. Undoes a Cancel for them.
+ */
+export async function repairHistory(tickers: string[]): Promise<{ queued: number; complete: number; noBroker: number }> {
+  const depthDays = Number((getAllSettings() as any)?.backfillDepthDays) || 365
+  const nowMs = Date.now()
+  backfillQueue.allowHistory(tickers)
+  const wanted = new Set(tickers)
+  const symbols = (stmts.getSymbols.all() as any[]).filter(s => wanted.has(s.amiBrokerTicker || s.amibroker_ticker))
+  let queued = 0, complete = 0, noBroker = 0
+  await forEachLimit(symbols, 4, async (sym: any) => {
+    const ticker = sym.amiBrokerTicker || sym.amibroker_ticker
+    const brokerId = sym.brokerId || sym.broker_id
+    if (!brokerId || brokerId === ORPHANED || !brokerManager.getAdapter(brokerId)) { noBroker++; return }
+    clearVerifiedThrough(ticker)
+    const r = await catchUpSymbol(sym, brokerId, depthDays, nowMs)
+    const older = await backfillQueue.extendHistory(ticker, brokerId, sym.rawSymbol || sym.raw_symbol || ticker, depthDays)
+    if (r === 'current' && !older) complete++
+    else queued++
+  })
+  console.log(`[Repair] ${symbols.length} symbol(s) checked: ${queued} with missing history queued, ${complete} complete, ${noBroker} without a connected broker`)
+  return { queued, complete, noBroker }
+}
+
+/**
  * Queues every missing range for the symbols of a connected broker: a full download for
  * symbols with no history, otherwise gap-fills from the coverage watermark up to now.
  * Gap passes are used (not enqueue()) because enqueue() skips any ticker that has been
@@ -150,7 +234,7 @@ export async function queueCatchUp(brokerId: string): Promise<void> {
   if (catchUpRunning.has(brokerId) || !brokerManager.getAdapter(brokerId)) return
   catchUpRunning.add(brokerId)
   const started = Date.now()
-  let full = 0, gapped = 0, current = 0
+  let full = 0, gapped = 0, current = 0, cancelled = 0
   try {
     const depthDays = Number((getAllSettings() as any)?.backfillDepthDays) || 365
     const nowMs = Date.now()
@@ -160,37 +244,15 @@ export async function queueCatchUp(brokerId: string): Promise<void> {
     await forEachLimit(symbols, 4, async (sym: any) => {
       const ticker = sym.amiBrokerTicker
       if (!ticker) return
-      const token = sym.rawSymbol || sym.instrumentId || ticker
-
-      const oldestSec = await getOldestBarTimestampSec(ticker)
-      if (!oldestSec) {
-        // Nothing stored: full download (stale "done" markers would make enqueue() skip it)
-        backfilledTickers.delete(ticker)
-        if (getVerifiedThroughMs(ticker)) clearVerifiedThrough(ticker)
-        backfillQueue.enqueue(ticker, brokerId, token, depthDays)
-        full++
-        return
-      }
-
-      let fromMs = Math.max(nowMs - depthDays * DAY_MS, oldestSec * 1000)
-      const listingMs = futuresListingStartMs(ticker, nowMs)
-      if (listingMs !== null) fromMs = Math.max(fromMs, listingMs)
-      // Only scan what an earlier pass has not verified (no-trade minutes aren't re-fetched)
-      const verifiedMs = getVerifiedThroughMs(ticker)
-      if (verifiedMs) fromMs = Math.max(fromMs, verifiedMs)
-
-      const gaps = await detectGaps(ticker, sym.exchange || 'NSE', '1m', ticker, fromMs, nowMs)
-      if (gaps.length > 0) {
-        backfilledTickers.delete(ticker)
-        gapped++
-      } else {
-        backfilledTickers.add(ticker)
-        current++
-      }
-      backfillQueue.enqueueGapPass(ticker, brokerId, token, gaps, nowMs)
+      // History cancelled by the user (download card): nothing until "Download now"
+      if (backfillQueue.isSkipped(ticker)) { cancelled++; return }
+      const r = await catchUpSymbol(sym, brokerId, depthDays, nowMs)
+      if (r === 'full') full++
+      else if (r === 'gaps') gapped++
+      else current++
     })
 
-    console.log(`[CatchUp] ${brokerId}: ${gapped} symbol(s) with missing bars queued, ${full} full download(s), ${current} up to date (${((Date.now() - started) / 1000).toFixed(1)}s)`)
+    console.log(`[CatchUp] ${brokerId}: ${gapped} symbol(s) with missing bars queued, ${full} full download(s), ${current} up to date${cancelled ? `, ${cancelled} cancelled by the user` : ''} (${((Date.now() - started) / 1000).toFixed(1)}s)`)
     // History depth may have been raised since the last run: fetch any older years still missing
     await backfillQueue.extendAllHistory(depthDays)
   } finally {

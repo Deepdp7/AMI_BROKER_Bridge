@@ -65,7 +65,7 @@ export function MorningBriefPanel() {
           {([['all', 'All stocks'], ['fno', 'F&O stocks']] as const).map(([v, label]) => (
             <button key={v} onClick={() => configure({ scope: v })}
               style={{
-                background: st.scope === v ? 'rgba(0,212,170,0.15)' : 'transparent', color: st.scope === v ? '#00d4aa' : '#8b9199',
+                background: st.scope === v ? 'rgb(var(--accent-rgb) / 0.15)' : 'transparent', color: st.scope === v ? 'var(--accent)' : '#8b9199',
                 border: 'none', borderRadius: 6, padding: '0.25rem 0.55rem', fontSize: '0.72rem', fontWeight: st.scope === v ? 700 : 500, cursor: 'pointer',
               }}>
               {label}
@@ -73,14 +73,14 @@ export function MorningBriefPanel() {
           ))}
         </div>
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', color: '#a1a7b0', cursor: 'pointer' }}>
-          <input type="checkbox" checked={st.enabled} onChange={e => configure({ enabled: e.target.checked })} style={{ accentColor: '#00d4aa' }} />
+          <input type="checkbox" checked={st.enabled} onChange={e => configure({ enabled: e.target.checked })} style={{ accentColor: 'var(--accent)' }} />
           Auto every trading day at
         </label>
-        <div style={{ display: 'flex', gap: 2, background: 'rgba(23,23,23,0.6)', padding: 3, borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ display: 'flex', gap: 2, background: 'rgb(var(--s1-rgb) / 0.6)', padding: 3, borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)' }}>
           {TIMES.map(t => (
             <button key={t} onClick={() => configure({ time: t })} disabled={!st.enabled}
               style={{
-                background: st.time === t ? 'rgba(0,212,170,0.15)' : 'transparent', color: st.time === t ? '#00d4aa' : '#8b9199',
+                background: st.time === t ? 'rgb(var(--accent-rgb) / 0.15)' : 'transparent', color: st.time === t ? 'var(--accent)' : '#8b9199',
                 border: 'none', borderRadius: 6, padding: '0.25rem 0.5rem', fontSize: '0.72rem', fontWeight: st.time === t ? 700 : 500,
                 cursor: st.enabled ? 'pointer' : 'default', opacity: st.enabled ? 1 : 0.5,
               }}>
@@ -100,7 +100,7 @@ export function MorningBriefPanel() {
       )}
 
       {/* Brief */}
-      <div className="glass-card selectable" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '1.1rem 1.25rem' }}>
+      <div className="glass-card" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '1.1rem 1.25rem' }}>
         {latest ? (
           <>
             {!isToday && (

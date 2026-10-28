@@ -41,6 +41,19 @@ describe('LiveFeed', () => {
     expect(updates.length).toBeGreaterThan(0)
   })
 
+  it('the once-a-second heartbeat carries engine stats, not every unchanged symbol again', async () => {
+    sim.addSymbolByTicker('HBTEST', 'test-broker')
+    const updates: any[] = []
+    sim.on('feed_update', (payload) => updates.push(payload))
+    sim.start()
+    await new Promise(resolve => setTimeout(resolve, 1100))
+    sim.stop()
+    const heartbeat = updates[updates.length - 1] // the 1 s heartbeat (earlier ones are the symbol being added)
+    expect(heartbeat).toBeTruthy()
+    expect(heartbeat.symbols).toEqual([])
+    expect(sim.getFeedStatuses().some(s => s.ticker === 'HBTEST')).toBe(true) // the full list is still there for new windows
+  })
+
 
   it('addSymbolByTicker adds a new symbol', () => {
     const beforeCount = sim.getFeedStatuses().length

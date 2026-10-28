@@ -4,19 +4,12 @@ import { exec } from 'child_process'
 import { stmts, getAllSettings } from '../../db'
 import { liveFeed } from '../../market/liveFeed'
 import { brokerManager } from '../../brokers/BrokerManager'
-import { FyersAdapter } from '../../brokers/adapters/fyers/FyersAdapter'
-import { KiteAdapter } from '../../brokers/adapters/kite/KiteAdapter'
-import { DhanAdapter } from '../../brokers/adapters/dhan/DhanAdapter'
-import { FlattradeAdapter } from '../../brokers/adapters/flattrade/FlattradeAdapter'
-import { ShoonyaAdapter } from '../../brokers/adapters/shoonya/ShoonyaAdapter'
-import { UpstoxAdapter } from '../../brokers/adapters/upstox/UpstoxAdapter'
-import { AngelAdapter } from '../../brokers/adapters/angel/AngelAdapter'
 import type { IBrokerAdapter } from '../../brokers/adapters/IBrokerAdapter'
 import { backfilledTickers } from '../../market/state/backfillState'
 import { clearVerifiedThrough } from '../../market/state/coverageState'
 import { backfillQueue } from '../../market/BackfillQueue'
-import { pendingLogins, activateBroker } from '../../brokers/BrokerLifecycle'
-import { brokerLoginUrl, LOGIN_BROKERS } from '../../brokers/brokerAuth'
+import { pendingLogins, activateBroker, loginDirect } from '../../brokers/BrokerLifecycle'
+import { brokerLoginUrl, LOGIN_BROKERS, BROKERS, isDirectLogin } from '../../brokers/brokerAuth'
 import type { BrokerAccount } from '../../types'
 
 export { pendingLogins }
@@ -24,15 +17,9 @@ export { pendingLogins }
 const router = Router()
 
 // Symbol search before an account is logged in: the instrument lists are public
-const searchOnlyAdapters: Record<string, IBrokerAdapter> = {
-  fyers: new FyersAdapter(),
-  zerodha_kite: new KiteAdapter(),
-  dhan: new DhanAdapter(),
-  flattrade: new FlattradeAdapter(),
-  shoonya: new ShoonyaAdapter(),
-  upstox: new UpstoxAdapter(),
-  angel_one: new AngelAdapter(),
-}
+const searchOnlyAdapters: Record<string, IBrokerAdapter> = Object.fromEntries(
+  Object.entries(BROKERS).map(([type, def]) => [type, def.create()]),
+)
 const fallbackSearchAdapter = searchOnlyAdapters.fyers
 
 // GET /api/brokers — List all broker accounts
@@ -65,9 +52,10 @@ router.post('/', async (req, res) => {
     if (!brokerType || !label) return res.status(400).json({ error: 'brokerType and label are required' })
     if (!LOGIN_BROKERS.has(brokerType)) return res.status(400).json({ error: `${label || brokerType} is not supported yet` })
     if (!rawApiKey || !rawApiSecret) return res.status(400).json({ error: 'apiKey and apiSecret are required' })
-    const clientId = (brokerType === 'shoonya' ? (rawClientId || '').trim().toUpperCase() : (rawClientId || '').trim()) || null
-    if (brokerType === 'dhan' && !clientId) return res.status(400).json({ error: 'Dhan Client ID is required' })
-    if (brokerType === 'shoonya' && !clientId) return res.status(400).json({ error: 'Shoonya User ID is required' })
+    const userId = BROKERS[brokerType].userId
+    const typedId = (rawClientId || '').trim()
+    const clientId = (userId?.upperCase ? typedId.toUpperCase() : typedId) || null
+    if (userId && !clientId) return res.status(400).json({ error: `${userId.label} is required` })
 
     const apiKey = rawApiKey.trim()
     const apiSecret = rawApiSecret.trim()
@@ -75,6 +63,28 @@ router.post('/', async (req, res) => {
     const id = `${brokerType}-${uuidv4().slice(0, 8)}`
     const credentialRef = `dpapi:${uuidv4()}`
     const now = Date.now()
+
+    // Keys alone log in (XTS): connect now; refused keys leave no account behind
+    if (isDirectLogin(brokerType)) {
+      stmts.insertBroker.run({
+        id, broker_type: brokerType, label, credential_ref: credentialRef,
+        status: 'auth_required', health_score: 100, reconnect_count_1h: 0,
+        account_id: clientId, created_at: now, last_connected_at: null,
+      })
+      stmts.upsertCredentials.run(id, { apiKey, apiSecret, accessToken: '' })
+      try {
+        const session = await loginDirect(id)
+        const broker: BrokerAccount = {
+          id, brokerType: brokerType as any, label, status: 'connected', lastConnectedAt: Date.now(),
+          accountId: session.accountId || clientId || undefined, healthScore: 100, reconnectCount1h: 0, credentialRef,
+        }
+        return res.status(201).json({ broker, loginUrl: null })
+      } catch (err: any) {
+        await brokerManager.disconnectBroker(id).catch(() => {})
+        stmts.deleteBroker.run(id)
+        return res.status(400).json({ error: err?.message || String(err) })
+      }
+    }
 
     // Login URL first: Dhan checks the keys here, and a refused key should not leave an account behind
     let loginUrl: string
@@ -126,7 +136,7 @@ router.get('/callback/:brokerType', async (req, res) => {
   try {
     const { brokerType } = req.params
     // Fyers sends auth_code (and code=200, so auth_code goes first), Kite request_token,
-    // Dhan tokenId, Flattrade / Shoonya / Upstox code, Angel One auth_token (+ feed_token, refresh_token)
+    // Dhan tokenId, Flattrade / Shoonya / Zebu / TradeSmart / Upstox code, Angel One auth_token (+ feed_token, refresh_token)
     const requestToken = (req.query.request_token || req.query.auth_code || req.query.tokenId || req.query.auth_token || req.query.code) as string
 
     if (!requestToken) {
@@ -293,6 +303,15 @@ router.post('/:id/reauth', async (req, res) => {
     if (!LOGIN_BROKERS.has(broker.broker_type)) {
       return res.status(400).json({ error: 'Re-auth not supported for this broker type yet' })
     }
+    // Keys alone log in: do it now, no browser page
+    if (isDirectLogin(broker.broker_type)) {
+      try {
+        await loginDirect(id)
+        return res.json({ loginUrl: null, connected: true })
+      } catch (err: any) {
+        return res.status(400).json({ error: err?.message || String(err) })
+      }
+    }
     if (!finalApiSecret) {
       return res.status(400).json({ error: 'API Secret is missing. Please delete and re-add the broker.' })
     }
@@ -392,6 +411,7 @@ router.post('/:id/symbols', async (req, res) => {
 
         const settings = getAllSettings() as any
         const backfillDepth = Number(settings?.backfillDepthDays) || 365
+        backfillQueue.allowHistory([sym.ticker]) // added again after a cancel
         backfillQueue.enqueue(sym.ticker, id, rawSymbol, backfillDepth)
         console.log(`[ADD_SYMBOL] "${sym.ticker}" backfill queued (${backfillDepth} days).`)
         added++
@@ -553,6 +573,7 @@ router.post('/:id/symbols/import', (req, res) => {
         brokerManager.subscribe(id, [ticker])
         const settings = getAllSettings() as any
         const backfillDepth = Number(settings?.backfillDepthDays) || 365
+        backfillQueue.allowHistory([ticker]) // added again after a cancel
         backfillQueue.enqueue(ticker, id, ticker, backfillDepth)
         backfilledTickers.delete(ticker) // ensure fresh fetch
         addedTickers.push(ticker)

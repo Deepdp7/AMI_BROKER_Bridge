@@ -3,7 +3,7 @@
  * Used across all local-api modules
  */
 
-export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya'
+export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya' | 'zebu' | 'tradesmart' | 'compositedge' | 'fivepaisa_xts' | 'jainam' | 'ibulls' | 'rmoney'
 export type BrokerStatus = 'connected' | 'reconnecting' | 'auth_required' | 'disconnected'
 export type FeedStatusType = 'SUBSCRIBED' | 'RECEIVING' | 'STREAMING' | 'STALE' | 'CLOSED' | 'ERROR'
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug'
@@ -91,6 +91,8 @@ export interface AppSettings {
   logLevel: LogLevel
   logRetentionDays: number
   backfillDepthDays: number
+  /** Spread history downloads over every connected broker (the fastest free one fetches each chunk) */
+  historyUseAllBrokers: boolean
   lateToleranaceSeconds: number
   clockSkewThresholdSeconds: number
   // Backfill engine config
@@ -162,6 +164,7 @@ export type WsMessageType =
   | 'backfill_progress'
   | 'backfill_completed'
   | 'backfill_failed'
+  | 'backfill_control'
   | 'market_status'
   | 'console_lines'
   | 'auto_refresh'

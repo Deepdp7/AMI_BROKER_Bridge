@@ -46,8 +46,8 @@ export function SuggestionCards({ brokerId, items, title = 'Add to AmiBroker?' }
   }
 
   return (
-    <div style={{ marginTop: '0.75rem', border: '1px solid rgba(0,212,170,0.22)', background: 'rgba(0,212,170,0.04)', borderRadius: 12, padding: '0.7rem 0.75rem' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.74rem', fontWeight: 650, color: '#00d4aa', marginBottom: '0.5rem' }}>
+    <div style={{ marginTop: '0.75rem', border: '1px solid rgb(var(--accent-rgb) / 0.22)', background: 'rgb(var(--accent-rgb) / 0.04)', borderRadius: 12, padding: '0.7rem 0.75rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.74rem', fontWeight: 650, color: 'var(--accent)', marginBottom: '0.5rem' }}>
         <PlusCircle size={14} /> {title}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>

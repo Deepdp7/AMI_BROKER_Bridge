@@ -7,15 +7,17 @@ import { BrokerConnectionPage } from '../pages/BrokerConnection'
 import { SymbolSetupPage } from '../pages/SymbolSetup'
 import { SettingsPage } from '../pages/Settings'
 import { LogsPage } from '../pages/Logs'
-import { ConsolePage } from '../pages/Console'
-import { AssistantPage } from '../pages/Assistant'
+import { ActivityPage } from '../pages/Activity'
+// The Assistant (and its markdown renderer) loads the first time it is opened
+const AssistantPage = lazy(() => import('../pages/Assistant').then(m => ({ default: m.AssistantPage })))
 import { AboutPage } from '../pages/About'
 import { ErrorBoundary } from '../components/ui/ErrorBoundary'
 import { ToastContainer } from '../components/ui/Toast'
+import { ConfirmHost } from '../components/ui/Dialog'
 import { MasterDownloadOverlay } from '../components/status/MasterDownloadOverlay'
 import { useApiSync } from '../hooks/useApiSync'
 import { Wifi, WifiOff, Loader } from 'lucide-react'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 
 const PAGE_TITLES: Record<string, string> = {
   '/feed-status': 'Feed Status',
@@ -23,7 +25,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/symbol-setup': 'Symbol Setup',
   '/settings': 'Settings',
   '/logs': 'Logs & Diagnostics',
-  '/console': 'Live Console',
+  '/console': 'Activity',
   '/assistant': 'AI Assistant',
   '/about': 'About',
 }
@@ -36,7 +38,7 @@ function ApiStatusBadge({ state }: { state: 'checking' | 'connected' | 'offline'
     </div>
   )
   if (state === 'connected') return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.68rem', color: '#00d4aa' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.68rem', color: 'var(--good)' }}>
       <Wifi size={11} />
       API Live :7890
     </div>
@@ -55,7 +57,8 @@ function MainLayout() {
   const title = PAGE_TITLES[location.pathname] || 'DataBridge Pro'
 
   // Update Zustand activePage for backward compatibility if needed
-  const { setActivePage } = useAppStore()
+  // Only the action: subscribing to the whole store would redraw the app on every price update
+  const setActivePage = useAppStore(s => s.setActivePage)
   useEffect(() => {
     setActivePage(location.pathname.replace('/', '') || 'feed-status')
   }, [location.pathname, setActivePage])
@@ -69,7 +72,7 @@ function MainLayout() {
         height: '100vh',
         width: '100vw',
         overflow: 'hidden',
-        background: '#0e0e0e',
+        background: 'rgb(var(--s0-rgb))',
         position: 'relative',
       }}
     >
@@ -82,7 +85,7 @@ function MainLayout() {
           pointerEvents: 'none',
           zIndex: 0,
           background: [
-            'radial-gradient(ellipse 60% 40% at 20% 0%, rgba(0,212,170,0.07) 0%, transparent 70%)',
+            'radial-gradient(ellipse 60% 40% at 20% 0%, rgb(var(--accent-rgb) / 0.07) 0%, transparent 70%)',
             'radial-gradient(ellipse 40% 60% at 80% 100%, rgba(47,47,47,0.5) 0%, transparent 70%)',
           ].join(', '),
         }} />
@@ -119,8 +122,8 @@ function MainLayout() {
                   <Route path="/symbol-setup" element={<SymbolSetupPage />} />
                   <Route path="/settings" element={<SettingsPage />} />
                   <Route path="/logs" element={<LogsPage />} />
-                  <Route path="/console" element={<ConsolePage />} />
-                  <Route path="/assistant" element={<AssistantPage />} />
+                  <Route path="/console" element={<ActivityPage />} />
+                  <Route path="/assistant" element={<Suspense fallback={<div style={{ flex: 1 }} />}><AssistantPage /></Suspense>} />
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="*" element={<Navigate to="/feed-status" replace />} />
                 </Routes>
@@ -132,6 +135,7 @@ function MainLayout() {
 
       <MasterDownloadOverlay />
       <ToastContainer />
+      <ConfirmHost />
       <style>{`
         @keyframes spin {
           from { transform: rotate(0deg); }

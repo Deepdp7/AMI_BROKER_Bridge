@@ -36,4 +36,13 @@ windows = { version = "0.61", features = [
   "Win32_UI_Shell",
   # DPAPI + random bytes for the credential key (see src/secret_key.rs)
   "Win32_Security_Cryptography",
+  # Start with Windows entry (src/autostart.rs) and AmiBroker install records (src/amibroker.rs)
+  "Win32_System_Registry",
+  # Finding and focusing AmiBroker (see src/amibroker.rs)
+  "Win32_System_Diagnostics_ToolHelp",
+  "Win32_System_Threading",
+  "Win32_Storage_FileSystem",
 ] }
+# WebView2 settings Tauri doesn't expose: no browser menu or shortcut keys (see src/window_chrome.rs).
+# Same version wry uses, so the types match.
+webview2-com = "0.38"

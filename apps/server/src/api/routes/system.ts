@@ -5,8 +5,44 @@ import { getConsoleLines } from '../../system/ConsoleCapture'
 import { liveFeed } from '../../market/liveFeed'
 import { backfillQueue } from '../../market/BackfillQueue'
 import { clearVerifiedThrough } from '../../market/state/coverageState'
+import { createBackup, readBackupInfo, stageRestore } from '../../system/Backup'
 
 const router = Router()
+
+// ===== Backup & restore (Settings) =====
+
+// POST /api/system/backup { path }: one file with symbols, history, settings
+router.post('/backup', async (req, res) => {
+  try {
+    res.json({ ok: true, ...(await createBackup(String(req.body?.path || ''))) })
+  } catch (err: any) {
+    console.error('[Backup] Failed:', err?.message || err)
+    res.status(400).json({ error: err?.message || String(err) })
+  }
+})
+
+// POST /api/system/restore/check { path }: what a backup file holds
+router.post('/restore/check', (req, res) => {
+  try {
+    res.json({ ok: true, ...readBackupInfo(String(req.body?.path || '')) })
+  } catch (err: any) {
+    res.status(400).json({ error: err?.message || String(err) })
+  }
+})
+
+// POST /api/system/restore { path }: stages the backup, then the engine saves, exits and is
+// started again by the desktop app, which swaps the backup in before opening the database
+router.post('/restore', async (req, res) => {
+  try {
+    const info = await stageRestore(String(req.body?.path || ''))
+    const supervised = process.env.DATABRIDGE_SUPERVISED === '1'
+    res.json({ ok: true, restarting: supervised, ...info })
+    if (supervised) setTimeout(() => process.exit(0), 300)
+  } catch (err: any) {
+    console.error('[Restore] Failed:', err?.message || err)
+    res.status(400).json({ error: err?.message || String(err) })
+  }
+})
 
 // GET /api/system/console?limit=2000&after=<seq>
 // Recent engine console output for the Live Console page (live lines arrive via WS 'console_lines')

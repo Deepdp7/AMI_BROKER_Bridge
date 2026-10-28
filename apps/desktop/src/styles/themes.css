@@ -1,0 +1,97 @@
+/* =====================================================================
+   Colour themes. Chosen in Settings → Appearance → Colour theme and applied to
+   <html data-theme="…"> (see hooks/usePref.ts). Every accent and dark surface in the app is
+   written with these variables, so a theme is just this list of values.
+
+   --accent / --accent-rgb   the brand colour (and its "r g b" form, for rgb(var(--accent-rgb) / 0.2))
+   --accent-hi, -hi2, -lo    lighter and darker shades of it
+   --on-accent               text drawn on top of the accent colour
+   --s0-rgb … --s3-rgb       dark surfaces, from the page background up to raised panels
+   --color-navy-*            the same ramp for the Tailwind bg-navy-* classes
+
+   Good (--good, green) and bad (red) market colours are not themed: a gain, a live feed or a
+   connected broker is green in every theme, and a loss is red.
+   ===================================================================== */
+
+/* Emerald: the original look */
+:root {
+  --accent: #00d4aa;
+  --accent-rgb: 0 212 170;
+  --accent-hi: #00f5c4;
+  --accent-hi2: #4dffd8;
+  --accent-lo: #00b38c;
+  --on-accent: #04261f;
+  /* Status green (gain, live, streaming, connected, success): never themed */
+  --good: #00d4aa;
+  --good-rgb: 0 212 170;
+  --good-lo: #00b38c;
+  --s0-rgb: 14 14 14;
+  --s1-rgb: 23 23 23;
+  --s2-rgb: 30 30 30;
+  --s3-rgb: 38 38 38;
+}
+
+/* Ocean: calm blue */
+html[data-theme="ocean"] {
+  --accent: #3b9eff;
+  --accent-rgb: 59 158 255;
+  --accent-hi: #6cb6ff;
+  --accent-hi2: #a5d3ff;
+  --accent-lo: #1d7fe0;
+  --on-accent: #041a33;
+  --s0-rgb: 10 14 22;
+  --s1-rgb: 16 22 34;
+  --s2-rgb: 23 31 47;
+  --s3-rgb: 30 40 60;
+  --color-navy-950: #0a0e16;
+  --color-navy-900: #101622;
+  --color-navy-800: #1a2232;
+  --color-navy-700: #263044;
+  --color-navy-600: #222b3c;
+  --color-navy-500: #313d54;
+}
+
+/* Violet: soft purple */
+html[data-theme="violet"] {
+  --accent: #a78bfa;
+  --accent-rgb: 167 139 250;
+  --accent-hi: #c4b5fd;
+  --accent-hi2: #ddd6fe;
+  --accent-lo: #8b5cf6;
+  --on-accent: #1b0f3d;
+  --s0-rgb: 14 11 21;
+  --s1-rgb: 21 17 31;
+  --s2-rgb: 29 24 42;
+  --s3-rgb: 37 31 54;
+  --color-navy-950: #0e0b15;
+  --color-navy-900: #151120;
+  --color-navy-800: #1f1a2e;
+  --color-navy-700: #2c2540;
+  --color-navy-600: #28223a;
+  --color-navy-500: #3a3252;
+}
+
+/* Ember: warm orange */
+html[data-theme="ember"] {
+  --accent: #ff7a45;
+  --accent-rgb: 255 122 69;
+  --accent-hi: #ff9b70;
+  --accent-hi2: #ffc0a1;
+  --accent-lo: #e85d2a;
+  --on-accent: #2d0f03;
+  --s0-rgb: 17 12 10;
+  --s1-rgb: 25 19 16;
+  --s2-rgb: 33 26 22;
+  --s3-rgb: 41 33 28;
+  --color-navy-950: #110c0a;
+  --color-navy-900: #19130f;
+  --color-navy-800: #261d17;
+  --color-navy-700: #362a22;
+  --color-navy-600: #32261f;
+  --color-navy-500: #45362c;
+}
+
+/* The accent and background change gently rather than snapping */
+html.theme-fading, html.theme-fading * {
+  transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease, fill 0.35s ease, stroke 0.35s ease !important;
+}

@@ -13,7 +13,7 @@
 import { exec } from 'child_process'
 import { getAllSettings } from '../db'
 import { stmts } from '../db'
-import { brokerLoginUrl, LOGIN_BROKERS, BROKER_NAMES } from './brokerAuth'
+import { brokerLoginUrl, LOGIN_BROKERS, BROKER_NAMES, isDirectLogin } from './brokerAuth'
 import { pendingLogins } from './BrokerLifecycle'
 
 // Track which broker+date combos have already been triggered today
@@ -64,7 +64,8 @@ function tick() {
 
   // Every broker that logs in through the browser (Fyers, Kite, Dhan)
   const brokers = stmts.getBrokers.all() as any[]
-  const oauthBrokers = brokers.filter(b => LOGIN_BROKERS.has(b.broker_type))
+  // (brokers that log in with their keys alone renew their own session)
+  const oauthBrokers = brokers.filter(b => LOGIN_BROKERS.has(b.broker_type) && !isDirectLogin(b.broker_type))
 
   const todayStr = getISTDateStr()
   

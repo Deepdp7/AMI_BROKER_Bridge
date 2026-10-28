@@ -23,6 +23,7 @@ import type { DatabaseSync as DatabaseSyncT } from 'node:sqlite'
 import type { AppSettings, ExchangeRegistry } from '../types'
 import { readBarsCsv, setReaderDbFile } from './reader'
 import { importFromPostgresIfNeeded } from './pgImport'
+import { applyPendingRestore } from './restore'
 import { isSealed, open, seal, secretsEncrypted } from '../lib/secretBox'
 
 // ===== Env Resolution =====
@@ -73,6 +74,12 @@ export function loadSqlite(): typeof import('node:sqlite') {
 
 fs.mkdirSync(path.dirname(DB_FILE), { recursive: true })
 const { DatabaseSync } = loadSqlite()
+// A restore from a backup staged before the last restart is swapped in before anything opens the file
+try {
+  applyPendingRestore(DB_FILE, DatabaseSync)
+} catch (err) {
+  console.error('[Restore] Could not apply the backup; the current data is kept:', err)
+}
 export const sqlite: DatabaseSyncT = new DatabaseSync(DB_FILE)
 // WAL: the reader workers read while this connection writes. NORMAL: no fsync per commit
 // (an app crash loses nothing; a power cut can lose the last second of bars).
@@ -201,6 +208,7 @@ const defaultSettings: AppSettings = {
   logLevel: 'info',
   logRetentionDays: 14,
   backfillDepthDays: 365,
+  historyUseAllBrokers: true,
   lateToleranaceSeconds: 2,
   clockSkewThresholdSeconds: 5,
   historyChunkDays: 30,
@@ -292,8 +300,15 @@ function loadCaches() {
     })
   }
 
-  // Stored values are JSON text; callers parse them (getAllSettings) and coerce numbers
-  for (const r of sqlite.prepare('SELECT * FROM settings').all() as any[]) settingsCache.set(r.key, r.value)
+  // Stored values are JSON text (true, 730, "C:\\AmiBroker", [..]) or, for a few single-key
+  // writes, plain text (08:45). The cache holds real values, the same as during the session that
+  // saved them; keeping the text made every setting a string after a restart, so a switch saved
+  // off ("false") showed on, numbers stopped matching and paths gained quotes.
+  for (const r of sqlite.prepare('SELECT * FROM settings').all() as any[]) {
+    let value: unknown = r.value
+    try { value = JSON.parse(r.value) } catch { /* plain text */ }
+    settingsCache.set(r.key, value)
+  }
 
   tickerIds.clear()
   for (const r of sqlite.prepare('SELECT id, name FROM tickers').all() as any[]) tickerIds.set(r.name, Number(r.id))

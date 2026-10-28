@@ -1,21 +1,22 @@
 /**
  * brokerAuth.ts
  *
- * Browser login URLs of the brokers that log in through a redirect to this app
- * (http://127.0.0.1:7890/api/callback/<broker type>). Used by "add broker", "re-login",
- * the auto re-open on token expiry and the daily re-login.
+ * Every broker the engine can connect, in one table: its name, how its adapter is made, its
+ * browser login page (the broker redirects back to http://127.0.0.1:7890/api/callback/<type>)
+ * and whether the account's user ID has to be typed in. Used by "add broker", "re-login", the
+ * auto re-open on token expiry, the daily re-login, symbol search and BrokerManager.
  */
+import type { IBrokerAdapter } from './adapters/IBrokerAdapter'
+import { FyersAdapter } from './adapters/fyers/FyersAdapter'
 import { KiteAdapter } from './adapters/kite/KiteAdapter'
 import { DhanAdapter } from './adapters/dhan/DhanAdapter'
 import { FlattradeAdapter } from './adapters/flattrade/FlattradeAdapter'
 import { ShoonyaAdapter } from './adapters/shoonya/ShoonyaAdapter'
+import { ZebuAdapter } from './adapters/zebu/ZebuAdapter'
+import { TradeSmartAdapter } from './adapters/tradesmart/TradeSmartAdapter'
 import { UpstoxAdapter } from './adapters/upstox/UpstoxAdapter'
 import { AngelAdapter } from './adapters/angel/AngelAdapter'
-
-/** Broker types the engine can connect */
-export const LOGIN_BROKERS = new Set(['fyers', 'zerodha_kite', 'dhan', 'flattrade', 'shoonya', 'upstox', 'angel_one'])
-
-export const BROKER_NAMES: Record<string, string> = { fyers: 'Fyers', zerodha_kite: 'Kite', dhan: 'Dhan', flattrade: 'Flattrade', shoonya: 'Shoonya', upstox: 'Upstox', angel_one: 'Angel One' }
+import { XTS_SITES, createXtsAdapter } from './adapters/xts/XtsAdapter'
 
 export function callbackUrl(brokerType: string): string {
   return `http://127.0.0.1:7890/api/callback/${brokerType}`
@@ -24,28 +25,57 @@ export function callbackUrl(brokerType: string): string {
 export interface LoginCredentials {
   apiKey: string
   apiSecret: string
-  /** Dhan Client ID (Dhan needs it to start a login) */
+  /** The account's user ID (Dhan needs it to start a login; Noren brokers use it for every call) */
   clientId?: string | null
 }
 
-/** Login page for `brokerId`. Dhan asks its server for a login session first. */
+export interface BrokerDef {
+  /** For logs and messages */
+  name: string
+  create: () => IBrokerAdapter
+  /** Login page for the account `brokerId`. Dhan asks its server for a login session first.
+   *  Absent for brokers that log in with their keys alone (`direct`). */
+  loginUrl?: (brokerId: string, creds: LoginCredentials) => string | Promise<string>
+  /** Logs in with the saved keys, no browser page (XTS market data): the engine does it by itself */
+  direct?: boolean
+  /** The account's user ID must be given when adding it ("Dhan Client ID", "Zebu User ID") */
+  userId?: { label: string; upperCase?: boolean }
+}
+
+export const BROKERS: Record<string, BrokerDef> = {
+  fyers: {
+    name: 'Fyers',
+    create: () => new FyersAdapter(),
+    loginUrl: (brokerId, c) => `https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${encodeURIComponent(c.apiKey)}&redirect_uri=${encodeURIComponent(callbackUrl('fyers'))}&response_type=code&state=${encodeURIComponent(brokerId)}`,
+  },
+  zerodha_kite: { name: 'Kite', create: () => new KiteAdapter(), loginUrl: (brokerId, c) => KiteAdapter.loginUrl(c.apiKey, brokerId) },
+  dhan: {
+    name: 'Dhan',
+    create: () => new DhanAdapter(),
+    loginUrl: (_id, c) => DhanAdapter.loginUrl(c.clientId || '', c.apiKey, c.apiSecret),
+    userId: { label: 'Dhan Client ID' },
+  },
+  flattrade: { name: 'Flattrade', create: () => new FlattradeAdapter(), loginUrl: (_id, c) => FlattradeAdapter.loginUrl(c.apiKey) },
+  shoonya: { name: 'Shoonya', create: () => new ShoonyaAdapter(), loginUrl: (_id, c) => ShoonyaAdapter.loginUrl(c.apiKey), userId: { label: 'Shoonya User ID', upperCase: true } },
+  zebu: { name: 'Zebu', create: () => new ZebuAdapter(), loginUrl: (_id, c) => ZebuAdapter.loginUrl(c.apiKey), userId: { label: 'Zebu User ID', upperCase: true } },
+  tradesmart: { name: 'TradeSmart', create: () => new TradeSmartAdapter(), loginUrl: (_id, c) => TradeSmartAdapter.loginUrl(c.apiKey), userId: { label: 'TradeSmart User ID', upperCase: true } },
+  upstox: { name: 'Upstox', create: () => new UpstoxAdapter(), loginUrl: (brokerId, c) => UpstoxAdapter.loginUrl(c.apiKey, brokerId) },
+  angel_one: { name: 'Angel One', create: () => new AngelAdapter(), loginUrl: (brokerId, c) => AngelAdapter.loginUrl(c.apiKey, brokerId) },
+  ...Object.fromEntries(XTS_SITES.map(site => [site.type, { name: site.label, create: () => createXtsAdapter(site.type), direct: true } satisfies BrokerDef])),
+}
+
+/** True for a broker that logs in with its keys alone (no browser) */
+export const isDirectLogin = (brokerType: string) => !!BROKERS[brokerType]?.direct
+
+/** Broker types the engine can connect */
+export const LOGIN_BROKERS = new Set(Object.keys(BROKERS))
+
+export const BROKER_NAMES: Record<string, string> = Object.fromEntries(Object.entries(BROKERS).map(([type, b]) => [type, b.name]))
+
+/** Login page for `brokerId` */
 export async function brokerLoginUrl(brokerType: string, brokerId: string, creds: LoginCredentials): Promise<string> {
-  switch (brokerType) {
-    case 'fyers':
-      return `https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${encodeURIComponent(creds.apiKey)}&redirect_uri=${encodeURIComponent(callbackUrl('fyers'))}&response_type=code&state=${encodeURIComponent(brokerId)}`
-    case 'zerodha_kite':
-      return KiteAdapter.loginUrl(creds.apiKey, brokerId)
-    case 'dhan':
-      return DhanAdapter.loginUrl(creds.clientId || '', creds.apiKey, creds.apiSecret)
-    case 'flattrade':
-      return FlattradeAdapter.loginUrl(creds.apiKey)
-    case 'shoonya':
-      return ShoonyaAdapter.loginUrl(creds.apiKey)
-    case 'upstox':
-      return UpstoxAdapter.loginUrl(creds.apiKey, brokerId)
-    case 'angel_one':
-      return AngelAdapter.loginUrl(creds.apiKey, brokerId)
-    default:
-      throw new Error(`${brokerType} is not supported yet`)
-  }
+  const def = BROKERS[brokerType]
+  if (!def) throw new Error(`${brokerType} is not supported yet`)
+  if (!def.loginUrl) throw new Error(`${def.name} logs in with its keys; there is no login page`)
+  return def.loginUrl(brokerId, creds)
 }

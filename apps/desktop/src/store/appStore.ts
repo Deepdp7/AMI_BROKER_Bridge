@@ -1,5 +1,16 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage, type StateStorage } from 'zustand/middleware'
+
+const lastWritten = new Map<string, string>()
+const dedupedLocalStorage: StateStorage = {
+  getItem: name => { try { return localStorage.getItem(name) } catch { return null } },
+  setItem: (name, value) => {
+    if (lastWritten.get(name) === value) return
+    lastWritten.set(name, value)
+    try { localStorage.setItem(name, value) } catch { /* storage unavailable */ }
+  },
+  removeItem: name => { lastWritten.delete(name); try { localStorage.removeItem(name) } catch { /* storage unavailable */ } },
+}
 
 // ===== Types =====
 export type BrokerStatus = 'connected' | 'reconnecting' | 'auth_required' | 'disconnected'
@@ -8,7 +19,7 @@ export type LogLevel = 'error' | 'warn' | 'info' | 'debug'
 
 export interface BrokerAccount {
   id: string
-  brokerType: 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya'
+  brokerType: 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya' | 'zebu' | 'tradesmart' | 'compositedge' | 'fivepaisa_xts' | 'jainam' | 'ibulls' | 'rmoney'
   label: string
   status: BrokerStatus
   lastConnectedAt?: number
@@ -49,6 +60,8 @@ export interface AppSettings {
   logLevel: LogLevel
   logRetentionDays: number
   backfillDepthDays: number
+  /** Spread history downloads over every connected broker (the fastest free one fetches each chunk) */
+  historyUseAllBrokers: boolean
   lateToleranaceSeconds: number
   clockSkewThresholdSeconds: number
   // Daily auto-relogin
@@ -98,6 +111,11 @@ interface AppStore {
   clearBackfillStatus: (ticker: string) => void
   /** Drop completed/failed entries (after the finished-batch notification is gone) */
   clearFinishedBackfills: () => void
+  /** Drop every entry (the user cancelled the downloads) */
+  clearAllBackfills: () => void
+  /** History downloads paused by the user (kept by the engine across restarts) */
+  backfillPaused: boolean
+  setBackfillPaused: (paused: boolean) => void
 
   // UI State
   activePage: string
@@ -127,13 +145,30 @@ export const useAppStore = create<AppStore>()(
   updateSymbolFeed: (ticker, update) => set((s) => ({
     symbols: s.symbols.map(sym => sym.ticker === ticker ? { ...sym, ...update } : sym)
   })),
+  // Runs up to 10 times a second during market hours: a symbol only gets a new object when one
+  // of its values really changed, and nothing at all happens when none did, so screens (and
+  // their memoised cards) redraw only what moved.
   batchUpdateSymbolFeeds: (updates) => set((s) => {
-    const updateMap = new Map(updates.map(u => [u.ticker, u.update]))
-    const newSymbols = [...s.symbols]
-    const existingTickers = new Set(s.symbols.map(sym => sym.ticker))
-    
-    for (const [ticker, update] of updateMap.entries()) {
-      if (!existingTickers.has(ticker)) {
+    const index = new Map(s.symbols.map((sym, i) => [sym.ticker, i]))
+    let newSymbols: SymbolFeed[] | null = null
+
+    for (const { ticker, update } of updates) {
+      const idx = index.get(ticker)
+      if (idx !== undefined) {
+        const cur = (newSymbols ?? s.symbols)[idx]
+        let differs = false
+        for (const k in update) {
+          const v = (update as any)[k]
+          if (v !== undefined && (cur as any)[k] !== v) { differs = true; break }
+        }
+        if (!differs) continue
+        newSymbols ??= [...s.symbols]
+        const merged = { ...cur }
+        for (const k in update) { const v = (update as any)[k]; if (v !== undefined) (merged as any)[k] = v }
+        newSymbols[idx] = merged
+      } else {
+        newSymbols ??= [...s.symbols]
+        index.set(ticker, newSymbols.length)
         newSymbols.push({
           ticker,
           exchange: (update.exchange as any) || 'NSE',
@@ -148,14 +183,9 @@ export const useAppStore = create<AppStore>()(
           changePercent: update.changePercent || 0,
           volume: update.volume || 0
         })
-      } else {
-        const idx = newSymbols.findIndex(sym => sym.ticker === ticker)
-        if (idx !== -1) {
-          newSymbols[idx] = { ...newSymbols[idx], ...update }
-        }
       }
     }
-    return { symbols: newSymbols }
+    return newSymbols ? { symbols: newSymbols } : s
   }),
 
   logs: [],
@@ -171,6 +201,7 @@ export const useAppStore = create<AppStore>()(
     logLevel: 'info',
     logRetentionDays: 14,
     backfillDepthDays: 30,
+    historyUseAllBrokers: true,
     lateToleranaceSeconds: 2,
     clockSkewThresholdSeconds: 5,
     dailyReloginEnabled: false,
@@ -185,7 +216,10 @@ export const useAppStore = create<AppStore>()(
     messagesPerSec: 0,
     totalSymbols: 0,
   },
-  updateCoreStats: (s) => set((prev) => ({ coreStats: { ...prev.coreStats, ...s } })),
+  updateCoreStats: (s) => set((prev) => {
+    const changed = (Object.keys(s) as (keyof CoreEngineStats)[]).some(k => s[k] !== undefined && s[k] !== prev.coreStats[k])
+    return changed ? { coreStats: { ...prev.coreStats, ...s } } : prev
+  }),
 
   backfillStatuses: {},
   updateBackfillStatus: (ticker, data) => set((prev) => ({
@@ -194,6 +228,9 @@ export const useAppStore = create<AppStore>()(
   clearFinishedBackfills: () => set((prev) => ({
     backfillStatuses: Object.fromEntries(Object.entries(prev.backfillStatuses).filter(([, st]) => st.status === 'pending' || st.status === 'running')),
   })),
+  clearAllBackfills: () => set({ backfillStatuses: {} }),
+  backfillPaused: false,
+  setBackfillPaused: (paused) => set({ backfillPaused: paused }),
   clearBackfillStatus: (ticker) => set((prev) => {
     const { [ticker]: _, ...rest } = prev.backfillStatuses
     return { backfillStatuses: rest }
@@ -203,10 +240,13 @@ export const useAppStore = create<AppStore>()(
       setActivePage: (p) => set({ activePage: p }),
 
       marketStatus: 'unknown',
-      setMarketStatus: (s) => set({ marketStatus: s }),
+      setMarketStatus: (s) => set(prev => prev.marketStatus === s ? prev : { marketStatus: s }),
     }),
-    { 
+    {
       name: 'databridge-pro-storage',
+      // The saved part (brokers, settings, page) rarely changes, but persist writes on every
+      // update, live prices included: only touch localStorage when the text differs
+      storage: createJSONStorage(() => dedupedLocalStorage),
       partialize: (state) => ({
         brokers: state.brokers,
         settings: state.settings,

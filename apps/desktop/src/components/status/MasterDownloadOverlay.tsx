@@ -27,7 +27,7 @@ const POLL_MS = 2000
 const STUCK_MS = 3 * 60_000
 
 export function MasterDownloadOverlay() {
-  const { brokers } = useAppStore()
+  const brokers = useAppStore(s => s.brokers)
   const [sync, setSync] = useState<SyncState | null>(null)
   const checked = useRef<Set<string>>(new Set())
   const lastChange = useRef(Date.now())

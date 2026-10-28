@@ -225,6 +225,8 @@ function istTimeMs(s: string | undefined): number | null {
 export class DhanAdapter extends ListedBrokerAdapter {
   /** Dhan serves at most 90 days of intraday candles per request */
   readonly maxIntradayHistoryDays = 85
+  /** History requests per minute allowed right now (the download queue picks the fastest broker) */
+  historyRequestsPerMinute() { return historyLimiter.perMinuteBudget }
   protected readonly label = 'Dhan'
   protected readonly master = dhanMaster
   private accessToken = ''

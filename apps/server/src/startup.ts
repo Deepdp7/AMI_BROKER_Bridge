@@ -7,6 +7,7 @@ import { activateBroker, openBrokerLogin } from './brokers/BrokerLifecycle'
 import { liveFeed } from './market/liveFeed'
 import { backfillQueue } from './market/BackfillQueue'
 import { autoRefresh } from './market/AutoRefresh'
+import { warmHealth } from './market/DataHealth'
 import { morningBrief } from './ai/MorningBrief'
 import { broadcast } from './api/realtime'
 import { notifyAmiBrokerHistoryChanged } from './amibroker/ipcServer'
@@ -55,6 +56,7 @@ export function wireEngineEvents() {
   backfillQueue.on('backfill_progress', (payload) => broadcast('backfill_progress', payload))
   backfillQueue.on('backfill_completed', (payload) => broadcast('backfill_completed', payload))
   backfillQueue.on('backfill_failed', (payload) => broadcast('backfill_failed', payload))
+  backfillQueue.on('backfill_control', (payload) => broadcast('backfill_control', payload))
   autoRefresh.on('status', (payload) => broadcast('auto_refresh', payload))
   morningBrief.on('status', (payload) => broadcast('morning_brief', payload))
 
@@ -193,6 +195,9 @@ export async function startEngine() {
       })
       console.log(`[Init] Startup today-bar fetch complete in ${((Date.now() - started) / 1000).toFixed(1)}s.`)
     }, todayFetchDelay)
+
+    // Work out every symbol's history health ahead of the first look at Symbol Setup
+    setTimeout(warmHealth, 15_000)
 
     // Auto-start with mock data for demonstration (only runs if no real ticks)
     liveFeed.start()

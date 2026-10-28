@@ -11,7 +11,7 @@ const WS_URL = 'ws://127.0.0.1:7890/api/status/stream'
 export type BrokerStatus = 'connected' | 'reconnecting' | 'auth_required' | 'disconnected'
 export type FeedStatusType = 'STREAMING' | 'STALE' | 'CLOSED' | 'ERROR'
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug'
-export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya'
+export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya' | 'zebu' | 'tradesmart' | 'compositedge' | 'fivepaisa_xts' | 'jainam' | 'ibulls' | 'rmoney'
 
 export interface BrokerAccount {
   id: string
@@ -92,6 +92,8 @@ export interface AppSettings {
   logLevel: LogLevel
   logRetentionDays: number
   backfillDepthDays: number
+  /** Spread history downloads over every connected broker (the fastest free one fetches each chunk) */
+  historyUseAllBrokers: boolean
   lateToleranaceSeconds: number
   clockSkewThresholdSeconds: number
 }
@@ -145,7 +147,23 @@ export const api = {
   // Status
   getFeedStatus: () => apiFetch<FeedStatusResponse>('/status/feed'),
   getHealth: () => apiFetch<HealthResponse>('/status/health'),
-  getBackfillStatus: () => apiFetch<{ queueLength: number; statuses: any[] }>('/backfill/status'),
+  getBackfillStatus: () => apiFetch<{ queueLength: number; paused?: boolean; cancelled?: number; etaMs?: number | null; statuses: any[] }>('/backfill/status'),
+  pauseBackfill: () => apiFetch<{ ok: boolean; paused: boolean }>('/backfill/pause', { method: 'POST' }),
+  resumeBackfill: () => apiFetch<{ ok: boolean; paused: boolean }>('/backfill/resume', { method: 'POST' }),
+  cancelBackfill: () => apiFetch<{ ok: boolean; cancelled: number; symbols: number }>('/backfill/cancel', { method: 'POST' }),
+  restoreBackfill: () => apiFetch<{ ok: boolean; symbols: number }>('/backfill/restore', { method: 'POST' }),
+  /** Re-download today's bars: one symbol, a list, or every symbol */
+  refreshToday: (target: { ticker: string } | { tickers: string[] } | { all: true }) =>
+    apiFetch<{ ok: boolean; queued?: number; skipped?: number }>('/backfill/today', { method: 'POST', body: JSON.stringify(target) }),
+  getAutoRefresh: () => apiFetch<any>('/backfill/auto'),
+  // Backup & restore (Settings)
+  createBackup: (path: string) => apiFetch<BackupInfo & { ok: boolean }>('/system/backup', { method: 'POST', body: JSON.stringify({ path }) }),
+  checkBackup: (path: string) => apiFetch<BackupInfo & { ok: boolean }>('/system/restore/check', { method: 'POST', body: JSON.stringify({ path }) }),
+  restoreBackup: (path: string) => apiFetch<BackupInfo & { ok: boolean; restarting: boolean }>('/system/restore', { method: 'POST', body: JSON.stringify({ path }) }),
+  // Data health (Symbol Setup)
+  getSymbolHealth: () => apiFetch<{ symbols: SymbolHealth[]; fresh?: boolean }>('/symbols/health'),
+  repairSymbols: (tickers?: string[]) =>
+    apiFetch<{ ok: boolean; checked: number; queued: number; complete: number; noBroker: number }>('/symbols/repair', { method: 'POST', body: JSON.stringify(tickers ? { tickers } : {}) }),
   // Master Contracts
   syncMaster: (id: string) => apiFetch<{ ok: boolean }>(`/brokers/${id}/master/sync`, { method: 'POST' }),
   getMasterStatus: (id: string) => apiFetch<{ isDownloading: boolean, lastSync: number, isDownloadedToday: boolean, count: number }>(`/brokers/${id}/master/status`),
@@ -166,6 +184,27 @@ export const api = {
   getConsole: (limit = 2000) => apiFetch<{ lines: ConsoleLine[] }>(`/system/console?limit=${limit}`),
 }
 
+/** What a backup file holds */
+export interface BackupInfo {
+  createdAt: string
+  appVersion: string
+  symbols: number
+  bars: number
+  bytes: number
+}
+
+/** One symbol's history, as Symbol Setup shows it */
+export interface SymbolHealth {
+  ticker: string
+  status: 'complete' | 'missing' | 'downloading' | 'cancelled' | 'empty'
+  missingDays: number
+  missingSample: string[]
+  olderMissing: boolean
+  firstDay: string | null
+  lastDay: string | null
+  bars: number
+}
+
 export interface ConsoleLine {
   seq: number
   ts: number
@@ -174,7 +213,7 @@ export interface ConsoleLine {
 }
 
 // ===== WebSocket Manager =====
-type WsEventType = 'feed_update' | 'log_entry' | 'broker_status' | 'health_update' | 'open' | 'close' | 'error' | 'backfill_progress' | 'backfill_completed' | 'backfill_failed' | 'master_sync_progress' | 'master_sync_complete' | 'master_sync_error' | 'market_status' | 'console_lines' | 'auto_refresh' | 'morning_brief'
+type WsEventType = 'feed_update' | 'log_entry' | 'broker_status' | 'health_update' | 'open' | 'close' | 'error' | 'backfill_progress' | 'backfill_completed' | 'backfill_failed' | 'backfill_control' | 'master_sync_progress' | 'master_sync_complete' | 'master_sync_error' | 'market_status' | 'console_lines' | 'auto_refresh' | 'morning_brief'
 type WsListener = (payload: unknown) => void
 
 class WebSocketManager {

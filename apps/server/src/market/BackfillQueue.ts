@@ -23,7 +23,8 @@ import {
   validateBar,
   repairBar,
   getAllSettings,
-  getOldestBarTimestampSec
+  getOldestBarTimestampSec,
+  upsertSettings,
 } from '../db'
 import { brokerManager } from '../brokers/BrokerManager'
 import { backfilledTickers } from './state/backfillState'
@@ -74,10 +75,32 @@ interface GapPass {
 // ===== Exported status store (used by /api/backfill routes) =====
 export const backfillStatusMap = new Map<string, BackfillStatus>()
 
+/** Where one chunk is fetched from: the symbol's own broker, or another connected broker helping out */
+interface ChunkRoute {
+  id: string
+  adapter: any
+  token: string
+  helper: boolean
+  /** Gives back the download slot taken for this chunk (safe to call more than once) */
+  release?: () => void
+}
+
+/** A helper broker that failed (expired login, refused requests) sits out this long */
+const HELPER_COOLDOWN_MS = 10 * 60_000
+
 class BackfillQueueService extends EventEmitter {
   private queue: BackfillTask[] = []
-  private readonly CONCURRENCY = 6   // parallel chunk downloads; the adapter's rate limiter keeps them within broker limits
+  /** Parallel chunk downloads per connected broker; each adapter's rate limiter keeps them within its limits */
+  private readonly SLOTS_PER_BROKER = 6
   private workers = 0
+  private busyByBroker = new Map<string, number>()
+  /** `${brokerId}:${ticker}` → the symbol's token on that broker, or null when it can't serve it */
+  private helperTokens = new Map<string, string | null>()
+  /** `${brokerId}:${ticker}` → that helper returned nothing for a chunk ending here; older chunks go elsewhere */
+  private helperEmptyAt = new Map<string, number>()
+  private helperCooldownUntil = new Map<string, number>()
+  /** Completion times of recent chunks, for the time-left estimate */
+  private chunkDoneAt: number[] = []
   private busyTickers = new Set<string>()
   private priorityTickers = new Set<string>()  // open in AmiBroker: download before the rest
   private kickTimer: NodeJS.Timeout | null = null
@@ -115,6 +138,8 @@ class BackfillQueueService extends EventEmitter {
     }
     
     let safeBrokerToken = typeof brokerToken === 'string' ? brokerToken : String(brokerToken)
+    // Cancelled by the user: callers that mean it (manual download) call allowHistory() first
+    if (this.isSkipped(ticker)) return
     if (this.activeTickers.has(ticker) || backfilledTickers.has(ticker)) return
     // History already downloaded and verified once — newer gaps are handled by the
     // startup/daily gap passes. (Manual re-download and symbol delete clear the watermark.)
@@ -182,6 +207,8 @@ class BackfillQueueService extends EventEmitter {
    */
   public enqueueGapFill(ticker: string, brokerId: string, brokerToken: string | number = '', fromMs: number, toMs: number, forceEvenDuringMarket = false, pass?: GapPass, floorMs?: number) {
     const gapKey = `${ticker}:gap:${fromMs}`
+    // Cancelled by the user; the manual "Today" button (forceEvenDuringMarket) still works
+    if (this.isSkipped(ticker) && !forceEvenDuringMarket) { this.settlePass(pass, false); return }
     if (this.activeTickers.has(gapKey)) { this.settlePass(pass, false); return }
     
     let safeBrokerToken = typeof brokerToken === 'string' ? brokerToken : String(brokerToken)
@@ -284,6 +311,7 @@ class BackfillQueueService extends EventEmitter {
    * Returns true if a download was queued.
    */
   public async extendHistory(ticker: string, brokerId: string, brokerToken: string | number, depthDays: number): Promise<boolean> {
+    if (this.isSkipped(ticker)) return false
     const desiredFromMs = Date.now() - depthDays * DAY_MS
     const floor = getHistoryFloorMs(ticker)
     if (floor !== undefined && floor <= desiredFromMs + DAY_MS) return false   // already asked the broker
@@ -322,6 +350,8 @@ class BackfillQueueService extends EventEmitter {
    * watermark advances to `scanToMs` so the next scan starts there.
    */
   public enqueueGapPass(ticker: string, brokerId: string, brokerToken: string | number, gaps: { fromMs: number, toMs: number }[], scanToMs: number) {
+    // Cancelled by the user: leave the watermark alone, so "Download now" still finds these gaps
+    if (gaps.length > 0 && this.isSkipped(ticker)) return
     if (gaps.length === 0) {
       setVerifiedThroughMs(ticker, scanToMs)
       return
@@ -366,12 +396,94 @@ class BackfillQueueService extends EventEmitter {
     console.log(`[BackfillQueue] Cancelled all pending backfill tasks for ${ticker}`)
   }
 
-  /** Drops every queued download (Clean Database, factory reset). Chunks already in flight finish. */
-  public cancelAll() {
+  /**
+   * Drops every queued download (Cancel button, Clean Database, factory reset). Chunks already in
+   * flight finish. `remember` (the Cancel button): those symbols get no automatic downloads again
+   * — catch-up at start, AmiBroker opening them — until allowHistory() ("Download now").
+   */
+  public cancelAll(remember = false) {
+    const dropped = this.queue.length
+    if (remember) {
+      const set = this.skippedSet()
+      for (const t of this.queue) set.add(t.ticker)
+      for (const s of backfillStatusMap.values()) if (s.status === 'pending' || s.status === 'running') set.add(s.ticker)
+      this.saveSkipped()
+    }
     this.queue = []
     this.activeTickers.clear()
     this.priorityTickers.clear()
     backfillStatusMap.clear()
+    if (dropped > 0) console.log(`[BackfillQueue] Cancelled ${dropped} queued download(s)`)
+    this.emit('backfill_control', { paused: this.isPaused(), queueLength: 0, cancelled: true })
+  }
+
+  // ===== Cancelled by the user (kept across restarts) =====
+  private skipped: Set<string> | null = null
+
+  private skippedSet(): Set<string> {
+    if (!this.skipped) {
+      // After a restart the settings cache holds the stored JSON text, not the array
+      let saved = (getAllSettings() as any).historySkipped
+      if (typeof saved === 'string') { try { saved = JSON.parse(saved) } catch { saved = [] } }
+      this.skipped = new Set(Array.isArray(saved) ? saved.map(String) : [])
+    }
+    return this.skipped
+  }
+
+  private saveSkipped() {
+    upsertSettings({ historySkipped: [...this.skippedSet()] })
+  }
+
+  /** True when the user cancelled this symbol's history and hasn't asked for it again */
+  public isSkipped(ticker: string): boolean {
+    return this.skippedSet().has(ticker)
+  }
+
+  /** Cancelled symbols still in the symbol list */
+  public skippedTickers(): string[] {
+    const set = this.skippedSet()
+    if (set.size === 0) return []
+    return (stmts.getSymbols.all() as any[]).map(s => s.amiBrokerTicker || s.amibroker_ticker).filter(t => t && set.has(t))
+  }
+
+  /** Lets automatic downloads run again for these symbols (all when omitted); returns the ones cleared */
+  public allowHistory(tickers?: string[]): string[] {
+    const set = this.skippedSet()
+    const cleared = tickers ? tickers.filter(t => set.has(t)) : [...set]
+    if (cleared.length === 0) return []
+    for (const t of cleared) set.delete(t)
+    this.saveSkipped()
+    console.log(`[BackfillQueue] History downloads allowed again for ${cleared.length} symbol(s)`)
+    return cleared
+  }
+
+  // ===== Pause (the user's choice, kept across restarts) =====
+  private userPaused: boolean | null = null
+
+  public isPaused(): boolean {
+    if (this.userPaused === null) this.userPaused = String((getAllSettings() as any).backfillPaused) === 'true'
+    return this.userPaused
+  }
+
+  /** Stops starting new chunks (the ones in flight finish); the queue is kept */
+  public pause() {
+    this.userPaused = true
+    upsertSettings('backfillPaused', 'true')
+    console.log(`[BackfillQueue] Paused by the user (${this.queue.length} queued)`)
+    this.emit('backfill_control', { paused: true, queueLength: this.queue.length })
+  }
+
+  public resume() {
+    this.userPaused = false
+    upsertSettings('backfillPaused', 'false')
+    console.log(`[BackfillQueue] Resumed by the user (${this.queue.length} queued)`)
+    this.emit('backfill_control', { paused: false, queueLength: this.queue.length })
+    this.processNext()
+  }
+
+  /** Queued work that will actually run (nothing while paused) */
+  public hasActiveWork(): boolean {
+    return this.queue.length > 0 && !this.isPaused()
   }
 
   public getQueueLength(): number {
@@ -404,9 +516,11 @@ class BackfillQueueService extends EventEmitter {
     return updated
   }
 
-  /** Starts workers (up to CONCURRENCY) for queued tasks. Safe to call at any time. */
+  /** Starts workers (a set of slots per connected broker) for queued tasks. Safe to call at any time. */
   private processNext() {
     if (this.queue.length === 0) return
+    // Paused by the user: resume() starts the workers again
+    if (this.isPaused()) return
 
     // Permanently paused — don't retry until manual re-auth (resumeAfterAuth called)
     if (this.tokenPermanentlyPaused) {
@@ -422,7 +536,7 @@ class BackfillQueueService extends EventEmitter {
       return
     }
 
-    while (this.workers < this.CONCURRENCY && this.nextRunnable()) {
+    while (this.workers < this.maxWorkers() && this.nextRunnable()) {
       this.workers++
       this.runWorker()
         .catch(err => { console.error(`[BackfillQueue] FATAL error in queue execution:`, err); return 'idle' as const })
@@ -457,9 +571,128 @@ class BackfillQueueService extends EventEmitter {
     return Number(adapter?.maxIntradayHistoryDays) || Number(settings?.historyChunkDays) || 30
   }
 
+  /** One set of download slots per connected broker */
+  private maxWorkers(): number {
+    return this.SLOTS_PER_BROKER * Math.max(1, brokerManager.getActiveIds().length)
+  }
+
+  /** Setting "Use every connected broker for history downloads" (on unless turned off) */
+  private useAllBrokers(): boolean {
+    return String((getAllSettings() as any).historyUseAllBrokers) !== 'false'
+  }
+
+  /** Days of history a broker can deliver per minute right now */
+  private historySpeed(adapter: any): number {
+    const perMinute = typeof adapter?.historyRequestsPerMinute === 'function' ? Number(adapter.historyRequestsPerMinute()) || 0 : 0
+    return this.chunkDaysFor(adapter) * perMinute
+  }
+
+  /**
+   * Picks the broker for the next chunk of `task`: of the connected brokers with a free slot,
+   * the one that downloads the most days per minute. Another broker only helps when it can
+   * find the symbol and hasn't come back empty for this period, so the symbol's own broker
+   * always remains the fallback.
+   */
+  private async pickRoute(task: BackfillTask, owner: any, chunkEndMs: number): Promise<ChunkRoute> {
+    const own: ChunkRoute = { id: task.brokerId, adapter: owner, token: task.brokerToken, helper: false }
+    const helpers: ChunkRoute[] = []
+    if (this.useAllBrokers() && typeof owner?.historyRequestsPerMinute === 'function') {
+      const now = Date.now()
+      for (const id of brokerManager.getActiveIds()) {
+        if (id === task.brokerId) continue
+        const adapter: any = brokerManager.getAdapter(id)
+        if (typeof adapter?.resolveSymbol !== 'function' || typeof adapter?.historyRequestsPerMinute !== 'function') continue
+        if ((this.helperCooldownUntil.get(id) || 0) > now) continue
+        const key = `${id}:${task.ticker}`
+        const emptyAt = this.helperEmptyAt.get(key)
+        if (emptyAt !== undefined && chunkEndMs <= emptyAt) continue
+        let token: string | null | undefined = this.helperTokens.get(key)
+        if (token === undefined) {
+          const sym = (stmts.getSymbols.all() as any[]).find(s => (s.amiBrokerTicker || s.amibroker_ticker) === task.ticker)
+          try {
+            token = (await adapter.resolveSymbol(sym?.rawSymbol || sym?.raw_symbol || task.ticker, sym?.exchange)) || null
+          } catch {
+            token = null
+          }
+          this.helperTokens.set(key, token ?? null)
+        }
+        if (token) helpers.push({ id, adapter, token, helper: true })
+      }
+    }
+
+    // From here on nothing awaits: choosing a broker and taking its slot happen together, so
+    // parallel workers never all pick the same "free" broker
+    const busy = (id: string) => this.busyByBroker.get(id) || 0
+    const options = [own, ...helpers]
+      .filter(r => busy(r.id) < this.SLOTS_PER_BROKER)
+      .map(r => ({ r, score: this.historySpeed(r.adapter) }))
+    // Fastest first; equal speed keeps the symbol on its own broker. All full: the own broker (it queues).
+    options.sort((a, b) => b.score - a.score || Number(a.r.helper) - Number(b.r.helper))
+    const chosen = options[0]?.r ?? own
+    this.busyByBroker.set(chosen.id, busy(chosen.id) + 1)
+    let held = true
+    const release = () => {
+      if (!held) return
+      held = false
+      this.busyByBroker.set(chosen.id, Math.max(0, busy(chosen.id) - 1))
+    }
+    return { ...chosen, release }
+  }
+
+  /**
+   * Fetches one chunk on `route`. For a helper broker, null means "it couldn't serve this" (an
+   * error, or nothing at all): the chunk stays queued and goes to the symbol's own broker. Only
+   * the own broker's answers count as the truth, so a helper can never mark a range as empty.
+   */
+  private async fetchChunk(task: BackfillTask, route: ChunkRoute, from: Date, to: Date): Promise<any[] | null> {
+    // The slot was taken by pickRoute; it is given back here
+    try {
+      if (!route.helper) return (await route.adapter.getHistoricalBars(route.token, '1m', from, to)) || []
+      const key = `${route.id}:${task.ticker}`
+      try {
+        const bars = (await route.adapter.getHistoricalBars(route.token, '1m', from, to)) || []
+        if (bars.length === 0) {
+          this.helperEmptyAt.set(key, to.getTime())
+          console.log(`[BackfillQueue] ${route.id} has no ${task.ticker} bars for ${from.toISOString().slice(0, 10)} → ${to.toISOString().slice(0, 10)}; ${task.brokerId} fetches that period`)
+          return null
+        }
+        return bars
+      } catch (err: any) {
+        const msg = err?.message || String(err)
+        const auth = err?.code === -16 || /auth|token|401|403|session/i.test(msg)
+        const limited = err?.code === 429 || /429|rate|request limit/i.test(msg)
+        if (auth || limited) this.helperCooldownUntil.set(route.id, Date.now() + (auth ? HELPER_COOLDOWN_MS : 60_000))
+        else this.helperTokens.set(key, null)   // this broker can't serve this symbol
+        console.warn(`[BackfillQueue] ${route.id} could not help with ${task.ticker} (${msg}); ${task.brokerId} takes it`)
+        return null
+      }
+    } finally {
+      route.release?.()
+    }
+  }
+
+  /** Estimated time to finish everything queued, from the last few minutes' real speed; null until known */
+  public estimateRemainingMs(): number | null {
+    const now = Date.now()
+    this.chunkDoneAt = this.chunkDoneAt.filter(t => now - t < 5 * 60_000)
+    if (this.queue.length === 0) return 0
+    if (this.chunkDoneAt.length < 3) return null
+    const windowMs = Math.max(60_000, now - this.chunkDoneAt[0])
+    const perMs = this.chunkDoneAt.length / windowMs
+    let chunks = 0
+    for (const t of this.queue) {
+      const adapter = brokerManager.getAdapter(t.brokerId)
+      const days = this.chunkDaysFor(adapter)
+      const left = ((t.cursorTo ?? t.targetTo).getTime() - t.currentFrom.getTime()) / DAY_MS
+      chunks += Math.max(1, Math.ceil(left / days))
+    }
+    return Math.round(chunks / perMs)
+  }
+
   private async runWorker(): Promise<'idle' | 'stalled' | 'paused'> {
     for (;;) {
       if (this.tokenPermanentlyPaused || Date.now() < this.tokenPausedUntil) return 'paused'
+      if (this.isPaused()) return 'idle'
       const task = this.nextRunnable()
       if (!task) return 'idle'
       this.busyTickers.add(task.ticker)
@@ -499,11 +732,13 @@ class BackfillQueueService extends EventEmitter {
       }
 
       const settings = getAllSettings() as any
-      const chunkDays = this.chunkDaysFor(adapter)
       const maxRetries = Number(settings?.maxBackfillRetries) || 3
 
-      // Chunk window, newest first: charts get the recent months before the older years
+      // Chunk window, newest first: charts get the recent months before the older years. Its
+      // size is the per-request cap of whichever broker fetches it.
       const currentTo = task.cursorTo ?? task.targetTo
+      const route = await this.pickRoute(task, adapter, currentTo.getTime())
+      const chunkDays = this.chunkDaysFor(route.adapter)
       const chunkFrom = new Date(Math.max(task.currentFrom.getTime(), currentTo.getTime() - chunkDays * DAY_MS))
 
       try {
@@ -515,9 +750,13 @@ class BackfillQueueService extends EventEmitter {
 
       const fromStr = chunkFrom.toISOString().split('T')[0]
       const toStr   = currentTo.toISOString().split('T')[0]
-      console.log(`[BackfillQueue] Fetching ${task.ticker} (${task.brokerToken}) [${this.queue.length} in queue] from ${fromStr} to ${toStr}...`)
+      console.log(`[BackfillQueue] Fetching ${task.ticker} (${route.token})${route.helper ? ` via ${route.id}` : ''} [${this.queue.length} in queue] from ${fromStr} to ${toStr}...`)
 
-      const bars = ((await adapter.getHistoricalBars(task.brokerToken, '1m', chunkFrom, currentTo)) || []).map(repairBar)
+      const fetched = await this.fetchChunk(task, route, chunkFrom, currentTo)
+      // A helper broker couldn't serve this chunk: it stays queued, unchanged, for the symbol's own broker
+      if (fetched === null) return true
+      this.chunkDoneAt.push(Date.now())
+      const bars = fetched.map(repairBar)
 
       if (bars && bars.length > 0) {
         const safeTicker = task.ticker.replace(/[^a-zA-Z0-9_-]/g, '_')
@@ -661,6 +900,7 @@ class BackfillQueueService extends EventEmitter {
       // Pacing is done by the adapter's shared rate limiter
 
     } catch (err: any) {
+      route.release?.()
       // ===== Auth Error (-16): Token invalid/expired =====
       const isAuthError = err?.code === -16 ||
         err?.message?.includes('Auth error') ||

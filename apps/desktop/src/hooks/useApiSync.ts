@@ -7,13 +7,39 @@ import { useEffect, useRef, useState } from 'react'
 import { useAppStore } from '../store/appStore'
 import { api, wsManager, isApiAvailable } from '../api/apiClient'
 import { toast } from '../components/ui/Toast'
-import { setAssistantView } from '../pages/Assistant'
+import { setAssistantView } from '../lib/assistantView'
 import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/plugin-notification'
+import { invoke } from '@tauri-apps/api/core'
 
 type ApiState = 'checking' | 'connected' | 'offline'
 
 let resyncing: Promise<void> | null = null
 let wsOpenedBefore = false
+let amiBrokerStartTried = false
+
+/** Settings → "Open AmiBroker automatically": once per app start, as soon as the saved settings are known */
+export function maybeStartAmiBroker(settings: any) {
+  if (amiBrokerStartTried || !(window as any).__TAURI_INTERNALS__) return
+  if (settings?.autoStartAmiBroker !== true && settings?.autoStartAmiBroker !== 'true') return
+  amiBrokerStartTried = true
+  invoke<{ alreadyOpen: boolean }>('start_amibroker', { path: settings.amiBrokerPath || null })
+    .then(r => { if (!r.alreadyOpen) toast.info('AmiBroker opened', 'Opened automatically, as set in Settings.', 4000) })
+    .catch(err => toast.error("Couldn't open AmiBroker", String(err), 8000))
+}
+
+const SYMBOL_FIELDS = ['ticker', 'exchange', 'instrumentType', 'brokerId', 'rawSymbol', 'lastPrice', 'prevClose', 'lastTickUtcMs',
+  'barsPerMin', 'internalLatencyMs', 'status', 'change', 'changePercent', 'volume'] as const
+
+/** A symbol as the engine reports it, on top of what the screen already had */
+export function freshSymbol(sym: any, old?: object): any {
+  const out: any = { ...(old || {}) }
+  for (const k of SYMBOL_FIELDS) out[k] = sym[k]
+  return out
+}
+
+export function sameSymbol(a: any, b: any): boolean {
+  return SYMBOL_FIELDS.every(k => a[k] === b[k])
+}
 
 /**
  * Pull the engine's current state into the store. Runs at startup and again whenever the
@@ -27,33 +53,31 @@ export function resyncFromEngine(initial = false): Promise<void> {
     const tasks: Promise<unknown>[] = []
 
     if (initial) {
-      tasks.push(api.getSettings().then(settings => store.updateSettings(settings as any)).catch(() => {}))
+      tasks.push(api.getSettings().then(settings => {
+        store.updateSettings(settings as any)
+        maybeStartAmiBroker(settings)
+      }).catch(() => {}))
       tasks.push(api.getLogs({ limit: 50 }).then(logs => logs.forEach(l => store.addLog(l as any))).catch(() => {}))
     }
 
     tasks.push(api.getBrokers().then(brokers => {
-      if (Array.isArray(brokers)) useAppStore.setState({ brokers: brokers as any })
+      if (Array.isArray(brokers) && JSON.stringify(brokers) !== JSON.stringify(useAppStore.getState().brokers)) {
+        useAppStore.setState({ brokers: brokers as any })
+      }
     }).catch(() => {}))
 
-    // Symbols: the engine's list is authoritative (drops symbols deleted elsewhere, adds new ones)
+    // Symbols: the engine's list is authoritative (drops symbols deleted elsewhere, adds new ones).
+    // Symbols that didn't change keep their object, so nothing redraws for them.
     tasks.push(api.getFeedStatus().then(feedStatus => {
-      const current = new Map(useAppStore.getState().symbols.map(s => [s.ticker, s]))
-      const next = feedStatus.symbols.map((sym: any) => ({
-        ...(current.get(sym.ticker) || {}),
-        ticker: sym.ticker,
-        exchange: sym.exchange,
-        instrumentType: sym.instrumentType,
-        lastPrice: sym.lastPrice,
-        prevClose: sym.prevClose,
-        lastTickUtcMs: sym.lastTickUtcMs,
-        barsPerMin: sym.barsPerMin,
-        internalLatencyMs: sym.internalLatencyMs,
-        status: sym.status,
-        change: sym.change,
-        changePercent: sym.changePercent,
-        volume: sym.volume,
-      }))
-      useAppStore.setState({ symbols: next as any })
+      const before = useAppStore.getState().symbols
+      const current = new Map(before.map(s => [s.ticker, s]))
+      const next = feedStatus.symbols.map((sym: any) => {
+        const old = current.get(sym.ticker)
+        const fresh = freshSymbol(sym, old)
+        return old && sameSymbol(old, fresh) ? old : fresh
+      })
+      const unchanged = next.length === before.length && next.every((s: any, i: number) => s === before[i])
+      if (!unchanged) useAppStore.setState({ symbols: next as any })
       store.updateCoreStats(feedStatus.coreEngine as any)
     }).catch(() => {}))
 
@@ -61,6 +85,7 @@ export function resyncFromEngine(initial = false): Promise<void> {
     // entries already on screen are brought up to date
     tasks.push(api.getBackfillStatus().then(bfData => {
       if (!bfData || !Array.isArray(bfData.statuses)) return
+      if (typeof bfData.paused === 'boolean') useAppStore.getState().setBackfillPaused(bfData.paused)
       const shown = useAppStore.getState().backfillStatuses
       bfData.statuses.forEach((s: any) => {
         if (s.status === 'pending' || s.status === 'running' || shown[s.ticker]) store.updateBackfillStatus(s.ticker, s)
@@ -91,12 +116,11 @@ export function useEngineRefresh(load: () => void) {
 
 export function useApiSync() {
   const [apiState, setApiState] = useState<ApiState>('checking')
+  // Actions never change, so read them once: subscribing to the store here would redraw the
+  // whole app (this hook runs in the main layout) on every live price update
   const {
-    updateSymbolFeed, updateCoreStats, addLog,
-    updateBrokerStatus, addSymbol, symbols,
-    updateBackfillStatus, clearBackfillStatus,
-    setMarketStatus,
-  } = useAppStore()
+    updateCoreStats, addLog, updateBrokerStatus, updateBackfillStatus, setMarketStatus,
+  } = useAppStore.getState()
   const initializedRef = useRef(false)
 
   useEffect(() => {
@@ -278,6 +302,13 @@ export function useApiSync() {
       }
     })
 
+    // Paused / resumed / cancelled (from the download card, or another window)
+    const offBackfillControl = wsManager.on('backfill_control', (payload: any) => {
+      const store = useAppStore.getState()
+      if (typeof payload?.paused === 'boolean') store.setBackfillPaused(payload.paused)
+      if (payload?.cancelled) store.clearAllBackfills()
+    })
+
     // Market status (open / closed transitions)
     let _prevMarketOpen: boolean | null = null
     const offMarketStatus = wsManager.on('market_status', (payload: any) => {
@@ -310,6 +341,7 @@ export function useApiSync() {
       offClose?.()
       offBackfillProgress?.()
       offBackfillCompleted?.()
+      offBackfillControl?.()
       offMarketStatus?.()
       offBackfillFailed?.()
       offResyncTriggers()

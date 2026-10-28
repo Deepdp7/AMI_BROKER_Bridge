@@ -18,7 +18,8 @@ const LEVEL_COLORS: Record<LogLevel, string> = {
 }
 
 export function LogsPage() {
-  const { logs, clearLogs } = useAppStore()
+  const logs = useAppStore(s => s.logs)
+  const clearLogs = useAppStore(s => s.clearLogs)
   const [search, setSearch] = useState('')
   const [levelFilter, setLevelFilter] = useState<LogLevel | 'all'>('all')
   const [componentFilter, setComponentFilter] = useState('All')
@@ -92,14 +93,14 @@ export function LogsPage() {
           </div>
 
           {/* Quick Level Filter */}
-          <div style={{ display: 'flex', gap: '0.25rem', background: 'rgba(23,23,23,0.6)', padding: '3px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ display: 'flex', gap: '0.25rem', background: 'rgb(var(--s1-rgb) / 0.6)', padding: '3px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
             {(['all', 'info', 'warn', 'error'] as const).map(lvl => (
               <button
                 key={lvl}
                 onClick={() => setLevelFilter(lvl)}
                 style={{
-                  background: levelFilter === lvl ? (lvl === 'error' ? 'rgba(244,63,94,0.2)' : 'rgba(0,212,170,0.15)') : 'transparent',
-                  color: levelFilter === lvl ? (lvl === 'error' ? '#f43f5e' : '#00d4aa') : '#8b9199',
+                  background: levelFilter === lvl ? (lvl === 'error' ? 'rgba(244,63,94,0.2)' : 'rgb(var(--accent-rgb) / 0.15)') : 'transparent',
+                  color: levelFilter === lvl ? (lvl === 'error' ? '#f43f5e' : 'var(--accent)') : '#8b9199',
                   border: 'none',
                   borderRadius: '6px',
                   padding: '0.25rem 0.6rem',
@@ -123,7 +124,7 @@ export function LogsPage() {
             className="btn-secondary"
             style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.375rem' }}
           >
-            {paused ? <Play size={13} style={{ color: '#00d4aa' }} /> : <Pause size={13} />}
+            {paused ? <Play size={13} style={{ color: 'var(--accent)' }} /> : <Pause size={13} />}
             {paused ? 'Resume' : 'Pause'}
           </button>
           <button
@@ -148,11 +149,10 @@ export function LogsPage() {
       {/* Terminal View Log Console */}
       <div
         ref={logContainerRef}
-        className="selectable"
         onScroll={handleScroll}
         style={{
           flex: 1,
-          background: 'rgba(12,12,12, 0.95)',
+          background: 'rgb(var(--s0-rgb) / 0.95)',
           border: '1px solid rgba(255,255,255,0.08)',
           borderRadius: '12px',
           padding: '1rem',

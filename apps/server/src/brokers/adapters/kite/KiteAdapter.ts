@@ -98,6 +98,8 @@ function kiteInterval(interval: string): string {
 export class KiteAdapter extends ListedBrokerAdapter {
   /** Kite serves at most 60 days of 1-minute candles per request */
   readonly maxIntradayHistoryDays = 55
+  /** History requests per minute allowed right now (the download queue picks the fastest broker) */
+  historyRequestsPerMinute() { return historyLimiter.perMinuteBudget }
   protected readonly label = 'Kite'
   protected readonly master = kiteMaster
   private apiKey = ''

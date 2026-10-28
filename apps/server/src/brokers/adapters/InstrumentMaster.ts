@@ -35,7 +35,7 @@ const FIELDS = ['key', 'ticker', 'name', 'exchange', 'cat', 'lot', 'tick', 'expi
 const IST_MS = 5.5 * 3600 * 1000
 
 /** Symbol-search filter values sent by the app ("NSE-10", "NFO-12"…, Fyers instrument codes) */
-const FILTERS: Record<string, InstrumentCategory[]> = {
+export const SEARCH_FILTERS: Record<string, InstrumentCategory[]> = {
   'NSE-10': ['EQ', 'INDEX'],
   'NFO-11': ['FUTIDX'], 'NFO-12': ['FUTSTK'], 'NFO-13': ['OPTIDX'], 'NFO-14': ['OPTSTK'],
   'MCX-11': ['FUTCOM'], 'MCX-12': ['OPTFUT'], 'MCX-13': ['FUTIDX'], 'MCX-14': ['OPTIDX'],
@@ -72,7 +72,7 @@ export function splitCsvLine(line: string): string[] {
   return out
 }
 
-function category(cat: InstrumentCategory): string {
+export function category(cat: InstrumentCategory): string {
   if (cat === 'EQ' || cat === 'INDEX') return cat
   return cat.startsWith('FUT') ? 'FUT' : 'OPT'
 }
@@ -226,7 +226,7 @@ export class InstrumentMaster {
     let exchange: string | null = null
     let cats: InstrumentCategory[] | null = null
     if (filter && filter !== 'ALL') {
-      if (FILTERS[filter]) cats = FILTERS[filter]
+      if (SEARCH_FILTERS[filter]) cats = SEARCH_FILTERS[filter]
       exchange = filter.split('-')[0]
     }
     const exact: MasterRecord[] = []

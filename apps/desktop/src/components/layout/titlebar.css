@@ -10,8 +10,8 @@
   position: relative;
   z-index: 200; /* above page content and modal backdrops, so the window buttons always work */
   background:
-    linear-gradient(90deg, rgba(0, 212, 170, 0.06) 0%, transparent 38%),
-    #0a0a0a;
+    linear-gradient(90deg, rgb(var(--accent-rgb) / 0.06) 0%, transparent 38%),
+    rgb(var(--s0-rgb));
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   user-select: none;
   -webkit-user-select: none;
@@ -91,7 +91,7 @@
   height: 20px;
   display: block;
   border-radius: 5px;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 10px rgba(0, 212, 170, 0.25);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 10px rgb(var(--accent-rgb) / 0.25);
 }
 .titlebar__name {
   font-size: 0.78rem;

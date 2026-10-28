@@ -55,7 +55,7 @@ const ICONS: Record<ToastType, React.ElementType> = {
   info: Info,
 }
 const COLORS: Record<ToastType, { bg: string; border: string; icon: string; bar: string }> = {
-  success: { bg: 'rgba(0,212,170,0.08)', border: 'rgba(0,212,170,0.2)', icon: '#00d4aa', bar: '#00d4aa' },
+  success: { bg: 'rgb(var(--good-rgb) / 0.08)', border: 'rgb(var(--good-rgb) / 0.2)', icon: 'var(--good)', bar: 'var(--good)' },
   warning: { bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)', icon: '#f59e0b', bar: '#f59e0b' },
   error: { bg: 'rgba(244,63,94,0.08)', border: 'rgba(244,63,94,0.2)', icon: '#f43f5e', bar: '#f43f5e' },
   info: { bg: 'rgba(107,128,153,0.08)', border: 'rgba(107,128,153,0.2)', icon: '#a1a7b0', bar: '#a1a7b0' },
@@ -76,7 +76,8 @@ function ToastItem({ t, onDismiss }: { t: Toast; onDismiss: () => void }) {
     <div
       id={`toast-${t.id}`}
       style={{
-        background: c.bg,
+        // Tint over a solid base (no backdrop blur: it re-blurred the page under it on every scroll frame)
+        background: `linear-gradient(${c.bg}, ${c.bg}), rgb(var(--s2-rgb))`,
         border: `1px solid ${c.border}`,
         borderRadius: '0.75rem',
         padding: '0.875rem 1rem',
@@ -84,7 +85,6 @@ function ToastItem({ t, onDismiss }: { t: Toast; onDismiss: () => void }) {
         maxWidth: '380px',
         position: 'relative',
         overflow: 'hidden',
-        backdropFilter: 'blur(12px)',
         boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
         transform: visible ? 'translateX(0)' : 'translateX(110%)',
         opacity: visible ? 1 : 0,

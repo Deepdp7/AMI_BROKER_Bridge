@@ -26,9 +26,10 @@ vi.mock('../../api/apiClient', () => ({
   },
 }))
 
-vi.mock('../../store/appStore', () => ({
-  useAppStore: () => ({ brokers: [{ id: 'fyers-1', brokerType: 'fyers', label: 'Fyers', status: 'connected' }] }),
-}))
+vi.mock('../../store/appStore', () => {
+  const state = { brokers: [{ id: 'fyers-1', brokerType: 'fyers', label: 'Fyers', status: 'connected' }] }
+  return { useAppStore: (select?: (s: typeof state) => unknown) => (select ? select(state) : state) }
+})
 
 import { MasterDownloadOverlay } from './MasterDownloadOverlay'
 

@@ -77,9 +77,18 @@ class AutoRefreshService extends EventEmitter {
     this.publish()
   }
 
+  /** How long the last run took: the next one waits at least that long */
+  private lastRunMs = 0
+  /** Start of the last pass that reached every symbol: incremental passes re-check from there */
+  private lastCompleteRunAt: number | null = null
+
   private scheduleNext() {
-    const base = this.status.lastRunAt ?? Date.now()
-    this.status.nextRunAt = this.status.enabled ? Math.max(Date.now(), base + this.status.intervalMin * 60_000) : null
+    // From the end of the last run, and never sooner than it took: with many symbols a run
+    // fills the broker's rate limit for minutes, and back-to-back runs left nothing for downloads
+    // (57 symbols, 1-min interval: runs of 4-5 min, one after the other, all afternoon).
+    const base = this.status.lastRunAt !== null ? this.status.lastRunAt + this.lastRunMs : Date.now()
+    const gap = Math.max(this.status.intervalMin * 60_000, this.lastRunMs)
+    this.status.nextRunAt = this.status.enabled ? Math.max(Date.now(), base + gap) : null
   }
 
   private publish() { this.emit('status', this.getStatus()) }
@@ -104,7 +113,7 @@ class AutoRefreshService extends EventEmitter {
     if (this.status.nextRunAt === null) { this.scheduleNext(); this.publish() }
     if (!closePass && this.status.nextRunAt && Date.now() < this.status.nextRunAt) return
     // Don't compete with a history download for the broker's rate limit; try again next tick
-    if (backfillQueue.getQueueLength() > 0) {
+    if (backfillQueue.hasActiveWork()) {
       if (this.status.waitingFor !== 'history-download') {
         this.status.waitingFor = 'history-download'
         this.publish()
@@ -114,14 +123,18 @@ class AutoRefreshService extends EventEmitter {
 
     this.status.waitingFor = null
     if (closePass) this.closePassDoneFor = date
-    this.run(closePass).catch(err => {
+    this.run(closePass).then(finished => {
+      // A close pass cut short by a download runs again (until 16:00)
+      if (closePass && !finished) this.closePassDoneFor = ''
+    }).catch(err => {
       this.status.lastError = err?.message || String(err)
       console.error('[AutoRefresh] Run failed:', this.status.lastError)
       this.publish()
     })
   }
 
-  private async run(fullDay: boolean) {
+  /** One pass over every symbol; false when it stopped early for a history download */
+  private async run(fullDay: boolean): Promise<boolean> {
     this.status.running = true
     this.status.lastError = null
     this.status.progressDone = 0
@@ -135,7 +148,7 @@ class AutoRefreshService extends EventEmitter {
     // After the day's first full pass only recent minutes can still differ from the broker,
     // so only those are written (the post-close pass re-checks the whole day).
     const full = fullDay || this.fullPassDoneFor !== date
-    const writeFromMs = full ? 0 : (this.status.lastRunAt ?? 0) - RECHECK_MS
+    const writeFromMs = full ? 0 : (this.lastCompleteRunAt ?? 0) - RECHECK_MS
 
     const symbols = (stmts.getSymbols.all() as any[]).filter(s => (s.brokerId || s.broker_id) && (s.brokerId || s.broker_id) !== 'orphaned')
     this.status.progressTotal = symbols.length
@@ -176,28 +189,35 @@ class AutoRefreshService extends EventEmitter {
       }
     }
 
+    let next = 0
+    // A history download (new symbols, catch-up) gets the broker's rate limit: stop here, and the
+    // next pass starts over once the queue is empty
+    const yieldToDownload = () => backfillQueue.hasActiveWork()
     try {
       // Small worker pool: requests overlap; the adapter's rate limiter spaces their starts
-      let next = 0
       const worker = async () => {
-        while (next < symbols.length && this.status.enabled) {
+        while (next < symbols.length && this.status.enabled && !yieldToDownload()) {
           await refreshOne(symbols[next++])
           this.status.progressDone++
           this.publishThrottled()
         }
       }
       await Promise.all(Array.from({ length: Math.min(CONCURRENCY, symbols.length) }, worker))
-      if (full && symbolsDone > 0) this.fullPassDoneFor = date
+      if (next >= symbols.length) this.lastCompleteRunAt = started
+      if (full && next >= symbols.length && symbolsDone > 0) this.fullPassDoneFor = date
     } finally {
       this.status.running = false
       this.status.lastRunAt = started
+      this.lastRunMs = Date.now() - started
       this.status.lastRunSymbols = symbolsDone
       this.status.lastRunBars = barsSaved
       this.scheduleNext()
       const secs = ((Date.now() - started) / 1000).toFixed(1)
-      console.log(`[AutoRefresh] Checked ${symbolsDone} symbol(s) against the broker in ${secs}s — ${barsChanged} bar(s) corrected${full ? ' (full day)' : ''}`)
+      const stopped = next < symbols.length ? ` — stopped early for a history download (${symbols.length - next} left)` : ''
+      console.log(`[AutoRefresh] Checked ${symbolsDone} symbol(s) against the broker in ${secs}s — ${barsChanged} bar(s) corrected${full ? ' (full day)' : ''}${stopped}`)
       this.publish()
     }
+    return next >= symbols.length
   }
 
   private lastPublishAt = 0

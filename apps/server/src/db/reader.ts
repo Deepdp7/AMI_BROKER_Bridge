@@ -33,6 +33,10 @@ const gapPairs = db.prepare(
 const bounds = db.prepare('SELECT MIN(ts) AS first, MAX(ts) AS last FROM bars WHERE tid = ? AND ts >= ? AND ts <= ?')
 const rangeRows = db.prepare('SELECT ts, open, high, low, close, volume FROM bars WHERE tid = ? AND ts >= ? ORDER BY ts')
 const hiLo = db.prepare('SELECT MAX(high) AS hi, MIN(low) AS lo FROM bars WHERE tid = ? AND ts >= ?')
+// Days (IST day number) with at least one bar, per ticker: data health in Symbol Setup
+const dayRows = db.prepare(
+  'SELECT t.name AS ticker, (b.ts + 19800) / 86400 AS d, COUNT(*) AS n FROM bars b JOIN tickers t ON t.id = b.tid ' +
+  'WHERE b.ts >= ? GROUP BY b.tid, d')
 
 const ops = {
   csv({ ticker, since, limit }) {
@@ -77,6 +81,22 @@ const ops = {
     const r = hiLo.get(t.id, Math.floor(fromMs / 1000))
     return { hi: r.hi == null ? null : r.hi / S, lo: r.lo == null ? null : r.lo / S }
   },
+  // A consistent, compacted copy of the whole database (Settings → Backup), made on this
+  // read-only connection so the engine keeps writing meanwhile
+  backupTo({ path }) {
+    db.exec("VACUUM INTO '" + String(path).replace(/'/g, "''") + "'")
+    return true
+  },
+  // Per ticker: the IST day numbers that have bars, and the bar count, since fromSec
+  dayCounts({ fromSec }) {
+    const out = {}
+    for (const r of dayRows.iterate(fromSec)) {
+      const e = out[r.ticker] || (out[r.ticker] = { days: [], bars: 0 })
+      e.days.push(r.d)
+      e.bars += r.n
+    }
+    return out
+  },
 }
 
 parentPort.on('message', ({ id, op, args }) => {
@@ -88,7 +108,7 @@ parentPort.on('message', ({ id, op, args }) => {
 })
 `
 
-type Op = 'csv' | 'gaps' | 'candles' | 'hiLo'
+type Op = 'csv' | 'gaps' | 'candles' | 'hiLo' | 'dayCounts' | 'backupTo'
 interface Reader { worker: Worker; pending: Map<number, { resolve: (v: any) => void; reject: (e: Error) => void }> }
 
 const READERS = 2
@@ -150,4 +170,14 @@ export function readCandles(ticker: string, fromMs: number, bucketMs: number, or
 
 export function readHighLow(ticker: string, fromMs: number) {
   return call<{ hi: number | null; lo: number | null }>('hiLo', { ticker, fromMs })
+}
+
+/** Writes a consistent copy of the database to `path` (which must not exist yet) */
+export function backupDatabaseTo(path: string) {
+  return call<boolean>('backupTo', { path })
+}
+
+/** Per ticker, the IST day numbers (days since 1970 in IST) that have bars since fromSec */
+export function readDayCounts(fromSec: number) {
+  return call<Record<string, { days: number[]; bars: number }>>('dayCounts', { fromSec })
 }

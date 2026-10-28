@@ -117,6 +117,8 @@ fn spawn_backend(exe: &PathBuf, secret_key: &str) -> std::io::Result<Child> {
     cmd.env("DATABRIDGE_PARENT_PID", std::process::id().to_string());
     // Encrypts broker credentials in the database; empty = no key, the engine stores them plain
     cmd.env("DATABRIDGE_SECRET_KEY", secret_key);
+    // The engine may exit to restart itself (restore from a backup): this supervisor starts it again
+    cmd.env("DATABRIDGE_SUPERVISED", "1");
     cmd.stdin(Stdio::null()).spawn()
 }
 

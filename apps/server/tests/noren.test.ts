@@ -5,6 +5,8 @@ import { parseNorenInstruments, norenExpiry } from '../src/brokers/adapters/nore
 import { parseNorenCandles, parseNorenTime, norenError, norenBody, norenFeedTimeMs } from '../src/brokers/adapters/noren/NorenAdapter'
 import { FlattradeAdapter, flattradeMaster } from '../src/brokers/adapters/flattrade/FlattradeAdapter'
 import { ShoonyaAdapter, shoonyaMaster } from '../src/brokers/adapters/shoonya/ShoonyaAdapter'
+import { ZebuAdapter, zebuMaster } from '../src/brokers/adapters/zebu/ZebuAdapter'
+import { TradeSmartAdapter } from '../src/brokers/adapters/tradesmart/TradeSmartAdapter'
 import { unzipFirstFile } from '../src/lib/unzip'
 import { brokerLoginUrl } from '../src/brokers/brokerAuth'
 
@@ -235,6 +237,51 @@ describe('Noren login', () => {
   it('builds the login pages', async () => {
     expect(await brokerLoginUrl('flattrade', 'flattrade-1', { apiKey: 'KEY 1', apiSecret: 's' })).toBe('https://auth.flattrade.in/?app_key=KEY%201')
     expect(await brokerLoginUrl('shoonya', 'shoonya-1', { apiKey: 'FA12345_U', apiSecret: 's' })).toBe('https://api.shoonya.com/OAuthlogin/authorize/oauth?client_id=FA12345_U')
+    expect(await brokerLoginUrl('zebu', 'zebu-1', { apiKey: 'Z56004_U', apiSecret: 's' })).toBe('https://go.mynt.in/OAuthlogin/authorize/oauth?client_id=Z56004_U')
+    expect(await brokerLoginUrl('tradesmart', 'tradesmart-1', { apiKey: 'APP1', apiSecret: 's' })).toBe('https://v2api.tradesmartonline.in/OAuthlogin/authorize/oauth?client_id=APP1')
+  })
+
+  it.each([
+    ['Zebu', () => new ZebuAdapter(), 'https://go.mynt.in/NorenWClientAPI/GenAcsTok'],
+    ['TradeSmart', () => new TradeSmartAdapter(), 'https://v2api.tradesmartonline.in/NorenWClientAPIv2/GenAcsTok'],
+  ])('%s: exchanges the code through its GenAcsTok, using the typed user ID when the answer has none', async (_name, make, tokenUrl) => {
+    let called = '', body = ''
+    vi.stubGlobal('fetch', vi.fn(async (url: string, init: any) => {
+      if (url.endsWith('/GenAcsTok')) {
+        called = url; body = init.body
+        return new Response(JSON.stringify({ stat: 'Ok', access_token: 'tok' }), { status: 200 })
+      }
+      throw new Error('offline')
+    }))
+    const a: any = make()
+    a.startFeed = () => {}
+    expect(await a.connect({ apiKey: 'CID_U', apiSecret: 'SEC', requestToken: 'abc', clientId: 'z56004' })).toMatchObject({ accountId: 'Z56004', accessToken: 'tok' })
+    await a.disconnect()
+    expect(called).toBe(tokenUrl)
+    expect(body).toBe(`jData=${JSON.stringify({ code: 'abc', checksum: sha256('CID_USECabc') })}`)
+  })
+
+  it('a refused code says so in plain words (the real "no data" answer)', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ stat: 'Not_Ok', request_time: '08:08:55 28-10-2026', emsg: 'Error Occurred : 5 "no data"' }), { status: 200 })))
+    const z: any = new ZebuAdapter()
+    z.startFeed = () => {}
+    await expect(z.connect({ apiKey: 'CID_U', apiSecret: 'SEC', requestToken: 'used' })).rejects.toThrow(/Zebu login failed: the Client ID, Secret code or login code was not accepted/)
+  })
+
+  it('Zebu sends the token as a Bearer header on history requests too (no jKey)', async () => {
+    zebuMaster.setRecords(parseNorenInstruments(SHOONYA_NSE))
+    const seen: any[] = []
+    vi.stubGlobal('fetch', vi.fn(async (url: string, init: any) => {
+      seen.push({ url, init })
+      return new Response(JSON.stringify([{ stat: 'Ok', time: '27-10-2026 09:15:00', into: '1', inth: '2', intl: '1', intc: '2', intv: '5' }]), { status: 200 })
+    }))
+    const z: any = new ZebuAdapter()
+    z.uid = 'Z56004'; z.accessToken = 'tok'
+    const bars = await z.getHistoricalBars('NSE:TCS', '1m', new Date(Date.parse('2026-10-27T03:00:00Z')), new Date(Date.parse('2026-10-27T10:00:00Z')))
+    expect(bars).toHaveLength(1)
+    expect(seen[0].url).toBe('https://go.mynt.in/NorenWClientAPI/TPSeries')
+    expect(seen[0].init.headers.Authorization).toBe('Bearer tok')
+    expect(seen[0].init.body).not.toContain('jKey')
   })
 
   it('exchanges the Flattrade code for a token and the client id (key + code + secret)', async () => {

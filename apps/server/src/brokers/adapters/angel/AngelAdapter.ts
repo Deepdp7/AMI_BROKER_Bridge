@@ -118,6 +118,8 @@ interface AngelSession { jwt: string; feedToken: string; refreshToken: string; c
 export class AngelAdapter extends ListedBrokerAdapter {
   /** ONE_MINUTE candles: at most 30 days per request */
   readonly maxIntradayHistoryDays = 28
+  /** History requests per minute allowed right now (the download queue picks the fastest broker) */
+  historyRequestsPerMinute() { return historyLimiter.perMinuteBudget }
   protected readonly label = 'Angel'
   protected readonly master = angelMaster
   private apiKey = ''

@@ -8,7 +8,12 @@ const router = Router()
 // GET /api/status/feed — Live per-symbol feed status snapshot
 router.get('/feed', (_req, res) => {
   try {
-    const symbols = liveFeed.getFeedStatuses()
+    // Which broker each symbol streams from (Feed Status shows it, Broker Connection counts them)
+    const mapped = new Map((stmts.getSymbols.all() as any[]).map(s => [s.amiBrokerTicker, s]))
+    const symbols = liveFeed.getFeedStatuses().map(s => {
+      const m = mapped.get(s.ticker)
+      return m ? { ...s, brokerId: m.brokerId, rawSymbol: m.rawSymbol } : s
+    })
     const coreEngine = liveFeed._getCoreStats()
     res.json({ symbols, coreEngine, timestamp: Date.now() })
   } catch (e) {

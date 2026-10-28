@@ -8,6 +8,8 @@
  *   GET  /api/backfill/status         — all ticker statuses
  *   GET  /api/backfill/status/:ticker — single ticker status
  *   POST /api/backfill/trigger        — manually trigger backfill for a ticker
+ *   POST /api/backfill/pause, /resume, /cancel — the download card's buttons
+ *   POST /api/backfill/restore        — "Download now" for cancelled symbols (Symbol Setup)
  */
 
 import { Router } from 'express'
@@ -16,6 +18,7 @@ import { stmts, getAllSettings } from '../../db'
 import { backfilledTickers } from '../../market/state/backfillState'
 import { clearVerifiedThrough } from '../../market/state/coverageState'
 import { autoRefresh } from '../../market/AutoRefresh'
+import { queueCatchUp } from '../../brokers/BrokerLifecycle'
 
 const router = Router()
 
@@ -27,8 +30,46 @@ router.get('/status', (_req, res) => {
   const statuses = backfillQueue.getAllStatuses()
   res.json({
     queueLength: backfillQueue.getQueueLength(),
+    paused: backfillQueue.isPaused(),
+    // Symbols whose history the user cancelled (Symbol Setup offers "Download now")
+    cancelled: backfillQueue.skippedTickers().length,
+    // Time to finish what's queued, from the last few minutes' real speed (null until known)
+    etaMs: backfillQueue.isPaused() ? null : backfillQueue.estimateRemainingMs(),
     statuses,
   })
+})
+
+/**
+ * POST /api/backfill/pause | /resume | /cancel
+ * Pause keeps the queue (and stays paused across restarts); cancel drops every queued download.
+ * Chunks already being fetched finish either way.
+ */
+router.post('/pause', (_req, res) => {
+  backfillQueue.pause()
+  res.json({ ok: true, paused: true, queueLength: backfillQueue.getQueueLength() })
+})
+
+router.post('/resume', (_req, res) => {
+  backfillQueue.resume()
+  res.json({ ok: true, paused: false, queueLength: backfillQueue.getQueueLength() })
+})
+
+router.post('/cancel', (_req, res) => {
+  const dropped = backfillQueue.getQueueLength()
+  backfillQueue.cancelAll(true)
+  res.json({ ok: true, cancelled: dropped, symbols: backfillQueue.skippedTickers().length, paused: backfillQueue.isPaused() })
+})
+
+/**
+ * POST /api/backfill/restore — "Download now" for symbols whose history was cancelled:
+ * allows them again and queues what's missing (the same check as at startup)
+ */
+router.post('/restore', (_req, res) => {
+  const allowed = backfillQueue.allowHistory()
+  for (const id of new Set((stmts.getSymbols.all() as any[]).map(s => s.brokerId || s.broker_id))) {
+    if (id && id !== 'orphaned') queueCatchUp(id).catch(err => console.error(`[BackfillAPI] Restore for ${id} failed:`, err))
+  }
+  res.json({ ok: true, symbols: allowed.length })
 })
 
 /**
@@ -88,6 +129,8 @@ router.post('/trigger', (req, res) => {
     return res.status(400).json({ error: `Symbol ${upperTicker} has no active broker. Re-add the broker.` })
   }
 
+  // Asked for by hand: also undoes an earlier Cancel for this symbol
+  backfillQueue.allowHistory([upperTicker])
   // Remove from backfilled set so it is eligible for re-download
   backfilledTickers.delete(upperTicker)
   clearVerifiedThrough(upperTicker)
@@ -124,55 +167,64 @@ router.post('/auto', (req, res) => {
   }
 })
 
+/** Re-downloads today's bars (midnight IST → now) for one symbol; a reason when it can't */
+function refreshTodayFor(sym: any, midnightIST: number, nowMs: number): string | null {
+  const ticker = String(sym.amiBrokerTicker || sym.amibroker_ticker).toUpperCase()
+  const brokerId = sym.brokerId || sym.broker_id
+  if (!brokerId || brokerId === 'orphaned') return `Symbol ${ticker} has no active broker.`
+  const brokerToken = sym.rawSymbol || sym.raw_symbol || sym.instrumentId || sym.instrument_id || ticker
+  // Cancel any existing queued tasks for this ticker first, then re-enqueue as a forced gap-fill
+  backfillQueue.cancel(ticker)
+  backfillQueue.enqueueGapFill(ticker, brokerId, brokerToken, midnightIST, nowMs, true)
+  return null
+}
+
 /**
  * POST /api/backfill/today
- * Body: { ticker: string }
- * Force-fetches today's bars for a given ticker, even during live market.
- * Used by the "Refresh Today" button in the UI.
+ * Body: { ticker: string } | { tickers: string[] } | { all: true }
+ * Force-fetches today's bars, even during live market. Used by the "Today" buttons in the UI.
  */
 router.post('/today', async (req, res) => {
-  const { ticker } = req.body as { ticker?: string }
+  const { ticker, tickers, all } = (req.body || {}) as { ticker?: string; tickers?: string[]; all?: boolean }
+
+  const symbols = stmts.getSymbols.all() as any[]
+  const nowMs = Date.now()
+  const nowIST = new Date(nowMs + 5.5 * 3600 * 1000)
+  const midnightIST = Date.UTC(nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate()) - (5.5 * 3600 * 1000)
+  const range = { fromDate: new Date(midnightIST).toISOString().slice(0, 10), toDate: new Date(nowMs).toISOString().slice(0, 10) }
+
+  // Many symbols in one call: Refresh All Today, or a selection in Symbol Setup
+  if (all === true || Array.isArray(tickers)) {
+    const wanted = all === true ? null : new Set(tickers!.map(t => String(t).toUpperCase()))
+    let queued = 0, skipped = 0
+    for (const sym of symbols) {
+      if (wanted && !wanted.has(String(sym.amiBrokerTicker || sym.amibroker_ticker).toUpperCase())) continue
+      if (refreshTodayFor(sym, midnightIST, nowMs)) skipped++
+      else queued++
+    }
+    console.log(`[BackfillAPI] Force today-backfill for ${queued} symbols${skipped ? ` (${skipped} without a broker)` : ''}`)
+    return res.json({ ok: true, queued, skipped, ...range })
+  }
 
   if (!ticker) {
     return res.status(400).json({ error: 'ticker is required' })
   }
 
   const upperTicker = ticker.toUpperCase()
-
-  const symbols = stmts.getSymbols.all() as any[]
-  const sym = symbols.find(
-    s => (s.amiBrokerTicker || s.amibroker_ticker) === upperTicker
-  )
-
+  const sym = symbols.find(s => (s.amiBrokerTicker || s.amibroker_ticker) === upperTicker)
   if (!sym) {
     return res.status(404).json({ error: `Symbol ${upperTicker} not found.` })
   }
 
-  const brokerId = sym.brokerId || sym.broker_id
-  if (!brokerId || brokerId === 'orphaned') {
-    return res.status(400).json({ error: `Symbol ${upperTicker} has no active broker.` })
-  }
-
-  // Build a gap from midnight IST today to now
-  const nowMs = Date.now()
-  const nowIST = new Date(nowMs + 5.5 * 3600 * 1000)
-  const midnightIST = Date.UTC(
-    nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate()
-  ) - (5.5 * 3600 * 1000)
-
-  const brokerToken = sym.rawSymbol || sym.raw_symbol || sym.instrumentId || sym.instrument_id || upperTicker
-  // Cancel any existing queued tasks for this ticker first
-  backfillQueue.cancel(upperTicker)
-  // Re-enqueue as a forced gap-fill for today
-  backfillQueue.enqueueGapFill(upperTicker, brokerId, brokerToken, midnightIST, nowMs, true)
+  const problem = refreshTodayFor(sym, midnightIST, nowMs)
+  if (problem) return res.status(400).json({ error: problem })
 
   console.log(`[BackfillAPI] Force today-backfill for ${upperTicker} from ${new Date(midnightIST).toISOString().slice(0, 16)} IST`)
   return res.json({
     ok: true,
     message: `Force today-backfill triggered for ${upperTicker}`,
     ticker: upperTicker,
-    fromDate: new Date(midnightIST).toISOString().slice(0, 10),
-    toDate: new Date(nowMs).toISOString().slice(0, 10),
+    ...range,
   })
 })
 

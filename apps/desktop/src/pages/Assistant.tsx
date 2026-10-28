@@ -6,6 +6,7 @@ import { BASE_URL } from '../api/apiClient'
 import { toast } from '../components/ui/Toast'
 import { useEngineRefresh } from '../hooks/useApiSync'
 import { MorningBriefPanel } from '../components/assistant/MorningBriefPanel'
+import { getAssistantView, setAssistantView, type AssistantView } from '../lib/assistantView'
 import { SuggestionCards, type Suggestion } from '../components/assistant/SuggestionCards'
 
 interface ChatMessage {
@@ -61,10 +62,7 @@ const SUGGESTIONS = [
 // Survives page switches within the session
 let saved: { messages: ChatMessage[]; conversationId?: string } = { messages: [] }
 
-type View = 'chat' | 'brief'
-let savedView: View = 'chat'
-/** Open the Assistant page on a given tab (used by the "brief ready" notification). */
-export function setAssistantView(v: View) { savedView = v; window.dispatchEvent(new CustomEvent('assistant-view', { detail: v })) }
+type View = AssistantView
 
 export function AssistantPage() {
   const [configured, setConfigured] = useState<boolean | null>(null)
@@ -74,8 +72,8 @@ export function AssistantPage() {
   const [messages, setMessages] = useState<ChatMessage[]>(saved.messages)
   const [scope, setScopeState] = useState<NewsScope>(savedScope)
   const setScope = (v: NewsScope) => { savedScope = v; setScopeState(v) }
-  const [view, setViewState] = useState<View>(savedView)
-  const setView = (v: View) => { savedView = v; setViewState(v) }
+  const [view, setViewState] = useState<View>(getAssistantView)
+  const setView = (v: View) => { setAssistantView(v); setViewState(v) }
   useEffect(() => {
     const on = (e: Event) => setViewState((e as CustomEvent).detail)
     window.addEventListener('assistant-view', on)
@@ -182,7 +180,7 @@ export function AssistantPage() {
   const keyForm = (
     <div className="glass-card" style={{ padding: '1.5rem', maxWidth: 560, margin: '2rem auto', width: 'calc(100% - 3rem)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-        <KeyRound size={18} style={{ color: '#00d4aa' }} />
+        <KeyRound size={18} style={{ color: 'var(--accent)' }} />
         <h2 style={{ margin: 0, fontSize: '1rem', color: '#eceef2' }}>Connect the AI Assistant</h2>
       </div>
       <p style={{ fontSize: '0.82rem', color: '#a1a7b0', lineHeight: 1.6, margin: '0 0 1rem' }}>
@@ -207,8 +205,8 @@ export function AssistantPage() {
   return (
     <div style={{ flex: 1, minHeight: 0, padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', maxWidth: 1000, margin: '0 auto', boxSizing: 'border-box' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', flexShrink: 0 }}>
-        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(0,212,170,0.12)', border: '1px solid rgba(0,212,170,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Sparkles size={20} style={{ color: '#00d4aa' }} />
+        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgb(var(--accent-rgb) / 0.12)', border: '1px solid rgb(var(--accent-rgb) / 0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Sparkles size={20} style={{ color: 'var(--accent)' }} />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: '1.15rem', fontWeight: 700, color: '#eceef2' }}>AI Market Assistant</div>
@@ -217,11 +215,11 @@ export function AssistantPage() {
             <span>Uses your live feed and stored history · technical analysis, not investment advice</span>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 2, background: 'rgba(23,23,23,0.6)', padding: 3, borderRadius: 9, border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ display: 'flex', gap: 2, background: 'rgb(var(--s1-rgb) / 0.6)', padding: 3, borderRadius: 9, border: '1px solid rgba(255,255,255,0.06)' }}>
           {([['chat', 'Chat'], ['brief', 'Pre-market brief']] as const).map(([v, label]) => (
             <button key={v} onClick={() => setView(v)}
               style={{
-                background: view === v ? 'rgba(0,212,170,0.15)' : 'transparent', color: view === v ? '#00d4aa' : '#a1a7b0',
+                background: view === v ? 'rgb(var(--accent-rgb) / 0.15)' : 'transparent', color: view === v ? 'var(--accent)' : '#a1a7b0',
                 border: 'none', borderRadius: 7, padding: '0.35rem 0.75rem', fontSize: '0.78rem', fontWeight: view === v ? 700 : 500, cursor: 'pointer',
               }}>
               {label}
@@ -235,7 +233,7 @@ export function AssistantPage() {
       </div>
 
       {view === 'brief' ? <MorningBriefPanel /> : (<>
-      <div ref={scrollRef} className="ai-chat selectable" style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem', paddingRight: '0.5rem' }}>
+      <div ref={scrollRef} className="ai-chat" style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem', paddingRight: '0.5rem' }}>
         {messages.length === 0 ? (
           <div style={{ margin: 'auto', width: '100%', maxWidth: 760 }}>
             <div style={{ textAlign: 'center', color: '#a1a7b0', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
@@ -245,14 +243,14 @@ export function AssistantPage() {
               {(scope === 'fno' ? FNO_SUGGESTIONS : scope === 'intraday' ? INTRADAY_SUGGESTIONS : SUGGESTIONS).map(({ icon: Icon, text }) => (
                 <button key={text} onClick={() => send(text)} className="glass-card ai-suggestion"
                   style={{ textAlign: 'left', padding: '0.875rem', display: 'flex', gap: '0.625rem', alignItems: 'flex-start', cursor: 'pointer', color: '#d1d5db', fontSize: '0.82rem', border: '1px solid rgba(255,255,255,0.06)' }}>
-                  <Icon size={16} style={{ color: '#00d4aa', flexShrink: 0, marginTop: 1 }} />
+                  <Icon size={16} style={{ color: 'var(--accent)', flexShrink: 0, marginTop: 1 }} />
                   {text}
                 </button>
               ))}
             </div>
           </div>
         ) : messages.map((m, i) => m.role === 'user' ? (
-          <div key={i} style={{ alignSelf: 'flex-end', maxWidth: '75%', background: 'rgba(0,212,170,0.12)', border: '1px solid rgba(0,212,170,0.25)', color: '#eceef2', padding: '0.625rem 0.875rem', borderRadius: '12px 12px 2px 12px', fontSize: '0.88rem', whiteSpace: 'pre-wrap' }}>
+          <div key={i} style={{ alignSelf: 'flex-end', maxWidth: '75%', background: 'rgb(var(--accent-rgb) / 0.12)', border: '1px solid rgb(var(--accent-rgb) / 0.25)', color: '#eceef2', padding: '0.625rem 0.875rem', borderRadius: '12px 12px 2px 12px', fontSize: '0.88rem', whiteSpace: 'pre-wrap' }}>
             {m.text}
           </div>
         ) : (
@@ -282,7 +280,7 @@ export function AssistantPage() {
           {SCOPES.map(sc => (
             <button key={sc.id} onClick={() => setScope(sc.id)} title={sc.hint}
               style={{
-                background: scope === sc.id ? 'rgba(0,212,170,0.15)' : 'transparent', color: scope === sc.id ? '#00d4aa' : '#a1a7b0',
+                background: scope === sc.id ? 'rgb(var(--accent-rgb) / 0.15)' : 'transparent', color: scope === sc.id ? 'var(--accent)' : '#a1a7b0',
                 border: 'none', borderRadius: 7, padding: '0.28rem 0.7rem', fontSize: '0.74rem', fontWeight: scope === sc.id ? 700 : 500, cursor: 'pointer',
                 transition: 'background-color 0.15s, color 0.15s',
               }}>
@@ -317,8 +315,8 @@ export function AssistantPage() {
       </>)}
 
       <style>{`
-        .ai-composer:focus-within { border-color: rgba(0,212,170,0.4) !important; }
-        .ai-suggestion:hover { border-color: rgba(0,212,170,0.35) !important; color: #eceef2 !important; }
+        .ai-composer:focus-within { border-color: rgb(var(--accent-rgb) / 0.4) !important; }
+        .ai-suggestion:hover { border-color: rgb(var(--accent-rgb) / 0.35) !important; color: #eceef2 !important; }
         .ai-md { color: #e1e4e9; font-size: 0.875rem; line-height: 1.65; }
         .ai-md p { margin: 0 0 0.6rem; }
         .ai-md p:last-child { margin-bottom: 0; }

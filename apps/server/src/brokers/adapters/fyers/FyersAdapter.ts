@@ -8,6 +8,30 @@ import path from 'path'
 import readline from 'readline'
 import { FyersHSMClient } from './FyersHSMClient'
 import { RateLimiter } from '../../../lib/RateLimiter'
+import { SEARCH_FILTERS, category, type InstrumentCategory } from '../InstrumentMaster'
+
+/**
+ * A Fyers symbol-list row's category, from its exchange and Fyers' instrument type code
+ * (column 3 of the public lists). Codes checked against the lists themselves: cash market
+ * 0 equity, 9 ETF, 10 index; NSE F&O 11 index futures, 13 stock futures, 14 index options,
+ * 15 stock options; MCX 11 index futures, 14 index options, 30 commodity futures, 31 options
+ * on commodity futures. The symbol's own ending decides when a code is new to us.
+ */
+export function fyersCategory(exchange: string, code: number, id: string): InstrumentCategory {
+  const option = /(CE|PE)$/.test(id)
+  if (exchange === 'NSE' || exchange === 'BSE') return code === 10 || id.endsWith('-INDEX') ? 'INDEX' : 'EQ'
+  if (exchange === 'MCX') {
+    if (code === 11) return 'FUTIDX'
+    if (code === 14) return 'OPTIDX'
+    return option ? 'OPTFUT' : 'FUTCOM'
+  }
+  // NSE F&O
+  if (code === 11 || code === 12) return 'FUTIDX'
+  if (code === 13) return 'FUTSTK'
+  if (code === 14) return 'OPTIDX'
+  if (code === 15) return 'OPTSTK'
+  return option ? 'OPTSTK' : 'FUTSTK'
+}
 
 // Fyers history API, Standard plan (measured 2026-10-25): bursts of 5/s pass, but no more than
 // 50 requests are accepted in any 60 s; past that it answers -360 ("5 requests/second"). Shared
@@ -42,6 +66,8 @@ const MASTER_DOWNLOAD_TIMEOUT_MS = 120_000
 export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
   /** Fyers serves at most 100 days of intraday candles per history request */
   readonly maxIntradayHistoryDays = 95
+  /** History requests per minute allowed right now (the download queue picks the fastest broker) */
+  historyRequestsPerMinute() { return historyLimiter.perMinuteBudget }
   private connected = false
   private accessToken: string = ''
   private appId: string = ''
@@ -386,16 +412,13 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
     const q = query.toLowerCase()
     let results: InstrumentInfo[] = []
     
+    // The app's filter chips ("NFO-12" = stock futures…) name instrument categories, not Fyers'
+    // own type codes, so each row's code is turned into a category first (fyersCategory)
     let exFilter: string | null = null
-    let instTypeFilter: number | null = null
+    let catFilter: InstrumentCategory[] | null = null
     if (exchange && exchange !== 'ALL') {
-      if (exchange.includes('-')) {
-        const parts = exchange.split('-')
-        exFilter = parts[0]
-        instTypeFilter = parseInt(parts[1])
-      } else {
-        exFilter = exchange
-      }
+      exFilter = exchange.split('-')[0]
+      catFilter = SEARCH_FILTERS[exchange] ?? null
     }
 
     const sources = [
@@ -432,22 +455,15 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
              const name = parts[src.nameCol || 1]?.trim() || ''
              if (sym && id) {
                if (sym.toLowerCase().includes(q) || id.toLowerCase().includes(q) || name.toLowerCase().includes(q)) {
-                 const rawInstType = parseInt(parts[2]) || 0
-                 
-                 if (instTypeFilter !== null && rawInstType !== instTypeFilter) continue
-                 
-                 let instType = src.type
+                 const cat = fyersCategory(src.ex, parseInt(parts[2]) || 0, id)
+                 if (catFilter && !catFilter.includes(cat)) continue
                  const cleanId = id.replace(/^[A-Z]+:/, '')
-                 if (src.ex === 'NFO') {
-                   if (cleanId.endsWith('CE') || cleanId.endsWith('PE')) instType = 'OPT'
-                   else instType = 'FUT'
-                 }
-                 
+
                  results.push({
                    instrumentId: id,
                    exchange: src.ex,
                    ticker: src.type === 'EQ' ? sym : cleanId,
-                   instrumentType: instType as any,
+                   instrumentType: category(cat),
                    lotSize: parseInt(parts[3]) || 1,
                    tickSize: parseFloat(parts[4]) || 0.05
                  })
@@ -623,7 +639,8 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
           const tokenStr = parts[12]?.trim();
           
           if (id && tokenStr) {
-            // Only add Future contracts from NSE_FO.csv (ignore Options)
+            // NSE options (~90k) are left out to save memory; the ones you actually add are
+            // looked up when they are subscribed (addOptionsToCache)
             if (src.file === 'NSE_FO.csv' && !id.endsWith('FUT')) {
               continue;
             }
@@ -646,11 +663,35 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
     await this.loadMasterCachePromise;
   }
 
+  /** Finds these NSE option symbols in the F&O list (one pass) and adds them to the live-feed map */
+  private async addOptionsToCache(ids: string[]): Promise<void> {
+    const filePath = path.join(DATA_DIR, 'fyers_master', 'NSE_FO.csv');
+    if (!fs.existsSync(filePath)) return;
+    const wanted = new Set(ids);
+    const rl = readline.createInterface({ input: fs.createReadStream(filePath), crlfDelay: Infinity });
+    for await (const line of rl) {
+      if (!wanted.size) break;
+      const parts = line.split(',');
+      const id = parts[9]?.trim();
+      const token = parts[12]?.trim();
+      if (id && token && wanted.has(id)) {
+        const entry = { id, hsm: `sf|nse_fo|${token}` };
+        // By full symbol only: column 14 is the underlying ("NIFTY"), shared by every contract
+        this.masterCache!.set(id, entry);
+        wanted.delete(id);
+      }
+    }
+    rl.close();
+  }
+
   private async getHsmTokens(tickers: string[]): Promise<string[]> {
     await this.loadMasterCache();
     const results: string[] = [];
     let mapped = 0;
     const unmapped: string[] = [];
+
+    const missingOptions = tickers.filter(t => !this.masterCache!.has(t) && /^NSE:.+\d(CE|PE)$/.test(t));
+    if (missingOptions.length) await this.addOptionsToCache(missingOptions);
 
     for (const t of tickers) {
       const entry = this.masterCache!.get(t);

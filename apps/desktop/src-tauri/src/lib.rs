@@ -1,16 +1,20 @@
 //! DataBridge Pro desktop shell: the window, the tray icon, and the data engine it runs.
 //!
+//!   amibroker.rs        finding AmiBroker anywhere on the PC (remembered), opening / focusing it
+//!   autostart.rs        Start with Windows (tray, hidden window)
 //!   engine.rs           local-api.exe supervisor (start, restart, clean stop)
 //!   secret_key.rs       DPAPI-locked key the engine encrypts broker credentials with
 //!   single_instance.rs  one app per user; a second launch shows the running window
 //!   tray.rs             notification-area menu
-//!   window_chrome.rs    custom title bar support (Windows 11 Snap Layouts)
+//!   window_chrome.rs    custom title bar support (Windows 11 Snap Layouts), no browser menus/keys
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
 use tauri::Manager;
 
+mod amibroker;
+mod autostart;
 mod engine;
 mod secret_key;
 mod single_instance;
@@ -78,10 +82,21 @@ pub fn run() {
     #[cfg(windows)]
     let builder = builder.invoke_handler(tauri::generate_handler![
         restart_backend,
-        window_chrome::set_maximize_button_rect
+        autostart::get_autostart,
+        autostart::set_autostart,
+        amibroker::start_amibroker,
+        amibroker::locate_amibroker,
+        window_chrome::set_maximize_button_rect,
+        window_chrome::open_devtools
     ]);
     #[cfg(not(windows))]
-    let builder = builder.invoke_handler(tauri::generate_handler![restart_backend]);
+    let builder = builder.invoke_handler(tauri::generate_handler![
+        restart_backend,
+        autostart::get_autostart,
+        autostart::set_autostart,
+        amibroker::start_amibroker,
+        amibroker::locate_amibroker
+    ]);
 
     builder
         .setup(move |app| {
@@ -96,6 +111,7 @@ pub fn run() {
             #[cfg(windows)]
             if let Some(window) = app.get_webview_window("main") {
                 window_chrome::install(&window);
+                window_chrome::make_webview_native(&window);
             }
 
             if let Some(listener) = instance_lock {
@@ -109,6 +125,15 @@ pub fn run() {
             }
 
             tray::build(app)?;
+
+            // Find AmiBroker once in the background, so "Open AmiBroker" is instant
+            amibroker::warm_up();
+
+            // The window starts hidden (tauri.conf.json): shown now, unless Windows started the app
+            // at login, which keeps it in the tray until the tray icon or the shortcut is used
+            if !autostart::launched_at_login() {
+                show_main_window(app.handle());
+            }
 
             Ok(())
         })

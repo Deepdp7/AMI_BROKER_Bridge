@@ -1,245 +1,225 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useAppStore } from '../store/appStore'
 import type { BrokerAccount } from '../store/appStore'
 import {
-  Wifi, WifiOff, RefreshCw, AlertCircle, Plus, Trash2,
-  ChevronRight, Shield, Key, Clock, CheckCircle, ExternalLink
+  Wifi, WifiOff, RefreshCw, AlertCircle, Plus, Trash2, ChevronDown, Shield, Key, Clock, CheckCircle,
+  ExternalLink, Copy, Eye, EyeOff, Zap, Link2, Gauge, Sparkles, Lock, ArrowRight,
 } from 'lucide-react'
 import { isApiAvailable, BASE_URL } from '../api/apiClient'
 import { toast } from '../components/ui/Toast'
 import Select from '../components/ui/Select'
 import BrokerLogo from '../components/ui/BrokerLogo'
+import { PageHeader } from '../components/ui/PageHeader'
+import { Dialog, DialogHeader, confirmDialog } from '../components/ui/Dialog'
+import { AnimatedNumber } from '../components/ui/AnimatedNumber'
+import { BROKER_INFO, BROKER_ORDER, SPEED_LABEL, SPEED_COLOR, redirectUrlFor } from '../lib/brokers'
+import { formatAgo } from '../lib/format'
+import { useThrottledSymbols } from '../hooks/useThrottledSymbols'
 
-
-const BROKER_INFO: Record<string, {
-  name: string; tag: string; color: string; description: string; authType: string; apiUrl: string
-  /** Connectable in this version */
-  supported?: boolean
-  /** Where the client creates the API key, shown in the Add Broker dialog */
-  setup?: string
-  keyLabel?: string
-  secretLabel?: string
-}> = {
-  zerodha_kite: {
-    name: 'Zerodha Kite',
-    tag: 'ZK',
-    color: '#387ED1',
-    description: 'Kite Connect v3. 1-minute history (60 days per request) + WebSocket tick stream.',
-    authType: 'Browser login (API Key + Secret)',
-    apiUrl: 'https://kite.trade',
-    supported: true,
-    setup: 'Create an app on developers.kite.trade (the paid Kite Connect plan — the free Personal plan has no market data). Copy its API key and API secret.',
-  },
-  angel_one: {
-    name: 'Angel One', tag: 'AO', color: '#E87722', description: 'Angel One SmartAPI. 1-minute history (30 days per request) + WebSocket 2.0 feed.', authType: 'Browser login (SmartAPI key)', apiUrl: 'https://smartapi.angelone.in',
-    supported: true,
-    setup: 'On smartapi.angelone.in → My Apps, create an app with the redirect URL below and copy its API Key and Secret Key. You log in on Angel One\'s own page; no PIN or TOTP is typed here.',
-    keyLabel: 'API Key', secretLabel: 'Secret Key',
-  },
-  upstox: {
-    name: 'Upstox', tag: 'UP', color: '#6C35DE', description: 'Upstox API v3. 1-minute history since 2022 + market data feed.', authType: 'Browser login (API Key + Secret)', apiUrl: 'https://upstox.com',
-    supported: true,
-    setup: 'On account.upstox.com/developer/apps, create an app with the redirect URL below and copy its API Key and API Secret.',
-  },
-  fyers: {
-    name: 'Fyers', tag: 'FY', color: '#FF6600', description: 'Fyers API v3. 1-minute historical data + tick stream.', authType: 'Browser login (App ID + Secret)', apiUrl: 'https://fyers.in',
-    supported: true,
-    setup: 'Create an app on myapi.fyers.in → Dashboard → Create App. Its App ID (ends in -100) is the API Key, its Secret ID the API Secret.',
-    keyLabel: 'App ID (API Key)', secretLabel: 'Secret ID (API Secret)',
-  },
-  dhan: {
-    name: 'Dhan', tag: 'DH', color: '#0052FF', description: 'DhanHQ v2. 1-minute history (5 years) + live market feed.', authType: 'Browser login (API Key + Secret)', apiUrl: 'https://dhanhq.co',
-    supported: true,
-    setup: 'On web.dhan.co → My Profile → Access DhanHQ APIs, choose "API key" and create one. History and live data need Dhan\'s Data API plan.',
-  },
-  flattrade: {
-    name: 'Flattrade', tag: 'FT', color: '#00A859', description: 'Flattrade Pi API (v2). 1-minute history + live touchline feed.', authType: 'Browser login (API Key + Secret)', apiUrl: 'https://flattrade.in',
-    supported: true,
-    setup: 'On wall.flattrade.in → Pi → API (v2), create an API key with the redirect URL below and your static IP, wait for approval, then copy the API key and secret key.',
-    keyLabel: 'API Key', secretLabel: 'Secret Key',
-  },
-  shoonya: {
-    name: 'Shoonya', tag: 'SH', color: '#1A365D', description: 'Finvasia Shoonya API. 1-minute history + live touchline feed.', authType: 'Browser login (OAuth Client ID + Secret)', apiUrl: 'https://shoonya.com',
-    supported: true,
-    setup: 'On trade.shoonya.com → profile → API Key, set the redirect URL below and register this PC\'s internet (static) IP address (Shoonya refuses API calls from other IPs). Copy the Client ID and Secret Code.',
-    keyLabel: 'Client ID (OAuth)', secretLabel: 'Secret Code',
-  },
+async function openExternal(url: string) {
+  try {
+    const { open } = await import('@tauri-apps/plugin-shell')
+    await open(url)
+  } catch {
+    window.open(url, '_blank')
+  }
 }
 
-function StatusBadge({ status }: { status: string }) {
-  const map: any = {
-    connected: { cls: 'badge-green', label: 'Connected', icon: CheckCircle },
-    reconnecting: { cls: 'badge-amber', label: 'Reconnecting...', icon: RefreshCw },
-    auth_required: { cls: 'badge-red', label: 'Auth Required', icon: AlertCircle },
-    disconnected: { cls: 'badge-gray', label: 'Disconnected', icon: WifiOff },
-    error: { cls: 'badge-red', label: 'Error', icon: AlertCircle },
-  }
-  const { cls, label, icon: Icon } = map[status?.toLowerCase()] || map.disconnected
+/** Opens the broker's login page again (a fresh token for the day) */
+async function startRelogin(broker: BrokerAccount) {
+  const res = await fetch(`${BASE_URL}/brokers/${broker.id}/reauth`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}),
+  })
+  const data = await res.json()
+  if (!res.ok) throw new Error(data.error || 'Re-login failed')
+  // Brokers that log in with their keys alone are already logged in again: no page to open
+  if (data.loginUrl) await openExternal(data.loginUrl)
+  else toast.success('Logged in again', `${BROKER_INFO[broker.brokerType]?.name || 'The broker'} is connected with your saved keys.`)
+}
+
+const STATUS_LOOK: Record<string, { color: string; label: string; icon: React.ElementType }> = {
+  connected: { color: 'var(--good)', label: 'Connected', icon: CheckCircle },
+  reconnecting: { color: '#f59e0b', label: 'Reconnecting…', icon: RefreshCw },
+  auth_required: { color: '#fb923c', label: 'Login needed', icon: AlertCircle },
+  disconnected: { color: '#8b9199', label: 'Disconnected', icon: WifiOff },
+  error: { color: '#f43f5e', label: 'Error', icon: AlertCircle },
+}
+
+/** Five bars for how fast history downloads from a broker */
+export function SpeedMeter({ speed, showLabel = true }: { speed: number; showLabel?: boolean }) {
+  const color = SPEED_COLOR[speed] || '#8b9199'
   return (
-    <span className={`badge ${cls}`} style={{ gap: '0.375rem' }}>
-      <Icon size={11} className={status === 'reconnecting' ? 'animate-spin' : ''} />
-      {label}
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }} aria-label={`History speed: ${SPEED_LABEL[speed]}`}>
+      <span style={{ display: 'inline-flex', alignItems: 'flex-end', gap: 2, height: 12 }}>
+        {[1, 2, 3, 4, 5].map(n => (
+          <span key={n} style={{ width: 4, height: 4 + n * 1.6, borderRadius: 1.5, background: n <= speed ? color : 'rgba(255,255,255,0.1)', boxShadow: n <= speed ? `0 0 6px ${color}55` : 'none', transition: 'background .3s' }} />
+        ))}
+      </span>
+      {showLabel && <span style={{ fontSize: '0.72rem', fontWeight: 650, color }}>{SPEED_LABEL[speed]}</span>}
     </span>
   )
 }
 
-function BrokerCard({ broker, onRemove }: { broker: BrokerAccount; onRemove: () => void }) {
+function BrokerCard({ broker, index, symbolCount, onRemove }: { broker: BrokerAccount; index: number; symbolCount: number; onRemove: () => void }) {
   const info = BROKER_INFO[broker.brokerType]
   const [expanded, setExpanded] = useState(false)
   const [reauthing, setReauthing] = useState(false)
-
-  const formatTime = (ms?: number) => {
-    if (!ms) return 'Never'
-    const d = new Date(ms)
-    return d.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
-  }
+  const look = STATUS_LOOK[broker.status?.toLowerCase()] || STATUS_LOOK.disconnected
+  const StatusIcon = look.icon
 
   const handleReAuth = async () => {
     setReauthing(true)
     try {
-      const res = await fetch(`${BASE_URL}/brokers/${broker.id}/reauth`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Re-auth failed')
-      try {
-        const { open } = await import('@tauri-apps/plugin-shell')
-        await open(data.loginUrl)
-      } catch {
-        window.open(data.loginUrl, '_blank')
-      }
-      toast.success('Browser Opened', 'Please log in to complete token refresh.')
+      await startRelogin(broker)
+      if (!info?.direct) toast.success('Browser opened', `Log in to ${info?.name || 'your broker'} there; DataBridge Pro picks up the new login by itself.`)
     } catch (e: any) {
-      toast.error('Re-Login Failed', e.message)
+      toast.error('Re-login failed', e.message)
     } finally {
       setReauthing(false)
     }
   }
 
   return (
-    <div id={`broker-card-${broker.id}`} className="glass-card glass-card-hover" style={{ padding: '1.25rem' }}>
-      {/* Daily Re-Login Banner */}
+    <div id={`broker-card-${broker.id}`} className="glass-card reveal lift" style={{ ['--i' as any]: index + 2, padding: 0, overflow: 'hidden', position: 'relative' }}>
+      {/* Status glow along the top edge */}
+      <span style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${look.color}, transparent)`, opacity: 0.8 }} />
+
       {broker.status === 'auth_required' && (
-        <div style={{
-          background: 'rgba(251,146,60,0.12)',
-          border: '1px solid rgba(251,146,60,0.4)',
-          borderRadius: '0.625rem',
-          padding: '0.875rem 1rem',
-          marginBottom: '1rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '1rem',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-            <AlertCircle size={18} style={{ color: '#fb923c', flexShrink: 0 }} />
-            <div>
-              <div style={{ color: '#fb923c', fontWeight: 700, fontSize: '0.85rem' }}>Daily Re-Login Required</div>
-              <div style={{ color: '#a1a7b0', fontSize: '0.75rem', marginTop: '0.15rem' }}>Tokens expire daily per SEBI rules. Click below to reconnect in 5 seconds.</div>
-            </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.8rem 1.1rem', background: 'linear-gradient(90deg, rgba(251,146,60,0.14), rgba(251,146,60,0.04))', borderBottom: '1px solid rgba(251,146,60,0.25)' }}>
+          <AlertCircle size={18} style={{ color: '#fb923c', flexShrink: 0 }} />
+          <div style={{ flex: 1 }}>
+            <div style={{ color: '#fb923c', fontWeight: 700, fontSize: '0.84rem' }}>Daily login needed</div>
+            <div style={{ color: '#a1a7b0', fontSize: '0.74rem', marginTop: 2 }}>Broker logins expire every day (SEBI rule). It takes a few seconds.</div>
           </div>
           <button
             id={`reauth-broker-${broker.id}`}
             onClick={handleReAuth}
             disabled={reauthing}
-            style={{
-              background: 'linear-gradient(135deg, #fb923c, #f97316)',
-              border: 'none',
-              borderRadius: '0.5rem',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: '0.8rem',
-              padding: '0.5rem 1rem',
-              cursor: reauthing ? 'not-allowed' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.375rem',
-              whiteSpace: 'nowrap',
-              opacity: reauthing ? 0.7 : 1,
-              boxShadow: '0 0 12px rgba(251,146,60,0.4)',
-            }}
+            className="btn-primary"
+            style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)', color: '#fff', padding: '0.45rem 0.9rem', fontSize: '0.78rem', boxShadow: '0 0 14px rgba(251,146,60,0.35)' }}
           >
             {reauthing ? <RefreshCw size={13} className="animate-spin" /> : <ExternalLink size={13} />}
-            {reauthing ? 'Opening...' : '🔐 Re-Login Now'}
+            {reauthing ? 'Opening…' : 'Log in now'}
           </button>
         </div>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div style={{ display: 'flex', gap: '0.875rem', alignItems: 'flex-start' }}>
-          <BrokerLogo brokerType={broker.brokerType} size={44} />
-          <div>
-            <div style={{ fontWeight: 600, color: '#eceef2', marginBottom: '0.25rem' }}>{info.name}</div>
-            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-              <span className="status-dot" style={{
-                background: broker.status === 'connected' ? '#00d4aa' : broker.status === 'reconnecting' ? '#f59e0b' : '#f43f5e',
-                width: 8, height: 8,
-                boxShadow: broker.status === 'connected' ? '0 0 8px rgba(0,212,170,0.8)' : undefined,
-                animation: broker.status === 'connected' ? 'pulse-green 2s infinite' : undefined,
-              }} />
-              <StatusBadge status={broker.status} />
+      <div style={{ padding: '1.1rem 1.2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
+          <span style={{ position: 'relative', display: 'inline-flex', borderRadius: 14, boxShadow: `0 0 0 2px ${look.color}55, 0 0 22px ${look.color}30` }}>
+            <BrokerLogo brokerType={broker.brokerType} size={50} />
+            <span className={broker.status === 'connected' ? 'breathe' : ''} style={{ position: 'absolute', right: -3, bottom: -3, width: 13, height: 13, borderRadius: '50%', background: look.color, border: '2px solid rgb(var(--s2-rgb))', boxShadow: `0 0 8px ${look.color}` }} />
+          </span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontWeight: 700, fontSize: '1rem', color: '#eceef2' }}>{info?.name || broker.label}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4, fontSize: '0.76rem', color: look.color, fontWeight: 600 }}>
+              <StatusIcon size={12} className={broker.status === 'reconnecting' ? 'animate-spin' : ''} />
+              {look.label}
+              {broker.accountId && <span style={{ color: '#6b727c', fontWeight: 500 }}>· {broker.accountId}</span>}
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button
-            id={`expand-broker-${broker.id}`}
-            onClick={() => setExpanded(!expanded)}
-            className="btn-secondary"
-            style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem' }}
-          >
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem', marginTop: '1rem' }}>
+          {[
+            { icon: Link2, label: 'Symbols', value: <AnimatedNumber value={symbolCount} /> },
+            { icon: Clock, label: 'Last login', value: broker.lastConnectedAt ? formatAgo(broker.lastConnectedAt) : 'Never' },
+            { icon: Gauge, label: 'History speed', value: info ? <SpeedMeter speed={info.speed} /> : '—' },
+          ].map(({ icon: Icon, label, value }) => (
+            <div key={label} style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 10, padding: '0.55rem 0.65rem', minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.64rem', color: '#6b727c', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 650 }}>
+                <Icon size={11} /> {label}
+              </div>
+              <div style={{ marginTop: 4, fontSize: '0.86rem', color: '#eceef2', fontWeight: 650, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{value}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="db-collapse" data-open={expanded}>
+          <div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginTop: '0.75rem' }}>
+              {[
+                { icon: Key, label: 'Account ID', value: broker.accountId || 'Shown after login' },
+                { icon: Shield, label: 'Login method', value: info?.authType || '—' },
+                { icon: Clock, label: 'Last connected', value: broker.lastConnectedAt ? new Date(broker.lastConnectedAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : 'Never' },
+                { icon: Zap, label: 'History', value: info?.speedNote || '—' },
+              ].map(({ icon: Icon, label, value }) => (
+                <div key={label} style={{ background: 'rgb(var(--s0-rgb) / 0.5)', borderRadius: 10, padding: '0.6rem 0.7rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#6b727c', fontSize: '0.68rem', marginBottom: 4 }}><Icon size={11} />{label}</div>
+                  <div style={{ color: '#d1d5db', fontSize: '0.76rem', lineHeight: 1.45 }}>{value}</div>
+                </div>
+              ))}
+            </div>
+            {info?.apiUrl && (
+              <button className="icon-btn" style={{ marginTop: '0.6rem' }} onClick={() => openExternal(info.apiUrl)}>
+                <ExternalLink size={12} /> {info.name} API website
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '0.45rem', marginTop: '0.9rem', alignItems: 'center' }}>
+          <button id={`expand-broker-${broker.id}`} onClick={() => setExpanded(!expanded)} className="icon-btn" data-on={expanded} aria-expanded={expanded}>
             Details
-            <ChevronRight size={13} style={{ transform: expanded ? 'rotate(90deg)' : 'none', transition: '0.2s' }} />
+            <ChevronDown size={13} style={{ transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform .3s cubic-bezier(.34,1.56,.64,1)' }} />
           </button>
+          {broker.status !== 'auth_required' && (
+            <button className="icon-btn" onClick={handleReAuth} disabled={reauthing} title="Open the broker's login page to get a fresh login">
+              {reauthing ? <RefreshCw size={12} className="animate-spin" /> : <RefreshCw size={12} />} Log in again
+            </button>
+          )}
           <button
             id={`remove-broker-${broker.id}`}
             onClick={onRemove}
-            className="btn-danger"
-            style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem' }}
+            className="icon-btn remove-btn"
+            style={{ marginLeft: 'auto' }}
+            title="Remove this broker"
+            aria-label={`Remove ${info?.name || 'broker'}`}
           >
             <Trash2 size={13} />
           </button>
         </div>
       </div>
-
-      {expanded && (
-        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
-          {[
-            { icon: Key, label: 'Account ID', value: broker.accountId || 'N/A' },
-            { icon: Clock, label: 'Last Connected', value: formatTime(broker.lastConnectedAt) },
-            { icon: Shield, label: 'Auth Method', value: info.authType },
-          ].map(({ icon: Icon, label, value }) => (
-            <div key={label} style={{ background: 'rgba(23,23,23,0.4)', borderRadius: '0.5rem', padding: '0.75rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: '#8b9199', fontSize: '0.72rem', marginBottom: '0.375rem' }}>
-                <Icon size={11} />
-                {label}
-              </div>
-              <div style={{ color: '#eceef2', fontSize: '0.8rem', fontWeight: 500, fontFamily: 'JetBrains Mono, monospace' }}>{value}</div>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   )
 }
 
-function AddBrokerModal({ onClose }: { onClose: () => void }) {
-  const { addBroker } = useAppStore()
-  const [selectedBrokerType, setSelectedBrokerType] = useState('zerodha_kite')
+const STEPS = ['Keys', 'Log in', 'Done']
+
+function AddBrokerModal({ open, initialType, onClose }: { open: boolean; initialType: string; onClose: () => void }) {
+  const addBroker = useAppStore(s => s.addBroker)
+  const [selectedBrokerType, setSelectedBrokerType] = useState(initialType)
   const [apiKey, setApiKey] = useState('')
   const [apiSecret, setApiSecret] = useState('')
   const [clientId, setClientId] = useState('')
+  const [showSecret, setShowSecret] = useState(false)
   const [step, setStep] = useState<'credentials' | 'authenticating' | 'success'>('credentials')
-  const info = BROKER_INFO[selectedBrokerType]
   const [pastedUrl, setPastedUrl] = useState('')
-  const needsClientId = selectedBrokerType === 'dhan' || selectedBrokerType === 'shoonya'
-  const clientIdField = selectedBrokerType === 'shoonya'
-    ? { label: 'Shoonya User ID', placeholder: 'Your Shoonya login ID, e.g. FA12345' }
-    : { label: 'Dhan Client ID', placeholder: '10-digit Client ID from your Dhan profile' }
+  const [copied, setCopied] = useState(false)
+  const timers = useRef<{ poll?: ReturnType<typeof setInterval>; stop?: ReturnType<typeof setTimeout> }>({})
+  const info = BROKER_INFO[selectedBrokerType]
+  const clientIdField = info?.userId
+  const needsClientId = !!clientIdField
+  const redirectUrl = redirectUrlFor(selectedBrokerType)
 
-  // Shoonya may show its own page after login instead of returning here: the code in that
+  const stopPolling = () => {
+    if (timers.current.poll) clearInterval(timers.current.poll)
+    if (timers.current.stop) clearTimeout(timers.current.stop)
+    timers.current = {}
+  }
+  useEffect(() => stopPolling, [])
+
+  // Fresh form each time it opens
+  useEffect(() => {
+    if (!open) return
+    setSelectedBrokerType(initialType)
+    setApiKey(''); setApiSecret(''); setClientId(''); setPastedUrl(''); setShowSecret(false)
+    setStep('credentials')
+  }, [open, initialType])
+
+  const close = () => { stopPolling(); onClose() }
+
+  // Shoonya, Zebu and TradeSmart may show their own page after login instead of returning here: the code in that
   // page's address completes the login the same way the redirect would
   const submitPastedUrl = async () => {
     const text = pastedUrl.trim()
@@ -250,308 +230,403 @@ function AddBrokerModal({ onClose }: { onClose: () => void }) {
     if (!res.ok) toast.error('Login Failed', (await res.text()).replace(/<[^>]+>/g, ' ').trim().slice(0, 200))
   }
 
+  const copyRedirect = () => {
+    navigator.clipboard?.writeText(redirectUrl).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1800) }).catch(() => {})
+  }
+
   const handleConnect = async () => {
     setStep('authenticating')
     try {
-      if (await isApiAvailable()) {
-        const response = await fetch(`${BASE_URL}/brokers`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            brokerType: selectedBrokerType,
-            label: BROKER_INFO[selectedBrokerType].name,
-            apiKey,
-            apiSecret,
-            clientId: needsClientId ? clientId.trim() : undefined,
-          })
-        })
-        if (!response.ok) {
-          const err = await response.json()
-          throw new Error(err.error || 'Failed to initiate connection')
-        }
-        
-        const { broker, loginUrl } = await response.json()
-        addBroker(broker)
-        
-        // Open the login URL in the user's default browser using Tauri shell plugin
-        // Since we are in the browser context, we can just use window.open if Tauri plugin is not available
-        try {
-          const { open } = await import('@tauri-apps/plugin-shell')
-          await open(loginUrl)
-        } catch (e) {
-          window.open(loginUrl, '_blank')
-        }
+      if (!(await isApiAvailable())) throw new Error('API Offline')
+      const response = await fetch(`${BASE_URL}/brokers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          brokerType: selectedBrokerType,
+          label: BROKER_INFO[selectedBrokerType].name,
+          apiKey,
+          apiSecret,
+          clientId: needsClientId ? clientId.trim() : undefined,
+        }),
+      })
+      if (!response.ok) {
+        const err = await response.json()
+        throw new Error(err.error || 'Failed to initiate connection')
+      }
+      const { broker, loginUrl } = await response.json()
+      addBroker(broker)
+      // Brokers that log in with their keys alone are connected already
+      if (!loginUrl) {
+        setStep('success')
+        setTimeout(() => onClose(), 1800)
+        return
+      }
+      await openExternal(loginUrl)
 
-        // Start polling for connection success
-        const pollInterval = setInterval(async () => {
-          // Check if it's connected now
-          const res = await fetch(`${BASE_URL}/brokers`)
-          const brokers = await res.json()
+      // Wait for the login to come back (up to 2 minutes)
+      stopPolling()
+      timers.current.poll = setInterval(async () => {
+        try {
+          const brokers = await (await fetch(`${BASE_URL}/brokers`)).json()
           const b = brokers.find((br: any) => br.id === broker.id)
           if (b && b.status === 'connected') {
-            clearInterval(pollInterval)
+            stopPolling()
             setStep('success')
-            setTimeout(() => onClose(), 1500)
+            setTimeout(() => onClose(), 1800)
           } else if (b && b.status === 'error') {
-            clearInterval(pollInterval)
+            stopPolling()
             setStep('credentials')
             toast.error('Authentication Failed', 'Check your credentials')
           }
-        }, 2000)
-
-        // Stop polling after 2 minutes
-        setTimeout(() => clearInterval(pollInterval), 120000)
-
-      } else {
-        throw new Error('API Offline')
-      }
+        } catch { /* engine busy; try again */ }
+      }, 2000)
+      timers.current.stop = setTimeout(stopPolling, 120000)
     } catch (e: any) {
       toast.error('Connection Failed', e.message)
       setStep('credentials')
     }
   }
 
-  return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 100,
-      background: 'rgba(14,14,14, 0.85)',
-      backdropFilter: 'blur(8px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-    }} onClick={onClose}>
-      <div
-        className="glass-card animate-fade-in"
-        style={{ width: '440px', padding: '1.75rem', maxWidth: '90vw' }}
-        onClick={e => e.stopPropagation()}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-          <div>
-            <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#eceef2', margin: 0 }}>Add Broker</h2>
-            <p style={{ fontSize: '0.78rem', color: '#8b9199', margin: '0.25rem 0 0' }}>Configure Automatic Connection</p>
-          </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#8b9199', cursor: 'pointer', padding: '0.25rem' }}>✕</button>
-        </div>
+  const stepIndex = step === 'credentials' ? 0 : step === 'authenticating' ? 1 : 2
+  const label = { fontSize: '0.76rem', color: '#a1a7b0', display: 'block', marginBottom: '0.35rem', fontWeight: 600 } as const
 
+  return (
+    <Dialog open={open} onClose={close} width={480} label="Add broker">
+      <DialogHeader
+        title="Connect a broker"
+        subtitle="Your keys stay on this PC, encrypted for your Windows account."
+        icon={<span className="page-icon"><Wifi size={18} /></span>}
+        onClose={close}
+      />
+
+      {/* Steps */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '1rem 1.25rem 0' }}>
+        {STEPS.map((s, i) => (
+          <div key={s} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flex: i < STEPS.length - 1 ? 1 : undefined }}>
+            <span style={{
+              width: 22, height: 22, borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 800,
+              background: i <= stepIndex ? 'linear-gradient(135deg,var(--accent),var(--accent-lo))' : 'rgba(255,255,255,0.06)', color: i <= stepIndex ? 'rgb(var(--s0-rgb))' : '#6b727c',
+              boxShadow: i === stepIndex ? '0 0 0 4px rgb(var(--accent-rgb) / 0.15)' : 'none', transition: 'all .35s',
+            }}>{i < stepIndex ? '✓' : i + 1}</span>
+            <span style={{ fontSize: '0.74rem', fontWeight: 650, color: i <= stepIndex ? '#eceef2' : '#6b727c' }}>{s}</span>
+            {i < STEPS.length - 1 && (
+              <span style={{ flex: 1, height: 2, borderRadius: 2, background: 'rgba(255,255,255,0.07)', overflow: 'hidden' }}>
+                <span style={{ display: 'block', height: '100%', width: i < stepIndex ? '100%' : '0%', background: 'var(--accent)', transition: 'width .5s cubic-bezier(.2,.8,.2,1)' }} />
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div style={{ padding: '1.1rem 1.25rem 1.25rem' }}>
         {step === 'credentials' && (
-          <>
-            <div style={{ marginBottom: '1.25rem' }}>
-              <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>Select Broker</label>
+          <div key="cred" className="reveal">
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={label}>Broker</label>
               <Select
                 value={selectedBrokerType}
                 onChange={setSelectedBrokerType}
-                options={Object.entries(BROKER_INFO).filter(([, b]) => b.supported).map(([key, b]) => ({
+                options={BROKER_ORDER.map(key => ({
                   value: key,
-                  label: b.name,
+                  label: BROKER_INFO[key].name,
                   leading: <BrokerLogo brokerType={key} size={24} />,
                 }))}
               />
-              {info?.setup && (
-                <div style={{ fontSize: '0.74rem', color: '#8b9199', lineHeight: 1.5, marginTop: '0.5rem' }}>{info.setup}</div>
+              {info && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8, fontSize: '0.72rem', color: '#8b9199' }}>
+                  <SpeedMeter speed={info.speed} /> <span>{info.speedNote}</span>
+                </div>
               )}
+              {info?.setup && <div style={{ fontSize: '0.74rem', color: '#8b9199', lineHeight: 1.55, marginTop: '0.5rem' }}>{info.setup}</div>}
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.25rem' }}>
-              {needsClientId && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '1rem' }}>
+              {clientIdField && (
                 <div>
-                  <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>{clientIdField.label}</label>
-                  <input
-                    id="broker-client-id"
-                    className="input-field"
-                    placeholder={clientIdField.placeholder}
-                    value={clientId}
-                    onChange={e => setClientId(e.target.value)}
-                    type="text"
-                  />
+                  <label style={label} htmlFor="broker-client-id">{clientIdField.label}</label>
+                  <input id="broker-client-id" className="input-field" placeholder={clientIdField.placeholder} value={clientId} onChange={e => setClientId(e.target.value)} type="text" />
                 </div>
               )}
               <div>
-                <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>{info?.keyLabel || 'API Key'}</label>
-                <input
-                  id="kite-api-key"
-                  className="input-field"
-                  placeholder="xxxxxxxxxxxxxxxx"
-                  value={apiKey}
-                  onChange={e => setApiKey(e.target.value)}
-                  type="text"
-                />
+                <label style={label} htmlFor="kite-api-key">{info?.keyLabel || 'API Key'}</label>
+                <input id="kite-api-key" className="input-field" placeholder="xxxxxxxxxxxxxxxx" value={apiKey} onChange={e => setApiKey(e.target.value)} type="text" autoComplete="off" spellCheck={false} />
               </div>
               <div>
-                <label style={{ fontSize: '0.78rem', color: '#a1a7b0', display: 'block', marginBottom: '0.375rem' }}>{info?.secretLabel || 'API Secret'}</label>
-                <input
-                  id="kite-api-secret"
-                  className="input-field"
-                  placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                  value={apiSecret}
-                  onChange={e => setApiSecret(e.target.value)}
-                  type="password"
-                />
+                <label style={label} htmlFor="kite-api-secret">{info?.secretLabel || 'API Secret'}</label>
+                <div style={{ position: 'relative' }}>
+                  <input id="kite-api-secret" className="input-field" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value={apiSecret} onChange={e => setApiSecret(e.target.value)} type={showSecret ? 'text' : 'password'} autoComplete="off" spellCheck={false} style={{ paddingRight: '2.5rem' }} />
+                  <button type="button" onClick={() => setShowSecret(s => !s)} aria-label={showSecret ? 'Hide secret' : 'Show secret'} style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#8b9199', cursor: 'pointer', display: 'flex' }}>
+                    {showSecret ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div style={{ background: 'rgba(0,168,89,0.1)', borderRadius: '0.5rem', padding: '0.85rem', marginBottom: '1.25rem', border: '1px solid rgba(0,168,89,0.2)' }}>
-              <div style={{ color: '#00d4aa', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.3rem' }}>
-                <CheckCircle size={12} style={{ display: 'inline', marginRight: '4px' }} />
-                Redirect URL (Mandatory)
+            {info?.direct ? (
+              <div style={{ background: 'rgb(var(--accent-rgb) / 0.06)', borderRadius: 10, padding: '0.8rem', marginBottom: '1.1rem', border: '1px solid rgb(var(--accent-rgb) / 0.18)', fontSize: '0.74rem', color: '#a1a7b0', lineHeight: 1.5 }}>
+                No browser login: DataBridge Pro logs in with these keys right away, and again by itself whenever the session ends.
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#a1a7b0', marginBottom: '0.5rem', lineHeight: '1.4' }}>
-                Copy and paste this exact URL into your {BROKER_INFO[selectedBrokerType]?.name || 'broker'} API app settings for automatic login:
+            ) : (
+            <div style={{ background: 'rgb(var(--accent-rgb) / 0.06)', borderRadius: 10, padding: '0.8rem', marginBottom: '1.1rem', border: '1px solid rgb(var(--accent-rgb) / 0.18)' }}>
+              <div style={{ color: 'var(--accent)', fontSize: '0.78rem', fontWeight: 700, marginBottom: '0.3rem', display: 'flex', alignItems: 'center', gap: 5 }}>
+                <Link2 size={12} /> Redirect URL (required)
               </div>
-              <code style={{ display: 'block', background: 'rgba(0,0,0,0.3)', padding: '0.5rem', borderRadius: '4px', color: '#eceef2', fontSize: '0.8rem', userSelect: 'all', wordBreak: 'break-all' }}>
-                http://127.0.0.1:7890/api/callback/{selectedBrokerType}
-              </code>
+              <div style={{ fontSize: '0.73rem', color: '#a1a7b0', marginBottom: '0.5rem', lineHeight: 1.45 }}>
+                Paste this exact address into your {info?.name || 'broker'} API app settings:
+              </div>
+              <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                <code style={{ flex: 1, display: 'block', background: 'rgba(0,0,0,0.35)', padding: '0.5rem 0.6rem', borderRadius: 7, color: '#eceef2', fontSize: '0.76rem', wordBreak: 'break-all' }}>
+                  {redirectUrl}
+                </code>
+                <button type="button" className="icon-btn" data-on={copied} onClick={copyRedirect}>
+                  {copied ? <CheckCircle size={13} /> : <Copy size={13} />} {copied ? 'Copied' : 'Copy'}
+                </button>
+              </div>
             </div>
+            )}
 
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <button onClick={onClose} className="btn-secondary" style={{ flex: 1 }}>Cancel</button>
+            <div style={{ display: 'flex', gap: '0.65rem' }}>
+              <button onClick={close} className="btn-secondary" style={{ flex: 1, justifyContent: 'center' }}>Cancel</button>
               <button
                 id="connect-broker-btn"
                 onClick={handleConnect}
                 className="btn-primary"
-                style={{ flex: 1 }}
+                style={{ flex: 1, justifyContent: 'center' }}
                 disabled={!apiKey || !apiSecret || (needsClientId && !clientId.trim())}
               >
-                <Wifi size={14} />
-                Save & Login
+                <Wifi size={14} /> {info?.direct ? 'Save & connect' : 'Save & log in'}
               </button>
             </div>
-          </>
+          </div>
         )}
 
         {step === 'authenticating' && (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem 1rem', textAlign: 'center' }}>
-            <div className="animate-spin" style={{ color: '#387ED1', marginBottom: '1rem' }}>
-              <RefreshCw size={32} />
+          <div key="auth" className="reveal" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1.5rem 0.5rem 0.5rem', textAlign: 'center' }}>
+            <div style={{ position: 'relative', width: 72, height: 72, marginBottom: '1rem' }}>
+              <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '3px solid rgb(var(--accent-rgb) / 0.12)', borderTopColor: 'var(--accent)', animation: 'spin 1s linear infinite' }} />
+              <span style={{ position: 'absolute', inset: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><BrokerLogo brokerType={selectedBrokerType} size={40} /></span>
             </div>
-            <h3 style={{ color: '#eceef2', margin: '0 0 0.5rem', fontSize: '1.1rem' }}>Waiting for Authentication...</h3>
-            <p style={{ color: '#a1a7b0', fontSize: '0.85rem', margin: 0, lineHeight: 1.5 }}>
-              A browser window has opened.<br />Please log in to your broker account to complete the setup.
+            <h3 style={{ color: '#eceef2', margin: '0 0 0.4rem', fontSize: '1.05rem' }}>Waiting for your login…</h3>
+            <p style={{ color: '#a1a7b0', fontSize: '0.82rem', margin: 0, lineHeight: 1.55 }}>
+              Your browser opened {info?.name || 'the broker'}'s login page.<br />Log in there; this window finishes by itself.
             </p>
-            {selectedBrokerType === 'shoonya' && (
+            {info?.pasteFallback && (
               <div style={{ width: '100%', marginTop: '1.25rem', textAlign: 'left' }}>
                 <div style={{ fontSize: '0.74rem', color: '#8b9199', lineHeight: 1.5, marginBottom: '0.5rem' }}>
-                  Did Shoonya leave you on its own page after logging in? Copy that page's address from the browser and paste it here:
+                  Did {info.name} leave you on its own page after logging in? Copy that page's address from the browser and paste it here:
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <input
-                    id="broker-pasted-url"
-                    className="input-field"
-                    placeholder="https://…?code=…"
-                    value={pastedUrl}
-                    onChange={e => setPastedUrl(e.target.value)}
-                    type="text"
-                  />
+                  <input id="broker-pasted-url" className="input-field" placeholder="https://…?code=…" value={pastedUrl} onChange={e => setPastedUrl(e.target.value)} type="text" />
                   <button className="btn-secondary" onClick={submitPastedUrl} disabled={!pastedUrl.trim()}>Finish</button>
                 </div>
               </div>
             )}
+            <button className="btn-secondary" style={{ marginTop: '1.25rem' }} onClick={() => { stopPolling(); setStep('credentials') }}>Back</button>
           </div>
         )}
 
         {step === 'success' && (
-          <div style={{ textAlign: 'center', padding: '2rem 0' }}>
-            <CheckCircle size={32} style={{ color: '#00d4aa', margin: '0 auto 1rem' }} />
-            <div style={{ color: '#00d4aa', fontWeight: 600 }}>Connected Successfully!</div>
+          <div key="ok" style={{ textAlign: 'center', padding: '1.5rem 0 0.5rem' }}>
+            <svg width="76" height="76" viewBox="0 0 76 76" className="pop-in" style={{ margin: '0 auto', display: 'block' }}>
+              <circle cx="38" cy="38" r="34" fill="rgb(var(--good-rgb) / 0.12)" stroke="var(--good)" strokeWidth="3" />
+              <path d="M24 39 l9 9 l19 -20" fill="none" stroke="var(--good)" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="draw-check" />
+            </svg>
+            <div style={{ color: 'var(--good)', fontWeight: 700, fontSize: '1.05rem', marginTop: '0.9rem' }}>Connected</div>
+            <div style={{ color: '#8b9199', fontSize: '0.8rem', marginTop: 4 }}>{info?.name} is streaming. Add symbols in Symbol Setup.</div>
           </div>
         )}
       </div>
-    </div>
+      <style>{`
+        .draw-check { stroke-dasharray: 48; stroke-dashoffset: 48; animation: drawCheck .5s .2s cubic-bezier(.2,.8,.2,1) forwards; }
+        @keyframes drawCheck { to { stroke-dashoffset: 0; } }
+      `}</style>
+    </Dialog>
   )
 }
 
 export function BrokerConnectionPage() {
-  const { brokers, removeBroker } = useAppStore()
-  const [showModal, setShowModal] = useState(false)
+  const brokers = useAppStore(s => s.brokers)
+  const removeBroker = useAppStore(s => s.removeBroker)
+  const historyUseAllBrokers = useAppStore(s => s.settings.historyUseAllBrokers)
+  // Only counts are shown here: once a second is plenty
+  const symbols = useThrottledSymbols(2000)
+  const [modal, setModal] = useState<{ open: boolean; type: string }>({ open: false, type: 'dhan' })
+  const [showSecurity, setShowSecurity] = useState(false)
+  const added = new Set<string>(brokers.map(b => b.brokerType))
+  // Starts on the fastest broker not added yet
+  const openAdd = (type = BROKER_ORDER.find(t => !added.has(t)) || 'dhan') => setModal({ open: true, type })
+
+  const connected = brokers.filter(b => b.status === 'connected')
+  const needLogin = brokers.filter(b => b.status === 'auth_required')
+  const symbolsPer = useMemo(() => {
+    const m = new Map<string, number>()
+    for (const s of symbols) if (s.brokerId) m.set(s.brokerId, (m.get(s.brokerId) || 0) + 1)
+    return m
+  }, [symbols])
+  const linked = useMemo(() => symbols.filter(s => s.brokerId && brokers.some(b => b.id === s.brokerId)).length, [symbols, brokers])
+  const fastest = connected.map(b => BROKER_INFO[b.brokerType]).filter(Boolean).sort((a, b) => b.speed - a.speed)[0]
+  const sharing = connected.length > 1 && historyUseAllBrokers !== false
+
+  const remove = async (b: BrokerAccount) => {
+    const name = BROKER_INFO[b.brokerType]?.name || b.label
+    const n = symbolsPer.get(b.id) || 0
+    const ok = await confirmDialog({
+      title: `Remove ${name}?`,
+      message: `Its login and keys are deleted from this PC. ${n ? `Your ${n} symbol${n === 1 ? '' : 's'} and all downloaded history stay; they stream again as soon as you connect a broker.` : 'Your symbols and history stay.'}`,
+      confirmLabel: 'Remove broker',
+      tone: 'danger',
+    })
+    if (!ok) return
+    removeBroker(b.id)
+    try {
+      await fetch(`${BASE_URL}/brokers/${b.id}`, { method: 'DELETE' })
+      toast.success(`${name} removed`, undefined, 3000)
+    } catch { /* already gone */ }
+  }
+
+  const reloginAll = async () => {
+    for (const b of needLogin) {
+      try { await startRelogin(b) } catch (e: any) { toast.error('Re-login failed', `${BROKER_INFO[b.brokerType]?.name}: ${e.message}`) }
+    }
+    toast.info('Browser opened', `Log in to ${needLogin.length} broker${needLogin.length === 1 ? '' : 's'}; each one reconnects by itself.`, 5000)
+  }
 
   return (
     <div style={{ width: '100%', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      {showModal && <AddBrokerModal onClose={() => setShowModal(false)} />}
+      <AddBrokerModal open={modal.open} initialType={modal.type} onClose={() => setModal(m => ({ ...m, open: false }))} />
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div>
-          <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#eceef2', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Wifi size={20} style={{ color: '#00d4aa' }} />
-            Broker Connection
-          </h1>
-          <p style={{ fontSize: '0.8rem', color: '#8b9199', margin: '0.25rem 0 0' }}>
-            Manage broker accounts and authentication
-          </p>
-        </div>
-        <button
-          id="add-broker-btn"
-          onClick={() => setShowModal(true)}
-          className="btn-primary"
-        >
-          <Plus size={15} />
-          Add Broker
-        </button>
-      </div>
-
-      {/* Security Notice */}
-      <div style={{
-        background: 'rgba(0,212,170,0.04)',
-        border: '1px solid rgba(0,212,170,0.12)',
-        borderRadius: '0.75rem',
-        padding: '1rem 1.25rem',
-        display: 'flex', gap: '0.75rem', alignItems: 'flex-start'
-      }}>
-        <Shield size={16} style={{ color: '#00d4aa', flexShrink: 0, marginTop: 2 }} />
-        <div>
-          <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#eceef2', marginBottom: '0.25rem' }}>Secure by Design</div>
-          <div style={{ fontSize: '0.75rem', color: '#8b9199', lineHeight: 1.6 }}>
-            All credentials are protected via Windows DPAPI (per-user encryption). Tokens are never stored in plaintext,
-            never logged, and never transmitted outside your machine. DataBridge Pro only connects to the broker's official API endpoints over TLS 1.3.
-          </div>
-        </div>
-      </div>
-
-      {/* Broker Cards */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
-        {brokers.length === 0 ? (
-          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center' }}>
-            <WifiOff size={36} style={{ color: '#575d66', margin: '0 auto 1rem' }} />
-            <div style={{ color: '#8b9199', marginBottom: '1rem' }}>No broker accounts configured</div>
-            <button className="btn-primary" onClick={() => setShowModal(true)}>
-              <Plus size={14} />
-              Add Your First Broker
+      <PageHeader
+        icon={Wifi}
+        title="Broker Connections"
+        subtitle={brokers.length === 0
+          ? 'Connect a broker account to stream prices and download history'
+          : `${connected.length} of ${brokers.length} connected${needLogin.length ? ` · ${needLogin.length} need${needLogin.length === 1 ? 's' : ''} a login` : ''}`}
+        actions={
+          <>
+            {needLogin.length > 1 && (
+              <button className="icon-btn" onClick={reloginAll} style={{ color: '#fb923c', borderColor: 'rgba(251,146,60,0.4)', background: 'rgba(251,146,60,0.1)', height: 38 }}>
+                <ExternalLink size={13} /> Log in to all ({needLogin.length})
+              </button>
+            )}
+            <button id="add-broker-btn" onClick={() => openAdd()} className="btn-primary">
+              <Plus size={15} /> Add Broker
             </button>
-          </div>
-        ) : (
-          brokers.map(b => (
-            <BrokerCard key={b.id} broker={b} onRemove={async () => {
-              removeBroker(b.id)
-              try {
-                await fetch(`http://127.0.0.1:7890/api/brokers/${b.id}`, { method: 'DELETE' })
-                // toast.success('Broker Removed', 'Broker has been successfully removed.')
-              } catch (e: any) {
-                // toast.error('Failed to remove from server', e.message)
-              }
-            }} />
-          ))
-        )}
-      </div>
+          </>
+        }
+      />
 
-      {/* Supported Brokers */}
-      <div>
-        <div style={{ fontSize: '0.75rem', color: '#575d66', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
-          Supported Brokers
-        </div>
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-          {[
-            { name: 'Zerodha Kite', type: 'zerodha_kite', status: 'Available', cls: 'badge-green' },
-            { name: 'Fyers', type: 'fyers', status: 'Available', cls: 'badge-green' },
-            { name: 'Dhan', type: 'dhan', status: 'Available', cls: 'badge-green' },
-            { name: 'Flattrade', type: 'flattrade', status: 'Available', cls: 'badge-green' },
-            { name: 'Shoonya', type: 'shoonya', status: 'Available', cls: 'badge-green' },
-            { name: 'Upstox', type: 'upstox', status: 'Available', cls: 'badge-green' },
-            { name: 'Angel One', type: 'angel_one', status: 'Available', cls: 'badge-green' },
-          ].map(b => (
-            <div key={b.name} className="glass-card" style={{ padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-              <BrokerLogo brokerType={b.type} size={26} />
-              <span style={{ fontSize: '0.8rem', color: '#eceef2', fontWeight: 500 }}>{b.name}</span>
-              <span className={`badge ${b.cls}`} style={{ fontSize: '0.68rem' }}>{b.status}</span>
+      {/* Summary */}
+      {brokers.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '0.9rem' }}>
+          <div className="metric-card reveal" style={{ ['--i' as any]: 1 }}>
+            <div style={{ fontSize: '0.7rem', color: '#8b9199', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 650 }}>Connected</div>
+            <div style={{ fontSize: '1.55rem', fontWeight: 750, color: connected.length ? 'var(--good)' : '#f59e0b', fontFamily: 'JetBrains Mono, monospace', marginTop: 4 }}>
+              <AnimatedNumber value={connected.length} /><span style={{ fontSize: '0.95rem', color: '#6b727c' }}> / {brokers.length}</span>
             </div>
+            <div style={{ fontSize: '0.72rem', color: '#6b727c', marginTop: 2 }}>{needLogin.length ? `${needLogin.length} waiting for today's login` : 'All logins are current'}</div>
+          </div>
+          <div className="metric-card reveal" style={{ ['--i' as any]: 2 }}>
+            <div style={{ fontSize: '0.7rem', color: '#8b9199', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 650 }}>Symbols linked</div>
+            <div style={{ fontSize: '1.55rem', fontWeight: 750, color: '#38bdf8', fontFamily: 'JetBrains Mono, monospace', marginTop: 4 }}>
+              <AnimatedNumber value={linked} />
+            </div>
+            <div style={{ fontSize: '0.72rem', color: '#6b727c', marginTop: 2 }}>{symbols.length - linked > 0 ? `${symbols.length - linked} waiting for a broker` : 'Every symbol has a broker'}</div>
+          </div>
+          <div className="metric-card reveal" style={{ ['--i' as any]: 3 }}>
+            <div style={{ fontSize: '0.7rem', color: '#8b9199', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 650 }}>History downloads</div>
+            <div style={{ marginTop: 8 }}>{fastest ? <SpeedMeter speed={fastest.speed} /> : <span style={{ color: '#6b727c', fontSize: '0.85rem' }}>No broker connected</span>}</div>
+            <div style={{ fontSize: '0.72rem', color: '#6b727c', marginTop: 6 }}>
+              {sharing ? `Shared across ${connected.length} brokers for speed` : fastest ? `From ${fastest.name}` : 'Connect a broker to download'}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Broker cards */}
+      {brokers.length === 0 ? (
+        <div className="glass-card reveal" style={{ ['--i' as any]: 1, padding: '3rem 2rem', textAlign: 'center' }}>
+          <div className="pop-in" style={{ width: 72, height: 72, margin: '0 auto 1rem', borderRadius: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgb(var(--accent-rgb) / 0.08)', border: '1px solid rgb(var(--accent-rgb) / 0.22)', boxShadow: '0 0 40px rgb(var(--accent-rgb) / 0.12)' }}>
+            <WifiOff size={30} color="var(--accent)" />
+          </div>
+          <div style={{ color: '#eceef2', fontWeight: 700, fontSize: '1.05rem' }}>No broker connected yet</div>
+          <div style={{ color: '#8b9199', fontSize: '0.82rem', margin: '0.4rem auto 1.25rem', maxWidth: 420, lineHeight: 1.55 }}>
+            Connect the broker you trade with. For the fastest history downloads, Dhan is recommended.
+          </div>
+          <button className="btn-primary" onClick={() => openAdd()}><Plus size={14} /> Add your first broker</button>
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '1rem', alignItems: 'start' }}>
+          {brokers.map((b, i) => (
+            <BrokerCard key={b.id} broker={b} index={i} symbolCount={symbolsPer.get(b.id) || 0} onRemove={() => remove(b)} />
           ))}
         </div>
+      )}
+
+      {/* Security */}
+      <div className="reveal" style={{ ['--i' as any]: 5, background: 'rgb(var(--accent-rgb) / 0.035)', border: '1px solid rgb(var(--accent-rgb) / 0.12)', borderRadius: 12, padding: '0.75rem 1rem' }}>
+        <button onClick={() => setShowSecurity(s => !s)} style={{ all: 'unset', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.6rem', width: '100%' }} aria-expanded={showSecurity}>
+          <Lock size={15} color="var(--accent)" />
+          <span style={{ fontSize: '0.8rem', fontWeight: 650, color: '#eceef2' }}>Your keys are encrypted on this PC</span>
+          <span style={{ fontSize: '0.74rem', color: '#6b727c' }}>How it works</span>
+          <ChevronDown size={14} color="#8b9199" style={{ marginLeft: 'auto', transform: showSecurity ? 'rotate(180deg)' : 'none', transition: 'transform .3s' }} />
+        </button>
+        <div className="db-collapse" data-open={showSecurity}>
+          <div>
+            <div style={{ fontSize: '0.76rem', color: '#8b9199', lineHeight: 1.6, padding: '0.6rem 0 0 1.6rem' }}>
+              Credentials are protected with Windows DPAPI (encryption tied to your Windows account). Tokens are never stored in plain text and never written to logs.
+              DataBridge Pro talks only to your broker's official API.
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* Gallery */}
+      <div className="reveal" style={{ ['--i' as any]: 6 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.6rem', marginBottom: '0.8rem' }}>
+          <div style={{ fontSize: '0.74rem', color: '#8b9199', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+            {brokers.length ? 'Add another broker' : 'Supported brokers'}
+          </div>
+          <div style={{ fontSize: '0.72rem', color: '#575d66' }}>More brokers connected = faster history downloads</div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: '0.75rem' }}>
+          {BROKER_ORDER.map((type, i) => {
+            const info = BROKER_INFO[type]
+            const isAdded = added.has(type)
+            const live = brokers.some(b => b.brokerType === type && b.status === 'connected')
+            return (
+              <button
+                key={type}
+                onClick={() => isAdded ? document.getElementById(`broker-card-${brokers.find(b => b.brokerType === type)?.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }) : openAdd(type)}
+                className="glass-card lift sheen gallery-card reveal"
+                style={{ ['--i' as any]: i + 7, padding: '0.9rem', textAlign: 'left', cursor: 'pointer', position: 'relative', border: type === 'dhan' ? '1px solid rgb(var(--accent-rgb) / 0.3)' : undefined, color: 'inherit', font: 'inherit' }}
+                title={isAdded ? 'Already added: show it above' : `Connect ${info.name}`}
+              >
+                {type === 'dhan' && (
+                  <span style={{ position: 'absolute', top: 10, right: 10, display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: '0.62rem', fontWeight: 800, color: 'var(--on-accent)', background: 'linear-gradient(135deg,var(--accent),var(--accent-hi2))', padding: '2px 7px', borderRadius: 999, letterSpacing: '0.04em' }}>
+                    <Sparkles size={10} /> RECOMMENDED
+                  </span>
+                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                  <BrokerLogo brokerType={type} size={34} />
+                  <div>
+                    <div style={{ fontSize: '0.86rem', color: '#eceef2', fontWeight: 650 }}>{info.name}</div>
+                    <SpeedMeter speed={info.speed} />
+                  </div>
+                </div>
+                <div style={{ fontSize: '0.72rem', color: '#8b9199', lineHeight: 1.5, marginTop: '0.6rem', minHeight: '2.2em' }}>{info.speedNote}</div>
+                <div style={{ marginTop: '0.6rem', fontSize: '0.74rem', fontWeight: 650, display: 'flex', alignItems: 'center', gap: 5, color: live ? 'var(--good)' : isAdded ? '#fb923c' : '#a1a7b0' }}>
+                  {live ? <><CheckCircle size={13} /> Connected</> : isAdded ? <><AlertCircle size={13} /> Added · needs today's login</> : <>Connect <ArrowRight size={13} className="gallery-arrow" /></>}
+                </div>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+      <style>{`
+        .remove-btn:hover:not(:disabled) { color: #fb7185 !important; border-color: rgba(244,63,94,0.4) !important; background: rgba(244,63,94,0.1) !important; }
+        .gallery-arrow { transition: transform .25s cubic-bezier(.34,1.56,.64,1); }
+        .gallery-card:hover .gallery-arrow { transform: translateX(4px); }
+      `}</style>
     </div>
   )
 }

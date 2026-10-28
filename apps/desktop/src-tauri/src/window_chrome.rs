@@ -9,10 +9,17 @@
 //! we answer HTMAXBUTTON for that rect, and turn the resulting non-client clicks back into
 //! a maximize toggle plus hover events the page can style against (once the OS owns the
 //! cursor over that button the webview no longer gets mouse events there).
+//!
+//! It also switches off WebView2's browser behaviour (see `make_webview_native`).
 
 use std::sync::atomic::{AtomicBool, AtomicI32, Ordering};
 
 use tauri::{Emitter, WebviewWindow};
+use webview2_com::Microsoft::Web::WebView2::Win32::{
+    ICoreWebView2Controller, ICoreWebView2Settings3, ICoreWebView2Settings4, ICoreWebView2Settings5,
+    ICoreWebView2Settings6,
+};
+use windows::core::Interface;
 use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, POINT, WPARAM};
 use windows::Win32::Graphics::Gdi::ScreenToClient;
 use windows::Win32::UI::Shell::{DefSubclassProc, SetWindowSubclass};
@@ -130,6 +137,61 @@ unsafe extern "system" fn subclass_proc(
 
         _ => DefSubclassProc(hwnd, msg, wparam, lparam),
     }
+}
+
+/// Turns off the parts of WebView2 that make the window act like an Edge tab: its right-click
+/// menu (Back / Reload / Save as / Inspect), the browser shortcut keys (F5, Ctrl+R, Ctrl+F,
+/// Ctrl+P, F12, Ctrl+Shift+I, zoom, …), the "Saved info" and save-password offers, pinch zoom
+/// and swipe back/forward. Editing keys (copy, paste, undo, select all) keep working, and
+/// `nativeFeel.ts` puts a real Windows menu on text fields in place of the browser one.
+///
+/// Tauri's config doesn't expose these switches, so they are set on the WebView2 control
+/// directly. The page's own blocking in `nativeFeel.ts` stays as a second layer.
+pub fn make_webview_native(window: &WebviewWindow) {
+    let result = window.with_webview(|webview| {
+        // SAFETY: the controller belongs to this live webview; these are plain COM setters
+        if let Err(err) = unsafe { apply_native_settings(&webview.controller()) } {
+            log::warn!("webview settings: {err}");
+        }
+    });
+    if let Err(err) = result {
+        log::warn!("webview settings: could not reach the webview: {err}");
+    }
+}
+
+unsafe fn apply_native_settings(controller: &ICoreWebView2Controller) -> windows::core::Result<()> {
+    let settings = controller.CoreWebView2()?.Settings()?;
+    settings.SetAreDefaultContextMenusEnabled(false)?;
+    settings.SetIsStatusBarEnabled(false)?;
+    settings.SetIsZoomControlEnabled(false)?;
+    // Dev builds keep the inspector (Ctrl+Shift+F12, see `open_devtools`)
+    if !cfg!(debug_assertions) {
+        settings.SetAreDevToolsEnabled(false)?;
+    }
+    // Older WebView2 runtimes lack the newer settings; each one is applied when present
+    if let Ok(s) = settings.cast::<ICoreWebView2Settings3>() {
+        s.SetAreBrowserAcceleratorKeysEnabled(false)?;
+    }
+    if let Ok(s) = settings.cast::<ICoreWebView2Settings4>() {
+        s.SetIsGeneralAutofillEnabled(false)?;
+        s.SetIsPasswordAutosaveEnabled(false)?;
+    }
+    if let Ok(s) = settings.cast::<ICoreWebView2Settings5>() {
+        s.SetIsPinchZoomEnabled(false)?;
+    }
+    if let Ok(s) = settings.cast::<ICoreWebView2Settings6>() {
+        s.SetIsSwipeNavigationEnabled(false)?;
+    }
+    Ok(())
+}
+
+/// Opens the inspector in dev builds (Ctrl+Shift+F12). Release builds have no inspector.
+#[tauri::command]
+pub fn open_devtools(window: WebviewWindow) {
+    #[cfg(debug_assertions)]
+    window.open_devtools();
+    #[cfg(not(debug_assertions))]
+    let _ = window;
 }
 
 /// Installs the Snap Layouts hit-test hook on `window`.

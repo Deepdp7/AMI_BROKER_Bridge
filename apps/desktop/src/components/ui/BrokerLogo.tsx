@@ -5,6 +5,7 @@ import upstox from '../../assets/brokers/upstox.png'
 import angelOne from '../../assets/brokers/angel_one.png'
 import flattrade from '../../assets/brokers/flattrade.png'
 import shoonya from '../../assets/brokers/shoonya.png'
+import zebu from '../../assets/brokers/zebu.png'
 
 /**
  * Broker marks, taken from each broker's own website icon. `light` ones have a transparent
@@ -19,6 +20,7 @@ const LOGOS: Record<string, { src: string; light: boolean }> = {
   dhan: { src: dhan, light: false },
   shoonya: { src: shoonya, light: false },
   upstox: { src: upstox, light: false },
+  zebu: { src: zebu, light: true },
 }
 
 export const BROKER_NAMES: Record<string, string> = {
@@ -29,6 +31,13 @@ export const BROKER_NAMES: Record<string, string> = {
   upstox: 'Upstox',
   flattrade: 'Flattrade',
   shoonya: 'Shoonya',
+  zebu: 'Zebu',
+  tradesmart: 'TradeSmart',
+  compositedge: 'Compositedge',
+  fivepaisa_xts: '5paisa (XTS)',
+  jainam: 'Jainam',
+  ibulls: 'IndiaBulls',
+  rmoney: 'Rmoney',
 }
 
 interface Props {

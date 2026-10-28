@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./themes.css";
 
 @theme {
   /* ===== Color Palette ===== */
@@ -9,10 +10,10 @@
   --color-navy-600: #2c2c2c;
   --color-navy-500: #3a3a3a;
 
-  --color-electric-500: #00d4aa;
-  --color-electric-400: #00f5c4;
-  --color-electric-300: #4dffd8;
-  --color-electric-600: #00b38c;
+  --color-electric-500: var(--accent);
+  --color-electric-400: var(--accent-hi);
+  --color-electric-300: var(--accent-hi2);
+  --color-electric-600: var(--accent-lo);
 
   --color-amber-500: #f59e0b;
   --color-amber-400: #fbbf24;
@@ -39,7 +40,7 @@
   --radius-2xl: 1.25rem;
 
   /* ===== Shadows ===== */
-  --shadow-glow-green: 0 0 20px rgba(0, 212, 170, 0.3);
+  --shadow-glow-green: 0 0 20px rgb(var(--accent-rgb) / 0.3);
   --shadow-glow-amber: 0 0 20px rgba(245, 158, 11, 0.3);
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
@@ -62,18 +63,52 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
-  /* Desktop-app feel: page text doesn't highlight on drag; inputs and .selectable areas still do */
+  /* Desktop-app feel: no page text can be selected or copied with the mouse; only text boxes,
+     where typing needs it. Copy buttons put text on the clipboard instead. */
   user-select: none;
   -webkit-user-select: none;
   cursor: default;
 }
 
-input, textarea, [contenteditable="true"], .selectable, .selectable * {
+input, textarea, [contenteditable="true"] {
   user-select: text;
   -webkit-user-select: text;
 }
 
-img, a { -webkit-user-drag: none; }
+img, a, svg { -webkit-user-drag: none; }
+html { overscroll-behavior: none; -webkit-tap-highlight-color: transparent; }
+
+/* Edge's own eye / clear buttons inside fields; the app draws its own show/hide */
+input::-ms-reveal, input::-ms-clear { display: none; }
+
+/* App tooltip (lib/tooltips.ts) in place of the browser's white "title" box */
+.app-tip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10000;
+  max-width: 320px;
+  padding: 5px 9px;
+  border-radius: 6px;
+  background: #1c1f24;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  color: #e2e8f0;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.12s ease, visibility 0s linear 0.12s;
+}
+.app-tip.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.12s ease, visibility 0s;
+}
+html[data-motion="reduced"] .app-tip { transition: none; }
 
 /* ===== Scrollbar ===== */
 ::-webkit-scrollbar {
@@ -92,10 +127,10 @@ img, a { -webkit-user-drag: none; }
 }
 
 /* ===== Glass Card ===== */
+/* No backdrop blur: behind the cards is a near-flat dark background, so it looked the same but
+   made the browser re-blur every card on every scroll frame */
 .glass-card {
-  background: rgba(34,34,34, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgb(var(--s2-rgb) / 0.72);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 1rem;
 }
@@ -104,8 +139,8 @@ img, a { -webkit-user-drag: none; }
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .glass-card-hover:hover {
-  border-color: rgba(0, 212, 170, 0.2);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 212, 170, 0.1);
+  border-color: rgb(var(--accent-rgb) / 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px rgb(var(--accent-rgb) / 0.1);
 }
 
 /* ===== Status Dot ===== */
@@ -117,8 +152,8 @@ img, a { -webkit-user-drag: none; }
   flex-shrink: 0;
 }
 .status-dot.connected {
-  background: #00d4aa;
-  box-shadow: 0 0 8px rgba(0, 212, 170, 0.8);
+  background: var(--good);
+  box-shadow: 0 0 8px rgb(var(--good-rgb) / 0.8);
   animation: pulse-green 2s infinite;
 }
 .status-dot.reconnecting {
@@ -133,9 +168,10 @@ img, a { -webkit-user-drag: none; }
   background: #8b9199;
 }
 
+/* Opacity only: animating the glow (box-shadow) repainted every live row 60 times a second */
 @keyframes pulse-green {
-  0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(0, 212, 170, 0.8); }
-  50% { opacity: 0.7; box-shadow: 0 0 16px rgba(0, 212, 170, 1); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
 }
 @keyframes pulse-amber {
   0%, 100% { opacity: 1; }
@@ -144,7 +180,7 @@ img, a { -webkit-user-drag: none; }
 
 /* ===== Gradient Text ===== */
 .gradient-text {
-  background: linear-gradient(135deg, #00d4aa 0%, #00f5c4 50%, #4dffd8 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hi) 50%, var(--accent-hi2) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -152,8 +188,8 @@ img, a { -webkit-user-drag: none; }
 
 /* ===== Button Styles ===== */
 .btn-primary {
-  background: linear-gradient(135deg, #00d4aa, #00b38c);
-  color: #0e0e0e;
+  background: linear-gradient(135deg, var(--accent), var(--accent-lo));
+  color: var(--on-accent);
   font-weight: 600;
   padding: 0.625rem 1.25rem;
   border-radius: 0.5rem;
@@ -167,7 +203,7 @@ img, a { -webkit-user-drag: none; }
   gap: 0.5rem;
 }
 .btn-primary:hover {
-  box-shadow: 0 0 20px rgba(0, 212, 170, 0.4);
+  box-shadow: 0 0 20px rgb(var(--accent-rgb) / 0.4);
   transform: translateY(-1px);
 }
 .btn-primary:active {
@@ -191,7 +227,7 @@ img, a { -webkit-user-drag: none; }
 }
 .btn-secondary:hover {
   background: rgba(62,62,62, 0.8);
-  border-color: rgba(0, 212, 170, 0.2);
+  border-color: rgb(var(--accent-rgb) / 0.2);
 }
 
 .btn-danger {
@@ -232,7 +268,7 @@ img, a { -webkit-user-drag: none; }
 
 /* ===== Input Styles ===== */
 .input-field {
-  background: rgba(23,23,23, 0.8);
+  background: rgb(var(--s1-rgb) / 0.8);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.5rem;
   color: var(--color-slate-200);
@@ -244,8 +280,8 @@ img, a { -webkit-user-drag: none; }
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .input-field:focus {
-  border-color: rgba(0, 212, 170, 0.4);
-  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+  border-color: rgb(var(--accent-rgb) / 0.4);
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.1);
 }
 .input-field::placeholder {
   color: var(--color-slate-500);
@@ -264,8 +300,8 @@ img, a { -webkit-user-drag: none; }
   border-color: rgba(255, 255, 255, 0.16);
 }
 .select-trigger.is-open {
-  border-color: rgba(0, 212, 170, 0.4);
-  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+  border-color: rgb(var(--accent-rgb) / 0.4);
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.1);
 }
 .select-value {
   display: flex;
@@ -296,7 +332,7 @@ img, a { -webkit-user-drag: none; }
   z-index: 10000;
   overflow-y: auto;
   padding: 0.3125rem;
-  background: rgba(28, 28, 28, 0.96);
+  background: rgb(var(--s2-rgb) / 0.96);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -332,7 +368,7 @@ img, a { -webkit-user-drag: none; }
   font-weight: 600;
 }
 .select-option.is-selected.is-active {
-  background: rgba(0, 212, 170, 0.12);
+  background: rgb(var(--accent-rgb) / 0.12);
 }
 .select-check {
   flex-shrink: 0;
@@ -389,9 +425,9 @@ img, a { -webkit-user-drag: none; }
   font-weight: 500;
 }
 .badge-green {
-  background: rgba(0, 212, 170, 0.15);
-  color: #00d4aa;
-  border: 1px solid rgba(0, 212, 170, 0.2);
+  background: rgb(var(--good-rgb) / 0.15);
+  color: var(--good);
+  border: 1px solid rgb(var(--good-rgb) / 0.2);
 }
 .badge-amber {
   background: rgba(245, 158, 11, 0.15);
@@ -436,7 +472,7 @@ img, a { -webkit-user-drag: none; }
 
 /* ===== Metric Card ===== */
 .metric-card {
-  background: rgba(34,34,34, 0.5);
+  background: rgb(var(--s3-rgb) / 0.5);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 0.875rem;
   padding: 1.25rem;
@@ -450,7 +486,7 @@ img, a { -webkit-user-drag: none; }
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(0, 212, 170, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--accent-rgb) / 0.4), transparent);
 }
 
 /* ===== Sidebar Active ===== */
@@ -475,21 +511,49 @@ img, a { -webkit-user-drag: none; }
 }
 @media (hover: hover) {
   .nav-link:hover:not(.active) {
-    background: rgba(0, 212, 170, 0.08);
+    background: rgb(var(--accent-rgb) / 0.08);
     color: var(--color-slate-200);
   }
 }
 .nav-link:active:not(.active) {
-  background: rgba(0, 212, 170, 0.14);
+  background: rgb(var(--accent-rgb) / 0.14);
 }
 .nav-link:focus-visible {
-  border-color: rgba(0, 212, 170, 0.4);
+  border-color: rgb(var(--accent-rgb) / 0.4);
 }
 .nav-link.active {
-  background: rgba(0, 212, 170, 0.12);
-  color: #00d4aa;
-  border-color: rgba(0, 212, 170, 0.15);
+  background: transparent;
+  color: var(--accent);
 }
+/* Sidebar "Open AmiBroker": the one highlighted action, in the theme's colour */
+.open-ab-btn {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0.6rem 0.75rem; border-radius: 0.6rem; cursor: pointer;
+  font-size: 0.82rem; font-weight: 700; letter-spacing: 0.01em; color: var(--on-accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent-lo));
+  border: 1px solid rgb(var(--accent-rgb) / 0.6);
+  box-shadow: 0 4px 16px rgb(var(--accent-rgb) / 0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  transition: transform 0.15s var(--ease-out), box-shadow 0.2s ease, filter 0.2s ease;
+}
+.open-ab-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 22px rgb(var(--accent-rgb) / 0.35), inset 0 1px 0 rgba(255,255,255,0.22); filter: brightness(1.05); }
+.open-ab-btn:active:not(:disabled) { transform: translateY(0); }
+.open-ab-btn:disabled { cursor: progress; filter: saturate(0.7) brightness(0.9); }
+html[data-motion="reduced"] .open-ab-btn:hover { transform: none; }
+
+/* The active page's highlight: one element that glides between items */
+.nav-indicator {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 0; pointer-events: none;
+  border-radius: 0.5rem;
+  background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.16), rgb(var(--accent-rgb) / 0.06));
+  border: 1px solid rgb(var(--accent-rgb) / 0.18);
+  box-shadow: 0 0 18px rgb(var(--accent-rgb) / 0.08);
+  transition: transform 0.38s var(--ease-spring), height 0.3s ease;
+}
+.nav-indicator::before {
+  content: ''; position: absolute; left: -1px; top: 22%; bottom: 22%; width: 3px; border-radius: 0 3px 3px 0;
+  background: var(--accent); box-shadow: 0 0 10px rgb(var(--accent-rgb) / 0.8);
+}
+html[data-motion="reduced"] .nav-indicator { transition: none; }
 
 /* ===== Animations ===== */
 @keyframes fadeInUp {
@@ -508,11 +572,7 @@ img, a { -webkit-user-drag: none; }
 .animate-fade-in {
   animation: fadeInUp 0.4s ease forwards;
 }
-/* Page change: fade only. Sliding the whole page down 16px pushed it past the bottom of the
-   scroll area and flashed a scrollbar for the length of the animation. */
-.animate-page-in {
-  animation: fadeIn 0.2s ease both;
-}
+/* (.animate-page-in, the page change, is under "Motion & polish" below) */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -565,12 +625,12 @@ img, a { -webkit-user-drag: none; }
   transition: 0.2s;
 }
 .toggle input:checked + .toggle-slider {
-  background: rgba(0, 212, 170, 0.2);
-  border-color: rgba(0, 212, 170, 0.4);
+  background: rgb(var(--accent-rgb) / 0.2);
+  border-color: rgb(var(--accent-rgb) / 0.4);
 }
 .toggle input:checked + .toggle-slider::before {
   transform: translateX(1.125rem);
-  background: #00d4aa;
+  background: var(--accent);
 }
 
 /* ===== Code / Log ===== */
@@ -596,7 +656,7 @@ img, a { -webkit-user-drag: none; }
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(23,23,23, 0.95);
+  background: rgb(var(--s1-rgb) / 0.95);
   color: var(--color-slate-200);
   padding: 0.375rem 0.625rem;
   border-radius: 0.375rem;
@@ -610,4 +670,239 @@ img, a { -webkit-user-drag: none; }
 }
 .tooltip:hover::after {
   opacity: 1;
+}
+
+/* =====================================================================
+   Motion & polish (shared by every page)
+   ===================================================================== */
+:root {
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.badge-blue {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+/* Page change: fade + a hint of depth. Scaling down (not sliding) never pushes the page past
+   the bottom of the scroll area, so no scrollbar flashes. */
+.animate-page-in {
+  animation: pageIn 0.32s var(--ease-out) backwards;
+  transform-origin: 50% 0;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: scale(0.992); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Staggered entrance: style={{ '--i': n }} sets the order */
+.reveal {
+  animation: revealUp 0.5s var(--ease-out) backwards;
+  animation-delay: calc(min(var(--i, 0), 14) * 45ms);
+}
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+/* "Checking history…" on a card whose health isn't known yet: opacity only, so it costs nothing */
+.health-checking { animation: healthPulse 1.4s ease-in-out infinite; }
+@keyframes healthPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+.pop-in { animation: popIn 0.35s var(--ease-spring) backwards; }
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Page header icon tile */
+.page-icon {
+  width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--accent);
+  background: linear-gradient(145deg, rgb(var(--accent-rgb) / 0.18), rgb(var(--accent-rgb) / 0.04));
+  border: 1px solid rgb(var(--accent-rgb) / 0.25);
+  box-shadow: 0 0 24px rgb(var(--accent-rgb) / 0.12), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* Cards that lift a little under the pointer */
+.lift { transition: transform 0.25s var(--ease-out), box-shadow 0.25s ease, border-color 0.25s ease; }
+.lift:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.35); border-color: rgb(var(--accent-rgb) / 0.22) !important; }
+
+/* A soft light sweeping across a card on hover */
+.sheen { position: relative; overflow: hidden; }
+.sheen::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.05) 50%, transparent 65%);
+  transform: translateX(-100%);
+}
+.sheen:hover::after { transform: translateX(100%); transition: transform 0.9s var(--ease-out); }
+
+/* Buttons press in */
+.btn-primary:active:not(:disabled), .btn-secondary:active:not(:disabled), .btn-danger:active:not(:disabled), .chip:active, .icon-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* Small icon button */
+.icon-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
+  height: 32px; min-width: 32px; padding: 0 0.55rem; border-radius: 8px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  color: var(--color-slate-300); cursor: pointer; font-size: 0.76rem; font-weight: 600;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+  font-family: var(--font-sans); white-space: nowrap;
+}
+.icon-btn:hover:not(:disabled) { background: rgba(255,255,255,0.08); color: #eceef2; border-color: rgb(var(--accent-rgb) / 0.3); }
+.icon-btn[data-on="true"] { background: rgb(var(--accent-rgb) / 0.14); color: var(--accent); border-color: rgb(var(--accent-rgb) / 0.35); }
+.icon-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Filter chips with a count */
+.chip {
+  display: inline-flex; align-items: center; gap: 0.4rem; height: 30px; padding: 0 0.7rem;
+  border-radius: 999px; font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+  background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.07); color: var(--color-slate-300);
+  transition: background 0.18s, color 0.18s, border-color 0.18s, transform 0.1s;
+  font-family: var(--font-sans);
+}
+.chip:hover { background: rgba(255,255,255,0.07); color: #eceef2; }
+.chip[data-on="true"] { background: rgb(var(--accent-rgb) / 0.14); border-color: rgb(var(--accent-rgb) / 0.4); color: var(--accent); }
+.chip-count {
+  min-width: 1.4rem; height: 1.15rem; padding: 0 0.35rem; border-radius: 999px; font-size: 0.66rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.07); color: inherit; font-variant-numeric: tabular-nums;
+}
+.chip[data-on="true"] .chip-count { background: rgb(var(--accent-rgb) / 0.2); }
+
+/* Keyboard hint */
+.kbd {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 1.25rem; height: 1.25rem;
+  padding: 0 0.3rem; border-radius: 5px; font-size: 0.66rem; font-weight: 700; font-family: var(--font-mono);
+  color: var(--color-slate-400); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-bottom-width: 2px;
+}
+
+/* Segmented control with a sliding highlight */
+.seg {
+  position: relative; display: inline-flex; padding: 3px; gap: 2px; border-radius: 10px;
+  background: rgb(var(--s0-rgb) / 0.6); border: 1px solid rgba(255,255,255,0.07);
+}
+.seg-thumb {
+  position: absolute; top: 3px; bottom: 3px; left: 0; border-radius: 7px;
+  background: linear-gradient(135deg, rgb(var(--accent-rgb) / 0.22), rgb(var(--accent-rgb) / 0.1));
+  border: 1px solid rgb(var(--accent-rgb) / 0.35); box-shadow: 0 0 14px rgb(var(--accent-rgb) / 0.15);
+  transition: transform 0.35s var(--ease-spring), width 0.35s var(--ease-spring);
+}
+.seg-btn {
+  position: relative; z-index: 1; border: none; background: transparent; cursor: pointer;
+  padding: 0 0.7rem; height: 26px; border-radius: 7px; font-size: 0.75rem; font-weight: 600;
+  color: var(--color-slate-400); transition: color 0.2s; display: inline-flex; align-items: center; gap: 0.35rem;
+  font-family: var(--font-sans); white-space: nowrap;
+}
+.seg-btn:hover { color: #eceef2; }
+.seg-btn[data-on="true"] { color: var(--accent); }
+
+/* Toggle: springy knob */
+.toggle-slider { transition: background 0.25s, border-color 0.25s, box-shadow 0.25s; }
+.toggle-slider::before { transition: transform 0.35s var(--ease-spring), background 0.25s; }
+.toggle input:checked + .toggle-slider { box-shadow: 0 0 12px rgb(var(--accent-rgb) / 0.25); }
+.toggle input:focus-visible + .toggle-slider { outline: 2px solid rgb(var(--accent-rgb) / 0.5); outline-offset: 2px; }
+
+/* Dialogs */
+.dlg-backdrop {
+  position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem;
+  background: rgba(8,8,8,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  animation: dlgFade 0.2s ease both;
+}
+.dlg-backdrop[data-top="true"] { align-items: flex-start; padding-top: 8vh; }
+.dlg-backdrop[data-closing="true"] { animation: dlgFadeOut 0.18s ease both; }
+.dlg {
+  width: 100%; max-height: 86vh; overflow: auto; border-radius: 16px; position: relative;
+  background: linear-gradient(180deg, rgb(var(--s3-rgb) / 0.97), rgb(var(--s1-rgb) / 0.98));
+  border: 1px solid rgba(255,255,255,0.09);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+  animation: dlgIn 0.34s var(--ease-spring) both;
+}
+.dlg-backdrop[data-closing="true"] .dlg { animation: dlgOut 0.18s ease both; }
+@keyframes dlgFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dlgFadeOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes dlgIn { from { opacity: 0; transform: translateY(14px) scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes dlgOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(8px) scale(0.98); } }
+
+/* Side drawer */
+.drawer-backdrop {
+  position: fixed; inset: 0; z-index: 900; background: rgba(8,8,8,0.45); backdrop-filter: blur(2px);
+  animation: dlgFade 0.2s ease both;
+}
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 901; width: min(420px, 92vw); overflow-y: auto;
+  background: linear-gradient(180deg, rgb(var(--s2-rgb)), rgb(var(--s1-rgb))); border-left: 1px solid rgba(255,255,255,0.08);
+  box-shadow: -30px 0 80px rgba(0,0,0,0.5); animation: drawerIn 0.38s var(--ease-out) both;
+}
+.drawer[data-closing="true"] { animation: drawerOut 0.22s ease both; }
+.drawer-backdrop[data-closing="true"] { animation: dlgFadeOut 0.22s ease both; }
+@keyframes drawerIn { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes drawerOut { from { transform: none; } to { transform: translateX(100%); } }
+
+/* Bottom action bar (selection, unsaved changes) */
+.action-bar {
+  position: fixed; left: 50%; bottom: 1.25rem; z-index: 800; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.6rem 0.55rem 1rem; border-radius: 14px;
+  background: rgb(var(--s2-rgb) / 0.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.55), 0 0 0 1px rgb(var(--accent-rgb) / 0.08);
+  animation: barUp 0.4s var(--ease-spring) both; max-width: calc(100vw - 2rem); flex-wrap: wrap;
+}
+@keyframes barUp { from { opacity: 0; transform: translate(-50%, 24px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* Price change flashes */
+.flash-up { animation: flashUp 0.9s ease-out; }
+.flash-down { animation: flashDown 0.9s ease-out; }
+@keyframes flashUp { from { background: rgb(var(--good-rgb) / 0.28); } to { background: transparent; } }
+@keyframes flashDown { from { background: rgba(244,63,94,0.28); } to { background: transparent; } }
+
+/* Live "breathing" for things that are streaming */
+.breathe { animation: breathe 2.4s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+/* Progress bar that animates its width */
+.meter { height: 6px; border-radius: 999px; background: rgba(255,255,255,0.06); overflow: hidden; }
+.meter > span { display: block; height: 100%; border-radius: inherit; transition: width 0.8s var(--ease-out); }
+
+/* Drop zone overlay (drag a CSV onto Symbol Setup) */
+.drop-overlay {
+  position: fixed; inset: 0; z-index: 950; display: flex; align-items: center; justify-content: center; pointer-events: none;
+  background: rgb(var(--accent-rgb) / 0.06); backdrop-filter: blur(3px); animation: dlgFade 0.15s ease both;
+}
+.drop-overlay > div {
+  padding: 2.5rem 3.5rem; border-radius: 20px; border: 2px dashed rgb(var(--accent-rgb) / 0.6); text-align: center;
+  background: rgb(var(--s1-rgb) / 0.9); animation: popIn 0.3s var(--ease-spring) both;
+}
+
+/* Collapsible block that animates its height (not ".collapse": Tailwind has a utility by that name) */
+.db-collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s var(--ease-out), opacity 0.25s; opacity: 0; }
+.db-collapse[data-open="true"] { grid-template-rows: 1fr; opacity: 1; }
+.db-collapse > div { overflow: hidden; min-height: 0; }
+
+/* A settings row found by the search box glows briefly */
+.setting-hit { animation: hit 1.6s ease; border-radius: 10px; }
+@keyframes hit { 0%, 35% { box-shadow: 0 0 0 2px rgb(var(--accent-rgb) / 0.45); background: rgb(var(--accent-rgb) / 0.06); } 100% { box-shadow: none; background: transparent; } }
+
+/* Animations turned down: Settings → Appearance, or the Windows "reduce motion" setting */
+html[data-motion="reduced"] .animate-page-in, html[data-motion="reduced"] .reveal, html[data-motion="reduced"] .pop-in,
+html[data-motion="reduced"] .dlg, html[data-motion="reduced"] .dlg-backdrop, html[data-motion="reduced"] .drawer,
+html[data-motion="reduced"] .drawer-backdrop, html[data-motion="reduced"] .action-bar, html[data-motion="reduced"] .flash-up,
+html[data-motion="reduced"] .flash-down, html[data-motion="reduced"] .breathe, html[data-motion="reduced"] .animate-fade-in,
+html[data-motion="reduced"] .drop-overlay > div, html[data-motion="reduced"] .setting-hit {
+  animation: none !important;
+}
+html[data-motion="reduced"] .health-checking { animation: none; }
+html[data-motion="reduced"] .lift:hover { transform: none; }
+html[data-motion="reduced"] .sheen::after { display: none; }
+html[data-motion="reduced"] .seg-thumb, html[data-motion="reduced"] .meter > span { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) .animate-page-in, html:not([data-motion="full"]) .reveal, html:not([data-motion="full"]) .pop-in,
+  html:not([data-motion="full"]) .dlg, html:not([data-motion="full"]) .drawer, html:not([data-motion="full"]) .action-bar,
+  html:not([data-motion="full"]) .flash-up, html:not([data-motion="full"]) .flash-down {
+    animation: none !important;
+  }
 }

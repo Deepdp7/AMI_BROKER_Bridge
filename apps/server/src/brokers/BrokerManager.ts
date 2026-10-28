@@ -1,11 +1,5 @@
 import { IBrokerAdapter, BrokerCredentials, SessionInfo } from './adapters/IBrokerAdapter'
-import { FyersAdapter } from './adapters/fyers/FyersAdapter'
-import { KiteAdapter } from './adapters/kite/KiteAdapter'
-import { DhanAdapter } from './adapters/dhan/DhanAdapter'
-import { FlattradeAdapter } from './adapters/flattrade/FlattradeAdapter'
-import { ShoonyaAdapter } from './adapters/shoonya/ShoonyaAdapter'
-import { UpstoxAdapter } from './adapters/upstox/UpstoxAdapter'
-import { AngelAdapter } from './adapters/angel/AngelAdapter'
+import { BROKERS } from './brokerAuth'
 import { stmts } from '../db'
 import type { LogEntry } from '../types'
 import { v4 as uuidv4 } from 'uuid'
@@ -24,6 +18,11 @@ export class BrokerManager extends EventEmitter {
 
   getAllAdapters(): IBrokerAdapter[] {
     return Array.from(this.activeAdapters.values())
+  }
+
+  /** Ids of the brokers that are connected right now */
+  getActiveIds(): string[] {
+    return Array.from(this.activeAdapters.keys())
   }
 
   private _emitLog(level: 'info' | 'debug' | 'warn' | 'error', component: string, message: string) {
@@ -45,33 +44,9 @@ export class BrokerManager extends EventEmitter {
       await this.disconnectBroker(brokerId)
     }
 
-    let adapter: IBrokerAdapter
-
-    switch (brokerType) {
-      case 'fyers':
-        adapter = new FyersAdapter()
-        break
-      case 'zerodha_kite':
-        adapter = new KiteAdapter()
-        break
-      case 'dhan':
-        adapter = new DhanAdapter()
-        break
-      case 'flattrade':
-        adapter = new FlattradeAdapter()
-        break
-      case 'shoonya':
-        adapter = new ShoonyaAdapter()
-        break
-      case 'upstox':
-        adapter = new UpstoxAdapter()
-        break
-      case 'angel_one':
-        adapter = new AngelAdapter()
-        break
-      default:
-        throw new Error(`Unsupported broker type: ${brokerType}`)
-    }
+    const def = BROKERS[brokerType]
+    if (!def) throw new Error(`Unsupported broker type: ${brokerType}`)
+    const adapter: IBrokerAdapter = def.create()
 
     adapter.on('tick', (tick) => {
       this.emit('tick', { ...tick, brokerId })

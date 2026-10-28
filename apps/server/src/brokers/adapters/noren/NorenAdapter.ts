@@ -1,7 +1,7 @@
 /**
  * NorenAdapter.ts
  *
- * Shared part of the brokers on the Noren platform (Flattrade, Shoonya): the request format,
+ * Shared part of the brokers on the Noren platform (Flattrade, Shoonya, Zebu, TradeSmart): the request format,
  * error answers, 1-minute history and the live feed. Each broker adds its login and its
  * symbol list download.
  *
@@ -29,6 +29,9 @@ export interface NorenEndpoints {
   ws: string
   /** How non-chart requests carry the token */
   tokenIn: 'jKey' | 'bearer'
+  /** How chart requests (TPSeries) carry it: jKey in the body (Flattrade, Shoonya), unless the
+   *  broker takes the Bearer header there too (Zebu, TradeSmart v2) */
+  chartTokenIn?: 'jKey' | 'bearer'
   /** Flattrade wants actid next to uid in every request */
   sendActid: boolean
 }
@@ -99,6 +102,8 @@ export function norenFeedTimeMs(ft: string | undefined, nowMs = Date.now()): num
 export abstract class NorenAdapter extends ListedBrokerAdapter {
   /** TPSeries times out on long 1-minute ranges: about five trading days per request */
   readonly maxIntradayHistoryDays = 5
+  /** History requests per minute allowed right now (the download queue picks the fastest broker) */
+  historyRequestsPerMinute() { return this.historyLimiter.perMinuteBudget }
   protected abstract readonly endpoints: NorenEndpoints
   protected abstract readonly historyLimiter: RateLimiter
   protected uid = ''
@@ -112,7 +117,7 @@ export abstract class NorenAdapter extends ListedBrokerAdapter {
 
   /** POST to `endpoint`; returns the parsed answer (object or array) */
   protected async post(endpoint: string, data: Record<string, unknown>, chart = false): Promise<any> {
-    const viaJKey = chart || this.endpoints.tokenIn === 'jKey'
+    const viaJKey = chart ? (this.endpoints.chartTokenIn ?? 'jKey') === 'jKey' : this.endpoints.tokenIn === 'jKey'
     const payload = { uid: this.uid, ...(this.endpoints.sendActid ? { actid: this.uid } : {}), ...data }
     const res = await fetch(`${this.endpoints.rest}/${endpoint}`, {
       method: 'POST',
