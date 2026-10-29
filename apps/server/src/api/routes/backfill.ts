@@ -18,6 +18,7 @@ import { stmts, getAllSettings } from '../../db'
 import { backfilledTickers } from '../../market/state/backfillState'
 import { clearVerifiedThrough } from '../../market/state/coverageState'
 import { autoRefresh } from '../../market/AutoRefresh'
+import { refreshToday, refreshTodayFor, midnightIstMs } from '../../market/refreshToday'
 import { queueCatchUp } from '../../brokers/BrokerLifecycle'
 
 const router = Router()
@@ -167,18 +168,6 @@ router.post('/auto', (req, res) => {
   }
 })
 
-/** Re-downloads today's bars (midnight IST → now) for one symbol; a reason when it can't */
-function refreshTodayFor(sym: any, midnightIST: number, nowMs: number): string | null {
-  const ticker = String(sym.amiBrokerTicker || sym.amibroker_ticker).toUpperCase()
-  const brokerId = sym.brokerId || sym.broker_id
-  if (!brokerId || brokerId === 'orphaned') return `Symbol ${ticker} has no active broker.`
-  const brokerToken = sym.rawSymbol || sym.raw_symbol || sym.instrumentId || sym.instrument_id || ticker
-  // Cancel any existing queued tasks for this ticker first, then re-enqueue as a forced gap-fill
-  backfillQueue.cancel(ticker)
-  backfillQueue.enqueueGapFill(ticker, brokerId, brokerToken, midnightIST, nowMs, true)
-  return null
-}
-
 /**
  * POST /api/backfill/today
  * Body: { ticker: string } | { tickers: string[] } | { all: true }
@@ -189,19 +178,12 @@ router.post('/today', async (req, res) => {
 
   const symbols = stmts.getSymbols.all() as any[]
   const nowMs = Date.now()
-  const nowIST = new Date(nowMs + 5.5 * 3600 * 1000)
-  const midnightIST = Date.UTC(nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate()) - (5.5 * 3600 * 1000)
+  const midnightIST = midnightIstMs(nowMs)
   const range = { fromDate: new Date(midnightIST).toISOString().slice(0, 10), toDate: new Date(nowMs).toISOString().slice(0, 10) }
 
   // Many symbols in one call: Refresh All Today, or a selection in Symbol Setup
   if (all === true || Array.isArray(tickers)) {
-    const wanted = all === true ? null : new Set(tickers!.map(t => String(t).toUpperCase()))
-    let queued = 0, skipped = 0
-    for (const sym of symbols) {
-      if (wanted && !wanted.has(String(sym.amiBrokerTicker || sym.amibroker_ticker).toUpperCase())) continue
-      if (refreshTodayFor(sym, midnightIST, nowMs)) skipped++
-      else queued++
-    }
+    const { queued, skipped } = refreshToday(all === true ? null : tickers!, nowMs)
     console.log(`[BackfillAPI] Force today-backfill for ${queued} symbols${skipped ? ` (${skipped} without a broker)` : ''}`)
     return res.json({ ok: true, queued, skipped, ...range })
   }

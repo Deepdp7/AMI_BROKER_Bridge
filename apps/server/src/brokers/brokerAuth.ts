@@ -17,6 +17,7 @@ import { TradeSmartAdapter } from './adapters/tradesmart/TradeSmartAdapter'
 import { UpstoxAdapter } from './adapters/upstox/UpstoxAdapter'
 import { AngelAdapter } from './adapters/angel/AngelAdapter'
 import { XTS_SITES, createXtsAdapter } from './adapters/xts/XtsAdapter'
+import { createKotakAdapter } from './adapters/kotak/KotakAdapter'
 
 export function callbackUrl(brokerType: string): string {
   return `http://127.0.0.1:7890/api/callback/${brokerType}`
@@ -61,6 +62,8 @@ export const BROKERS: Record<string, BrokerDef> = {
   tradesmart: { name: 'TradeSmart', create: () => new TradeSmartAdapter(), loginUrl: (_id, c) => TradeSmartAdapter.loginUrl(c.apiKey), userId: { label: 'TradeSmart User ID', upperCase: true } },
   upstox: { name: 'Upstox', create: () => new UpstoxAdapter(), loginUrl: (brokerId, c) => UpstoxAdapter.loginUrl(c.apiKey, brokerId) },
   angel_one: { name: 'Angel One', create: () => new AngelAdapter(), loginUrl: (brokerId, c) => AngelAdapter.loginUrl(c.apiKey, brokerId) },
+  // Mobile number, MPIN and authenticator key travel packed in the secret (KotakAdapter.packKotakSecret); the UCC is the user ID
+  kotak_neo: { name: 'Kotak Neo', create: () => createKotakAdapter(), direct: true, userId: { label: 'Kotak Client Code (UCC)', upperCase: true } },
   ...Object.fromEntries(XTS_SITES.map(site => [site.type, { name: site.label, create: () => createXtsAdapter(site.type), direct: true } satisfies BrokerDef])),
 }
 

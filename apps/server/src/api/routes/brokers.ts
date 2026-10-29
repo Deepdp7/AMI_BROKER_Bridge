@@ -1,9 +1,9 @@
 import { Router } from 'express'
 import { v4 as uuidv4 } from 'uuid'
-import { exec } from 'child_process'
 import { stmts, getAllSettings } from '../../db'
 import { liveFeed } from '../../market/liveFeed'
 import { brokerManager } from '../../brokers/BrokerManager'
+import { schedulePush as pushSymbolDetailsSoon } from '../../amibroker/symbolDetails'
 import type { IBrokerAdapter } from '../../brokers/adapters/IBrokerAdapter'
 import { backfilledTickers } from '../../market/state/backfillState'
 import { clearVerifiedThrough } from '../../market/state/coverageState'
@@ -364,6 +364,21 @@ const searchHandler = async (req: any, res: any) => {
 router.get('/search', searchHandler)
 router.get('/:id/search', searchHandler)
 
+// GET /api/brokers/:id/futures?kind=stock|index — every NFO stock (or index) future the broker
+// lists, all expiries: Symbol Setup adds a whole month at once (e.g. all stock futures of November)
+router.get('/:id/futures', async (req, res) => {
+  try {
+    const kind = req.query.kind === 'index' ? 'index' : 'stock'
+    let adapter = brokerManager.getAdapter(req.params.id)
+    if (!adapter) adapter = searchOnlyAdapters[(stmts.getBrokerById.get(req.params.id) as any)?.broker_type]
+    if (!adapter?.listFutures) return res.status(404).json({ error: 'This broker cannot list its futures' })
+    const contracts = (await adapter.listFutures(kind)).sort((a, b) => (a.expiry || '').localeCompare(b.expiry || '') || a.ticker.localeCompare(b.ticker))
+    res.json({ kind, contracts })
+  } catch (e: any) {
+    res.status(500).json({ error: e?.message || String(e) })
+  }
+})
+
 // POST /api/brokers/:id/symbols — Add symbols to stream
 router.post('/:id/symbols', async (req, res) => {
   try {
@@ -415,25 +430,13 @@ router.post('/:id/symbols', async (req, res) => {
         backfillQueue.enqueue(sym.ticker, id, rawSymbol, backfillDepth)
         console.log(`[ADD_SYMBOL] "${sym.ticker}" backfill queued (${backfillDepth} days).`)
         added++
-        
-        const psScript = `
-          try {
-            $ab = [System.Runtime.InteropServices.Marshal]::GetActiveObject('Broker.Application')
-            if ($null -ne $ab) {
-              $ab.Stocks.Add('${sym.ticker}')
-              $ab.RefreshAll()
-            }
-          } catch {}
-          exit 0
-        `
-        exec(`powershell -Command "${psScript.replace(/\n/g, ';')}"`, (_err) => {
-          // ignore OLE errors if AmiBroker is closed
-        })
       } catch (symErr) {
         console.error(`[ADD_SYMBOL] Error adding symbol "${sym.ticker}":`, symErr)
         /* continue with next symbol */
       }
     }
+    // Into AmiBroker's symbol list, with lot size, tick size and name (when it is running)
+    if (added > 0) pushSymbolDetailsSoon()
     res.json({ added, total: normalizedSymbols.length })
   } catch (e) {
     res.status(500).json({ error: String(e) })
@@ -583,25 +586,8 @@ router.post('/:id/symbols/import', (req, res) => {
       }
     }
 
-    if (added > 0) {
-      // Bulk add symbols to AmiBroker (only the ones added above)
-      if (addedTickers.length > 0) {
-        const psScript = `
-          try {
-            $ab = [System.Runtime.InteropServices.Marshal]::GetActiveObject('Broker.Application')
-            if ($null -ne $ab) {
-              $tickers = @('${addedTickers.join("','")}')
-              foreach ($t in $tickers) {
-                $ab.Stocks.Add($t) | Out-Null
-              }
-              $ab.RefreshAll()
-            }
-          } catch {}
-          exit 0
-        `
-        exec(`powershell -Command "${psScript.replace(/\n/g, ';')}"`, () => {})
-      }
-    }
+    // Into AmiBroker's symbol list, with lot size, tick size and name (when it is running)
+    if (addedTickers.length > 0) pushSymbolDetailsSoon()
 
     res.json({ added, total: lines.length, errors })
   } catch (e) {

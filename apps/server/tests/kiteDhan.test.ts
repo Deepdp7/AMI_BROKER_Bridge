@@ -314,7 +314,7 @@ describe('history requests', () => {
     const bars = await dhan.getHistoricalBars('NSE:TATAELXSI26OCTFUT', '1m', IST('2026-10-23T09:15:00'), IST('2026-10-23T15:30:00'))
     expect(calls[0].url).toBe('https://api.dhan.co/v2/charts/intraday')
     expect(JSON.parse(calls[0].init.body)).toEqual({
-      securityId: '49010', exchangeSegment: 'NSE_FNO', instrument: 'FUTSTK', interval: '1', oi: false,
+      securityId: '49010', exchangeSegment: 'NSE_FNO', instrument: 'FUTSTK', interval: '1', oi: true, // a future: open interest per candle too
       fromDate: '2026-10-23 09:15:00', toDate: '2026-10-23 15:30:00',
     })
     expect(calls[0].init.headers['access-token']).toBe('jwt')

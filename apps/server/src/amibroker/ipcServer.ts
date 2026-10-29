@@ -1,14 +1,16 @@
 /**
  * TCP line protocol to the AmiBroker plugin (127.0.0.1:7891).
  *
- *   engine → plugin  LIVE_BAR|TICKER|ts|o|h|l|c|v   the in-progress 1-minute bar, on every tick
+ *   engine → plugin  LIVE_BAR|TICKER|ts|o|h|l|c|v|oi  the in-progress 1-minute bar, on every tick
+ *                                                     (oi: open interest, 0 when unknown)
  *                    SYNC|TICKER[|fromSec]           stored history changed: re-fetch it over HTTP
+ *                    STATUS|level|short|long         the DataBridge light in AmiBroker's status bar
  *   plugin → engine  GET_QUOTES TICKER               bars for a symbol (auto-registers unknown ones)
+ *                    CMD|REPAIR|T, CMD|TODAY|T, CMD|TODAY_ALL   its right-click menu (pluginStatus.ts)
  *
  * History itself is served over HTTP (/api/feed/bars); this channel only pushes and nudges.
  */
 import net = require('net')
-import { exec } from 'child_process'
 import { AMIBROKER_IPC_PORT, HOST } from '../config'
 import { getAllSettings, stmts } from '../db'
 import { brokerManager } from '../brokers/BrokerManager'
@@ -16,23 +18,16 @@ import { backfillQueue } from '../market/BackfillQueue'
 import { backfilledTickers } from '../market/state/backfillState'
 import { liveFeed } from '../market/liveFeed'
 import { setRuntimeProbe } from '../ai/AiAssistant'
+import { startSymbolDetailsSync, schedulePush as pushSymbolDetailsSoon } from './symbolDetails'
+import { currentPluginStatus, statusLine, runPluginCommand, handlePluginNote } from './pluginStatus'
 
 const ipcClients = new Set<net.Socket>()
 let lastLiveBarLogAt = 0
-// Track last time we fired a connect-refresh so we don't spam it
-let lastABConnectRefreshAt = 0
 
-// After gap-fill saves bars, trigger a debounced AmiBroker RefreshAll().
-// This forces AmiBroker to pull the historical data correctly via the HTTP plugin 
-// rather than pushing them as LIVE_BARs (which causes chart gaps).
-let abRefreshTimeout: NodeJS.Timeout | null = null;
-
-/** Asks a running AmiBroker to re-read every chart (COM). Only called while the plugin is connected:
- *  COM activation would otherwise launch a hidden AmiBroker. */
-function refreshAmiBroker() {
-  const psScript = 'try { $ab = New-Object -ComObject Broker.Application; $ab.RefreshAll() } catch { }'
-  exec(`powershell -Command "${psScript}"`, () => {})
-}
+// New history reaches AmiBroker through SYNC notices only (the plugin merges the bars in).
+// There used to be an OLE RefreshAll() after every finished download and on connect too; it
+// never actually ran (PowerShell can't call AmiBroker's objects by "$ab.RefreshAll()"), and a
+// working one would redraw everything in the middle of running scans.
 
 /**
  * Tell the AmiBroker plugin that new historical bars were stored for `ticker`, from `fromSec`
@@ -63,13 +58,28 @@ export function notifyAmiBrokerHistoryChanged(ticker: string, fromSec = 0) {
 /** Starts the plugin channel: live bars and history notices go out, GET_QUOTES is answered. */
 export function startAmiBrokerIpc() {
   setRuntimeProbe(() => ({ amibrokerConnections: ipcClients.size }))
+  startSymbolDetailsSync(() => ipcClients.size > 0)
+
+  // The DataBridge light in AmiBroker's status bar: sent when it changes (checked every 3 s)
+  // and every 30 s anyway
+  let lastStatus = ''
+  let lastStatusAt = 0
+  setInterval(() => {
+    if (ipcClients.size === 0) return
+    let line: string
+    try { line = statusLine(currentPluginStatus()) } catch { return }
+    if (line === lastStatus && Date.now() - lastStatusAt < 30_000) return
+    lastStatus = line
+    lastStatusAt = Date.now()
+    ipcClients.forEach(client => { try { client.write(line) } catch {} })
+  }, 3000).unref()
 
   liveFeed.on('live_bar_updated', (data: { ticker: string, bar: any }) => {
     const { ticker, bar } = data;
     if (!bar || bar.close === 0) return;
 
     const ts = Math.floor(bar.bucketMs / 1000);
-    const msg = `LIVE_BAR|${ticker}|${ts}|${bar.open}|${bar.high}|${bar.low}|${bar.close}|${bar.volume}\n`;
+    const msg = `LIVE_BAR|${ticker}|${ts}|${bar.open}|${bar.high}|${bar.low}|${bar.close}|${bar.volume}|${bar.oi || 0}\n`;
     
     if (Date.now() - lastLiveBarLogAt > 2000) {
       lastLiveBarLogAt = Date.now();
@@ -89,17 +99,6 @@ export function startAmiBrokerIpc() {
 
   backfillQueue.on('backfill_completed', ({ ticker }: { ticker: string }) => {
     notifyAmiBrokerHistoryChanged(ticker)
-    // Only refresh via COM when AmiBroker is running with our plugin connected —
-    // COM activation would otherwise LAUNCH a hidden AmiBroker instance.
-    if (ipcClients.size === 0) return
-    console.log(`[IPC_GAP_PUSH] Backfill completed for ${ticker}. Scheduling AmiBroker refresh...`);
-
-    if (abRefreshTimeout) clearTimeout(abRefreshTimeout);
-    abRefreshTimeout = setTimeout(() => {
-      if (ipcClients.size === 0) return
-      console.log('[IPC_GAP_PUSH] Executing debounced AmiBroker RefreshAll()...');
-      refreshAmiBroker()
-    }, 3000); // 3-second debounce
   })
 
   const ipcServer = net.createServer((socket) => {
@@ -109,18 +108,13 @@ export function startAmiBrokerIpc() {
     socket.setKeepAlive(true, 15000)
     let socketBuffer = ''
 
-    // When AmiBroker (re)connects, trigger a RefreshAll() after a short delay.
-    // This ensures AmiBroker pulls any bars that were backfilled while it was closed.
-    const nowMs = Date.now()
-    if (nowMs - lastABConnectRefreshAt > 30_000) { // at most once every 30 seconds
-      lastABConnectRefreshAt = nowMs
-      console.log('[IPC_CONNECT] AmiBroker connected — scheduling RefreshAll() in 5 seconds to sync backfilled data...')
-      setTimeout(() => {
-        if (ipcClients.size === 0) return // AmiBroker closed again; don't COM-launch it
-        console.log('[IPC_CONNECT] Executing RefreshAll() for AmiBroker reconnect...')
-        refreshAmiBroker()
-      }, 5000)
-    }
+    // Bars stored while AmiBroker was closed: the plugin re-syncs every symbol on each new
+    // connection by itself (connection generation in DataClient.cpp)
+    // Lot size, tick size and name of every tracked symbol into AmiBroker's Symbol Information
+    pushSymbolDetailsSoon(5000)
+
+    // The status light right away, not only at the next change
+    try { socket.write(statusLine(currentPluginStatus())) } catch {}
 
     socket.on('error', (err) => {
       console.error('[IPC Error]', err.message)
@@ -139,6 +133,14 @@ export function startAmiBrokerIpc() {
 
         for (const line of lines) {
           const msg = line.trim()
+          if (msg.startsWith('NOTE|')) { handlePluginNote(msg); continue }
+          if (msg.startsWith('CMD|')) {
+            // AmiBroker's right-click menu on the DataBridge light
+            runPluginCommand(msg)
+              .then(done => console.log(`[AmiBroker] ${msg.split('|').slice(1).join(' ')}: ${done}`))
+              .catch(err => console.warn(`[AmiBroker] ${msg} failed: ${err?.message || err}`))
+            continue
+          }
           if (msg.startsWith('GET_QUOTES')) {
             const parts = msg.split(' ')
             const ticker = parts[1]
@@ -220,7 +222,7 @@ export function startAmiBrokerIpc() {
             const liveBar = liveFeed.getLiveBar(ticker, brokerId)
             if (liveBar && liveBar.close > 0) {
               const ts = Math.floor(liveBar.bucketMs / 1000)
-              response += `${ts},${liveBar.open},${liveBar.high},${liveBar.low},${liveBar.close},${liveBar.volume}\n`
+              response += `${ts},${liveBar.open},${liveBar.high},${liveBar.low},${liveBar.close},${liveBar.volume}${liveBar.oi ? `,${liveBar.oi}` : ''}\n`
             }
 
             if (response.length === 0) {

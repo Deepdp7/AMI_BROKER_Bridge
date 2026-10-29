@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { stmts } from '../../db'
 import { computeHealth, invalidateHealth, healthAgeMs } from '../../market/DataHealth'
 import { repairHistory } from '../../brokers/BrokerLifecycle'
+import { symbolDetailsCached } from '../../amibroker/symbolDetails'
 
 const router = Router()
 
@@ -17,6 +18,16 @@ router.get('/health', async (_req, res) => {
     const symbols = await computeHealth()
     // fresh: false means an older answer was sent for speed; the page asks again a moment later
     res.json({ symbols, fresh: healthAgeMs() < 30_000 })
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || String(err) })
+  }
+})
+
+// GET /api/symbols/details: lot size, tick size, name and expiry of every symbol, from its broker's list
+router.get('/details', async (_req, res) => {
+  try {
+    const rows = await symbolDetailsCached()
+    res.json(rows.filter(r => r.details).map(r => ({ ticker: r.ticker, ...r.details })))
   } catch (err: any) {
     res.status(500).json({ error: err?.message || String(err) })
   }

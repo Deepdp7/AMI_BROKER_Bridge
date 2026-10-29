@@ -27,6 +27,12 @@ use engine::{supervisor_log, Backend};
 /// Set once the app starts quitting (window closed or tray Quit)
 static QUITTING_APP: AtomicBool = AtomicBool::new(false);
 
+/// Set once the window was first shown (it waits for the page's data, see `app_ready`)
+static FIRST_SHOWN: AtomicBool = AtomicBool::new(false);
+
+/// Longest the window waits for the page to say its data is in (a slow first engine start)
+const FIRST_SHOW_FALLBACK: std::time::Duration = std::time::Duration::from_secs(10);
+
 /// Closing the window quits DataBridge, engine included: the window goes away at once, the
 /// engine saves its buffered data and stops, then the app exits. The next start's catch-up
 /// downloads whatever was missed while it was closed.
@@ -49,11 +55,28 @@ pub(crate) fn show_main_window(app: &tauri::AppHandle) {
     if QUITTING_APP.load(Ordering::SeqCst) {
         return;
     }
+    FIRST_SHOWN.store(true, Ordering::SeqCst);
     if let Some(window) = app.get_webview_window("main") {
         let _ = window.show();
         let _ = window.unminimize();
         let _ = window.set_focus();
     }
+}
+
+/// First start: shows the window once, unless Windows started the app at login (that start
+/// stays in the tray until the tray icon or the shortcut is used)
+fn reveal_on_start(app: &tauri::AppHandle) {
+    if autostart::launched_at_login() || FIRST_SHOWN.load(Ordering::SeqCst) {
+        return;
+    }
+    show_main_window(app);
+}
+
+/// The page has its first data (symbols, brokers, settings) on screen: show the window now,
+/// so it never opens on an empty "Connecting…" page
+#[tauri::command]
+fn app_ready(app: tauri::AppHandle) {
+    reveal_on_start(&app);
 }
 
 #[tauri::command]
@@ -72,6 +95,12 @@ pub fn run() {
     let backend = Arc::new(Backend::new());
     let backend_for_exit = backend.clone();
 
+    // In release the app owns the engine (in dev `npm run dev` starts it). Started first thing,
+    // so it boots while the window and page are being created rather than after
+    if !cfg!(debug_assertions) {
+        engine::start(&backend);
+    }
+
     let builder = tauri::Builder::default()
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_dialog::init())
@@ -81,6 +110,7 @@ pub fn run() {
     // `generate_handler!` takes a plain list, so the platform split happens here
     #[cfg(windows)]
     let builder = builder.invoke_handler(tauri::generate_handler![
+        app_ready,
         restart_backend,
         autostart::get_autostart,
         autostart::set_autostart,
@@ -91,6 +121,7 @@ pub fn run() {
     ]);
     #[cfg(not(windows))]
     let builder = builder.invoke_handler(tauri::generate_handler![
+        app_ready,
         restart_backend,
         autostart::get_autostart,
         autostart::set_autostart,
@@ -119,21 +150,19 @@ pub fn run() {
                 single_instance::serve(listener, || QUITTING_APP.load(Ordering::SeqCst), move || show_main_window(&handle));
             }
 
-            // In dev the engine is started by `npm run dev`; in release the app owns it
-            if !cfg!(debug_assertions) {
-                engine::start(&backend);
-            }
-
             tray::build(app)?;
 
             // Find AmiBroker once in the background, so "Open AmiBroker" is instant
             amibroker::warm_up();
 
-            // The window starts hidden (tauri.conf.json): shown now, unless Windows started the app
-            // at login, which keeps it in the tray until the tray icon or the shortcut is used
-            if !autostart::launched_at_login() {
-                show_main_window(app.handle());
-            }
+            // The window starts hidden (tauri.conf.json) and is shown when the page has its first
+            // data (`app_ready`), so it opens full rather than on an empty page. If the page never
+            // says so (engine very slow to start), it is shown anyway after a few seconds.
+            let handle = app.handle().clone();
+            std::thread::spawn(move || {
+                std::thread::sleep(FIRST_SHOW_FALLBACK);
+                reveal_on_start(&handle);
+            });
 
             Ok(())
         })

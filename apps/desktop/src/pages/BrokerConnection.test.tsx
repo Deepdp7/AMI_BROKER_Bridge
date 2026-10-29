@@ -87,4 +87,30 @@ describe('Broker Connection', () => {
     expect(open).not.toHaveBeenCalled()
     expect(useAppStore.getState().brokers.some(b => b.id === 'c1')).toBe(true)
   })
+
+  it('Kotak Neo asks for its several details and sends them as one packed secret with the client code', async () => {
+    fetchMock.mockImplementation(async (url: any, init?: any) => ({
+      ok: true,
+      json: async () => (url === '/api/brokers' && init?.method === 'POST'
+        ? { broker: { id: 'k1', brokerType: 'kotak_neo', label: 'Kotak Neo', status: 'connected' }, loginUrl: null }
+        : {}),
+    }))
+    render(<BrokerConnectionPage />)
+    fireEvent.click(screen.getByTitle('Connect Kotak Neo'))
+    await settle()
+    const dialog = screen.getByRole('dialog')
+    const connect = within(dialog).getByRole('button', { name: /save & connect/i }) as HTMLButtonElement
+    fireEvent.change(within(dialog).getByLabelText('Kotak Client Code (UCC)'), { target: { value: 'a1b2c' } })
+    fireEvent.change(within(dialog).getByLabelText('Access Token'), { target: { value: 'TOKEN' } })
+    fireEvent.change(within(dialog).getByLabelText('Registered mobile number'), { target: { value: '9876543210' } })
+    fireEvent.change(within(dialog).getByLabelText('Trading MPIN'), { target: { value: '112233' } })
+    expect(connect.disabled).toBe(true) // the authenticator key is still missing
+    fireEvent.change(within(dialog).getByLabelText(/Authenticator secret key/), { target: { value: 'GEZD GNBV' } })
+    expect(connect.disabled).toBe(false)
+    fireEvent.click(connect)
+    await settle()
+    const post = fetchMock.mock.calls.find(c => c[0] === '/api/brokers' && c[1]?.method === 'POST')!
+    expect(JSON.parse(post[1].body)).toMatchObject({ brokerType: 'kotak_neo', apiKey: 'TOKEN', apiSecret: '9876543210|112233|GEZD GNBV', clientId: 'a1b2c' })
+    expect(within(dialog).getByText('Connected')).toBeTruthy()
+  })
 })

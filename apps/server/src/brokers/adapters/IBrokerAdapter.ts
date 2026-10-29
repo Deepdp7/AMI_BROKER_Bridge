@@ -7,6 +7,23 @@ export interface InstrumentInfo {
   instrumentType: string
   lotSize: number
   tickSize: number
+  /** Company / contract name, when the broker's list has one */
+  name?: string
+  /** YYYY-MM-DD for futures and options */
+  expiry?: string
+}
+
+/** What the broker's instrument list says about one contract (shown in AmiBroker's Symbol Information) */
+export interface InstrumentDetails {
+  name: string
+  /** Shares in one lot: F&O are bought in whole lots only (1 for cash shares) */
+  lotSize: number
+  /** Smallest price step */
+  tickSize: number
+  /** YYYY-MM-DD for futures and options, '' otherwise */
+  expiry: string
+  /** Rupees one lot gains per rupee of price move, when the list says (MCX at Fyers: lot 1, CRUDEOIL 100) */
+  pointValue?: number
 }
 
 export interface Bar {
@@ -57,7 +74,11 @@ export interface IBrokerAdapter extends EventEmitter {
   searchSymbols(query: string, exchange?: string): Promise<InstrumentInfo[]>
   downloadInstruments?(): Promise<void>
   resolveSymbol?(ticker: string, dbExchange?: string): Promise<string>
-  
+  /** Every NFO stock future ('stock') or index future ('index') the broker lists, all expiries */
+  listFutures?(kind: 'stock' | 'index'): Promise<InstrumentInfo[]>
+  /** Lot size, tick size and name of stored symbol names (names the list doesn't have are left out) */
+  instrumentDetails?(names: string[]): Promise<Map<string, InstrumentDetails>>
+
   // Historical
   getHistoricalBars(instrumentToken: string, interval: string, from: Date, to: Date): Promise<Bar[]>
   

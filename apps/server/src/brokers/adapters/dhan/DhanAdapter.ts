@@ -383,10 +383,12 @@ export class DhanAdapter extends ListedBrokerAdapter {
     if (!rec) throw this.unknownSymbol(instrumentToken)
     const [exchangeSegment, securityId, instrument] = rec.ref.split('|')
     const daily = interval === '1d' || interval === '1D'
+    // F&O contracts: open interest per candle too (open_interest array)
+    const oi = !!rec.expiry
 
     const body = daily
-      ? { securityId, exchangeSegment, instrument, oi: false, fromDate: formatIstDateTime(from).slice(0, 10), toDate: formatIstDateTime(new Date(to.getTime() + DAY_MS)).slice(0, 10) }
-      : { securityId, exchangeSegment, instrument, interval: String(parseInt(interval, 10) || 1), oi: false, fromDate: formatIstDateTime(from), toDate: formatIstDateTime(to) }
+      ? { securityId, exchangeSegment, instrument, oi, fromDate: formatIstDateTime(from).slice(0, 10), toDate: formatIstDateTime(new Date(to.getTime() + DAY_MS)).slice(0, 10) }
+      : { securityId, exchangeSegment, instrument, interval: String(parseInt(interval, 10) || 1), oi, fromDate: formatIstDateTime(from), toDate: formatIstDateTime(to) }
 
     await historyLimiter.acquire()
     const res = await fetch(`${API}/charts/${daily ? 'historical' : 'intraday'}`, {
@@ -419,6 +421,7 @@ export class DhanAdapter extends ListedBrokerAdapter {
         low: data.low[i],
         close: data.close[i],
         volume: Math.round(data.volume?.[i] || 0),
+        openInterest: data.open_interest?.[i] > 0 ? data.open_interest[i] : undefined,
       })
     }
     return bars

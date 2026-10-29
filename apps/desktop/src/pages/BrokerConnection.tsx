@@ -192,6 +192,7 @@ function AddBrokerModal({ open, initialType, onClose }: { open: boolean; initial
   const [apiKey, setApiKey] = useState('')
   const [apiSecret, setApiSecret] = useState('')
   const [clientId, setClientId] = useState('')
+  const [secretParts, setSecretParts] = useState<string[]>([])
   const [showSecret, setShowSecret] = useState(false)
   const [step, setStep] = useState<'credentials' | 'authenticating' | 'success'>('credentials')
   const [pastedUrl, setPastedUrl] = useState('')
@@ -200,6 +201,10 @@ function AddBrokerModal({ open, initialType, onClose }: { open: boolean; initial
   const info = BROKER_INFO[selectedBrokerType]
   const clientIdField = info?.userId
   const needsClientId = !!clientIdField
+  const partFields = info?.secretParts
+  // Several secret fields (Kotak) are sent as one value, joined with "|"
+  const secretValue = partFields ? partFields.map((_, i) => (secretParts[i] || '').trim().replace(/\|/g, '')).join('|') : apiSecret
+  const secretComplete = partFields ? partFields.every((_, i) => (secretParts[i] || '').trim()) : !!apiSecret
   const redirectUrl = redirectUrlFor(selectedBrokerType)
 
   const stopPolling = () => {
@@ -213,7 +218,7 @@ function AddBrokerModal({ open, initialType, onClose }: { open: boolean; initial
   useEffect(() => {
     if (!open) return
     setSelectedBrokerType(initialType)
-    setApiKey(''); setApiSecret(''); setClientId(''); setPastedUrl(''); setShowSecret(false)
+    setApiKey(''); setApiSecret(''); setClientId(''); setSecretParts([]); setPastedUrl(''); setShowSecret(false)
     setStep('credentials')
   }, [open, initialType])
 
@@ -245,7 +250,7 @@ function AddBrokerModal({ open, initialType, onClose }: { open: boolean; initial
           brokerType: selectedBrokerType,
           label: BROKER_INFO[selectedBrokerType].name,
           apiKey,
-          apiSecret,
+          apiSecret: secretValue,
           clientId: needsClientId ? clientId.trim() : undefined,
         }),
       })
@@ -351,6 +356,12 @@ function AddBrokerModal({ open, initialType, onClose }: { open: boolean; initial
                 <label style={label} htmlFor="kite-api-key">{info?.keyLabel || 'API Key'}</label>
                 <input id="kite-api-key" className="input-field" placeholder="xxxxxxxxxxxxxxxx" value={apiKey} onChange={e => setApiKey(e.target.value)} type="text" autoComplete="off" spellCheck={false} />
               </div>
+              {partFields ? partFields.map((f, i) => (
+                <div key={f.label}>
+                  <label style={label} htmlFor={`broker-secret-part-${i}`}>{f.label}</label>
+                  <input id={`broker-secret-part-${i}`} className="input-field" placeholder={f.placeholder} value={secretParts[i] || ''} onChange={e => setSecretParts(p => { const n = [...p]; n[i] = e.target.value; return n })} type={f.hidden && !showSecret ? 'password' : 'text'} autoComplete="off" spellCheck={false} />
+                </div>
+              )) : (
               <div>
                 <label style={label} htmlFor="kite-api-secret">{info?.secretLabel || 'API Secret'}</label>
                 <div style={{ position: 'relative' }}>
@@ -360,11 +371,12 @@ function AddBrokerModal({ open, initialType, onClose }: { open: boolean; initial
                   </button>
                 </div>
               </div>
+              )}
             </div>
 
             {info?.direct ? (
               <div style={{ background: 'rgb(var(--accent-rgb) / 0.06)', borderRadius: 10, padding: '0.8rem', marginBottom: '1.1rem', border: '1px solid rgb(var(--accent-rgb) / 0.18)', fontSize: '0.74rem', color: '#a1a7b0', lineHeight: 1.5 }}>
-                No browser login: DataBridge Pro logs in with these keys right away, and again by itself whenever the session ends.
+                No browser login: DataBridge Pro logs in with these details right away, and again by itself whenever the session ends.
               </div>
             ) : (
             <div style={{ background: 'rgb(var(--accent-rgb) / 0.06)', borderRadius: 10, padding: '0.8rem', marginBottom: '1.1rem', border: '1px solid rgb(var(--accent-rgb) / 0.18)' }}>
@@ -392,7 +404,7 @@ function AddBrokerModal({ open, initialType, onClose }: { open: boolean; initial
                 onClick={handleConnect}
                 className="btn-primary"
                 style={{ flex: 1, justifyContent: 'center' }}
-                disabled={!apiKey || !apiSecret || (needsClientId && !clientId.trim())}
+                disabled={!apiKey || !secretComplete || (needsClientId && !clientId.trim())}
               >
                 <Wifi size={14} /> {info?.direct ? 'Save & connect' : 'Save & log in'}
               </button>

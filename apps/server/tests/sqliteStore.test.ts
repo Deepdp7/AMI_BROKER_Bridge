@@ -72,6 +72,23 @@ describe('Bars', () => {
     expect(await db.stmts.getBarsCsvByTickerAsync.get('ZZB', 10)).toBe(line(T, 10, 12, 9, 11, 100))
   })
 
+  it('open interest: 7th CSV value for F&O bars only; history without it keeps what live ticks gave', async () => {
+    await db.upsertBarsToHistory('ZZFUT', [
+      { ts: T * 1000, open: 100, high: 101, low: 99, close: 100.5, volume: 1500, openInterest: 2_450_000 },
+      { ts: (T + 60) * 1000, open: 100.5, high: 102, low: 100, close: 101, volume: 900, openInterest: 2_451_500 },
+    ])
+    expect(await db.stmts.getBarsCsvByTickerAsync.get('ZZFUT', 10)).toBe(`${line(T, 100, 101, 99, 100.5, 1500)},2450000\n${line(T + 60, 100.5, 102, 100, 101, 900)},2451500`)
+
+    // A live-built bar with OI, then broker history for that minute without OI: OI stays
+    db.insertBarBatch([{ amibroker_ticker: 'ZZFUT', ts_utc_ms: (T + 120) * 1000, open: 101, high: 101, low: 101, close: 101, volume: 5, open_interest: 2_452_000 }])
+    db.flushPendingBars()
+    expect(await db.upsertBarsToHistory('ZZFUT', [line(T + 120, 101, 103, 100, 102, 800)])).toBe(1)
+    expect(await db.stmts.getBarsCsvSinceAsync.get('ZZFUT', T + 60, 10)).toBe(`${line(T + 120, 101, 103, 100, 102, 800)},2452000`)
+    // Same prices, OI now known: that counts as a change
+    expect(await db.upsertBarsToHistory('ZZFUT', [{ ts: (T + 120) * 1000, open: 101, high: 103, low: 100, close: 102, volume: 800, openInterest: 2_453_000 }])).toBe(1)
+    expect(await db.upsertBarsToHistory('ZZFUT', [{ ts: (T + 120) * 1000, open: 101, high: 103, low: 100, close: 102, volume: 800, openInterest: 2_453_000 }])).toBe(0)
+  })
+
   it('skips the still-forming minute', async () => {
     const nowMin = Math.floor(Date.now() / 60000) * 60
     expect(await db.upsertBarsToHistory('ZZC', [line(nowMin, 1, 1, 1, 1, 1)])).toBe(0)

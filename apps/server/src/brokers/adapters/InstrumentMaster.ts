@@ -220,6 +220,19 @@ export class InstrumentMaster {
     return undefined
   }
 
+  /** Every listed contract of these categories (e.g. all NFO stock futures) */
+  futures(cats: InstrumentCategory[]): InstrumentInfo[] {
+    const out: InstrumentInfo[] = []
+    for (const line of this.lines) {
+      // Cheap test on the category column before splitting the line
+      if (!cats.some(c => line.includes(`\t${c}\t`))) continue
+      const r = fromLine(line)
+      if (!cats.includes(r.cat) || !r.expiry) continue
+      out.push({ instrumentId: r.key, exchange: r.exchange, ticker: r.ticker, instrumentType: category(r.cat), lotSize: r.lot, tickSize: r.tick, name: r.name, expiry: r.expiry })
+    }
+    return out
+  }
+
   search(query: string, filter?: string, limit = 100): InstrumentInfo[] {
     const q = query.trim().toUpperCase()
     if (!q) return []
@@ -251,6 +264,8 @@ export class InstrumentMaster {
       instrumentType: category(r.cat),
       lotSize: r.lot,
       tickSize: r.tick,
+      name: r.name,
+      expiry: r.expiry || undefined,
     }))
   }
 }

@@ -34,6 +34,8 @@ interface LiveBar {
   close: number
   volume: number
   bucketMs: number
+  /** Open interest at the bar's last update (F&O; brokers send it with the ticks) */
+  oi?: number
 }
 
 export class LiveFeed extends EventEmitter {
@@ -50,6 +52,9 @@ export class LiveFeed extends EventEmitter {
   private pendingStatusUpdates = new Map<string, SymbolFeedStatus>()
   // Last cumulative day volume seen per instrument (broker sends running totals)
   private lastCumVolume = new Map<string, number>()
+  // Last open interest seen per instrument: carried into every new bar, since NSE only
+  // publishes it every few minutes (a bar without an update still has that OI)
+  private lastOi = new Map<string, number>()
   private feedUpdateThrottleTimer: ReturnType<typeof setTimeout> | null = null
 
   private _scheduleFeedBroadcast(status: SymbolFeedStatus, _now: number) {
@@ -142,6 +147,9 @@ export class LiveFeed extends EventEmitter {
       const cum = this.lastCumVolume.get(oldKey)
       this.lastCumVolume.delete(oldKey)
       if (cum !== undefined) this.lastCumVolume.set(newKey, cum)
+      const oi = this.lastOi.get(oldKey)
+      this.lastOi.delete(oldKey)
+      if (oi !== undefined) this.lastOi.set(newKey, oi)
       return true
     }
     return false
@@ -284,6 +292,8 @@ export class LiveFeed extends EventEmitter {
     if (!bar) return
 
     const newPrice = tick.lastPrice
+    if (typeof tick.openInterest === 'number' && tick.openInterest > 0) this.lastOi.set(key, tick.openInterest)
+    const oi = this.lastOi.get(key)
     // Volume traded since the previous update. The feed sends periodic snapshots, not
     // every trade, so summing last-traded-qty misses most volume; diff the day's running
     // total instead. Fall back to last-traded-qty only for feeds without a running total.
@@ -308,7 +318,7 @@ export class LiveFeed extends EventEmitter {
       // New bar
       this.liveBars.set(key, {
         open: newPrice, high: newPrice, low: newPrice,
-        close: newPrice, volume: tickQty, bucketMs: bucket,
+        close: newPrice, volume: tickQty, bucketMs: bucket, oi,
       })
     } else {
       // Update in-progress bar
@@ -322,6 +332,7 @@ export class LiveFeed extends EventEmitter {
       }
       bar.close = newPrice
       bar.volume += tickQty
+      bar.oi = oi
     }
 
     // Update feed status
@@ -334,6 +345,7 @@ export class LiveFeed extends EventEmitter {
     status.change = +(newPrice - prevClose).toFixed(2)
     status.changePercent = +((newPrice - prevClose) / prevClose * 100).toFixed(2)
     status.volume = typeof tick.totalVolume === 'number' ? tick.totalVolume : status.volume + tickQty
+    if (oi) status.openInterest = oi
     status.status = 'RECEIVING' as any
     status.internalLatencyMs = Math.round(Math.random() * 5 + 5)
 
@@ -362,7 +374,7 @@ export class LiveFeed extends EventEmitter {
         low: bar.low,
         close: bar.close,
         volume: bar.volume,
-        open_interest: null,
+        open_interest: bar.oi ?? null,
       })
     })
 
@@ -489,6 +501,7 @@ export class LiveFeed extends EventEmitter {
     this.liveBars.clear()
     this.feedStatuses.clear()
     this.lastCumVolume.clear()
+    this.lastOi.clear()
     this.pendingStatusUpdates.clear()
     for (const timer of this._streamingTimers.values()) clearTimeout(timer)
     this._streamingTimers.clear()

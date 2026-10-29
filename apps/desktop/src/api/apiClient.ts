@@ -11,7 +11,7 @@ const WS_URL = 'ws://127.0.0.1:7890/api/status/stream'
 export type BrokerStatus = 'connected' | 'reconnecting' | 'auth_required' | 'disconnected'
 export type FeedStatusType = 'STREAMING' | 'STALE' | 'CLOSED' | 'ERROR'
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug'
-export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya' | 'zebu' | 'tradesmart' | 'compositedge' | 'fivepaisa_xts' | 'jainam' | 'ibulls' | 'rmoney'
+export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya' | 'zebu' | 'tradesmart' | 'compositedge' | 'fivepaisa_xts' | 'jainam' | 'ibulls' | 'rmoney' | 'kotak_neo'
 
 export interface BrokerAccount {
   id: string
@@ -127,6 +127,9 @@ export const api = {
     apiFetch<{ added: number }>(`/brokers/${id}/symbols`, { method: 'POST', body: JSON.stringify({ symbols }) }),
   removeSymbolFromBroker: (id: string, ticker: string) =>
     apiFetch<{ ok: boolean }>(`/brokers/${id}/symbols/${ticker}`, { method: 'DELETE' }),
+  /** Every NFO stock (or index) future the broker lists, all expiries */
+  listFutures: (id: string, kind: 'stock' | 'index') =>
+    apiFetch<{ kind: string; contracts: Array<{ instrumentId: string; ticker: string; exchange: string; instrumentType: string; lotSize: number; tickSize: number; name?: string; expiry?: string }> }>(`/brokers/${id}/futures?kind=${kind}`),
   searchSymbols: (id: string, q: string, exchange?: string) => {
     let path = id ? `/brokers/${id}/search?q=${encodeURIComponent(q)}` : `/brokers/search?q=${encodeURIComponent(q)}`
     if (exchange) path += `&exchange=${encodeURIComponent(exchange)}`
@@ -162,6 +165,8 @@ export const api = {
   restoreBackup: (path: string) => apiFetch<BackupInfo & { ok: boolean; restarting: boolean }>('/system/restore', { method: 'POST', body: JSON.stringify({ path }) }),
   // Data health (Symbol Setup)
   getSymbolHealth: () => apiFetch<{ symbols: SymbolHealth[]; fresh?: boolean }>('/symbols/health'),
+  /** Lot size, tick size, name and expiry from each symbol's broker list (also in AmiBroker's Symbol Information) */
+  getSymbolDetails: () => apiFetch<SymbolDetail[]>('/symbols/details'),
   repairSymbols: (tickers?: string[]) =>
     apiFetch<{ ok: boolean; checked: number; queued: number; complete: number; noBroker: number }>('/symbols/repair', { method: 'POST', body: JSON.stringify(tickers ? { tickers } : {}) }),
   // Master Contracts
@@ -203,6 +208,18 @@ export interface SymbolHealth {
   firstDay: string | null
   lastDay: string | null
   bars: number
+}
+
+export interface SymbolDetail {
+  ticker: string
+  name: string
+  /** Shares in one lot (F&O are bought in whole lots); 1 for cash shares */
+  lotSize: number
+  tickSize: number
+  /** YYYY-MM-DD, '' for cash and indices */
+  expiry: string
+  /** Rupees one lot gains per rupee of price move, when the list says (MCX at Fyers) */
+  pointValue?: number
 }
 
 export interface ConsoleLine {

@@ -104,7 +104,7 @@ router.get('/bars', async (req, res) => {
   const liveBar = liveFeed.getLiveBar(ticker, brokerId)
   if (liveBar && liveBar.close > 0) {
     const ts = Math.floor(liveBar.bucketMs / 1000)
-    const liveCsvLine = `${ts},${liveBar.open},${liveBar.high},${liveBar.low},${liveBar.close},${liveBar.volume}`
+    const liveCsvLine = `${ts},${liveBar.open},${liveBar.high},${liveBar.low},${liveBar.close},${liveBar.volume}${liveBar.oi ? `,${liveBar.oi}` : ''}`
     csv = csv ? csv + '\n' + liveCsvLine : liveCsvLine
   }
 

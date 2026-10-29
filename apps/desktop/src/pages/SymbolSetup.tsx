@@ -13,10 +13,13 @@ import { VirtualGrid } from '../components/ui/VirtualGrid'
 import { useDataHealth, DataHealthSummary, HealthLine, needsAttention, type SymbolHealth } from '../components/status/DataHealth'
 import {
   List, Search, Plus, Trash2, TrendingUp, TrendingDown, CheckCircle, X, Loader, Upload, Download,
-  LayoutGrid, Rows3, ChevronDown, CheckSquare, RefreshCw, Wrench, FileUp, CornerDownLeft,
+  LayoutGrid, Rows3, ChevronDown, CheckSquare, RefreshCw, Wrench, FileUp, CornerDownLeft, CalendarClock,
 } from 'lucide-react'
 import { usePref } from '../hooks/usePref'
 import { useThrottledSymbols } from '../hooks/useThrottledSymbols'
+import { useSymbolDetails } from '../hooks/useSymbolDetails'
+import { MonthOfFutures } from '../components/symbols/MonthOfFutures'
+import { expiryOf, isExpired, monthLabel, todayIst, type Expiry } from '../lib/expiry'
 import { formatPrice, plural } from '../lib/format'
 
 const EXCHANGE_FILTERS = [
@@ -42,7 +45,8 @@ const typeBadge = (t: string) => TYPE_BADGE[t] || { bg: 'rgba(255,255,255,0.08)'
 
 const EXCHANGE_GROUPS = ['NSE', 'BSE', 'NFO', 'BFO', 'MCX']
 
-const CARD_HEIGHT = 150
+// Tall enough for a long contract name whose "FUT" and "Lot" tags wrap onto a second line
+const CARD_HEIGHT = 182
 const ROW_HEIGHT = 44
 const symKey = (s: SymbolFeed) => s.ticker
 
@@ -80,12 +84,14 @@ interface CardProps {
   health?: SymbolHealth
   healthLoading: boolean
   repairing: boolean
+  /** Lot size from the broker's list (0 = not known) */
+  lot: number
   onClick: (ticker: string, e: React.MouseEvent) => void
   onRemove: (ticker: string) => void
   onRepair: (ticker: string) => void
 }
 
-const SymbolCard = React.memo(({ sym, index, isSelected, selectionMode, health, healthLoading, repairing, onClick, onRemove, onRepair }: CardProps) => {
+const SymbolCard = React.memo(({ sym, index, isSelected, selectionMode, health, healthLoading, repairing, lot, onClick, onRemove, onRepair }: CardProps) => {
   const up = sym.changePercent >= 0
   const intro = useIntro(index)
   return (
@@ -105,6 +111,7 @@ const SymbolCard = React.memo(({ sym, index, isSelected, selectionMode, health, 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
             <span style={{ fontWeight: 700, color: '#eceef2', fontSize: '0.9rem', letterSpacing: '0.01em' }}>{sym.ticker}</span>
             <TypeTag type={sym.instrumentType} />
+            {lot > 1 && <span className="lot-tag" title="Bought in whole lots only (AmiBroker: Round lot size)">Lot {lot.toLocaleString('en-IN')}</span>}
           </div>
           {sym.rawSymbol && sym.rawSymbol !== sym.ticker && (
             <div style={{ fontSize: '0.64rem', color: '#575d66', marginTop: '0.15rem', fontFamily: 'JetBrains Mono, monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -142,7 +149,7 @@ const SymbolCard = React.memo(({ sym, index, isSelected, selectionMode, health, 
   )
 })
 
-const SymbolRow = React.memo(({ sym, index, isSelected, selectionMode, health, healthLoading, repairing, onClick, onRemove, onRepair }: CardProps) => {
+const SymbolRow = React.memo(({ sym, index, isSelected, selectionMode, health, healthLoading, repairing, lot, onClick, onRemove, onRepair }: CardProps) => {
   const up = sym.changePercent >= 0
   const intro = useIntro(index)
   return (
@@ -150,6 +157,7 @@ const SymbolRow = React.memo(({ sym, index, isSelected, selectionMode, health, h
       {selectionMode && <span className="sym-check" data-on={isSelected} aria-hidden="true">{isSelected && <CheckCircle size={14} />}</span>}
       <span style={{ fontWeight: 700, color: '#eceef2', fontSize: '0.84rem', width: 150, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sym.ticker}</span>
       <span style={{ width: 44 }}><TypeTag type={sym.instrumentType} /></span>
+      <span style={{ width: 72 }}>{lot > 1 && <span className="lot-tag" title="Bought in whole lots only (AmiBroker: Round lot size)">Lot {lot.toLocaleString('en-IN')}</span>}</span>
       <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.82rem', color: '#eceef2', width: 110, textAlign: 'right' }}>{sym.lastPrice > 0 ? formatPrice(sym.lastPrice) : '—'}</span>
       <span style={{ fontSize: '0.74rem', fontWeight: 650, color: sym.changePercent === 0 ? '#6b727c' : up ? 'var(--good)' : '#f43f5e', width: 64, textAlign: 'right' }}>
         {sym.lastPrice > 0 ? `${up ? '+' : ''}${sym.changePercent.toFixed(2)}%` : ''}
@@ -168,6 +176,7 @@ const SymbolRow = React.memo(({ sym, index, isSelected, selectionMode, health, h
 export function SymbolSetupPage() {
   // Prices at most once a second here: redrawing 500 cards on every tick made the page sluggish
   const symbols = useThrottledSymbols(1000)
+  const details = useSymbolDetails()
   const brokers = useAppStore(s => s.brokers)
   const addSymbol = useAppStore(s => s.addSymbol)
   const removeSymbol = useAppStore(s => s.removeSymbol)
@@ -197,6 +206,10 @@ export function SymbolSetupPage() {
   const [collapsed, setCollapsed] = usePref<string[]>('symbols.collapsed', [])
   const [drawer, setDrawer] = useState<string | null>(null)
   const [bulkBusy, setBulkBusy] = useState<'today' | 'repair' | 'delete' | null>(null)
+  /** Removing many: how far it got */
+  const [removed, setRemoved] = useState<{ done: number; total: number } | null>(null)
+  /** 'ALL', 'EXPIRED' or a month ("2026-11") */
+  const [expiryFilter, setExpiryFilter] = useState('ALL')
 
   const activeBrokerId = brokers.find(b => b.status === 'connected')?.id || brokers[0]?.id || ''
   const brokerOf = useCallback((ticker: string) => useAppStore.getState().symbols.find(s => s.ticker === ticker)?.brokerId || activeBrokerId, [activeBrokerId])
@@ -263,6 +276,19 @@ export function SymbolSetupPage() {
     }
   }
 
+  /** A whole month of futures was added in the engine: show them right away */
+  const addFuturesToList = (list: Array<{ ticker: string; exchange: string }>) => {
+    for (const c of list) {
+      if (isAdded(c.ticker)) continue
+      addSymbol({
+        ticker: c.ticker, exchange: (c.exchange || 'NFO') as any, instrumentType: 'FUT' as any, brokerId: activeBrokerId,
+        lastPrice: 0, prevClose: 0, lastTickUtcMs: 0, barsPerMin: 0, internalLatencyMs: 0, status: 'SUBSCRIBED',
+        change: 0, changePercent: 0, volume: 0,
+      })
+    }
+    setAddedThisTime(prev => [...list.map(c => c.ticker).slice(0, 8), ...prev].slice(0, 8))
+  }
+
   const removeOne = async (ticker: string) => {
     try { await api.removeSymbolFromBroker(brokerOf(ticker), ticker) } catch (e) { console.error('Failed to remove symbol from backend', e) }
     removeSymbol(ticker)
@@ -281,6 +307,21 @@ export function SymbolSetupPage() {
     toast.success('Removed', `${ticker} was removed.`, 2500)
   }, [brokerOf]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  /** Removes these one after another (each also deletes its stored bars), showing how far it got */
+  const removeMany = async (tickers: string[]) => {
+    setBulkBusy('delete')
+    setRemoved({ done: 0, total: tickers.length })
+    try {
+      for (let i = 0; i < tickers.length; i++) {
+        await removeOne(tickers[i])
+        setRemoved({ done: i + 1, total: tickers.length })
+      }
+    } finally {
+      setBulkBusy(null)
+      setRemoved(null)
+    }
+  }
+
   const handleDeleteSelected = async () => {
     const n = selectedTickers.size
     const ok = await confirmDialog({
@@ -290,12 +331,26 @@ export function SymbolSetupPage() {
       tone: 'danger',
     })
     if (!ok) return
-    setBulkBusy('delete')
-    for (const ticker of selectedTickers) await removeOne(ticker)
-    setBulkBusy(null)
+    await removeMany([...selectedTickers])
     setSelectedTickers(new Set())
     setSelectionMode(false)
     toast.success('Removed', `${plural(n, 'symbol')} removed.`)
+  }
+
+  /** Everything the filters show right now (e.g. all October futures, or only RELIANCE's) */
+  const handleDeleteFiltered = async () => {
+    const tickers = filteredSymbols.map(s => s.ticker)
+    const what = expiryFilter === 'EXPIRED' ? 'expired contract' : expiryFilter !== 'ALL' ? `${monthLabel(expiryFilter)} contract` : 'symbol'
+    const ok = await confirmDialog({
+      title: `Remove ${plural(tickers.length, what)}?`,
+      message: `${tickers.slice(0, 6).join(', ')}${tickers.length > 6 ? ` and ${tickers.length - 6} more` : ''} stop streaming to AmiBroker and their downloaded history is deleted.`,
+      confirmLabel: `Remove ${tickers.length}`,
+      tone: 'danger',
+    })
+    if (!ok) return
+    await removeMany(tickers)
+    setSelectedTickers(new Set())
+    toast.success('Removed', `${plural(tickers.length, what)} removed.`)
   }
 
   const handleDeleteAll = async () => {
@@ -307,9 +362,7 @@ export function SymbolSetupPage() {
       typeToConfirm: 'DELETE',
     })
     if (!ok) return
-    setBulkBusy('delete')
-    for (const sym of [...symbols]) await removeOne(sym.ticker)
-    setBulkBusy(null)
+    await removeMany(symbols.map(s => s.ticker))
     setSelectionMode(false)
     setSelectedTickers(new Set())
     toast.success('All removed', 'Every symbol has been removed.')
@@ -392,11 +445,43 @@ export function SymbolSetupPage() {
     return m
   }, [symbols])
 
+  // Futures and options by expiry month (the date from the broker list, else from the ticker)
+  const expiryOfTicker = useMemo(() => {
+    const m = new Map<string, Expiry>()
+    for (const s of symbols) {
+      const e = expiryOf(s.ticker, details.get(s.ticker)?.expiry)
+      if (e) m.set(s.ticker, e)
+    }
+    return m
+  }, [symbols, details])
+  const today = todayIst()
+  const expiryCounts = useMemo(() => {
+    const months = new Map<string, number>()
+    let expired = 0
+    for (const e of expiryOfTicker.values()) {
+      months.set(e.month, (months.get(e.month) || 0) + 1)
+      if (isExpired(e, today)) expired++
+    }
+    return { months: [...months].sort((a, b) => a[0].localeCompare(b[0])), expired }
+  }, [expiryOfTicker, today])
+  // A month whose symbols were all removed: back to all months
+  useEffect(() => {
+    if (expiryFilter === 'ALL') return
+    if (expiryFilter === 'EXPIRED' ? !expiryCounts.expired : !expiryCounts.months.some(([m]) => m === expiryFilter)) setExpiryFilter('ALL')
+  }, [expiryFilter, expiryCounts])
+
   const filteredSymbols = useMemo(() => {
     const q = localSearch.trim().toLowerCase()
+    const matchesExpiry = (ticker: string) => {
+      if (expiryFilter === 'ALL') return true
+      const e = expiryOfTicker.get(ticker)
+      if (!e) return false
+      return expiryFilter === 'EXPIRED' ? isExpired(e, today) : e.month === expiryFilter
+    }
     const list = symbols.filter(s =>
       (!q || s.ticker.toLowerCase().includes(q) || (s.rawSymbol && s.rawSymbol.toLowerCase().includes(q))) &&
       (localTypeFilter === 'ALL' || s.instrumentType === localTypeFilter) &&
+      matchesExpiry(s.ticker) &&
       (!onlyProblems || needsAttention(health.byTicker.get(s.ticker))),
     )
     const by: Record<Exclude<SortBy, 'default'>, (a: SymbolFeed, b: SymbolFeed) => number> = {
@@ -407,7 +492,7 @@ export function SymbolSetupPage() {
     }
     // Default: the order they were added in (indices first, as the engine lists them)
     return sortBy === 'default' || !by[sortBy] ? list : list.sort(by[sortBy])
-  }, [symbols, localSearch, localTypeFilter, onlyProblems, health.byTicker, sortBy])
+  }, [symbols, localSearch, localTypeFilter, onlyProblems, health.byTicker, sortBy, expiryFilter, expiryOfTicker, today])
 
   const groups = useMemo(() => {
     const known = EXCHANGE_GROUPS.map(ex => ({ ex, list: filteredSymbols.filter(s => s.exchange === ex) }))
@@ -567,6 +652,37 @@ export function SymbolSetupPage() {
         </div>
       </div>
 
+      {/* Expiry months: futures / options by month, removed together or picked one by one */}
+      {expiryCounts.months.length > 0 && (
+        <div className="reveal expiry-bar" style={{ ['--i' as any]: 3 }}>
+          <span className="expiry-bar-label"><CalendarClock size={13} /> Expiry</span>
+          <button className="chip" data-on={expiryFilter === 'ALL'} onClick={() => setExpiryFilter('ALL')}>All months</button>
+          {expiryCounts.expired > 0 && (
+            <button className="chip chip-warn" data-on={expiryFilter === 'EXPIRED'} onClick={() => setExpiryFilter('EXPIRED')} title="Contracts whose expiry has passed (they no longer trade)">
+              Expired <span className="chip-count">{expiryCounts.expired}</span>
+            </button>
+          )}
+          {expiryCounts.months.map(([m, n]) => (
+            <button key={m} className="chip" data-on={expiryFilter === m} onClick={() => setExpiryFilter(m)}>
+              {monthLabel(m)} <span className="chip-count">{n}</span>
+            </button>
+          ))}
+          {expiryFilter !== 'ALL' && filteredSymbols.length > 0 && (
+            <button
+              className="btn-danger"
+              style={{ marginLeft: 'auto', padding: '0.3rem 0.75rem', fontSize: '0.76rem' }}
+              disabled={bulkBusy !== null}
+              onClick={handleDeleteFiltered}
+              title={localSearch ? `Only the ones matching "${localSearch}"` : 'Every symbol this filter shows'}
+            >
+              {bulkBusy === 'delete' && removed
+                ? <><Loader size={13} className="animate-spin" /> Removing {removed.done} of {removed.total}…</>
+                : <><Trash2 size={13} /> Remove these {filteredSymbols.length}…</>}
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Groups */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem', paddingBottom: selectionMode ? '4.5rem' : 0 }}>
         {groups.map(({ ex, list: groupSymbols }) => {
@@ -608,6 +724,7 @@ export function SymbolSetupPage() {
                           health={health.byTicker.get(sym.ticker)}
                           healthLoading={health.list === null}
                           repairing={health.isRepairing(sym.ticker)}
+                          lot={details.get(sym.ticker)?.lotSize || 0}
                           onClick={onCardClick}
                           onRemove={handleRemove}
                           onRepair={repairOne}
@@ -632,6 +749,7 @@ export function SymbolSetupPage() {
                           health={health.byTicker.get(sym.ticker)}
                           healthLoading={health.list === null}
                           repairing={health.isRepairing(sym.ticker)}
+                          lot={details.get(sym.ticker)?.lotSize || 0}
                           onClick={onCardClick}
                           onRemove={handleRemove}
                           onRepair={repairOne}
@@ -658,7 +776,7 @@ export function SymbolSetupPage() {
                 : <>Click <b style={{ color: '#eceef2' }}>Add Symbol</b> to search your broker's list, or drop a CSV file here to add many at once.</>}
             </div>
             {symbols.length > 0 && (
-              <button className="btn-secondary" style={{ marginTop: '1rem' }} onClick={() => { setLocalSearch(''); setLocalTypeFilter('ALL'); setOnlyProblems(false) }}>Clear filters</button>
+              <button className="btn-secondary" style={{ marginTop: '1rem' }} onClick={() => { setLocalSearch(''); setLocalTypeFilter('ALL'); setOnlyProblems(false); setExpiryFilter('ALL') }}>Clear filters</button>
             )}
           </div>
         )}
@@ -685,7 +803,8 @@ export function SymbolSetupPage() {
             {bulkBusy === 'repair' ? <Loader size={13} className="animate-spin" /> : <Wrench size={13} />} Repair history
           </button>
           <button className="btn-danger btn-danger--solid" style={{ padding: '0.4rem 0.8rem', fontSize: '0.78rem' }} disabled={!selectedTickers.size || bulkBusy !== null} onClick={handleDeleteSelected}>
-            {bulkBusy === 'delete' ? <Loader size={13} className="animate-spin" /> : <Trash2 size={13} />} Remove
+            {bulkBusy === 'delete' ? <Loader size={13} className="animate-spin" /> : <Trash2 size={13} />}
+            {bulkBusy === 'delete' && removed ? ` Removing ${removed.done} of ${removed.total}…` : ' Remove'}
           </button>
           <button className="icon-btn" onClick={handleDeleteAll} disabled={bulkBusy !== null} title="Remove every symbol" style={{ color: '#fb7185' }}>
             Remove all…
@@ -753,6 +872,7 @@ export function SymbolSetupPage() {
           {!isSearching && search.length < 2 && (
             <div style={{ padding: '1.25rem 1.25rem 1.5rem', color: '#8b9199', fontSize: '0.8rem' }}>
               <div style={{ textAlign: 'center' }}>Type a name to search every Indian market contract.</div>
+              <MonthOfFutures brokerId={activeBrokerId} isAdded={isAdded} onAdded={addFuturesToList} />
               {addedThisTime.length > 0 && (
                 <div style={{ marginTop: '1rem' }}>
                   <div style={{ fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#575d66', marginBottom: 6 }}>Added just now</div>
@@ -783,7 +903,11 @@ export function SymbolSetupPage() {
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontWeight: 650, color: '#eceef2', fontSize: '0.88rem' }}>{sym.ticker}</div>
-                    <div style={{ fontSize: '0.72rem', color: '#8b9199', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sym.name || sym.instrumentType}</div>
+                    <div style={{ fontSize: '0.72rem', color: '#8b9199', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {sym.name || sym.instrumentType}
+                      {sym.lotSize > 1 && <span style={{ color: 'var(--accent)', fontWeight: 650 }}> · Lot {Number(sym.lotSize).toLocaleString('en-IN')}</span>}
+                      {sym.tickSize > 0 && <span> · Tick {sym.tickSize}</span>}
+                    </div>
                   </div>
                 </div>
                 {added ? (

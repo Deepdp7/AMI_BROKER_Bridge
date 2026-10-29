@@ -86,7 +86,8 @@ export function parseNorenCandles(rows: any[], exchange: string): Bar[] {
     }
     // The running day volume restarts during NSE's closing session, which makes the
     // per-bar volume negative for a few minutes: a bar can't trade less than nothing
-    bars.push({ ts, open, high: Math.max(high, open, close), low: Math.min(low, open, close), close, volume: Math.max(0, Math.round(Number(c.intv) || 0)) })
+    const oi = Number(c.oi)
+    bars.push({ ts, open, high: Math.max(high, open, close), low: Math.min(low, open, close), close, volume: Math.max(0, Math.round(Number(c.intv) || 0)), openInterest: oi > 0 ? oi : undefined })
   }
   return bars.sort((a, b) => a.ts - b.ts)
 }

@@ -27,9 +27,14 @@ export interface HSMMappedTick {
   high?: number
   low?: number
   prevClose?: number
+  /** Open interest (F&O), a plain count */
+  openInterest?: number
   updateType: 'snapshot' | 'live'
 }
 
+// Field order on the wire, as Fyers' own SDK reads it (fyers_apiv3 3.2.0, FyersWebsocket/map.json
+// "data_val" / "index_val"). Field 13 is open interest; it used to be read as a circuit limit,
+// which is why no OI ever arrived.
 const DATA_FIELDS = [
   "ltp",
   "vol_traded_today",
@@ -43,17 +48,24 @@ const DATA_FIELDS = [
   "tot_buy_qty",
   "tot_sell_qty",
   "avg_trade_price",
-  "low_circuit",
-  "high_circuit"
+  "OI",
+  "low_price",
+  "high_price",
+  "Yhigh",
+  "Ylow",
+  "lower_ckt",
+  "upper_ckt",
+  "open_price",
+  "prev_close_price",
 ]
 
 const INDEX_FIELDS = [
   "ltp",
+  "prev_close_price",
+  "exch_feed_time",
   "high_price",
   "low_price",
   "open_price",
-  "prev_close_price",
-  "exch_feed_time"
 ]
 
 export class FyersHSMClient extends EventEmitter {
@@ -73,7 +85,7 @@ export class FyersHSMClient extends EventEmitter {
   private indexData = new Map<number, any>() // topic_id -> normalized snapshot
 
   // Dedup state: token -> { ltp, timestamp }
-  private lastTickState = new Map<string, { ltp: number, time: number, vol?: number }>()
+  private lastTickState = new Map<string, { ltp: number, time: number, vol?: number, oi?: number }>()
 
   private lastMessageTime = 0
   private watchdogTimer: NodeJS.Timeout | null = null
@@ -571,17 +583,20 @@ export class FyersHSMClient extends EventEmitter {
     const ltp = rawData.ltp !== undefined ? rawData.ltp / totalDivisor : undefined
     if (ltp === undefined) return // Ignore ticks without price
 
-    // Handle timestamps
-    const rawTs = rawData.exch_feed_time || rawData.last_traded_time || Math.floor(Date.now() / 1000)
+    // Handle timestamps (unix seconds); anything that isn't a believable clock time (a field
+    // read from the wrong place) falls back to now rather than putting a candle in 1970
+    const nowSec = Math.floor(Date.now() / 1000)
+    const plausible = (t: any) => typeof t === 'number' && t > nowSec - 7 * 86_400 && t < nowSec + 86_400
+    const rawTs = plausible(rawData.exch_feed_time) ? rawData.exch_feed_time : plausible(rawData.last_traded_time) ? rawData.last_traded_time : nowSec
     const tsMs = rawTs * 1000
 
     // Dedup logic
     const dedup = this.lastTickState.get(dbTicker)
     const cumVol = typeof rawData.vol_traded_today === 'number' ? rawData.vol_traded_today : undefined
-    if (dedup && dedup.ltp === ltp && dedup.time === tsMs && dedup.vol === cumVol) {
+    if (dedup && dedup.ltp === ltp && dedup.time === tsMs && dedup.vol === cumVol && dedup.oi === rawData.OI) {
       return // Duplicate
     }
-    this.lastTickState.set(dbTicker, { ltp, time: tsMs, vol: cumVol })
+    this.lastTickState.set(dbTicker, { ltp, time: tsMs, vol: cumVol, oi: rawData.OI })
     
     const stat = this.tickStats.get(dbTicker) || { ticks: 0, lastTime: 0 }
     stat.ticks++
@@ -598,6 +613,7 @@ export class FyersHSMClient extends EventEmitter {
       high: rawData.high_price !== undefined ? rawData.high_price / totalDivisor : undefined,
       low: rawData.low_price !== undefined ? rawData.low_price / totalDivisor : undefined,
       prevClose: rawData.prev_close_price !== undefined ? rawData.prev_close_price / totalDivisor : undefined,
+      openInterest: rawData.OI > 0 ? rawData.OI : undefined,
       updateType
     }
     

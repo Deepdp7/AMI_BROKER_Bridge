@@ -38,6 +38,7 @@ export const BROKER_NAMES: Record<string, string> = {
   jainam: 'Jainam',
   ibulls: 'IndiaBulls',
   rmoney: 'Rmoney',
+  kotak_neo: 'Kotak Neo',
 }
 
 interface Props {

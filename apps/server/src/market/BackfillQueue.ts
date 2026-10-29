@@ -490,6 +490,11 @@ class BackfillQueueService extends EventEmitter {
     return this.queue.length
   }
 
+  /** Tickers with downloads waiting (one per queued task, so a ticker can repeat) */
+  public queuedTickers(): string[] {
+    return this.queue.map(t => t.ticker)
+  }
+
   public resumeAfterAuth() {
     this.consecutiveAuthErrors = 0
     this.tokenPausedUntil = 0

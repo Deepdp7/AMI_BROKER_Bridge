@@ -11,6 +11,7 @@ import { warmHealth } from './market/DataHealth'
 import { morningBrief } from './ai/MorningBrief'
 import { broadcast } from './api/realtime'
 import { notifyAmiBrokerHistoryChanged } from './amibroker/ipcServer'
+import { startStallWatch } from './system/stallWatch'
 import type { AppSettings } from './types'
 
 /** Forwards service events to the app (WebSocket) and broker ticks into the live feed. Call once. */
@@ -117,6 +118,7 @@ async function fetchTodayBars(adapter: any, ticker: string) {
  * opens the login page for expired tokens and, during market hours, refreshes today's bars.
  */
 export async function startEngine() {
+  startStallWatch()
   try {
     const settings = getAllSettings() as unknown as AppSettings
     console.log(`[Init] Log level: ${settings.logLevel}`)

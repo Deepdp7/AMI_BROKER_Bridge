@@ -230,11 +230,14 @@ const q = {
   // Live-tick bars never overwrite broker history
   insertLiveBar: sqlite.prepare('INSERT OR IGNORE INTO bars (tid, ts, open, high, low, close, volume, oi) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'),
   // Broker history is authoritative; identical rows are skipped (no write, changes = 0)
+  // Open interest: a broker answer without it keeps what the bar had (from live ticks)
   upsertHistoryBar: sqlite.prepare(`
-    INSERT INTO bars (tid, ts, open, high, low, close, volume, oi) VALUES (?, ?, ?, ?, ?, ?, ?, NULL)
+    INSERT INTO bars (tid, ts, open, high, low, close, volume, oi) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT (tid, ts) DO UPDATE SET
-      open = excluded.open, high = excluded.high, low = excluded.low, close = excluded.close, volume = excluded.volume
-    WHERE (open, high, low, close, volume) IS NOT (excluded.open, excluded.high, excluded.low, excluded.close, excluded.volume)
+      open = excluded.open, high = excluded.high, low = excluded.low, close = excluded.close, volume = excluded.volume,
+      oi = COALESCE(excluded.oi, bars.oi)
+    WHERE (bars.open, bars.high, bars.low, bars.close, bars.volume, bars.oi) IS NOT
+          (excluded.open, excluded.high, excluded.low, excluded.close, excluded.volume, COALESCE(excluded.oi, bars.oi))
   `),
   lastBarTs: sqlite.prepare('SELECT ts FROM bars WHERE tid = ? ORDER BY ts DESC LIMIT 1'),
   oldestBarTs: sqlite.prepare('SELECT ts FROM bars WHERE tid = ? ORDER BY ts ASC LIMIT 1'),
@@ -380,7 +383,7 @@ export function insertBarBatch(barsToInsert: any[]) {
 }
 
 /** A broker history bar; `ts` is the minute's start in UTC ms */
-export interface HistoryBar { ts: number; open: number; high: number; low: number; close: number; volume: number }
+export interface HistoryBar { ts: number; open: number; high: number; low: number; close: number; volume: number; openInterest?: number }
 
 /**
  * Upserts broker history bars (bar objects, or "tsSec,open,high,low,close,volume" lines); returns
@@ -411,7 +414,8 @@ export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<H
     const tid = tickerId(amibrokerTicker)
     let changed = 0
     for (const [tsSec, b] of byMinute) {
-      changed += Number(q.upsertHistoryBar.run(tid, tsSec, px(b.open), px(b.high), px(b.low), px(b.close), Math.round(Number(b.volume) || 0)).changes)
+      const oi = Number(b.openInterest)
+      changed += Number(q.upsertHistoryBar.run(tid, tsSec, px(b.open), px(b.high), px(b.low), px(b.close), Math.round(Number(b.volume) || 0), oi > 0 ? Math.round(oi) : null).changes)
     }
     return changed
   })

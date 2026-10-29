@@ -16,8 +16,10 @@ export interface BrokerInfo {
   userId?: { label: string; placeholder: string }
   /** The broker may leave you on its own page after login: offer to paste that page's address */
   pasteFallback?: boolean
-  /** Logs in with the keys alone, no browser page (XTS market data API) */
+  /** Logs in with the keys alone, no browser page (XTS market data API, Kotak Neo) */
   direct?: boolean
+  /** The "secret" is several fields (Kotak: mobile, MPIN, authenticator key); they are sent joined with "|" */
+  secretParts?: { label: string; placeholder: string; hidden?: boolean }[]
   /** History download speed, 1 (slow) to 5 (fastest) */
   speed: 1 | 2 | 3 | 4 | 5
   speedNote: string
@@ -118,6 +120,23 @@ export const BROKER_INFO: Record<string, BrokerInfo> = {
     speed: 1,
     speedNote: 'Slow history: about 5 days of data per request, 120 requests a minute.',
   },
+  kotak_neo: {
+    name: 'Kotak Neo',
+    description: 'Kotak Neo Trade API v2. 1-minute history for NSE, BSE and F&O + live feed.',
+    authType: 'Access token + client code, mobile, MPIN and authenticator key (no browser)',
+    apiUrl: 'https://www.kotaksecurities.com',
+    setup: 'In the Kotak Neo app or website go to Invest → Trade API, create an application and copy its access token. You also need your client code (UCC), the mobile number registered with Kotak, your trading MPIN, and an authenticator registered for the API: when it shows the secret key next to the QR code, copy that key here (DataBridge Pro then makes the daily code by itself). A 6-digit code works for one login only. Commodity (MCX) and currency have live prices but no history at Kotak, so they are not listed.',
+    keyLabel: 'Access Token',
+    userId: { label: 'Kotak Client Code (UCC)', placeholder: 'Your client code, e.g. A1B2C' },
+    secretParts: [
+      { label: 'Registered mobile number', placeholder: '10-digit mobile number' },
+      { label: 'Trading MPIN', placeholder: '6-digit MPIN', hidden: true },
+      { label: 'Authenticator secret key (or the 6-digit code now)', placeholder: 'Letters and digits 2-7, from the authenticator setup' },
+    ],
+    direct: true,
+    speed: 2,
+    speedNote: 'Medium: about a month of data per request, but only about one request a second.',
+  },
   ...Object.fromEntries(([
     ['compositedge', 'Compositedge', 'https://www.compositedge.com', 'On Compositedge\'s XTS developer portal'],
     ['fivepaisa_xts', '5paisa (XTS)', 'https://www.5paisa.com', 'On 5paisa\'s XTS developer portal'],
@@ -139,7 +158,7 @@ export const BROKER_INFO: Record<string, BrokerInfo> = {
 
 /** Fastest history first */
 export const BROKER_ORDER = [
-  'dhan', 'zerodha_kite', 'angel_one', 'fyers', 'upstox',
+  'dhan', 'zerodha_kite', 'angel_one', 'fyers', 'upstox', 'kotak_neo',
   'compositedge', 'fivepaisa_xts', 'jainam', 'ibulls', 'rmoney',
   'flattrade', 'shoonya', 'zebu', 'tradesmart',
 ]

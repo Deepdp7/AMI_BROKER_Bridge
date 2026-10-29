@@ -206,7 +206,9 @@ export class KiteAdapter extends ListedBrokerAdapter {
     const rec = await this.lookup(instrumentToken)
     if (!rec) throw this.unknownSymbol(instrumentToken)
 
-    const qs = `from=${encodeURIComponent(formatIstDateTime(from))}&to=${encodeURIComponent(formatIstDateTime(to))}`
+    // F&O contracts: open interest per candle too (7th value)
+    const oi = rec.expiry ? '&oi=1' : ''
+    const qs = `from=${encodeURIComponent(formatIstDateTime(from))}&to=${encodeURIComponent(formatIstDateTime(to))}${oi}`
     await historyLimiter.acquire()
     let data: any
     try {
@@ -225,6 +227,7 @@ export class KiteAdapter extends ListedBrokerAdapter {
       low: c[3],
       close: c[4],
       volume: c[5] || 0,
+      openInterest: c[6] > 0 ? c[6] : undefined,
     })).filter(b => Number.isFinite(b.ts))
   }
 }

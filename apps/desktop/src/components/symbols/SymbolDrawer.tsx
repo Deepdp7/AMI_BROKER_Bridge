@@ -4,7 +4,8 @@
  */
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { X, Star, RefreshCw, Copy, Wrench, Loader, TrendingUp, TrendingDown, Clock, Gauge, Layers, Hash, Database, Trash2 } from 'lucide-react'
+import { X, Star, RefreshCw, Copy, Wrench, Loader, TrendingUp, TrendingDown, Clock, Gauge, Layers, Hash, Database, Trash2, Package, Ruler, CalendarClock, Wallet, BarChart3 } from 'lucide-react'
+import { useSymbolDetails, lotValue } from '../../hooks/useSymbolDetails'
 import { useAppStore } from '../../store/appStore'
 import { api, type SymbolHealth } from '../../api/apiClient'
 import { toast } from '../ui/Toast'
@@ -48,6 +49,7 @@ export function SymbolDrawer({ ticker, onClose, pinned, onTogglePin, onRemove }:
   const shown = ticker ?? last.current
   const sym = useAppStore(s => s.symbols.find(x => x.ticker === shown))
   const brokers = useAppStore(s => s.brokers)
+  const detail = useSymbolDetails().get(shown ?? '')
   const [health, setHealth] = useState<SymbolHealth | null | undefined>(undefined)
   const [busy, setBusy] = useState<'today' | 'repair' | null>(null)
   const [now, setNow] = useState(Date.now())
@@ -150,6 +152,26 @@ export function SymbolDrawer({ ticker, onClose, pinned, onTogglePin, onRemove }:
               <Detail icon={Gauge} label="Delay" value={`${sym.internalLatencyMs || 0} ms`} />
               <Detail icon={Database} label="Volume" value={sym.volume ? formatCompact(sym.volume) : '—'} />
               <Detail icon={Layers} label="Exchange" value={`${sym.exchange} · ${sym.instrumentType}`} />
+              {sym.openInterest ? <Detail icon={BarChart3} label="Open interest" value={sym.openInterest.toLocaleString('en-IN')} /> : null}
+            </div>
+          )}
+
+          {/* Contract: what the broker's list says; also in AmiBroker's Symbol Information */}
+          {detail && (
+            <div className="reveal" style={{ ['--i' as any]: 3, padding: '0.9rem', borderRadius: 12, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#8b9199', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.55rem' }}>Contract</div>
+              {detail.name && <div style={{ fontSize: '0.84rem', color: '#eceef2', fontWeight: 600, marginBottom: '0.55rem' }}>{detail.name}</div>}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                <Detail icon={Package} label="Lot size" value={detail.lotSize > 1 ? `${detail.lotSize.toLocaleString('en-IN')} shares` : detail.pointValue ? `1 lot (×${detail.pointValue})` : '1 (any quantity)'} />
+                <Detail icon={Ruler} label="Tick size" value={`₹${detail.tickSize}`} />
+                {detail.expiry && <Detail icon={CalendarClock} label="Expiry" value={detail.expiry} />}
+                {sym && sym.lastPrice > 0 && (
+                  <Detail icon={Wallet} label={detail.lotSize > 1 || detail.pointValue ? 'One lot costs' : 'One share costs'} value={`₹${Math.round(lotValue(detail, sym.lastPrice)).toLocaleString('en-IN')}`} />
+                )}
+              </div>
+              <div style={{ fontSize: '0.7rem', color: '#6b727c', marginTop: '0.55rem' }}>
+                In AmiBroker: Symbol › Information (Round lot size{detail.pointValue ? ', Point value' : ''}); formulas read it as RoundLotSize.
+              </div>
             </div>
           )}
 

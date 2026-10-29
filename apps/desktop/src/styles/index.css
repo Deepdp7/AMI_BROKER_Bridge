@@ -772,6 +772,24 @@ html[data-motion="reduced"] .nav-indicator { transition: none; }
   background: rgba(255,255,255,0.07); color: inherit; font-variant-numeric: tabular-nums;
 }
 .chip[data-on="true"] .chip-count { background: rgb(var(--accent-rgb) / 0.2); }
+/* Expired contracts: amber, so they stand out as the ones to clear away */
+.chip-warn { color: #fbbf24; }
+.chip-warn[data-on="true"] { background: rgba(245,158,11,0.14); border-color: rgba(245,158,11,0.4); color: #fbbf24; }
+.chip-warn[data-on="true"] .chip-count { background: rgba(245,158,11,0.2); }
+
+/* Add Symbol dialog: a whole month of futures */
+.month-futures {
+  margin-top: 1rem; padding: 0.75rem 0.85rem; border-radius: 12px; text-align: left;
+  background: rgb(var(--accent-rgb) / 0.05); border: 1px solid rgb(var(--accent-rgb) / 0.16);
+}
+.month-futures-head { display: flex; align-items: center; gap: 7px; font-size: 0.8rem; font-weight: 650; color: #eceef2; }
+
+/* Symbol Setup: expiry month row under the toolbar */
+.expiry-bar { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; margin-top: -0.35rem; }
+.expiry-bar-label {
+  display: inline-flex; align-items: center; gap: 5px; margin-right: 0.25rem;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #6b727c;
+}
 
 /* Keyboard hint */
 .kbd {
@@ -779,6 +797,13 @@ html[data-motion="reduced"] .nav-indicator { transition: none; }
   padding: 0 0.3rem; border-radius: 5px; font-size: 0.66rem; font-weight: 700; font-family: var(--font-mono);
   color: var(--color-slate-400); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
   border-bottom-width: 2px;
+}
+
+/* Lot size next to an F&O symbol (whole lots only) */
+.lot-tag {
+  display: inline-flex; align-items: center; height: 1.1rem; padding: 0 0.4rem; border-radius: 5px;
+  font-size: 0.62rem; font-weight: 700; font-family: var(--font-mono); white-space: nowrap;
+  color: var(--accent); background: rgb(var(--accent-rgb) / 0.1); border: 1px solid rgb(var(--accent-rgb) / 0.2);
 }
 
 /* Segmented control with a sliding highlight */

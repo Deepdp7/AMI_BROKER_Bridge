@@ -19,7 +19,7 @@ export type LogLevel = 'error' | 'warn' | 'info' | 'debug'
 
 export interface BrokerAccount {
   id: string
-  brokerType: 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya' | 'zebu' | 'tradesmart' | 'compositedge' | 'fivepaisa_xts' | 'jainam' | 'ibulls' | 'rmoney'
+  brokerType: 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya' | 'zebu' | 'tradesmart' | 'compositedge' | 'fivepaisa_xts' | 'jainam' | 'ibulls' | 'rmoney' | 'kotak_neo'
   label: string
   status: BrokerStatus
   lastConnectedAt?: number
@@ -41,6 +41,8 @@ export interface SymbolFeed {
   change: number
   changePercent: number
   volume: number
+  /** Open interest (F&O), from the broker's ticks */
+  openInterest?: number
 }
 
 export interface LogEntry {
@@ -108,6 +110,8 @@ interface AppStore {
   // Backfill status
   backfillStatuses: Record<string, { ticker: string; progress: number; status: string; candlesFetched: number; completedChunks: number; totalChunks: number }>
   updateBackfillStatus: (ticker: string, data: any) => void
+  /** Many at once (one store update for a burst of download events) */
+  updateBackfillStatuses: (byTicker: Record<string, any>) => void
   clearBackfillStatus: (ticker: string) => void
   /** Drop completed/failed entries (after the finished-batch notification is gone) */
   clearFinishedBackfills: () => void
@@ -224,6 +228,9 @@ export const useAppStore = create<AppStore>()(
   backfillStatuses: {},
   updateBackfillStatus: (ticker, data) => set((prev) => ({
     backfillStatuses: { ...prev.backfillStatuses, [ticker]: data }
+  })),
+  updateBackfillStatuses: (byTicker) => set((prev) => ({
+    backfillStatuses: { ...prev.backfillStatuses, ...byTicker }
   })),
   clearFinishedBackfills: () => set((prev) => ({
     backfillStatuses: Object.fromEntries(Object.entries(prev.backfillStatuses).filter(([, st]) => st.status === 'pending' || st.status === 'running')),

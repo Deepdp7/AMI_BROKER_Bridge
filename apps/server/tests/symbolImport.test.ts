@@ -9,8 +9,9 @@ import path from 'path'
 import request from 'supertest'
 
 const execMock = vi.hoisted(() => vi.fn())
+const execFileMock = vi.hoisted(() => vi.fn())
 // The import also tells a running AmiBroker through PowerShell; never start it in tests
-vi.mock('child_process', async orig => ({ ...(await orig<typeof import('child_process')>()), exec: execMock }))
+vi.mock('child_process', async orig => ({ ...(await orig<typeof import('child_process')>()), exec: execMock, execFile: execFileMock }))
 
 const tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), 'dbp-import-'))
 process.env.USERPROFILE = tmpHome
@@ -81,14 +82,15 @@ describe('the ready-made symbol lists', () => {
 })
 
 describe('a hostile CSV', () => {
-  it('cannot put commands into the PowerShell line that tells AmiBroker', async () => {
+  it('cannot put commands into a PowerShell line: tickers never go into one', async () => {
     execMock.mockClear()
+    execFileMock.mockClear()
     const res = await importCsv(['GOODONE,NSE,EQ', "EVIL'; calc; '", 'BAD"X,NSE,EQ', 'ALSO$(calc),NSE,EQ', 'PCT%PATH%,NSE,EQ'].join('\n'))
     expect(res.status).toBe(200)
     expect(res.body.added).toBe(1)
     expect(res.body.errors.length).toBeGreaterThanOrEqual(3)
-    const ran = execMock.mock.calls.map(c => String(c[0])).join('\n')
-    expect(ran).toContain('GOODONE')
-    for (const bad of ['EVIL', 'calc', 'BAD"X', 'PATH']) expect(ran, bad).not.toContain(bad)
+    // AmiBroker is told through a data file handed to a fixed script (amibroker/symbolDetails.ts)
+    const ran = [...execMock.mock.calls, ...execFileMock.mock.calls].map(c => JSON.stringify(c.slice(0, 2))).join('\n')
+    for (const t of ['GOODONE', 'EVIL', 'calc', 'BAD"X', 'PATH']) expect(ran, t).not.toContain(t)
   })
 })

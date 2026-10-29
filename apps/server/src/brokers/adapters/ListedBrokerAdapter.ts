@@ -8,7 +8,7 @@
  */
 import { EventEmitter } from 'events'
 import { stmts } from '../../db'
-import type { IBrokerAdapter, BrokerCredentials, SessionInfo, InstrumentInfo, Bar } from './IBrokerAdapter'
+import type { IBrokerAdapter, BrokerCredentials, SessionInfo, InstrumentInfo, InstrumentDetails, Bar } from './IBrokerAdapter'
 import type { InstrumentMaster, MasterRecord } from './InstrumentMaster'
 
 export interface FeedTick {
@@ -63,6 +63,20 @@ export abstract class ListedBrokerAdapter extends EventEmitter implements IBroke
   async searchSymbols(query: string, exchange?: string): Promise<InstrumentInfo[]> {
     await this.master.ensureLoaded()
     return this.master.search(query, exchange)
+  }
+
+  async listFutures(kind: 'stock' | 'index'): Promise<InstrumentInfo[]> {
+    await this.master.ensureLoaded()
+    return this.master.futures([kind === 'stock' ? 'FUTSTK' : 'FUTIDX']).filter(f => f.exchange === 'NFO')
+  }
+
+  async instrumentDetails(names: string[]): Promise<Map<string, InstrumentDetails>> {
+    const out = new Map<string, InstrumentDetails>()
+    for (const name of names) {
+      const r = await this.lookup(name)
+      if (r) out.set(name, { name: r.name, lotSize: r.lot, tickSize: r.tick, expiry: r.expiry })
+    }
+    return out
   }
 
   async subscribe(instruments: string[]): Promise<void> {

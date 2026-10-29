@@ -9,3 +9,4 @@ EXPORTS
     Notify
     SetSiteInterface
     GetRecentInfo
+    GetPluginStatus

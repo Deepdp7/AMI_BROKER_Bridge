@@ -1,7 +1,7 @@
 import { encode, decode } from '@msgpack/msgpack';
 import { stmts, DATA_DIR } from '../../../db';
 import { EventEmitter } from 'events'
-import { IBrokerAdapter, BrokerCredentials, SessionInfo, InstrumentInfo, Bar, NormalizedTick } from '../IBrokerAdapter'
+import { IBrokerAdapter, BrokerCredentials, SessionInfo, InstrumentInfo, InstrumentDetails, Bar, NormalizedTick } from '../IBrokerAdapter'
 import crypto from 'crypto'
 import fs from 'fs'
 import path from 'path'
@@ -58,6 +58,49 @@ export function fyersTokenExpiryMs(accessToken: string): number | null {
 export function isFyersTokenExpired(accessToken: string): boolean {
   const exp = fyersTokenExpiryMs(accessToken)
   return exp !== null && exp < Date.now() + 60_000
+}
+
+/** Fyers symbol-list files and the exchange prefix of the symbols in them */
+const FYERS_LIST_FILES: Record<string, string> = { 'NSE_CM.csv': 'NSE', 'NSE_FO.csv': 'NSE', 'MCX_COM.csv': 'MCX', 'BSE_CM.csv': 'BSE' }
+
+/**
+ * One Fyers list row's lot size, tick size, name and expiry. Columns: 1 name, 3 lot size
+ * (0 for indices), 4 tick size, 8 expiry (unix seconds, empty for cash), 9 symbol.
+ */
+export function fyersRowDetails(parts: string[]): InstrumentDetails {
+  const expirySec = parseInt(parts[8]) || 0
+  return {
+    name: (parts[1] || '').trim(),
+    lotSize: Math.max(1, parseInt(parts[3]) || 1),
+    tickSize: parseFloat(parts[4]) || 0.05,
+    expiry: expirySec > 0 ? new Date(expirySec * 1000 + 19_800_000).toISOString().slice(0, 10) : '',
+  }
+}
+
+/**
+ * MCX symbol → rupees one lot gains per rupee of price move (CRUDEOIL 100: quoted per barrel,
+ * one lot is 100 barrels). Fyers' JSON list (~17 MB) is the only place with it; the numbers
+ * are kept in a small file, refreshed once a day.
+ */
+async function fyersMcxMultipliers(masterDir: string): Promise<Record<string, number>> {
+  const file = path.join(masterDir, 'MCX_multipliers.json')
+  const today = new Date(Date.now() + 19_800_000).toISOString().slice(0, 10)
+  try {
+    const saved = JSON.parse(await fs.promises.readFile(file, 'utf8'))
+    if (saved.date === today) return saved.multipliers
+  } catch { /* not saved yet */ }
+  const res = await fetch('https://public.fyers.in/sym_details/MCX_COM_sym_master.json', { signal: AbortSignal.timeout(MASTER_DOWNLOAD_TIMEOUT_MS) })
+  if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
+  const list: Record<string, { qtyMultiplier?: number }> = await res.json() as any
+  const multipliers: Record<string, number> = {}
+  for (const [sym, row] of Object.entries(list)) {
+    const m = Number(row?.qtyMultiplier)
+    if (m > 0) multipliers[sym] = m
+  }
+  if (Object.keys(multipliers).length < 10) throw new Error('the MCX list had no lot values')
+  await fs.promises.mkdir(masterDir, { recursive: true })
+  await fs.promises.writeFile(file, JSON.stringify({ date: today, multipliers }))
+  return multipliers
 }
 
 /** Longest one symbol-list file may take to download (the biggest is about 10 MB) */
@@ -459,13 +502,16 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
                  if (catFilter && !catFilter.includes(cat)) continue
                  const cleanId = id.replace(/^[A-Z]+:/, '')
 
+                 const d = fyersRowDetails(parts)
                  results.push({
                    instrumentId: id,
                    exchange: src.ex,
                    ticker: src.type === 'EQ' ? sym : cleanId,
                    instrumentType: category(cat),
-                   lotSize: parseInt(parts[3]) || 1,
-                   tickSize: parseFloat(parts[4]) || 0.05
+                   lotSize: d.lotSize,
+                   tickSize: d.tickSize,
+                   name: d.name,
+                   expiry: d.expiry || undefined,
                  })
                  fileCount++
                }
@@ -488,6 +534,67 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
     return results
   }
 
+  /** Every NFO stock or index future in the saved Fyers list (NSE_FO.csv), all expiries */
+  async listFutures(kind: 'stock' | 'index'): Promise<InstrumentInfo[]> {
+    const filePath = path.join(DATA_DIR, 'fyers_master', 'NSE_FO.csv')
+    if (!fs.existsSync(filePath)) await this.downloadMasterContracts()
+    if (!fs.existsSync(filePath)) return []
+    const want: InstrumentCategory = kind === 'stock' ? 'FUTSTK' : 'FUTIDX'
+    const out: InstrumentInfo[] = []
+    const rl = readline.createInterface({ input: fs.createReadStream(filePath), crlfDelay: Infinity })
+    for await (const line of rl) {
+      if (!line.includes('FUT,')) continue
+      const parts = line.split(',')
+      const id = parts[9]?.trim()
+      if (!id || !id.endsWith('FUT') || fyersCategory('NFO', parseInt(parts[2]) || 0, id) !== want) continue
+      const d = fyersRowDetails(parts)
+      out.push({ instrumentId: id, exchange: 'NFO', ticker: id.replace(/^[A-Z]+:/, ''), instrumentType: 'FUT', lotSize: d.lotSize, tickSize: d.tickSize, name: d.name, expiry: d.expiry || undefined })
+    }
+    return out
+  }
+
+  /**
+   * Lot size, tick size, name and expiry from the saved Fyers lists, in one pass over the files
+   * the names can be in. MCX rows count in lots (lot 1) and leave out what one lot earns per
+   * rupee of price move; that is only in Fyers' JSON list (qtyMultiplier), read for MCX names.
+   */
+  async instrumentDetails(names: string[]): Promise<Map<string, InstrumentDetails>> {
+    const masterDir = path.join(DATA_DIR, 'fyers_master')
+    const namesOf = new Map<string, string[]>() // Fyers symbol → stored names
+    for (const name of names) {
+      const sym = await this.resolveSymbol(name).catch(() => name)
+      namesOf.set(sym, [...(namesOf.get(sym) || []), name])
+    }
+    const exchanges = new Set([...namesOf.keys()].map(s => s.split(':')[0]))
+    const files = Object.entries(FYERS_LIST_FILES).filter(([, ex]) => exchanges.has(ex)).map(([f]) => f)
+
+    const out = new Map<string, InstrumentDetails>()
+    for (const file of files) {
+      const filePath = path.join(masterDir, file)
+      if (!fs.existsSync(filePath)) continue
+      const rl = readline.createInterface({ input: fs.createReadStream(filePath), crlfDelay: Infinity })
+      for await (const line of rl) {
+        const parts = line.split(',')
+        const forNames = namesOf.get(parts[9]?.trim())
+        if (!forNames) continue
+        const d = fyersRowDetails(parts)
+        for (const n of forNames) out.set(n, d)
+      }
+    }
+
+    if (exchanges.has('MCX')) {
+      const multipliers = await fyersMcxMultipliers(masterDir).catch(err => {
+        console.warn(`[Fyers] MCX lot values unavailable: ${err?.message || err}`)
+        return {} as Record<string, number>
+      })
+      for (const [sym, forNames] of namesOf) {
+        const m = multipliers[sym]
+        if (!(m > 0)) continue
+        for (const n of forNames) { const d = out.get(n); if (d) d.pointValue = m }
+      }
+    }
+    return out
+  }
 
   /** Authenticated GET on the Fyers data API (option chain, quotes…), under the shared rate limit. */
   async dataApi(pathAndQuery: string): Promise<any> {
@@ -530,7 +637,9 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
     const toStr = formatIST(to)
 
     await historyLimiter.acquire()
-    const url = `https://api-t1.fyers.in/data/history?symbol=${encodeURIComponent(safeToken)}&resolution=${resolution}&date_format=1&range_from=${fromStr}&range_to=${toStr}&cont_flag=0`
+    // F&O contracts: open interest per candle too (7th value)
+    const oiFlag = /(FUT|CE|PE)$/.test(safeToken) ? '&oi_flag=1' : ''
+    const url = `https://api-t1.fyers.in/data/history?symbol=${encodeURIComponent(safeToken)}&resolution=${resolution}&date_format=1&range_from=${fromStr}&range_to=${toStr}&cont_flag=0${oiFlag}`
 
     try {
       const controller = new AbortController()
@@ -567,7 +676,8 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
           high: c[2],
           low: c[3],
           close: c[4],
-          volume: c[5]
+          volume: c[5],
+          openInterest: c[6] > 0 ? c[6] : undefined,
         }))
       } else if (data.s === 'no_data') {
         return []
