@@ -93,6 +93,27 @@ describe('Learned closed days', () => {
     expect(gapBetween('2027-01-25', '2027-01-27')).not.toBeNull()
   })
 
+  it("a symbol's own day without trades is remembered, even when the market was open", () => {
+    const at26 = Date.parse('2027-01-26T06:00:00Z')
+    cal.learnClosedDays('NSE', 'CCC', from, to, sessionBars('2027-01-25', '2027-01-26', '2027-01-27'))
+    cal.learnClosedDays('NSE', 'FUT', from, to, around)  // a far-month future: nothing traded on the 26th
+    expect(cal.isQuietDay(at26, 'NFO', 'FUT')).toBe(true)
+    expect(cal.isQuietDay(at26, 'NSE', 'CCC')).toBe(false)
+    expect(cal.isClosedDay(at26, 'NSE')).toBe(false)       // the market itself was open
+    const saved = JSON.parse(fs.readFileSync(path.join(db.DATA_DIR, 'closed_days.json'), 'utf8'))
+    expect(saved.NSE.quiet.FUT).toEqual(['2027-01-26'])
+    // Bars for that day turn up later: it's no longer quiet
+    cal.learnClosedDays('NSE', 'FUT', from, to, sessionBars('2027-01-25', '2027-01-26', '2027-01-27'))
+    expect(cal.isQuietDay(at26, 'NSE', 'FUT')).toBe(false)
+  })
+
+  it('a file from before quiet days were kept counts each closed-day vote as one', () => {
+    fs.writeFileSync(path.join(db.DATA_DIR, 'closed_days.json'), JSON.stringify({ NSE: { closed: { '2026-09-03': ['FORTIS26NOVFUT'] }, traded: [] } }))
+    expect(cal.isQuietDay(Date.parse('2026-09-03T06:00:00Z'), 'NFO', 'FORTIS26NOVFUT')).toBe(true)
+    expect(cal.isQuietDay(Date.parse('2026-09-03T06:00:00Z'), 'NSE', 'FORTIS')).toBe(false)
+    expect(cal.isClosedDay(Date.parse('2026-09-03T06:00:00Z'), 'NSE')).toBe(false)
+  })
+
   it('bars on a static holiday override the list (the list once had a wrong date)', () => {
     expect(gapBetween('2026-10-19', '2026-10-21')).toBeNull()
     const [f, t] = range('2026-10-19', '2026-10-21')

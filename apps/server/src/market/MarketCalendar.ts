@@ -93,11 +93,13 @@ function calendarOf(exchange: string): string {
 // is closed when broker history for 2 different symbols has bars before and after it but none
 // on it. One response with bars on a day marks it as traded for good, which also overrides a
 // wrong entry in the static list.
+// Each symbol's own quiet days are kept too, even on days the market was open: a far-month
+// future can go a whole day without one trade, and that day is not "missing" history.
 const CLOSED_DAYS_FILE = path.join(DATA_DIR, 'closed_days.json')
 /** Symbols needed to agree before a day counts as closed (one illiquid symbol can skip a day) */
 const CLOSED_CONFIRMATIONS = 2
 
-interface LearnedCalendar { closed: Map<string, Set<string>>; traded: Set<string> }
+interface LearnedCalendar { closed: Map<string, Set<string>>; traded: Set<string>; quiet: Map<string, Set<string>> }
 let learned: Map<string, LearnedCalendar> | null = null
 
 function learnedCalendars(): Map<string, LearnedCalendar> {
@@ -106,10 +108,16 @@ function learnedCalendars(): Map<string, LearnedCalendar> {
   try {
     const obj = JSON.parse(fs.readFileSync(CLOSED_DAYS_FILE, 'utf8'))
     for (const [cal, v] of Object.entries<any>(obj)) {
-      learned.set(cal, {
-        closed: new Map(Object.entries<string[]>(v.closed || {}).map(([d, t]) => [d, new Set(t)])),
-        traded: new Set(v.traded || []),
-      })
+      const closed = new Map(Object.entries<string[]>(v.closed || {}).map(([d, t]) => [d, new Set(t)]))
+      const quiet = new Map(Object.entries<string[]>(v.quiet || {}).map(([t, d]) => [t, new Set(d)]))
+      // Files from before quiet days were kept: each closed-day vote is one
+      if (!v.quiet) {
+        for (const [d, who] of closed) for (const t of who) {
+          if (!quiet.has(t)) quiet.set(t, new Set())
+          quiet.get(t)!.add(d)
+        }
+      }
+      learned.set(cal, { closed, traded: new Set(v.traded || []), quiet })
     }
   } catch { /* no file yet */ }
   return learned
@@ -118,14 +126,18 @@ function learnedCalendars(): Map<string, LearnedCalendar> {
 function learnedFor(cal: string): LearnedCalendar {
   const all = learnedCalendars()
   let c = all.get(cal)
-  if (!c) all.set(cal, c = { closed: new Map(), traded: new Set() })
+  if (!c) all.set(cal, c = { closed: new Map(), traded: new Set(), quiet: new Map() })
   return c
 }
 
 function saveLearned() {
-  const obj: Record<string, { closed: Record<string, string[]>; traded: string[] }> = {}
+  const obj: Record<string, { closed: Record<string, string[]>; traded: string[]; quiet: Record<string, string[]> }> = {}
   for (const [cal, c] of learnedCalendars()) {
-    obj[cal] = { closed: Object.fromEntries([...c.closed].map(([d, t]) => [d, [...t]])), traded: [...c.traded].sort() }
+    obj[cal] = {
+      closed: Object.fromEntries([...c.closed].map(([d, t]) => [d, [...t]])),
+      traded: [...c.traded].sort(),
+      quiet: Object.fromEntries([...c.quiet].map(([t, d]) => [t, [...d].sort()])),
+    }
   }
   try {
     fs.mkdirSync(DATA_DIR, { recursive: true })
@@ -148,6 +160,15 @@ function isClosedDate(dateStr: string, exchange: string): boolean {
 /** True when the IST day of `utcMs` is a holiday (known or learned) for the exchange; weekends aside */
 export function isClosedDay(utcMs: number, exchange: string): boolean {
   return isClosedDate(toISTDateStr(utcMs), exchange)
+}
+
+/**
+ * True when the broker's own history for `ticker` skipped the IST day of `utcMs`: it had bars
+ * before and after, but no full session on it (no trades in an illiquid contract). Downloading
+ * again can't fill such a day, so it is not reported as missing.
+ */
+export function isQuietDay(utcMs: number, exchange: string, ticker: string): boolean {
+  return learnedCalendars().get(calendarOf(exchange))?.quiet.get(ticker)?.has(toISTDateStr(utcMs)) ?? false
 }
 
 /** Bars spread over at least this long make a day a full trading day; Diwali's Muhurat session is 1 hour */
@@ -178,8 +199,10 @@ export function learnClosedDays(exchange: string, ticker: string, fromMs: number
   const fullDays = new Set([...spans].filter(([, s]) => s.last - s.first >= FULL_DAY_SPAN_MS).map(([d]) => d))
 
   let changed = false
+  const quiet = c.quiet.get(ticker)
   // Traded days: forget a wrong closure and never learn it again
   for (const d of fullDays) {
+    if (quiet?.delete(d)) changed = true
     if (c.traded.has(d)) continue
     if (c.closed.has(d) || (cal === 'NSE' && ALL_NSE_HOLIDAYS.has(d))) {
       c.closed.delete(d)
@@ -193,8 +216,11 @@ export function learnClosedDays(exchange: string, ticker: string, fromMs: number
     const d = new Date(t).toISOString().slice(0, 10)
     if (d >= lastDay) break
     const dow = new Date(t).getUTCDay()
-    if (dow === 0 || dow === 6 || fullDays.has(d) || c.traded.has(d)) continue
+    if (dow === 0 || dow === 6 || fullDays.has(d)) continue
     if (cal === 'NSE' && ALL_NSE_HOLIDAYS.has(d)) continue
+    if (!c.quiet.has(ticker)) c.quiet.set(ticker, new Set())
+    if (!c.quiet.get(ticker)!.has(d)) { c.quiet.get(ticker)!.add(d); changed = true }
+    if (c.traded.has(d)) continue
     let who = c.closed.get(d)
     if (!who) c.closed.set(d, who = new Set())
     if (who.size < CLOSED_CONFIRMATIONS && !who.has(ticker)) {
@@ -208,7 +234,7 @@ export function learnClosedDays(exchange: string, ticker: string, fromMs: number
 
 /** Forget everything learned (tests) */
 export function resetLearnedClosedDays() {
-  learned = new Map()
+  learned = null
   try { fs.unlinkSync(CLOSED_DAYS_FILE) } catch {}
 }
 

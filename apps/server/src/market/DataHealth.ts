@@ -3,14 +3,15 @@
  *
  * One line per symbol for Symbol Setup: is its history complete, how many trading days are
  * missing, is it downloading, was it cancelled. Days are counted against the trading calendar
- * (weekends, known and learned holidays are not "missing"), from the first stored day up to
+ * (weekends, known and learned holidays, and days the broker itself has no trades for in that
+ * symbol are not "missing"), from the first stored day up to
  * the last finished trading day. Computed in one database pass on a reader thread.
  */
 import { stmts, getAllSettings } from '../db'
 import { readDayCounts } from '../db/reader'
 import { backfillQueue, backfillStatusMap } from './BackfillQueue'
 import { getHistoryFloorMs } from './state/coverageState'
-import { isWeekend, isClosedDay } from './MarketCalendar'
+import { isWeekend, isClosedDay, isQuietDay } from './MarketCalendar'
 
 export type HealthStatus = 'complete' | 'missing' | 'downloading' | 'cancelled' | 'empty'
 
@@ -110,7 +111,7 @@ async function compute(): Promise<SymbolHealth[]> {
       for (let d = first; d <= lastDay; d++) {
         if (days.has(d)) continue
         const noon = noonOf(d)
-        if (isWeekend(noon) || isClosedDay(noon, exchange)) continue
+        if (isWeekend(noon) || isClosedDay(noon, exchange) || isQuietDay(noon, exchange, ticker)) continue
         missing.push(d)
       }
     }

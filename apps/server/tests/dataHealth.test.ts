@@ -116,6 +116,21 @@ describe('Data health', () => {
     expect(full.missingDays).toBe(0) // the bars skip every weekend and holiday in the range
   })
 
+  it("a day the broker has no trades for in that symbol is not missing (illiquid futures)", async () => {
+    addSymbol('HQUIET')
+    const quietDay = tradingDays[10]
+    await addBars('HQUIET', tradingDays.filter(d => d !== quietDay))
+    expect((await health.computeHealth(true)).find(h => h.ticker === 'HQUIET')).toMatchObject({ status: 'missing', missingDays: 1 })
+
+    // The broker's answer had bars before and after that day, and none on it
+    const session = (d: number) => [0, 200, 374].map(m => ({ ts: d * DAY - IST + (9 * 60 + 15 + m) * 60_000 }))
+    const answer = tradingDays.filter(d => d !== quietDay).flatMap(session)
+    cal.learnClosedDays('NSE', 'HQUIET', tenAm(tradingDays[0]) - DAY, tenAm(tradingDays.at(-1)!) + DAY, answer)
+    expect((await health.computeHealth(true)).find(h => h.ticker === 'HQUIET')).toMatchObject({ status: 'complete', missingDays: 0 })
+    // Other symbols still count that day
+    expect(cal.isClosedDay(tenAm(quietDay), 'NSE')).toBe(false)
+  })
+
   it('history that starts long after the requested depth counts as older history missing', async () => {
     db.upsertSettings({ backfillDepthDays: 365 })
     try {
