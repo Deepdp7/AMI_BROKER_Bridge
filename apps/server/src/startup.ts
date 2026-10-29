@@ -204,9 +204,9 @@ export async function startEngine() {
     // Work out every symbol's history health ahead of the first look at Symbol Setup
     setTimeout(warmHealth, 15_000)
 
-    // Auto-start with mock data for demonstration (only runs if no real ticks)
+    // Starts the live feed's timers (stale check, saving bars built from the broker's ticks): no made-up prices
     liveFeed.start()
   } catch (e) {
-    console.error('[Init] Error starting simulator:', e)
+    console.error('[Init] Error starting the live feed:', e)
   }
 }

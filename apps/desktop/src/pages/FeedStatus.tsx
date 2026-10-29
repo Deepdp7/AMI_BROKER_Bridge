@@ -225,6 +225,9 @@ function StatusBadge({ status }: { status: SymbolFeed['status'] }) {
 }
 
 /** "42s ago", moving on by itself each second (only this label redraws) */
+/** 850 → "850ms", 1840 → "1.8s" */
+const formatDelay = (ms: number) => (ms < 1000 ? `${Math.round(ms)}ms` : `${(ms / 1000).toFixed(1)}s`)
+
 function TickAge({ ms }: { ms: number }) {
   const now = useNow()
   const age = ms ? (now - ms) / 1000 : Infinity
@@ -564,8 +567,11 @@ export function FeedStatusPage() {
                       </td>
                     )}
                     {cols.latency !== false && (
-                      <td style={{ padding: cellPad, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: (sym.internalLatencyMs || 0) < 50 ? 'var(--good)' : '#f59e0b' }}>
-                        {sym.internalLatencyMs || 0}ms
+                      <td
+                        style={{ padding: cellPad, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: !sym.lastTickUtcMs ? '#6b727c' : (sym.internalLatencyMs || 0) < 2000 ? 'var(--good)' : (sym.internalLatencyMs || 0) < 5000 ? '#f59e0b' : '#f43f5e' }}
+                        title="How old the last price was when it arrived (exchange time to now; exchanges stamp whole seconds)"
+                      >
+                        {!sym.lastTickUtcMs ? '—' : formatDelay(sym.internalLatencyMs || 0)}
                       </td>
                     )}
                     {cols.today !== false && (

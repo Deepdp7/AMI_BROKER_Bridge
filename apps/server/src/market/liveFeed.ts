@@ -6,6 +6,7 @@
  * the database) and holds the per-symbol feed status the Feed Status page shows.
  */
 import { EventEmitter } from 'events'
+import os from 'os'
 import { v4 as uuidv4 } from 'uuid'
 import { stmts, insertBarBatch } from '../db'
 import type {
@@ -170,7 +171,7 @@ export class LiveFeed extends EventEmitter {
       instrumentType: inst.instrumentType,
       lastPrice: inst.basePrice,
       prevClose: inst.basePrice, // no random offset
-      lastTickUtcMs: now,
+      lastTickUtcMs: 0, // no tick yet (it used to say "just now" for a symbol that never had one)
       barsPerMin: 0, // no fake throughput
       internalLatencyMs: 0, // no fake latency
       status: 'CLOSED', // start closed
@@ -187,7 +188,7 @@ export class LiveFeed extends EventEmitter {
     this._startTickGeneration()
     this._startBarFlush()
     this._startLogEmission()
-    this._emitLog('info', 'LiveFeed', `Feed simulator started: ${this.instruments.size} instruments`)
+    this._emitLog('info', 'LiveFeed', `Live feed started: ${this.instruments.size} instruments (prices only from the broker)`)
   }
 
   stop() {
@@ -347,7 +348,13 @@ export class LiveFeed extends EventEmitter {
     status.volume = typeof tick.totalVolume === 'number' ? tick.totalVolume : status.volume + tickQty
     if (oi) status.openInterest = oi
     status.status = 'RECEIVING' as any
-    status.internalLatencyMs = Math.round(Math.random() * 5 + 5)
+    // How old the price is when it gets here: the exchange's own time of the update to now
+    // (it used to be a made-up 5-10 ms). Feeds stamp whole seconds, so it is coarse.
+    const ageMs = tick.timestamp ? Math.max(0, Date.now() - tick.timestamp) : 0
+    status.internalLatencyMs = ageMs
+    this.msgCount++
+    this.latencyHistory.push(ageMs)
+    if (this.latencyHistory.length > 500) this.latencyHistory.shift()
 
     // Per-tick logging suppressed to prevent SQLite/WebSocket flood
 
@@ -410,16 +417,31 @@ export class LiveFeed extends EventEmitter {
     this.emit('log_entry', entry)
   }
 
+  // Measured, not made up: CPU and memory of this process, updates per second since the last look
+  private cpuMark = { at: Date.now(), usage: process.cpuUsage() }
+  private rateMark = { at: Date.now(), count: 0 }
+  private lastCpu = 0
+  private lastRate = 0
+
   _getCoreStats(): CoreEngineStats {
     const sorted = [...this.latencyHistory].sort((a, b) => a - b)
-    const p50 = sorted[Math.floor(sorted.length * 0.5)] || 30
-    const p99 = sorted[Math.floor(sorted.length * 0.99)] || 80
+    const p50 = sorted.length ? sorted[Math.floor(sorted.length * 0.5)] : 0
+    const p99 = sorted.length ? sorted[Math.floor(sorted.length * 0.99)] : 0
+    const now = Date.now()
+    if (now - this.cpuMark.at >= 900) {
+      const used = process.cpuUsage(this.cpuMark.usage)   // microseconds since the mark
+      const cores = Math.max(1, os.cpus().length)
+      this.lastCpu = ((used.user + used.system) / 1000) / ((now - this.cpuMark.at) * cores) * 100
+      this.lastRate = (this.msgCount - this.rateMark.count) / ((now - this.rateMark.at) / 1000)
+      this.cpuMark = { at: now, usage: process.cpuUsage() }
+      this.rateMark = { at: now, count: this.msgCount }
+    }
 
     return {
-      cpuPercent: +(3.5 + Math.random() * 2.5).toFixed(1),
-      ramMb: Math.round(185 + Math.random() * 10),
-      uptimeSec: Math.floor((Date.now() - this.startTime) / 1000),
-      messagesPerSec: Math.round(this.msgCount / Math.max(1, (Date.now() - this.startTime) / 1000)),
+      cpuPercent: +this.lastCpu.toFixed(1),
+      ramMb: Math.round(process.memoryUsage().rss / 1048576),
+      uptimeSec: Math.floor((now - this.startTime) / 1000),
+      messagesPerSec: Math.round(this.lastRate),
       totalSymbols: this.instruments.size,
       p50LatencyMs: Math.round(p50),
       p99LatencyMs: Math.round(p99),
@@ -462,7 +484,7 @@ export class LiveFeed extends EventEmitter {
       status.lastPrice = 0
       status.prevClose = 0
       status.barsPerMin = 0
-      status.internalLatencyMs = 12
+      status.internalLatencyMs = 0
       // Default to SUBSCRIBED so user immediately sees active feed upon addition
       status.status = 'SUBSCRIBED' as any
       this._scheduleFeedBroadcast(status, Date.now())

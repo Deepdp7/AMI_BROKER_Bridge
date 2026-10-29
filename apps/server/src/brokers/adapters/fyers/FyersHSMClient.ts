@@ -17,6 +17,23 @@ function isMarketOpen() {
 import WebSocket from 'ws'
 import { EventEmitter } from 'events'
 
+/**
+ * Fyers' answer to the live-feed login (message type 1):
+ *   u16 length · u8 type (1) · u8 field count · fields of u8 id, u16 length, value
+ * The first field's text is "K" when the login was taken; otherwise it is the reason, e.g.
+ * "authentication failed" (seen 2026-10-29 for a token whose REST calls still worked).
+ */
+export function hsmAuthAnswer(data: Buffer): { refused: boolean; text: string } {
+  try {
+    if (data.length < 7 || data.readUInt8(3) < 1) return { refused: false, text: '' }
+    const len = data.readUInt16BE(5)
+    const text = data.subarray(7, 7 + len).toString('utf8').trim()
+    return { refused: /fail|invalid|expire|denied|error|unauthori/i.test(text), text }
+  } catch {
+    return { refused: false, text: '' }
+  }
+}
+
 export interface HSMMappedTick {
   instrumentId: string // e.g. NSE:BRITANNIA-EQ
   lastPrice: number
@@ -101,6 +118,8 @@ export class FyersHSMClient extends EventEmitter {
   private hsmUrl = "wss://socket.fyers.in/hsm/v1-5/prod"
   private source = "DataBridgePro"
   private reconnectAttempts = 0
+  /** Logins Fyers refused in a row (see onAuthRefused) */
+  private authRefusals = 0
 
   constructor(accessToken: string) {
     super()
@@ -196,10 +215,11 @@ export class FyersHSMClient extends EventEmitter {
       this.parseBinaryMessage(data)
     })
 
-    this.ws.on('close', () => {
+    this.ws.on('close', (code: number, reason: Buffer) => {
       this.isConnecting = false
       this.authenticated = false
-      console.log('[FYERS_HSM_CONNECT] Disconnected. Scheduling reconnect...')
+      // Into the stored log too: only printing it hid why the feed kept dropping
+      this.emitLog('warn', `[FYERS_HSM_CONNECT] Disconnected (code ${code}${reason?.length ? `, "${reason.toString()}"` : ''}). Reconnecting...`)
       
       // BUG #8 FIX: Re-queue active subscriptions — but do NOT clear symbolMappings!
       // symbolMappings (HSM token -> ticker) must survive reconnect or ticks will be dropped
@@ -413,6 +433,16 @@ export class FyersHSMClient extends EventEmitter {
     const msgType = data.readUInt8(2)
 
     if (msgType === 1) {
+      // Fyers answers every login with type 1, whether it took it or not: its first field says
+      // which ("K" when it did, "authentication failed" when it didn't). Reading only the type
+      // logged "Auth successful" for a refused login, then Fyers dropped the socket at the first
+      // subscribe and the client reconnected every 6 seconds all day, with no live prices.
+      const answer = hsmAuthAnswer(data)
+      if (answer.refused) {
+        this.onAuthRefused(answer.text)
+        return
+      }
+      this.authRefusals = 0
       this.emitLog('info', '[FYERS_HSM_AUTH] Auth successful.')
       this.emitLog('info', '[FYERS_HSM_STATUS] authenticated')
       this.authenticated = true
@@ -428,6 +458,29 @@ export class FyersHSMClient extends EventEmitter {
     } else if (msgType === 6) {
       this.parseDataFeed(data)
     }
+  }
+
+  /**
+   * Fyers refused the live-feed login. Once can be a hiccup: one more try in a few seconds. Twice
+   * in a row means this token's live feed is dead (a newer login of the same Fyers app replaced
+   * it, or it expired): stop instead of looping, and say so; the app then asks for a new login.
+   */
+  private onAuthRefused(text: string) {
+    this.authRefusals++
+    this.authenticated = false
+    this.emitLog('error', `[FYERS_HSM_AUTH] Fyers refused the live price login: "${text}" (attempt ${this.authRefusals})`)
+    const ws = this.ws
+    this.ws = null
+    this.isConnecting = false
+    if (ws) { ws.removeAllListeners(); try { ws.close() } catch { /* already closed */ } }
+    this.activeSubscriptions.forEach(t => this.pendingSubscriptions.add(t))
+    if (this.authRefusals >= 2) {
+      this.stopWatchdog()
+      this.emitLog('error', '[FYERS_HSM_AUTH] Live prices stopped: log in to Fyers again in Broker Connection (history downloads use the same login).')
+      this.emit('auth_failed')
+      return
+    }
+    this.triggerReconnect()
   }
 
   private parseDataFeed(data: Buffer) {
