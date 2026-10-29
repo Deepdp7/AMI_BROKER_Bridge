@@ -13,6 +13,7 @@
     "build:server": "npm run build:bin --prefix apps/server",
     "build:desktop": "node scripts/with-msvc.cjs npm run tauri --prefix apps/desktop -- build",
     "build:plugin": "cmd /c plugins\\amibroker\\build.bat",
+    "build:excel": "cmd /c plugins\\excel\\build.bat",
     "build:files": "npm run build:server && node scripts/with-msvc.cjs npm run tauri --prefix apps/desktop -- build --no-bundle && node scripts/stage-release.cjs",
     "typecheck": "npm run typecheck --prefix apps/server && npm run typecheck --prefix apps/desktop",
     "test": "npm run test --prefix apps/server && npm run test --prefix apps/desktop",

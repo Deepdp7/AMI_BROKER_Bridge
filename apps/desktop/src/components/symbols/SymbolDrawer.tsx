@@ -12,6 +12,8 @@ import { toast } from '../ui/Toast'
 import { useExitAnimation } from '../ui/Dialog'
 import { Sparkline } from '../ui/Sparkline'
 import BrokerLogo, { BROKER_NAMES } from '../ui/BrokerLogo'
+import SymbolLogo from '../ui/SymbolLogo'
+import { ChartLinkButtons } from '../platforms/OpenChart'
 import { formatAgo, formatPrice, formatCompact } from '../../lib/format'
 import { trendOf } from '../../lib/feedView'
 
@@ -104,6 +106,7 @@ export function SymbolDrawer({ ticker, onClose, pinned, onTogglePin, onRemove }:
         <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
           {/* Title */}
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+            {shown && <SymbolLogo ticker={shown} exchange={sym?.exchange} size={42} />}
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                 <span style={{ fontSize: '1.35rem', fontWeight: 800, color: '#eceef2', letterSpacing: '-0.02em' }}>{shown}</span>
@@ -140,6 +143,13 @@ export function SymbolDrawer({ ticker, onClose, pinned, onTogglePin, onRemove }:
               <div style={{ fontSize: '0.72rem', color: '#8b9199', marginTop: '0.6rem' }}>
                 {sym.prevClose ? `Previous close ${formatPrice(sym.prevClose)} · ` : ''}Status <b style={{ color: '#eceef2' }}>{sym.status.toLowerCase()}</b>
               </div>
+            </div>
+          )}
+
+          {/* Its chart on Chartink / TradingView, opened straight on this symbol */}
+          {sym && (
+            <div className="reveal chart-open-row" style={{ ['--i' as any]: 2 }}>
+              <ChartLinkButtons sym={sym} />
             </div>
           )}
 

@@ -172,6 +172,36 @@ describe('Pause, resume, cancel (the download card)', () => {
   })
 })
 
+describe('A name the broker doesn\'t have', () => {
+  it('is asked for once, not retried chunk after chunk, and not queued again until re-added', async () => {
+    const calls: string[] = []
+    brokerManager.activeAdapters.set('fyers-bad', {
+      maxIntradayHistoryDays: 95,
+      on() {}, subscribe: async () => {}, unsubscribe: async () => {}, disconnect: async () => {},
+      getHistoricalBars: async (token: string) => {
+        calls.push(token)
+        throw Object.assign(new Error('Fyers API Error: Invalid symbol provided'), { code: -300 })
+      },
+    })
+    backfillQueue.enqueue('TICKER', 'fyers-bad', 'NSE:TICKER-EQ', 150) // 2 chunks
+    await vi.waitFor(() => expect(calls.length).toBe(1))
+    await new Promise(r => setTimeout(r, 800))
+    expect(calls.length).toBe(1)
+    await vi.waitFor(() => expect(backfillQueue.getQueueLength()).toBe(0))
+
+    // Startup catch-up and gap checks leave it alone
+    backfillQueue.enqueue('TICKER', 'fyers-bad', 'NSE:TICKER-EQ', 150)
+    backfillQueue.enqueueGapFill('TICKER', 'fyers-bad', 'NSE:TICKER-EQ', Date.now() - 86400_000, Date.now())
+    await new Promise(r => setTimeout(r, 300))
+    expect(calls.length).toBe(1)
+
+    // Added again (or "Download now"): tried once more
+    backfillQueue.allowHistory(['TICKER'])
+    backfillQueue.enqueue('TICKER', 'fyers-bad', 'NSE:TICKER-EQ', 30)
+    await vi.waitFor(() => expect(calls.length).toBe(2))
+  })
+})
+
 describe('Pacing', () => {
   it('holds requests over the per-minute cap until the window frees up', async () => {
     vi.useFakeTimers()

@@ -34,6 +34,8 @@ router.get('/status', (_req, res) => {
     paused: backfillQueue.isPaused(),
     // Symbols whose history the user cancelled (Symbol Setup offers "Download now")
     cancelled: backfillQueue.skippedTickers().length,
+    // Tracked symbols the broker said it doesn't have (Symbol Setup offers to remove them)
+    unknown: backfillQueue.unknownSymbols(),
     // Time to finish what's queued, from the last few minutes' real speed (null until known)
     etaMs: backfillQueue.isPaused() ? null : backfillQueue.estimateRemainingMs(),
     statuses,

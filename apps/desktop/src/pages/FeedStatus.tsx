@@ -15,6 +15,7 @@ import { PageHeader } from '../components/ui/PageHeader'
 import { Segmented } from '../components/ui/Segmented'
 import Select from '../components/ui/Select'
 import { Sparkline } from '../components/ui/Sparkline'
+import SymbolLogo from '../components/ui/SymbolLogo'
 import { MarketClock } from '../components/feed/MarketClock'
 import { StatCards } from '../components/feed/StatCards'
 import { MarketPulse } from '../components/feed/MarketPulse'
@@ -536,6 +537,7 @@ export function FeedStatusPage() {
                         >
                           <Star size={13} fill={isPinned ? 'currentColor' : 'none'} />
                         </button>
+                        <SymbolLogo ticker={sym.ticker || 'Unknown'} exchange={sym.exchange} size={24} />
                         <span style={{ fontSize: '0.86rem' }}>{sym.ticker || 'Unknown'}</span>
                         <span className="badge badge-gray" style={{ fontSize: '0.64rem', padding: '0.05rem 0.4rem' }}>{sym.instrumentType || 'EQ'}</span>
                       </div>

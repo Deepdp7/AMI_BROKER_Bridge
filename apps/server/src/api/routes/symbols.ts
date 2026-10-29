@@ -3,6 +3,7 @@ import { stmts } from '../../db'
 import { computeHealth, invalidateHealth, healthAgeMs } from '../../market/DataHealth'
 import { repairHistory } from '../../brokers/BrokerLifecycle'
 import { symbolDetailsCached } from '../../amibroker/symbolDetails'
+import { logoFor, LogoUnavailable } from '../../lib/logos'
 
 const router = Router()
 
@@ -29,6 +30,20 @@ router.get('/details', async (_req, res) => {
     const rows = await symbolDetailsCached()
     res.json(rows.filter(r => r.details).map(r => ({ ticker: r.ticker, ...r.details })))
   } catch (err: any) {
+    res.status(500).json({ error: err?.message || String(err) })
+  }
+})
+
+// GET /api/symbols/logo/:ticker: the company's logo; 404 (final) for an index, a commodity or a
+// company with none, 503 (try again) while NSE's list or the logo servers can't be reached
+router.get('/logo/:ticker', async (req, res) => {
+  try {
+    const logo = await logoFor(req.params.ticker)
+    if (!logo) { res.status(404).end(); return }
+    res.set({ 'Content-Type': logo.type, 'Cache-Control': 'public, max-age=604800' }).send(logo.data)
+  } catch (err: any) {
+    // Not ready yet (just started, offline): the app asks again; a 404 above is final
+    if (err instanceof LogoUnavailable) { res.status(503).set('Retry-After', '10').end(); return }
     res.status(500).json({ error: err?.message || String(err) })
   }
 })

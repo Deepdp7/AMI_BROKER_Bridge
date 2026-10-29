@@ -5,6 +5,7 @@ const h = vi.hoisted(() => ({
   refreshToday: vi.fn(async () => ({ ok: true, queued: 3, skipped: 0 })),
 }))
 vi.mock('../api/apiClient', () => ({
+  BASE_URL: '/api',
   api: { refreshToday: h.refreshToday, getSymbolHealth: vi.fn(async () => ({ symbols: [] })), repairSymbols: vi.fn() },
   wsManager: { on: () => () => {} },
 }))

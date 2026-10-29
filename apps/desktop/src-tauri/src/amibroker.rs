@@ -12,7 +12,10 @@
 //! "broker.exe" too). The DataBridge plugin is 32-bit, so a copy whose Plugins folder holds
 //! DataBridgePro.dll wins over one without it.
 //!
-//! An AmiBroker that is already open is brought to the front instead of started again.
+//! An AmiBroker that is already open is brought to the front instead of started again. One that
+//! was just closed can stay in memory for a while with no window (it saves its settings and
+//! unloads its plugins); that is waited out and a fresh AmiBroker is started, instead of the click
+//! doing nothing.
 
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
@@ -334,14 +337,30 @@ fn amibroker_running() -> Vec<u32> {
     Vec::new()
 }
 
-/// Opens AmiBroker, or brings it to the front when it is open already
-pub fn open(hint: Option<&str>) -> Result<AmiBrokerResult, String> {
-    let pids = amibroker_running();
-    if !pids.is_empty() {
+/// How long an AmiBroker without a window is waited for before giving up on it
+const WINDOWLESS_WAIT: Duration = Duration::from_secs(30);
+
+/// Brings a running AmiBroker to the front. If it has no window, waits: it is either starting (a
+/// window appears) or closing (the process ends). `Some(pids)` = it is open (brought to the front,
+/// or still starting after the wait); `None` = it ended, start a fresh one.
+fn running_or_gone(wait: Duration) -> Option<(Vec<u32>, bool)> {
+    let started = Instant::now();
+    loop {
+        let pids = amibroker_running();
+        if pids.is_empty() { return None }
         #[cfg(windows)]
         let shown = win::bring_to_front(&pids);
         #[cfg(not(windows))]
         let shown = false;
+        if shown { return Some((pids, true)) }
+        if started.elapsed() >= wait { return Some((pids, false)) }
+        std::thread::sleep(Duration::from_millis(150));
+    }
+}
+
+/// Opens AmiBroker, or brings it to the front when it is open already
+pub fn open(hint: Option<&str>) -> Result<AmiBrokerResult, String> {
+    if let Some((pids, shown)) = running_or_gone(WINDOWLESS_WAIT) {
         // Learn where the running copy lives, for next time
         #[cfg(windows)]
         let path = pids.iter().find_map(|&p| win::process_path(p)).filter(|p| looks_like_amibroker(p));
@@ -349,7 +368,7 @@ pub fn open(hint: Option<&str>) -> Result<AmiBrokerResult, String> {
         let path: Option<PathBuf> = None;
         if let Some(p) = &path { remember(p) }
         return Ok(AmiBrokerResult {
-            message: if shown { "AmiBroker is open (brought to the front)".into() } else { "AmiBroker is already starting".into() },
+            message: if shown { "AmiBroker is open (brought to the front)".into() } else { "AmiBroker is still starting".into() },
             plugin_installed: path.as_deref().map_or(false, has_plugin),
             path: path.map(|p| p.to_string_lossy().into_owned()),
             already_open: true,

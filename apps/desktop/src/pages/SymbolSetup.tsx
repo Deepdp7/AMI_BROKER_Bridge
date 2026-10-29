@@ -7,7 +7,7 @@ import Select from '../components/ui/Select'
 import { PageHeader } from '../components/ui/PageHeader'
 import { Segmented } from '../components/ui/Segmented'
 import { Dialog, confirmDialog } from '../components/ui/Dialog'
-import { CancelledHistoryNotice } from '../components/status/CancelledHistoryNotice'
+import { CancelledHistoryNotice, UnknownSymbolsNotice } from '../components/status/CancelledHistoryNotice'
 import { SymbolDrawer } from '../components/symbols/SymbolDrawer'
 import { VirtualGrid } from '../components/ui/VirtualGrid'
 import { useDataHealth, DataHealthSummary, HealthLine, needsAttention, type SymbolHealth } from '../components/status/DataHealth'
@@ -18,6 +18,8 @@ import {
 import { usePref } from '../hooks/usePref'
 import { useThrottledSymbols } from '../hooks/useThrottledSymbols'
 import { useSymbolDetails } from '../hooks/useSymbolDetails'
+import SymbolLogo from '../components/ui/SymbolLogo'
+import { ChartLinkIcons } from '../components/platforms/OpenChart'
 import { MonthOfFutures } from '../components/symbols/MonthOfFutures'
 import { expiryOf, isExpired, monthLabel, todayIst, type Expiry } from '../lib/expiry'
 import { formatPrice, plural } from '../lib/format'
@@ -107,6 +109,7 @@ const SymbolCard = React.memo(({ sym, index, isSelected, selectionMode, health, 
         {selectionMode && (
           <span className="sym-check" data-on={isSelected} aria-hidden="true">{isSelected && <CheckCircle size={14} />}</span>
         )}
+        <SymbolLogo ticker={sym.ticker} exchange={sym.exchange} size={34} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
             <span style={{ fontWeight: 700, color: '#eceef2', fontSize: '0.9rem', letterSpacing: '0.01em' }}>{sym.ticker}</span>
@@ -145,6 +148,7 @@ const SymbolCard = React.memo(({ sym, index, isSelected, selectionMode, health, 
           </button>
         )}
       </div>
+      {!selectionMode && <ChartLinkIcons sym={sym} />}
     </div>
   )
 })
@@ -155,7 +159,8 @@ const SymbolRow = React.memo(({ sym, index, isSelected, selectionMode, health, h
   return (
     <div onClick={e => onClick(sym.ticker, e)} className={intro ? 'sym-row reveal' : 'sym-row'} data-selected={isSelected} style={{ ['--i' as any]: Math.min(index, 14) }} id={`symbol-chip-${(sym.ticker || 'unknown').replace(' ', '-')}`}>
       {selectionMode && <span className="sym-check" data-on={isSelected} aria-hidden="true">{isSelected && <CheckCircle size={14} />}</span>}
-      <span style={{ fontWeight: 700, color: '#eceef2', fontSize: '0.84rem', width: 150, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sym.ticker}</span>
+      <SymbolLogo ticker={sym.ticker} exchange={sym.exchange} size={26} />
+      <span style={{ fontWeight: 700, color: '#eceef2', fontSize: '0.84rem', width: 150, marginLeft: 10, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sym.ticker}</span>
       <span style={{ width: 44 }}><TypeTag type={sym.instrumentType} /></span>
       <span style={{ width: 72 }}>{lot > 1 && <span className="lot-tag" title="Bought in whole lots only (AmiBroker: Round lot size)">Lot {lot.toLocaleString('en-IN')}</span>}</span>
       <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.82rem', color: '#eceef2', width: 110, textAlign: 'right' }}>{sym.lastPrice > 0 ? formatPrice(sym.lastPrice) : '—'}</span>
@@ -164,6 +169,7 @@ const SymbolRow = React.memo(({ sym, index, isSelected, selectionMode, health, h
       </span>
       <span style={{ width: 86, paddingLeft: 8 }}><StatusPill status={sym.status} /></span>
       <span className="health-line" style={{ flex: 1, minWidth: 180 }}><HealthLine health={health} loading={healthLoading} onRepair={() => onRepair(sym.ticker)} repairing={repairing} /></span>
+      {!selectionMode && <ChartLinkIcons sym={sym} size={20} />}
       {!selectionMode && (
         <button onClick={e => { e.stopPropagation(); onRemove(sym.ticker) }} className="sym-remove" title="Remove symbol" aria-label={`Remove ${sym.ticker}`}>
           <X size={14} />
@@ -585,6 +591,7 @@ export function SymbolSetupPage() {
       />
 
       <CancelledHistoryNotice />
+      <UnknownSymbolsNotice onRemove={removeMany} />
 
       <div className="reveal" style={{ ['--i' as any]: 1 }}>
         <DataHealthSummary
@@ -898,13 +905,12 @@ export function SymbolSetupPage() {
                 onClick={() => !added && handleAdd(sym)}
               >
                 <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', minWidth: 0 }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgb(var(--accent-rgb) / 0.1)', border: '1px solid rgb(var(--accent-rgb) / 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.62rem', fontWeight: 800, color: 'var(--accent)', flexShrink: 0 }}>
-                    {sym.exchange || 'NSE'}
-                  </div>
+                  <SymbolLogo ticker={sym.ticker!} exchange={sym.exchange} size={40} />
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontWeight: 650, color: '#eceef2', fontSize: '0.88rem' }}>{sym.ticker}</div>
                     <div style={{ fontSize: '0.72rem', color: '#8b9199', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {sym.name || sym.instrumentType}
+                      <span style={{ color: 'var(--accent)', fontWeight: 700 }}>{sym.exchange || 'NSE'}</span> ·
+                      <span>{sym.name || sym.instrumentType}</span>
                       {sym.lotSize > 1 && <span style={{ color: 'var(--accent)', fontWeight: 650 }}> · Lot {Number(sym.lotSize).toLocaleString('en-IN')}</span>}
                       {sym.tickSize > 0 && <span> · Tick {sym.tickSize}</span>}
                     </div>

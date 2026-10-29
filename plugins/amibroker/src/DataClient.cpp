@@ -400,9 +400,16 @@ static void PollerThreadProc() {
         { std::lock_guard<std::mutex> lk(g_sendMutex); g_ipcSocket = s; }
         LogDebug("[IPC] Connected to 7891");
 
+        // A read that gives up every second, so closing AmiBroker is noticed within a second: the
+        // engine can stay quiet for 30 s, and this thread blocked in recv() held Release() (and so
+        // the whole AmiBroker shutdown, a process with no window) until it spoke again
+        DWORD rcvTimeoutMs = 1000;
+        setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (const char*)&rcvTimeoutMs, sizeof(rcvTimeoutMs));
+
         char buf[4096]; std::string acc;
         while (!g_bShutdown) {
             int n = recv(s, buf, sizeof(buf)-1, 0);
+            if (n < 0 && WSAGetLastError() == WSAETIMEDOUT) continue;
             if (n <= 0) break;
             buf[n] = '\0'; acc += buf;
 
@@ -479,6 +486,8 @@ void StartPollingThread() {
 
 void StopPollingThread() {
     g_bShutdown = true;
+    // Wake the reader now rather than at its next one-second timeout
+    { std::lock_guard<std::mutex> lk(g_sendMutex); if (g_ipcSocket != INVALID_SOCKET) shutdown(g_ipcSocket, SD_BOTH); }
     if (g_pollerThread.joinable()) g_pollerThread.join();
     if (g_notifyThread.joinable()) g_notifyThread.join();
     CloseHttpSession();

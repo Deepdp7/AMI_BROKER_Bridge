@@ -64,6 +64,11 @@ const FUTURES_RE = /\d{2}(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)FUT$/i
 /** Deepest history the app will request (10 years). Fyers' 1-minute data starts around 2017-18. */
 export const MAX_HISTORY_DAYS = 3650
 
+/** The broker says it has no such symbol (Fyers -300 "Invalid symbol provided", a contract not in a list) */
+export function isInvalidSymbolError(err: any): boolean {
+  return err?.code === -300 || /invalid symbol/i.test(String(err?.message || ''))
+}
+
 /** All gaps found by one detection scan of a ticker; when every one fills, the scan range is verified. */
 interface GapPass {
   ticker: string
@@ -140,6 +145,7 @@ class BackfillQueueService extends EventEmitter {
     let safeBrokerToken = typeof brokerToken === 'string' ? brokerToken : String(brokerToken)
     // Cancelled by the user: callers that mean it (manual download) call allowHistory() first
     if (this.isSkipped(ticker)) return
+    if (this.unknownTickers.has(ticker)) return
     if (this.activeTickers.has(ticker) || backfilledTickers.has(ticker)) return
     // History already downloaded and verified once — newer gaps are handled by the
     // startup/daily gap passes. (Manual re-download and symbol delete clear the watermark.)
@@ -209,6 +215,7 @@ class BackfillQueueService extends EventEmitter {
     const gapKey = `${ticker}:gap:${fromMs}`
     // Cancelled by the user; the manual "Today" button (forceEvenDuringMarket) still works
     if (this.isSkipped(ticker) && !forceEvenDuringMarket) { this.settlePass(pass, false); return }
+    if (this.unknownTickers.has(ticker)) { this.settlePass(pass, false); return }
     if (this.activeTickers.has(gapKey)) { this.settlePass(pass, false); return }
     
     let safeBrokerToken = typeof brokerToken === 'string' ? brokerToken : String(brokerToken)
@@ -446,8 +453,21 @@ class BackfillQueueService extends EventEmitter {
     return (stmts.getSymbols.all() as any[]).map(s => s.amiBrokerTicker || s.amibroker_ticker).filter(t => t && set.has(t))
   }
 
+  // Names the broker said it doesn't have: not asked for again in this run (re-adding the symbol
+  // or "Download now" tries once more)
+  private unknownTickers = new Set<string>()
+
+  /** Names the broker refused that are still in the symbol list */
+  public unknownSymbols(): string[] {
+    if (!this.unknownTickers.size) return []
+    const tracked = new Set((stmts.getSymbols.all() as any[]).map(s => s.amiBrokerTicker))
+    for (const t of this.unknownTickers) if (!tracked.has(t)) this.unknownTickers.delete(t) // removed since
+    return [...this.unknownTickers]
+  }
+
   /** Lets automatic downloads run again for these symbols (all when omitted); returns the ones cleared */
   public allowHistory(tickers?: string[]): string[] {
+    for (const t of tickers || [...this.unknownTickers]) this.unknownTickers.delete(t)
     const set = this.skippedSet()
     const cleared = tickers ? tickers.filter(t => set.has(t)) : [...set]
     if (cleared.length === 0) return []
@@ -712,6 +732,12 @@ class BackfillQueueService extends EventEmitter {
   /** Fetches and stores one chunk of `task`. Returns false if its broker isn't connected. */
   private async processChunk(task: BackfillTask): Promise<boolean> {
     {
+      // The broker already said it has no such symbol: the rest of its downloads would get the same answer
+      if (this.unknownTickers.has(task.ticker)) {
+        this._dropTask(task, 'the broker has no such symbol')
+        return true
+      }
+
       let adapter = brokerManager.getAdapter(task.brokerId)
 
       if (!adapter) {
@@ -929,6 +955,15 @@ class BackfillQueueService extends EventEmitter {
 
         // Brief pause before next attempt
         await new Promise(r => setTimeout(r, 2000))
+
+      // ===== The broker has no such symbol (a stray word imported as a ticker, an expired contract) =====
+      // Asking again never helps: stopped at once instead of retried chunk after chunk
+      } else if (isInvalidSymbolError(err)) {
+        this.consecutiveAuthErrors = 0
+        console.error(`[BackfillQueue] ${task.ticker}: the broker has no such symbol. History skipped; remove it in Symbol Setup if it was added by mistake.`)
+        this.unknownTickers.add(task.ticker)
+        // Its other queued parts (older history, gaps) are dropped when their turn comes
+        this._failTask(task, `The broker has no symbol named ${task.ticker}`)
 
       // ===== Rate Limit (429) or Network Timeout =====
       } else if (err?.code === 429 ||

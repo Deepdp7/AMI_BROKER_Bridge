@@ -6,6 +6,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
 vi.mock('../../api/apiClient', () => ({
+  BASE_URL: '/api',
   api: {
     getSymbolHealth: vi.fn(async () => ({ symbols: [] })),
     getSymbolDetails: vi.fn(async () => [

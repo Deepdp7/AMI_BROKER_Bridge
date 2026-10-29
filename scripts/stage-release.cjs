@@ -7,6 +7,11 @@
  *   release/DataBridge Pro/local-api.exe        data engine (npm run build:server); the app
  *                                               starts it from its own folder
  *   release/plugin/DataBridgePro.dll            AmiBroker plugin (npm run build:plugin)
+ *   release/DataBridge Pro/connectors/          what the app installs into each platform from its
+ *                                               Platforms page: the AmiBroker plugin again (for
+ *                                               any AmiBroker it finds), Excel's live prices
+ *                                               (npm run build:excel, 64- and 32-bit) and the
+ *                                               MetaTrader 5 service (source; MT5 compiles it)
  *
  * Run by `npm run build:files` after both builds.
  */
@@ -19,6 +24,10 @@ const files = [
   ['apps/desktop/src-tauri/target/release/app.exe', 'DataBridge Pro/DataBridge Pro.exe'],
   ['apps/desktop/src-tauri/bin/local-api-x86_64-pc-windows-msvc.exe', 'DataBridge Pro/local-api.exe'],
   ['plugins/amibroker/DataBridgePro.dll', 'plugin/DataBridgePro.dll'],
+  ['plugins/amibroker/DataBridgePro.dll', 'DataBridge Pro/connectors/DataBridgePro.dll'],
+  ['plugins/excel/DataBridgeRtd64.dll', 'DataBridge Pro/connectors/DataBridgeRtd64.dll'],
+  ['plugins/excel/DataBridgeRtd32.dll', 'DataBridge Pro/connectors/DataBridgeRtd32.dll'],
+  ['plugins/metatrader5/DataBridge.mq5', 'DataBridge Pro/connectors/DataBridge.mq5'],
 ]
 
 const missing = files.filter(([from]) => !fs.existsSync(path.join(root, from)))

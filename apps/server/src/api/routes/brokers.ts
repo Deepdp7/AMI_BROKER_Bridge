@@ -9,6 +9,7 @@ import { backfilledTickers } from '../../market/state/backfillState'
 import { clearVerifiedThrough } from '../../market/state/coverageState'
 import { backfillQueue } from '../../market/BackfillQueue'
 import { pendingLogins, activateBroker, loginDirect } from '../../brokers/BrokerLifecycle'
+import { addSymbolsToBroker } from '../../brokers/addSymbols'
 import { brokerLoginUrl, LOGIN_BROKERS, BROKERS, isDirectLogin } from '../../brokers/brokerAuth'
 import type { BrokerAccount } from '../../types'
 
@@ -389,55 +390,8 @@ router.post('/:id/symbols', async (req, res) => {
     const broker = stmts.getBrokerById.get(id) as any
     if (!broker) return res.status(404).json({ error: 'Broker not found' })
 
-    const now = Date.now()
-    let added = 0
-    
     const normalizedSymbols = symbols || (tickers || []).map(t => ({ ticker: t, instrumentId: t, exchange: 'NSE', instrumentType: 'EQ' }))
-
-    for (const sym of normalizedSymbols) {
-      try {
-        // Use the instrumentId from search result as the raw_symbol (e.g. NSE:ITC26OCTFUT)
-        // If instrumentId is missing or same as ticker, resolve it properly
-        let rawSymbol = sym.instrumentId || sym.ticker
-        const adapter = brokerManager.getAdapter(id) as any
-        if ((!rawSymbol || rawSymbol === sym.ticker) && adapter?.resolveSymbol) {
-          rawSymbol = await adapter.resolveSymbol(sym.ticker, sym.exchange)
-        }
-
-        stmts.insertSymbol.run({
-          broker_id: id,
-          instrument_id: rawSymbol,
-          amibroker_ticker: sym.ticker,
-          exchange: sym.exchange || 'NSE',
-          instrument_type: sym.instrumentType || 'EQ',
-          raw_symbol: rawSymbol,
-          created_at: now,
-        })
-
-        liveFeed.addSymbolByTicker(sym.ticker, id, sym.exchange, sym.instrumentType, rawSymbol)
-
-        // Await subscribe so we know it actually succeeded
-        try {
-          await brokerManager.subscribe(id, [rawSymbol])
-          console.log(`[ADD_SYMBOL] "${sym.ticker}" → "${rawSymbol}" subscribed to live feed.`)
-        } catch (subErr) {
-          console.error(`[ADD_SYMBOL] Failed to subscribe "${sym.ticker}" → "${rawSymbol}":`, subErr)
-        }
-
-        const settings = getAllSettings() as any
-        const backfillDepth = Number(settings?.backfillDepthDays) || 365
-        backfillQueue.allowHistory([sym.ticker]) // added again after a cancel
-        backfillQueue.enqueue(sym.ticker, id, rawSymbol, backfillDepth)
-        console.log(`[ADD_SYMBOL] "${sym.ticker}" backfill queued (${backfillDepth} days).`)
-        added++
-      } catch (symErr) {
-        console.error(`[ADD_SYMBOL] Error adding symbol "${sym.ticker}":`, symErr)
-        /* continue with next symbol */
-      }
-    }
-    // Into AmiBroker's symbol list, with lot size, tick size and name (when it is running)
-    if (added > 0) pushSymbolDetailsSoon()
-    res.json({ added, total: normalizedSymbols.length })
+    res.json(await addSymbolsToBroker(id, normalizedSymbols))
   } catch (e) {
     res.status(500).json({ error: String(e) })
   }

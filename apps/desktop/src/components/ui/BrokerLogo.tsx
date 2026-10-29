@@ -6,6 +6,13 @@ import angelOne from '../../assets/brokers/angel_one.png'
 import flattrade from '../../assets/brokers/flattrade.png'
 import shoonya from '../../assets/brokers/shoonya.png'
 import zebu from '../../assets/brokers/zebu.png'
+import kotakNeo from '../../assets/brokers/kotak_neo.png'
+import compositedge from '../../assets/brokers/compositedge.png'
+import fivepaisa from '../../assets/brokers/fivepaisa_xts.png'
+import jainam from '../../assets/brokers/jainam.png'
+import ibulls from '../../assets/brokers/ibulls.png'
+import rmoney from '../../assets/brokers/rmoney.png'
+import tradesmart from '../../assets/brokers/tradesmart.png'
 
 /**
  * Broker marks, taken from each broker's own website icon. `light` ones have a transparent
@@ -21,6 +28,14 @@ const LOGOS: Record<string, { src: string; light: boolean }> = {
   shoonya: { src: shoonya, light: false },
   upstox: { src: upstox, light: false },
   zebu: { src: zebu, light: true },
+  kotak_neo: { src: kotakNeo, light: false },
+  compositedge: { src: compositedge, light: false },
+  fivepaisa_xts: { src: fivepaisa, light: false },
+  // The mark has a black stroke that vanishes on the dark theme
+  jainam: { src: jainam, light: true },
+  ibulls: { src: ibulls, light: false },
+  rmoney: { src: rmoney, light: false },
+  tradesmart: { src: tradesmart, light: false },
 }
 
 export const BROKER_NAMES: Record<string, string> = {

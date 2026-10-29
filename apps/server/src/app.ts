@@ -13,6 +13,7 @@ import backfillRouter from './api/routes/backfill'
 import aiRouter from './api/routes/ai'
 import feedRouter from './api/routes/feed'
 import symbolsRouter from './api/routes/symbols'
+import platformsRouter from './api/routes/platforms'
 
 export const app = express()
 
@@ -42,7 +43,9 @@ app.use((err: Error & { type?: string }, _req: express.Request, res: express.Res
 
 // Structured request logger (filters high-frequency feed polling from flooding stdout)
 app.use((req, _res, next) => {
-  if (req.path !== '/api/feed/bars') {
+  // Polled every second or faster (AmiBroker's plugin, Excel's live prices): not logged
+  // (a card asks for its company's logo, a screenful of them at a time: not logged either)
+  if (req.path !== '/api/feed/bars' && req.path !== '/api/platforms/quotes' && req.path !== '/api/platforms/bars' && !req.path.startsWith('/api/symbols/logo/')) {
     console.log(JSON.stringify({
       ts: new Date().toISOString(),
       method: req.method,
@@ -69,6 +72,7 @@ app.use('/api/backfill', backfillRouter)
 app.use('/api/ai', aiRouter)
 app.use('/api/feed', feedRouter)
 app.use('/api/symbols', symbolsRouter)
+app.use('/api/platforms', platformsRouter)
 
 // Health check (used by the app to detect that the engine is up)
 app.get('/api/ping', (_req, res) => {

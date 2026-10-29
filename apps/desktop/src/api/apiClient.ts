@@ -150,7 +150,7 @@ export const api = {
   // Status
   getFeedStatus: () => apiFetch<FeedStatusResponse>('/status/feed'),
   getHealth: () => apiFetch<HealthResponse>('/status/health'),
-  getBackfillStatus: () => apiFetch<{ queueLength: number; paused?: boolean; cancelled?: number; etaMs?: number | null; statuses: any[] }>('/backfill/status'),
+  getBackfillStatus: () => apiFetch<{ queueLength: number; paused?: boolean; cancelled?: number; unknown?: string[]; etaMs?: number | null; statuses: any[] }>('/backfill/status'),
   pauseBackfill: () => apiFetch<{ ok: boolean; paused: boolean }>('/backfill/pause', { method: 'POST' }),
   resumeBackfill: () => apiFetch<{ ok: boolean; paused: boolean }>('/backfill/resume', { method: 'POST' }),
   cancelBackfill: () => apiFetch<{ ok: boolean; cancelled: number; symbols: number }>('/backfill/cancel', { method: 'POST' }),

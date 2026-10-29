@@ -11,6 +11,8 @@ import { ActivityPage } from '../pages/Activity'
 // The Assistant (and its markdown renderer) loads the first time it is opened
 const AssistantPage = lazy(() => import('../pages/Assistant').then(m => ({ default: m.AssistantPage })))
 import { AboutPage } from '../pages/About'
+import { PlatformsPage } from '../pages/Platforms'
+import { FirstRunPlatformPicker } from '../components/platforms/FirstRunPlatformPicker'
 import { ErrorBoundary } from '../components/ui/ErrorBoundary'
 import { ToastContainer } from '../components/ui/Toast'
 import { ConfirmHost } from '../components/ui/Dialog'
@@ -23,6 +25,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/feed-status': 'Feed Status',
   '/broker-connection': 'Broker Connection',
   '/symbol-setup': 'Symbol Setup',
+  '/platforms': 'Platforms',
   '/settings': 'Settings',
   '/logs': 'Logs & Diagnostics',
   '/console': 'Activity',
@@ -120,6 +123,7 @@ function MainLayout() {
                   <Route path="/feed-status" element={<FeedStatusPage />} />
                   <Route path="/broker-connection" element={<BrokerConnectionPage />} />
                   <Route path="/symbol-setup" element={<SymbolSetupPage />} />
+                  <Route path="/platforms" element={<PlatformsPage />} />
                   <Route path="/settings" element={<SettingsPage />} />
                   <Route path="/logs" element={<LogsPage />} />
                   <Route path="/console" element={<ActivityPage />} />
@@ -134,6 +138,8 @@ function MainLayout() {
       </div>
 
       <MasterDownloadOverlay />
+      {/* First start: which platforms the user works with */}
+      {apiState === 'connected' && <FirstRunPlatformPicker />}
       <ToastContainer />
       <ConfirmHost />
       <style>{`

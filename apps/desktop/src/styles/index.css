@@ -400,6 +400,32 @@ html[data-motion="reduced"] .app-tip { transition: none; }
   color: #8bb4e8;
   font-weight: 700;
 }
+/* A symbol's company logo: on a light tile, so dark marks show on the dark theme too */
+.sym-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-radius: 22%;
+  overflow: hidden;
+  line-height: 0;
+  background: #f1f4f8;
+  padding: 2px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.sym-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+}
+.sym-logo.is-letters {
+  padding: 0;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
 .select-tag {
   display: inline-flex;
   align-items: center;
@@ -539,6 +565,36 @@ html[data-motion="reduced"] .app-tip { transition: none; }
 .open-ab-btn:active:not(:disabled) { transform: translateY(0); }
 .open-ab-btn:disabled { cursor: progress; filter: saturate(0.7) brightness(0.9); }
 html[data-motion="reduced"] .open-ab-btn:hover { transform: none; }
+
+/* Chartink / TradingView launchers under Open AmiBroker: quieter, side by side */
+.open-site-row { display: flex; gap: 0.4rem; padding: 0 0.625rem 0.625rem; }
+.open-site-btn {
+  flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 0.45rem;
+  padding: 0.5rem 0.55rem; border-radius: 0.6rem; cursor: pointer;
+  font-size: 0.78rem; font-weight: 650; color: #d6d9de;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  transition: background .15s, border-color .15s, transform .15s;
+}
+.open-site-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.open-site-btn:hover { background: rgb(var(--accent-rgb) / 0.1); border-color: rgb(var(--accent-rgb) / 0.35); color: #eceef2; transform: translateY(-1px); }
+html[data-motion="reduced"] .open-site-btn:hover { transform: none; }
+
+/* A symbol's "open its chart" logo buttons (cards: bottom right; rows: inline) */
+.chart-links { display: inline-flex; gap: 4px; flex-shrink: 0; }
+.sym-card .chart-links { position: absolute; right: 0.8rem; bottom: 0.75rem; }
+.chart-link-btn {
+  all: unset; cursor: pointer; display: inline-flex; border-radius: 7px; line-height: 0;
+  opacity: 0.55; filter: saturate(0.6); transition: opacity .15s, filter .15s, transform .15s, box-shadow .15s;
+}
+.sym-card:hover .chart-link-btn, .sym-row:hover .chart-link-btn { opacity: 0.85; filter: none; }
+.chart-link-btn:hover, .chart-link-btn:focus-visible { opacity: 1 !important; filter: none; transform: translateY(-1px) scale(1.08); box-shadow: 0 0 0 2px rgb(var(--accent-rgb) / 0.45); }
+.chart-open-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem; }
+
+/* The symbol picker that opens a chart */
+.chart-pick { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0.65rem; border-radius: 8px; cursor: pointer; }
+.chart-pick[data-active="true"] { background: rgb(var(--accent-rgb) / 0.1); }
+.chart-site-toggle { all: unset; cursor: pointer; display: inline-flex; padding: 3px; border-radius: 8px; line-height: 0; opacity: 0.45; border: 1px solid transparent; }
+.chart-site-toggle[data-on="true"] { opacity: 1; border-color: rgb(var(--accent-rgb) / 0.5); background: rgb(var(--accent-rgb) / 0.1); }
 
 /* The active page's highlight: one element that glides between items */
 .nav-indicator {

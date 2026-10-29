@@ -12,6 +12,7 @@ import { morningBrief } from './ai/MorningBrief'
 import { broadcast } from './api/realtime'
 import { notifyAmiBrokerHistoryChanged } from './amibroker/ipcServer'
 import { startStallWatch } from './system/stallWatch'
+import { startPlatformBridges } from './api/routes/platforms'
 import type { AppSettings } from './types'
 
 /** Forwards service events to the app (WebSocket) and broker ticks into the live feed. Call once. */
@@ -119,6 +120,8 @@ async function fetchTodayBars(adapter: any, ticker: string) {
  */
 export async function startEngine() {
   startStallWatch()
+  // Files kept current for platforms fed through files (MetaTrader 5)
+  startPlatformBridges()
   try {
     const settings = getAllSettings() as unknown as AppSettings
     console.log(`[Init] Log level: ${settings.logLevel}`)

@@ -1,7 +1,9 @@
 import {
   Activity, Wifi, List, Settings, FileText, Info,
-  ChevronRight, RefreshCw, AlertCircle, ListChecks, Sparkles, CandlestickChart, Loader2
+  ChevronRight, RefreshCw, AlertCircle, ListChecks, Sparkles, CandlestickChart, Loader2, Blocks, FileSpreadsheet
 } from 'lucide-react'
+import { usePlatforms, platformsApi, CHART_SITES } from '../../lib/platforms'
+import { OpenChartSiteButton } from '../platforms/OpenChart'
 import { openAmiBroker, canOpenAmiBroker, folderOf } from '../../lib/amibroker'
 import { toast } from '../ui/Toast'
 import appIcon from '../../assets/brand/app-icon.png'
@@ -16,6 +18,7 @@ const NAV_ITEMS = [
   { id: 'assistant', label: 'AI Assistant', icon: Sparkles },
   { id: 'broker-connection', label: 'Broker Connection', icon: Wifi },
   { id: 'symbol-setup', label: 'Symbol Setup', icon: List },
+  { id: 'platforms', label: 'Platforms', icon: Blocks },
   { id: 'settings', label: 'Settings', icon: Settings },
   { id: 'logs', label: 'Logs & Diagnostics', icon: FileText },
   { id: 'console', label: 'Activity', icon: ListChecks },
@@ -48,6 +51,31 @@ export function OpenAmiBrokerButton() {
   )
 }
 
+/** Excel with every symbol's live prices (installs Excel's live prices the first time) */
+function OpenLiveSheetButton() {
+  const [busy, setBusy] = useState(false)
+  const click = async () => {
+    setBusy(true)
+    try {
+      const { platforms } = await platformsApi.list()
+      if (!platforms.find(p => p.id === 'excel')?.instances[0]?.connectorInstalled) await platformsApi.install('excel')
+      await platformsApi.liveSheet()
+    } catch (err: any) {
+      toast.error("Couldn't open the live sheet", String(err?.message || err), 8000)
+    } finally {
+      setBusy(false)
+    }
+  }
+  return (
+    <div style={{ padding: '0 0.625rem 0.625rem' }}>
+      <button id="open-live-sheet" className="open-ab-btn" onClick={click} disabled={busy} title="Open Excel with every symbol's live prices">
+        {busy ? <Loader2 size={15} className="animate-spin" /> : <FileSpreadsheet size={15} />}
+        <span>{busy ? 'Opening Excel…' : 'Excel live sheet'}</span>
+      </button>
+    </div>
+  )
+}
+
 function StatusIcon({ status }: { status: string }) {
   if (status === 'connected') return <span className="status-dot connected" />
   if (status === 'reconnecting') return <RefreshCw size={10} style={{ color: '#f59e0b', animation: 'spin-slow 1s linear infinite' }} />
@@ -63,6 +91,9 @@ export function Sidebar() {
   const activePage = location.pathname.replace('/', '') || 'feed-status'
   
   const primaryBroker = brokers.find(b => b.status === 'connected') || brokers[0]
+  // Launch buttons for the platforms the user chose (AmiBroker until they choose)
+  const { state: platforms } = usePlatforms()
+  const chosen = platforms?.chosen.length ? platforms.chosen : ['amibroker']
 
   // The highlight glides to the open page
   const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({})
@@ -148,7 +179,14 @@ export function Sidebar() {
       </nav>
 
       {/* Open AmiBroker: found anywhere on the PC the first time, then opened at once */}
-      {canOpenAmiBroker() && <OpenAmiBrokerButton />}
+      {canOpenAmiBroker() && chosen.includes('amibroker') && <OpenAmiBrokerButton />}
+      {canOpenAmiBroker() && chosen.includes('excel') && <OpenLiveSheetButton />}
+      {/* Chartink / TradingView: pick a symbol, the site opens on its chart */}
+      {CHART_SITES.some(s => chosen.includes(s)) && (
+        <div className="open-site-row">
+          {CHART_SITES.filter(s => chosen.includes(s)).map(s => <OpenChartSiteButton key={s} site={s} />)}
+        </div>
+      )}
 
       {/* Broker Status Card */}
       {primaryBroker ? (

@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { getVersion } from '@tauri-apps/api/app'
 import { Shield, Lightbulb } from 'lucide-react'
 import appIcon from '../assets/brand/app-icon.png'
+import BrokerLogo, { BROKER_NAMES } from '../components/ui/BrokerLogo'
 
-const BROKERS = ['Zerodha Kite', 'Fyers', 'Dhan', 'Upstox', 'Angel One', 'Flattrade', 'Shoonya']
+// The same list the rest of the app uses (logos, Broker Connection), so a new broker shows up here too
+const BROKERS = Object.entries(BROKER_NAMES).map(([type, name]) => ({ type, name }))
 
 const FACTS = [
   { value: String(BROKERS.length), label: 'Brokers supported', sub: 'Pick the one you already trade with' },
@@ -162,8 +164,9 @@ export function AboutPage() {
           <div style={{ ...sectionTitle, marginBottom: '0.75rem' }}>Supported brokers</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
             {BROKERS.map(b => (
-              <span key={b} style={{ fontSize: '0.78rem', color: '#d1d5db', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 999, padding: '3px 11px' }}>
-                {b}
+              <span key={b.type} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '0.78rem', color: '#d1d5db', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 999, padding: '3px 11px 3px 4px' }}>
+                <BrokerLogo brokerType={b.type} size={18} />
+                {b.name}
               </span>
             ))}
           </div>
