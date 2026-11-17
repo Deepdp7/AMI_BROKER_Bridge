@@ -5,7 +5,7 @@
   align-items: center;
   height: 36px;
   flex-shrink: 0;
-  padding: 0 14px;
+  padding: 0 0 0 14px;
   gap: 10px;
   position: relative;
   z-index: 200; /* above page content and modal backdrops, so the window buttons always work */
@@ -18,66 +18,77 @@
   cursor: default;
 }
 
-/* ===== Traffic lights (macOS style): 12px circles, 8px apart ===== */
-.titlebar__lights {
+/* ===== Windows-style caption buttons (Minimize, Maximize / Restore, Close) ===== */
+.titlebar__controls {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: stretch;
+  height: 100%;
   justify-self: end;
 }
-.light {
+
+.titlebar__btn {
   position: relative;
-  width: 12px;
-  height: 12px;
+  width: 46px;
+  height: 100%;
   padding: 0;
-  border: 0.5px solid rgba(0, 0, 0, 0.28);
-  border-radius: 50%;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #c0c4cc;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: default;
-  transition: filter 0.1s ease, background 0.15s ease;
+  transition: background 0.1s ease, color 0.1s ease;
 }
-/* A larger invisible target so the small circles are easy to hit */
-.light::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-}
-.light svg {
-  width: 8px;
-  height: 8px;
-  opacity: 0;
-  transition: opacity 0.1s ease;
+
+.titlebar__btn svg {
   pointer-events: none;
-  fill: none;
-  stroke-width: 1.15;
   stroke-linecap: round;
+  shape-rendering: crispEdges;
 }
-.light .light__fill { fill: currentColor; stroke: none; width: 6.5px; height: 6.5px; }
 
-.light--close    { background: #ff5f57; color: #4d0000; }
-.light--minimize { background: #febc2e; color: #995700; }
-.light--maximize { background: #28c840; color: #006500; }
-.light--close svg, .light--minimize svg { stroke: currentColor; }
-
-/* Symbols appear on all three while the pointer is anywhere over the group
-   (is-snap-hover: Windows owns the cursor over the green one for Snap Layouts) */
-.titlebar__lights:hover .light svg,
-.titlebar__lights.is-snap-hover .light svg { opacity: 1; }
-.light:hover { filter: brightness(1.06); }
-.light:active { filter: brightness(0.82); }
-.titlebar__lights.is-snap-hover .light--maximize { filter: brightness(1.06); }
-
-/* Window not focused: the lights go grey, like macOS */
-.titlebar.is-blurred .light {
-  background: #3a3d42;
-  border-color: rgba(255, 255, 255, 0.06);
+.titlebar__btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
 }
-.titlebar.is-blurred .titlebar__lights:hover .light--close    { background: #ff5f57; }
-.titlebar.is-blurred .titlebar__lights:hover .light--minimize { background: #febc2e; }
-.titlebar.is-blurred .titlebar__lights:hover .light--maximize { background: #28c840; }
+
+.titlebar__btn:active {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Snap hover triggered by Windows 11 Snap Layouts */
+.titlebar__btn--maximize.is-snap-hover,
+.titlebar__controls.is-snap-hover .titlebar__btn--maximize {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+}
+
+.titlebar__btn--close:hover {
+  background: #e81123;
+  color: #ffffff;
+}
+
+.titlebar__btn--close:active {
+  background: #bf101f;
+  color: #ffffff;
+}
+
+/* Window not focused (blurred) */
+.titlebar.is-blurred .titlebar__btn {
+  color: #5c6370;
+}
+
+.titlebar.is-blurred .titlebar__btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+}
+
+.titlebar.is-blurred .titlebar__btn--close:hover {
+  background: #e81123;
+  color: #ffffff;
+}
 
 /* ===== Brand, page, status ===== */
 .titlebar__brand {

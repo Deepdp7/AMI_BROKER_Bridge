@@ -21,7 +21,7 @@ const isEditable = (target: EventTarget | null) => {
   // Selection events can come from the text inside an element
   const el = target instanceof Text ? target.parentElement : target
   return el instanceof HTMLElement &&
-    (el.isContentEditable || el.closest('input, textarea, select, [contenteditable="true"]') !== null)
+    (el.isContentEditable || el.closest('input, textarea, select, [contenteditable="true"], [data-selectable="true"]') !== null)
 }
 
 // Ctrl/Cmd + key combinations that only make sense in a browser
@@ -178,7 +178,16 @@ export function installNativeFeel() {
   // double/triple-click, Ctrl+A and anything with its own user-select). Text fields are unaffected,
   // and the app's Copy buttons write to the clipboard directly, so they keep working.
   window.addEventListener('selectstart', e => { if (!isEditable(e.target)) e.preventDefault() }, { capture: true })
-  const blockPageCopy = (e: ClipboardEvent) => { if (!isEditable(document.activeElement)) e.preventDefault() }
+  const blockPageCopy = (e: ClipboardEvent) => {
+    const sel = window.getSelection()
+    if (sel && sel.toString().length > 0) {
+      const anchor = sel.anchorNode instanceof Text ? sel.anchorNode.parentElement : sel.anchorNode
+      if (anchor instanceof HTMLElement && anchor.closest('[data-selectable="true"]')) {
+        return
+      }
+    }
+    if (!isEditable(document.activeElement)) e.preventDefault()
+  }
   window.addEventListener('copy', blockPageCopy, { capture: true })
   window.addEventListener('cut', blockPageCopy, { capture: true })
 

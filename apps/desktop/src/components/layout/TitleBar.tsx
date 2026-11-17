@@ -96,42 +96,49 @@ export function TitleBar({ page, status }: Props) {
         <span className="titlebar__page">{page}</span>
       </div>
 
-      {/* Right: minimize, maximize / restore, close (red quits DataBridge, engine included) */}
+      {/* Right: Windows-standard minimize, maximize / restore, close */}
       {native ? (
-        <div className={`titlebar__lights${snapHover ? ' is-snap-hover' : ''}`} data-no-drag>
+        <div className={`titlebar__controls${snapHover ? ' is-snap-hover' : ''}`} data-no-drag>
           <button
-            className="light light--minimize"
+            className="titlebar__btn titlebar__btn--minimize"
             onClick={() => win?.minimize().catch(() => {})}
             aria-label="Minimize"
             title="Minimize"
             tabIndex={-1}
           >
-            <svg viewBox="0 0 8 8"><path d="M1.4 4h5.2" /></svg>
+            <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true">
+              <path d="M 0,5 L 10,5" stroke="currentColor" strokeWidth="1" />
+            </svg>
           </button>
           <button
             ref={maximizeRef}
-            className="light light--maximize"
+            className={`titlebar__btn titlebar__btn--maximize${snapHover ? ' is-snap-hover' : ''}`}
             onClick={toggleMaximize}
-            aria-label={isMaximized ? 'Restore' : 'Maximize'}
+            aria-label={isMaximized ? 'Restore Down' : 'Maximize'}
             title={isMaximized ? 'Restore Down' : 'Maximize'}
             tabIndex={-1}
           >
             {isMaximized ? (
-              // two triangles pointing inward
-              <svg viewBox="0 0 8 8" className="light__fill"><path d="M4.6 3.4V0.9L7.1 3.4ZM3.4 4.6V7.1L0.9 4.6Z" /></svg>
+              <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true">
+                <path d="M 2.5,2.5 L 2.5,0.5 L 9.5,0.5 L 9.5,7.5 L 7.5,7.5" fill="none" stroke="currentColor" strokeWidth="1" />
+                <rect x="0.5" y="2.5" width="7" height="7" fill="none" stroke="currentColor" strokeWidth="1" />
+              </svg>
             ) : (
-              // two triangles pointing out to the corners
-              <svg viewBox="0 0 8 8" className="light__fill"><path d="M2.2 0.8H7.2V5.8ZM0.8 2.2V7.2H5.8Z" /></svg>
+              <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true">
+                <rect x="0.5" y="0.5" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1" />
+              </svg>
             )}
           </button>
           <button
-            className="light light--close"
+            className="titlebar__btn titlebar__btn--close"
             onClick={() => win?.close().catch(() => {})}
             aria-label="Close"
             title="Close DataBridge (stops the data engine; missed data is filled in when you open it again)"
             tabIndex={-1}
           >
-            <svg viewBox="0 0 8 8"><path d="M1.6 1.6l4.8 4.8M6.4 1.6L1.6 6.4" /></svg>
+            <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true">
+              <path d="M 0.8,0.8 L 9.2,9.2 M 9.2,0.8 L 0.8,9.2" fill="none" stroke="currentColor" strokeWidth="1" />
+            </svg>
           </button>
         </div>
       ) : <div />}

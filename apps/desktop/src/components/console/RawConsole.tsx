@@ -5,8 +5,9 @@
  */
 import { useMemo, useRef, useState } from 'react'
 import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso'
-import { Search, Trash2, Pause, Play } from 'lucide-react'
+import { Search, Trash2, Pause, Play, Copy, Check } from 'lucide-react'
 import type { ConsoleLine } from '../../api/apiClient'
+import { toast } from '../ui/Toast'
 
 const LEVEL_COLORS: Record<ConsoleLine['level'], string> = {
   error: '#f43f5e',
@@ -40,6 +41,7 @@ export function RawConsole({ lines, connected }: { lines: ConsoleLine[]; connect
   const [frozen, setFrozen] = useState<ConsoleLine[] | null>(null)
   const [clearedTs, setClearedTs] = useState(0)
   const [autoScroll, setAutoScroll] = useState(true)
+  const [copied, setCopied] = useState(false)
   const listRef = useRef<VirtuosoHandle>(null)
 
   // Paused: the screen keeps the lines it had, new ones are not lost, they show after Resume
@@ -54,6 +56,39 @@ export function RawConsole({ lines, connected }: { lines: ConsoleLine[]; connect
       return !q || l.text.toLowerCase().includes(q)
     })
   }, [source, search, problemsOnly, hideTicks, clearedTs])
+
+  const handleCopy = async () => {
+    const targetLines = displayed.length > 0 ? displayed : source
+    const text = targetLines.map(l => l.text).join('\n')
+    if (!text) {
+      toast.info('No output to copy', 'The console is currently empty.')
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+      toast.success('Copied to clipboard', `Copied ${targetLines.length} line${targetLines.length === 1 ? '' : 's'}.`)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      try {
+        const textarea = document.createElement('textarea')
+        textarea.value = text
+        textarea.style.position = 'fixed'
+        textarea.style.opacity = '0'
+        textarea.style.pointerEvents = 'none'
+        document.body.appendChild(textarea)
+        textarea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textarea)
+        setCopied(true)
+        toast.success('Copied to clipboard', `Copied ${targetLines.length} line${targetLines.length === 1 ? '' : 's'}.`)
+        setTimeout(() => setCopied(false), 2000)
+      } catch {
+        toast.error('Copy failed', 'Could not access clipboard.')
+      }
+    }
+  }
 
   return (
     <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -77,6 +112,15 @@ export function RawConsole({ lines, connected }: { lines: ConsoleLine[]; connect
           {frozen ? <Play size={13} style={{ color: 'var(--accent)' }} /> : <Pause size={13} />}
           {frozen ? 'Resume' : 'Freeze'}
         </button>
+        <button
+          onClick={handleCopy}
+          className="btn-secondary"
+          title="Copy console output to clipboard"
+          style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.375rem' }}
+        >
+          {copied ? <Check size={13} style={{ color: 'var(--good)' }} /> : <Copy size={13} />}
+          {copied ? 'Copied' : 'Copy'}
+        </button>
         <button onClick={() => setClearedTs(Date.now())} className="btn-secondary" style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
           <Trash2 size={13} />
           Clear screen
@@ -84,6 +128,7 @@ export function RawConsole({ lines, connected }: { lines: ConsoleLine[]; connect
       </div>
 
       <div
+        data-selectable="true"
         style={{
           flex: 1,
           minHeight: 0,
@@ -95,6 +140,8 @@ export function RawConsole({ lines, connected }: { lines: ConsoleLine[]; connect
           fontSize: '0.78rem',
           lineHeight: 1.45,
           boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.5)',
+          userSelect: 'text',
+          WebkitUserSelect: 'text',
         }}
       >
         {displayed.length === 0 ? (
@@ -114,7 +161,17 @@ export function RawConsole({ lines, connected }: { lines: ConsoleLine[]; connect
             initialTopMostItemIndex={displayed.length - 1}
             increaseViewportBy={400}
             itemContent={(_, l) => (
-              <div style={{ color: lineColor(l), whiteSpace: 'pre-wrap', wordBreak: 'break-all', paddingRight: '1rem' }}>
+              <div
+                data-selectable="true"
+                style={{
+                  color: lineColor(l),
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-all',
+                  paddingRight: '1rem',
+                  userSelect: 'text',
+                  WebkitUserSelect: 'text',
+                }}
+              >
                 {l.text}
               </div>
             )}
