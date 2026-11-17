@@ -232,8 +232,15 @@ static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, in
                 WriteBarToQuotation(pQuotes, nLastValid, live);
                 return nLastValid + 1;
             } else if (liveMin > sinceMin) {
-                // New minute candle (MergeBars shifts out the oldest bar if the array is full)
-                return MergeBars(pQuotes, startIndex, nSize, std::vector<Bar>{ live });
+                // New minute candle (MergeBars shifts out the oldest bar if the array is full).
+                // The minute before goes in too, with its final values: AmiBroker's copy of it
+                // may be from before its last ticks (the next minute started in between).
+                std::vector<Bar> bars;
+                Bar prev; memset(&prev, 0, sizeof(Bar));
+                if (GetCachedPrevBar(pszTicker, prev) && prev.close > 0 &&
+                    BarMinute(prev) >= sinceMin && BarMinute(prev) < liveMin) bars.push_back(prev);
+                bars.push_back(live);
+                return MergeBars(pQuotes, startIndex, nSize, bars);
             }
         }
         // No new live data - return what AmiBroker already has

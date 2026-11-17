@@ -18,6 +18,8 @@ extern void StopPollingThread();
 extern void UpdateActiveSymbol(const std::string& ticker);
 extern void SetAmiBrokerWindow(HWND hWnd);
 extern bool GetCachedLiveBar(const std::string& ticker, Bar& outBar);
+// The final state of the minute before the live bar's (false when there is none yet)
+extern bool GetCachedPrevBar(const std::string& ticker, Bar& outBar);
 
 // ---- The DataBridge light in AmiBroker's status bar and its right-click menu ----
 // level: 0 green, 1 yellow, 2 red, -1 DataBridge Pro not running

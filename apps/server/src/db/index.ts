@@ -382,6 +382,9 @@ export function insertBarBatch(barsToInsert: any[]) {
   }
 }
 
+/** A minute's broker bar is stored only once the minute ended at least this long ago */
+const HISTORY_SETTLE_MS = 30_000
+
 /** A broker history bar; `ts` is the minute's start in UTC ms */
 export interface HistoryBar { ts: number; open: number; high: number; low: number; close: number; volume: number; openInterest?: number }
 
@@ -391,9 +394,10 @@ export interface HistoryBar { ts: number; open: number; high: number; low: numbe
  * ticks for the same minute (live inserts never overwrite history).
  */
 export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<HistoryBar | string>): Promise<number> {
-  // Skip the still-forming minute: a partial history bar would block the live bar for that
-  // minute (live inserts never overwrite history), leaving it with partial volume.
-  const currentMinuteSec = Math.floor(Date.now() / 60000) * 60
+  // Skip the still-forming minute, and one that ended only seconds ago: the broker's bar for it
+  // can still be missing its last trades, and would replace the complete bar built from live
+  // ticks (live inserts never overwrite history). Later passes write those minutes.
+  const firstUnsettledSec = Math.floor((Date.now() - 60_000 - HISTORY_SETTLE_MS) / 60000) * 60 + 60
   // One row per minute (last wins). Bar objects are used as they are: turning a 23k-bar chunk
   // into text and back made several MB of garbage per chunk, which kept the engine's heap large.
   const byMinute = new Map<number, HistoryBar>()
@@ -406,7 +410,7 @@ export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<H
       bar = item
     }
     const tsSec = Math.floor(bar.ts / 1000)
-    if (tsSec < currentMinuteSec) byMinute.set(tsSec, bar)
+    if (tsSec < firstUnsettledSec) byMinute.set(tsSec, bar)
   }
   if (byMinute.size === 0) return 0
 
@@ -697,6 +701,7 @@ export const stmts = {
   getBarsCsvByTickerAsync: {
     get: async (amibrokerTicker: string, limit: number = 50000): Promise<string> => {
       try {
+        flushLiveBars()   // a minute closed a moment ago is in the answer, not only in the write buffer
         return await readBarsCsv(amibrokerTicker, 0, limit)
       } catch (err) {
         console.error('[DB] Failed to get bars CSV:', err)
@@ -709,6 +714,7 @@ export const stmts = {
   getBarsCsvSinceAsync: {
     get: async (amibrokerTicker: string, sinceSec: number, limit: number = 50000): Promise<string> => {
       try {
+        flushLiveBars()
         return await readBarsCsv(amibrokerTicker, Math.floor(sinceSec), limit)
       } catch (err) {
         console.error('[DB] Failed to get bars CSV since:', err)

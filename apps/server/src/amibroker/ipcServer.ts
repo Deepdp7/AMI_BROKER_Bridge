@@ -74,24 +74,35 @@ export function startAmiBrokerIpc() {
     ipcClients.forEach(client => { try { client.write(line) } catch {} })
   }, 3000).unref()
 
-  liveFeed.on('live_bar_updated', (data: { ticker: string, bar: any }) => {
-    const { ticker, bar } = data;
-    if (!bar || bar.close === 0) return;
-
-    const ts = Math.floor(bar.bucketMs / 1000);
-    const msg = `LIVE_BAR|${ticker}|${ts}|${bar.open}|${bar.high}|${bar.low}|${bar.close}|${bar.volume}|${bar.oi || 0}\n`;
-    
+  // Live bars go out in one write per event-loop turn (a broker packet carries many ticks), with
+  // the newest state of each symbol's minute. Keyed by minute, not only symbol: the last update
+  // of a minute that just ended is always sent, before the first one of the next minute.
+  const pendingLive = new Map<string, string>()
+  let liveFlushQueued = false
+  const flushLive = () => {
+    liveFlushQueued = false
+    if (pendingLive.size === 0) return
+    const msg = [...pendingLive.values()].join('')
+    pendingLive.clear()
     if (Date.now() - lastLiveBarLogAt > 2000) {
-      lastLiveBarLogAt = Date.now();
-      console.log(`[IPC_LIVE_BAR] Broadcasted: ${msg.trim()}`);
+      lastLiveBarLogAt = Date.now()
+      console.log(`[IPC_LIVE_BAR] Broadcasted: ${msg.slice(0, msg.indexOf('\n'))}`)
     }
+    ipcClients.forEach(client => { try { client.write(msg) } catch {} })
+  }
 
-    ipcClients.forEach(client => {
-      try {
-        client.write(msg);
-      } catch (e) {}
-    });
-  });
+  liveFeed.on('live_bar_updated', (data: { ticker: string, bar: any }) => {
+    const { ticker, bar } = data
+    if (!bar || !(bar.close > 0) || ipcClients.size === 0) return
+    const ts = Math.floor(bar.bucketMs / 1000)
+    const key = `${ticker}|${ts}`
+    pendingLive.delete(key)   // re-inserted last, so the order stays the order of the updates
+    pendingLive.set(key, `LIVE_BAR|${ticker}|${ts}|${bar.open}|${bar.high}|${bar.low}|${bar.close}|${bar.volume}|${bar.oi || 0}\n`)
+    if (!liveFlushQueued) {
+      liveFlushQueued = true
+      setImmediate(flushLive)
+    }
+  })
 
   backfillQueue.on('bars_gap_filled', ({ ticker, fromSec }: { ticker: string, fromSec: number }) => {
     notifyAmiBrokerHistoryChanged(ticker, fromSec)

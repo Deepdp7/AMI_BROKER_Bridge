@@ -143,6 +143,9 @@ async function forEachLimit<T>(items: T[], limit: number, fn: (item: T) => Promi
 }
 
 const CATCH_UP_EVERY_MS = 30 * 60 * 1000
+/** After the live feed comes back: wait until the minutes it missed are past the live feed's own
+ *  last two minutes (BackfillQueue) and settled at the broker, then look for them */
+const AFTER_FEED_BACK_MS = 150_000
 
 /**
  * Re-checks every connected broker for missing bars every 30 minutes, and right after the PC
@@ -151,6 +154,26 @@ const CATCH_UP_EVERY_MS = 30 * 60 * 1000
  * the local database; a broker request is made only for a real hole.
  */
 export function startPeriodicCatchUp() {
+  // The live feed dropped and came back (network, broker restart): the minutes in between have
+  // no live bars, so they are looked for soon instead of at the next half-hour check
+  const droppedAt = new Map<string, number>()
+  const pendingAfterDrop = new Map<string, NodeJS.Timeout>()
+  brokerManager.on('broker_status', ({ brokerId, status }: { brokerId: string; status: string }) => {
+    if (status === 'disconnected') {
+      if (!droppedAt.has(brokerId)) droppedAt.set(brokerId, Date.now())
+      return
+    }
+    if (status !== 'connected' || !droppedAt.has(brokerId)) return
+    droppedAt.delete(brokerId)
+    clearTimeout(pendingAfterDrop.get(brokerId))
+    pendingAfterDrop.set(brokerId, setTimeout(() => {
+      pendingAfterDrop.delete(brokerId)
+      console.log(`[CatchUp] ${brokerId}: live feed is back, looking for the minutes it missed`)
+      queueCatchUp(brokerId).catch(err => console.error(`[CatchUp] ${brokerId} failed:`, err))
+    }, AFTER_FEED_BACK_MS))
+    pendingAfterDrop.get(brokerId)!.unref?.()
+  })
+
   let lastTick = Date.now()
   let lastRun = Date.now()
   setInterval(() => {

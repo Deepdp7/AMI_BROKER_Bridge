@@ -1,0 +1,259 @@
+DATABRIDGE PRO - WHAT CHANGED ON 29 OCTOBER 2026
+=================================================
+
+Who this is for: a developer picking up the project who was not here today.
+Everything below is already committed on branch "main" in 4 commits:
+
+    2e06fe2  05:39   Kotak Neo broker, futures by month, AmiBroker status light, lot sizes, OI, faster start
+    aaa1002  08:20   Platforms page (Excel, MetaTrader 5, CSV, TradingView, Chartink...), symbol logos
+    83ab998  10:34   Fyers live-feed login bug fixed, fake numbers on screen replaced by real ones
+    1758ca3  10:59   "1 day missing" false alarm for illiquid futures fixed
+
+To see exactly what changed:   git show --stat <commit>
+
+
+-------------------------------------------------------------------
+0. THE PROJECT IN 30 SECONDS (read this first)
+-------------------------------------------------------------------
+
+  apps/server     = the "engine" (Node + TypeScript). Talks to brokers, stores bars, serves everything.
+                    HTTP API on port 7890. AmiBroker plugin talks to it on port 7891.
+  apps/desktop    = the app window (Tauri + React). Only talks to the engine's API.
+  plugins/        = small native add-ons that live inside other programs
+                    (amibroker = C++ plugin DLL, excel = C++ RTD DLL, metatrader5 = .mq5 service).
+
+  Data is stored in SQLite:  %APPDATA%\DataBridgePro\databridge.db
+  Prices are stored x10000 as whole numbers, time in seconds (UTC).
+  Broker logins are encrypted with %APPDATA%\DataBridgePro\secret.key (Windows DPAPI).
+
+
+-------------------------------------------------------------------
+1. NEW BROKER: KOTAK NEO                                  (commit 2e06fe2)
+-------------------------------------------------------------------
+
+  What it does: Kotak Neo can now be connected like the other brokers (15 brokers in total now).
+
+  Step by step:
+   1. Login = mobile number + authenticator code (TOTP) + MPIN.
+      The user can type the 6-digit code OR paste the authenticator secret key;
+      with the key the engine makes the code itself (apps/server/src/lib/totp.ts).
+   2. The app packs those details into ONE secret and sends it with the client code
+      (apps/desktop/src/pages/BrokerConnection.tsx).
+   3. Symbol list: read from Kotak's public files, renamed to the same ticker names
+      every other broker uses (kotak/KotakInstruments.ts).
+   4. Live prices: Kotak's binary socket (kotak/KotakFeed.ts). A refused login ends
+      in "auth_failed", never a fake "connected".
+   5. History: fixes Kotak's bad bars (open outside high/low, negative volume).
+
+  Files:  apps/server/src/brokers/adapters/kotak/*   tests: apps/server/tests/kotak.test.ts
+
+
+-------------------------------------------------------------------
+2. FUTURES: ADD A WHOLE MONTH, REMOVE EXPIRED            (commit 2e06fe2)
+-------------------------------------------------------------------
+
+  1. "Add a whole month of futures": lists the months still trading and adds every
+     stock (or index) future of that month that isn't tracked yet.
+     -> apps/desktop/src/components/symbols/MonthOfFutures.tsx
+  2. Symbol Setup has a chip per expiry month (with a count) and one "Expired" chip.
+     One click removes all expired contracts. The text filter can narrow it down.
+     -> apps/desktop/src/pages/SymbolSetup.tsx, apps/desktop/src/lib/expiry.ts
+  3. Expiry is read from the broker list first; otherwise worked out from the ticker
+     (monthly "26NOV" and weekly option codes).
+
+
+-------------------------------------------------------------------
+3. AMIBROKER IMPROVEMENTS                                (commits 2e06fe2, aaa1002)
+-------------------------------------------------------------------
+
+  a) Status light in AmiBroker's status bar (green / yellow / red) with a tooltip.
+     Right-click menu: Repair this symbol, Refresh today (one / all).
+     -> apps/server/src/amibroker/pluginStatus.ts, plugins/amibroker/src/Plugin.cpp
+
+  b) Lot size, tick size and name go into AmiBroker's Symbol > Information
+     (so backtests buy whole lots). MCX contracts get "Point value".
+     Only written while AmiBroker is open with the plugin connected
+     (otherwise COM would start a hidden AmiBroker).
+     -> apps/server/src/amibroker/symbolDetails.ts
+
+  c) Open interest (OI) is now saved in every F&O bar (live and Fyers history).
+
+  d) If DataBridge is closed, AmiBroker no longer freezes waiting for it on every symbol.
+     -> plugins/amibroker/src/DataClient.cpp
+
+  e) "Refresh today" re-downloads today's bars even during market hours.
+     -> apps/server/src/market/refreshToday.ts
+
+  f) Clicking "Open AmiBroker" when it is already open brings it to the front;
+     if it is still closing, it waits and then starts a fresh one.
+     -> apps/desktop/src-tauri/src/amibroker.rs
+
+
+-------------------------------------------------------------------
+4. FASTER, CLEANER APP START                             (commit 2e06fe2)
+-------------------------------------------------------------------
+
+  1. The window stays hidden until the first data is on screen (no empty "Connecting..." page).
+  2. The last session's symbols and prices are saved and shown at once on the next start,
+     then quietly replaced by fresh data.  -> apps/desktop/src/lib/startupSnapshot.ts
+  3. "Stall watch": if the engine is busy for 0.5 s or more, it is written to the log,
+     so freezes can be traced.  -> apps/server/src/system/stallWatch.ts
+
+
+-------------------------------------------------------------------
+5. PLATFORMS PAGE (NEW)                                  (commit aaa1002)
+-------------------------------------------------------------------
+
+  A new page that finds trading/charting programs on the PC and connects them.
+  Code: apps/server/src/platforms/*  +  apps/server/src/api/routes/platforms.ts
+        apps/desktop/src/pages/Platforms.tsx
+
+  What each platform gets (the platform decides what is possible, not us):
+
+    AmiBroker       live + full history      (existing plugin)
+    Excel           live + history           RTD connector, plugins/excel/src/DataBridgeRtd.cpp
+                       Live price:  =RTD("DataBridge.RTD",,"TCS","LTP")
+                       Bars:        =RTD("DataBridge.RTD",,"TCS","BAR","5m",1,"CLOSE")  (bar 1 = forming bar)
+                       Also makes ready-made workbooks (live sheet + history sheet with a chart).
+    MetaTrader 5    live + history           a service file (plugins/metatrader5/DataBridge.mq5)
+                       that reads files the engine writes into MT5's MQL5\Files\DataBridge folder.
+    CSV (any app)   live + history           files in Documents\DataBridge, live file updated every second.
+    NinjaTrader 8 / MetaStock   history      1-minute files to import.
+    TradingView / Chartink      watchlist    they don't accept outside data; we export symbol
+                       lists and open the symbol's chart directly in the browser,
+                       e.g. https://chartink.com/stocks-new?symbol=TCS
+    Sierra Chart    "coming later"           needs the DTC protocol, not built yet.
+
+  Bugs fixed on the way:
+   - Opening a chart link opened the Documents folder instead of the browser.
+     Fixed: URLs are opened with rundll32 url.dll (see openUrl in routes/platforms.ts).
+   - Opening a chart was slow. Fixed: the platform list is cached and refreshed in the background.
+
+  Engine endpoint added for Excel: GET /api/platforms/bars?ticker=TCS&tf=5m&n=50
+  (newest first, one line per bar: unixSec|open|high|low|close|volume)
+
+
+-------------------------------------------------------------------
+6. SYMBOL LOGOS                                          (commit aaa1002)
+-------------------------------------------------------------------
+
+  Every symbol card shows the company logo.
+   1. Try Dhan's logo CDN by symbol.
+   2. Else Groww's CDN by ISIN (ISIN comes from NSE's EQUITY_L.csv).
+   3. Else TradingView's logo by company name.
+   4. Else a lettered tile; commodities get their own tile (Au, Ag, Cu, oil drop, gas flame).
+   Logos are cached on disk:  %APPDATA%\DataBridgePro\logos\
+   The route answers 503 = "not ready yet, try again" and 404 = "no logo, stop asking".
+   The app retries 503s a few times (this fixed logos missing in the installed app).
+   -> apps/server/src/lib/logos.ts, apps/desktop/src/components/ui/SymbolLogo.tsx
+
+
+-------------------------------------------------------------------
+7. SMALLER FIXES                                         (commit aaa1002)
+-------------------------------------------------------------------
+
+   - Activity log was full of "invalid symbol" and rate-limit errors. Symbols the broker
+     says don't exist are now remembered and not asked for again; the app shows one notice
+     listing them.  -> market/BackfillQueue.ts, components/status/CancelledHistoryNotice.tsx
+   - About page said "7 brokers"; it now counts the real list (15).
+   - Build error TS2554 in SymbolLogo.tsx (useRef needs a starting value) fixed.
+
+
+-------------------------------------------------------------------
+8. BIG BUG: FYERS LIVE PRICES SILENTLY STOPPED           (commit 83ab998)
+-------------------------------------------------------------------
+
+  What happened:
+   - Fyers' live socket answers the login with message type 1 whether it accepted or not.
+     The reply text is "K" when accepted, or the reason, e.g. "authentication failed".
+   - Our code only checked the type, logged "Auth successful", subscribed, Fyers dropped
+     the connection, and we reconnected every 6 seconds all day. No live prices.
+   - History (REST) still worked with the same token, so AmiBroker still got bars,
+     which hid the problem.
+
+  The fix:
+   1. Read the reply text (hsmAuthAnswer in FyersHSMClient.ts).
+   2. Refused once -> try one more time.
+   3. Refused twice -> stop, log "Live prices stopped: log in to Fyers again in Broker
+      Connection", and emit "auth_failed" so the app shows "log in again".
+   4. Every disconnect is now written to the log with its reason code.
+
+  Note: the stored price data was checked against Fyers' own history service and matched exactly.
+  Nothing was ever changed or invented in prices.
+  -> apps/server/src/brokers/adapters/fyers/FyersHSMClient.ts, tests/fyersAuth.test.ts
+
+
+-------------------------------------------------------------------
+9. FAKE NUMBERS ON SCREEN REPLACED BY REAL ONES          (commit 83ab998)
+-------------------------------------------------------------------
+
+   Before (made up)                         Now (measured)
+   ---------------------------------------  ----------------------------------------
+   Sidebar CPU: random 3.5-6 %              real engine CPU (process.cpuUsage)
+   Sidebar RAM: random 185-195 MB           real engine memory (process.memoryUsage)
+   Feed Status "Delay": random 5-10 / 12 ms real age of the last price (about 1 s is normal)
+   "Last tick" = time symbol was added      "-" until a real price arrives
+   msg/s always 0                           real count of price updates per second
+   Log "Feed simulator started"             "Live feed started" (it never simulated prices)
+
+  -> apps/server/src/market/liveFeed.ts, apps/desktop/src/pages/FeedStatus.tsx
+
+
+-------------------------------------------------------------------
+10. "1 DAY MISSING" FALSE ALARM ON ILLIQUID FUTURES      (commit 1758ca3)
+-------------------------------------------------------------------
+
+  Example: FORTIS26NOVFUT showed "Missing: 2026-09-03".
+  Reason: that contract had zero trades that day (the market was open; FORTIS stock traded).
+  No broker has data for a day with no trades, so "Repair" could never fill it.
+
+  The fix:
+   1. When a broker's history has bars before and after a weekday but none on it, that day
+      is remembered as a "quiet day" for THAT symbol only
+      (saved in %APPDATA%\DataBridgePro\closed_days.json, key "quiet").
+   2. The history check (DataHealth.ts) does not count quiet days as missing,
+      so "Repair all" doesn't queue them either.
+   3. If bars for that day show up later, it stops being a quiet day.
+   4. Old closed_days.json files are read too, so nothing needs re-downloading.
+  -> apps/server/src/market/MarketCalendar.ts (isQuietDay), market/DataHealth.ts
+
+
+-------------------------------------------------------------------
+11. HOW TO TEST AND BUILD
+-------------------------------------------------------------------
+
+   Engine tests:      cd apps/server   ->  npx vitest run        (318 tests, all pass)
+   Engine types:      cd apps/server   ->  npm run typecheck
+   App tests:         cd apps/desktop  ->  npx vitest run        (136 tests, all pass)
+   App types:         cd apps/desktop  ->  npm run typecheck     (and npx tsc -b)
+       !! In apps/desktop, plain "npx tsc --noEmit" checks NOTHING. Use the commands above.
+
+   Build for users:
+     1. Close AmiBroker (it locks the plugin DLL).
+     2. npm run build:files
+     3. Build the installer (Installer Studio -> Build installer).
+     4. In the app: Platforms -> Excel -> "Reinstall live prices" (new Excel connector).
+
+
+-------------------------------------------------------------------
+12. RULES / TRAPS TO KNOW
+-------------------------------------------------------------------
+
+   - Port 7890 = the real engine, 7891 = AmiBroker plugin. Run test servers on 17890.
+   - Never put passwords or tokens in code, logs or notes. The database and secret.key
+     contain broker logins: if you copy them for testing, delete the copy afterwards.
+   - Tests run in their own temp folder (they set USERPROFILE/HOME/DATABRIDGE_DB_PATH);
+     never point a test at the real %APPDATA%\DataBridgePro.
+   - Fyers tokens expire every day at 06:00 India time.
+   - Don't kill or Quit the user's own Excel from code or tests.
+
+
+-------------------------------------------------------------------
+13. STILL OPEN (not done / not confirmed)
+-------------------------------------------------------------------
+
+   - WHY Fyers refused the live login on 29 Oct is not confirmed. Most likely another login
+     of the same Fyers app replaced it. Logging in again in Broker Connection fixes it.
+   - The Excel "History" workbook was not checked end-to-end in real Excel.
+   - MetaTrader 5 connector is untested against a real MT5 terminal.
+   - Sierra Chart (DTC protocol) is not built.

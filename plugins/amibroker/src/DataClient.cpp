@@ -19,11 +19,15 @@
 #include <map>
 #include <deque>
 #include <chrono>
+#include <cmath>
 
 static std::thread   g_pollerThread;
 static std::mutex    g_pollerMutex;
 static bool          g_bShutdown = false;
 static std::map<std::string, Bar>    g_lastKnownBars;
+// The final state of the minute before g_lastKnownBars' one: AmiBroker may not have read it yet
+// when the next minute started (it reads about once a second, less often during scans)
+static std::map<std::string, Bar>    g_prevMinuteBars;
 static HWND          g_hAmiBrokerWnd = NULL;
 // The engine connection, for the right-click menu's commands (guarded by g_sendMutex)
 static SOCKET        g_ipcSocket = INVALID_SOCKET;
@@ -65,6 +69,13 @@ bool GetCachedLiveBar(const std::string& ticker, Bar& outBar) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
     auto it = g_lastKnownBars.find(ticker);
     if (it != g_lastKnownBars.end()) { outBar = it->second; return true; }
+    return false;
+}
+
+bool GetCachedPrevBar(const std::string& ticker, Bar& outBar) {
+    std::lock_guard<std::mutex> lk(g_pollerMutex);
+    auto it = g_prevMinuteBars.find(ticker);
+    if (it != g_prevMinuteBars.end()) { outBar = it->second; return true; }
     return false;
 }
 
@@ -373,6 +384,25 @@ void ShowDataBridge() {
     }).detach();
 }
 
+// Records a LIVE_BAR: the newest bar of the ticker, and the final state of the minute before it
+// (caller holds g_pollerMutex)
+static void KeepLiveBar(const std::string& ticker, const Bar& b) {
+    double m = floor(b.timestamp / 60.0);
+    auto it = g_lastKnownBars.find(ticker);
+    if (it != g_lastKnownBars.end()) {
+        double cur = floor(it->second.timestamp / 60.0);
+        if (m < cur) {
+            // An update of the minute before (it reached us after the new one): keep it there
+            auto pv = g_prevMinuteBars.find(ticker);
+            if (pv != g_prevMinuteBars.end() && floor(pv->second.timestamp / 60.0) == m) pv->second = b;
+            return;
+        }
+        if (m > cur) g_prevMinuteBars[ticker] = it->second;
+    }
+    g_lastKnownBars[ticker] = b;
+    g_pendingNotify[ticker] = b;
+}
+
 // Background thread: listens on TCP 7891 for LIVE_BAR messages
 static void PollerThreadProc() {
     WSADATA wd;
@@ -457,8 +487,7 @@ static void PollerThreadProc() {
 
                 {
                     std::lock_guard<std::mutex> lk(g_pollerMutex);
-                    g_lastKnownBars[ticker] = b;
-                    g_pendingNotify[ticker] = b;
+                    KeepLiveBar(ticker, b);
                 }
             }
         }

@@ -14,6 +14,7 @@
  *   }
  */
 
+import { flushPendingBars } from '../db'
 import { readGapCandidates as readStoredGaps } from '../db/reader'
 import { getTrueGapRange, INTERVAL_SECONDS } from './MarketCalendar'
 
@@ -29,6 +30,7 @@ export interface GapRange {
  */
 async function readGapCandidates(ticker: string, fromMs: number, toMs: number, intervalSec: number) {
   try {
+    flushPendingBars()   // live bars still in the write buffer are not holes
     return await readStoredGaps(ticker, Math.floor(fromMs / 1000), Math.floor(toMs / 1000), intervalSec)
   } catch (err) {
     console.error(`[GapDetector] Failed to read gaps for ${ticker}:`, err)

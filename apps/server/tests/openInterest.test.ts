@@ -14,7 +14,7 @@ process.env.APPDATA = path.join(tmpHome, 'AppData', 'Roaming')
 process.env.DATABRIDGE_DB_PATH = path.join(tmpHome, 'oi.db')
 process.env.DATABRIDGE_NO_PG_IMPORT = '1'
 
-afterEach(() => vi.unstubAllGlobals())
+afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers() })
 
 describe('open interest', () => {
   it('live: the last OI seen is in every bar, also in minutes without an OI update', async () => {
@@ -24,6 +24,9 @@ describe('open interest', () => {
     feed.on('bar_finalized', e => finalized.push(e.bar))
     feed.addSymbolByTicker('NIFTY26NOVFUT', 'b1', 'NFO', 'FUT', 'NSE:NIFTY26NOVFUT')
     const t0 = Date.UTC(2026, 10, 2, 4, 0)
+    // The clock on that morning: ticks stamped long before now are snapshots, not trading
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(t0 + 100_000)
     const tick = (ms: number, price: number, oi?: number) =>
       feed.processRealTick({ instrumentId: 'NSE:NIFTY26NOVFUT', lastPrice: price, volume: 75, timestamp: ms, openInterest: oi }, 'b1')
     tick(t0, 24000, 12_500_000)

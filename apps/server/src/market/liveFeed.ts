@@ -4,11 +4,19 @@
  * Every broker adapter's ticks arrive in processRealTick(); this keeps the in-progress bar per
  * symbol, emits live_bar_updated (pushed to AmiBroker and the app) and bar_finalized (saved to
  * the database) and holds the per-symbol feed status the Feed Status page shows.
+ *
+ * A minute's bar is built from ticks stamped inside that minute (exchange time) and is closed
+ * once, either by the first tick of a later minute or by the clock a little after the minute
+ * ends (a quiet symbol may not tick again for a long time). After that the minute is never
+ * reopened: a late tick for it changes nothing in the saved bar, and broker history replaces
+ * the bar later anyway. Ticks that are not trading build no bar: snapshots sent on subscribe
+ * (old exchange time) and, on NSE/BSE, updates after the close.
  */
 import { EventEmitter } from 'events'
 import os from 'os'
 import { v4 as uuidv4 } from 'uuid'
 import { stmts, insertBarBatch } from '../db'
+import { isWeekend, isClosedDay, getSessionWindowMs } from './MarketCalendar'
 import type {
   SymbolFeedStatus, CoreEngineStats, LogEntry,
   Exchange, InstrumentType
@@ -34,10 +42,25 @@ interface LiveBar {
   low: number
   close: number
   volume: number
+  /** Start of the bar's minute (UTC ms); 0 = no bar yet */
   bucketMs: number
   /** Open interest at the bar's last update (F&O; brokers send it with the ticks) */
   oi?: number
+  /** Closed and handed to the database: later ticks for this minute leave it alone */
+  done?: boolean
 }
+
+/** A minute is closed this long after it ends, plus the feed's usual delay (whole-second stamps, travel) */
+const CLOSE_GRACE_MS = 2000
+/** A tick stamped this much before now is a snapshot of an earlier trade (sent on subscribe): price only, no bar */
+const SNAPSHOT_AGE_MS = 5 * 60_000
+const IST_MS = 19_800_000
+const DAY_MS = 86_400_000
+/** Exchanges on NSE's fixed 09:15-15:30 day. MCX and CDS are left alone: their evening close moves with US daylight saving */
+const FIXED_SESSION = new Set(['NSE', 'BSE', 'NFO', 'BFO'])
+
+/** Day volume last seen for an instrument, and the IST day it belongs to */
+interface CumVolume { total: number; day: number }
 
 export class LiveFeed extends EventEmitter {
   private instruments: Map<string, Instrument> = new Map()
@@ -45,18 +68,19 @@ export class LiveFeed extends EventEmitter {
   private feedStatuses: Map<string, SymbolFeedStatus> = new Map()
   private startTime = Date.now()
   private tickInterval: ReturnType<typeof setInterval> | null = null
-  private barFlushInterval: ReturnType<typeof setInterval> | null = null
   private logInterval: ReturnType<typeof setInterval> | null = null
   private msgCount = 0
   private latencyHistory: number[] = []
   private brokerId = 'zerodha-1'
   private pendingStatusUpdates = new Map<string, SymbolFeedStatus>()
   // Last cumulative day volume seen per instrument (broker sends running totals)
-  private lastCumVolume = new Map<string, number>()
+  private lastCumVolume = new Map<string, CumVolume>()
   // Last open interest seen per instrument: carried into every new bar, since NSE only
   // publishes it every few minutes (a bar without an update still has that OI)
   private lastOi = new Map<string, number>()
   private feedUpdateThrottleTimer: ReturnType<typeof setTimeout> | null = null
+  /** Trading-day answer per exchange and IST day: closed day, or the session window */
+  private sessionCache = new Map<string, { closed: boolean; openMs: number; closeMs: number } | null>()
 
   private _scheduleFeedBroadcast(status: SymbolFeedStatus, _now: number) {
     this.pendingStatusUpdates.set(status.ticker, status)
@@ -116,11 +140,7 @@ export class LiveFeed extends EventEmitter {
         if (existingBar) {
           this.liveBars.set(newKey, existingBar)
         } else {
-          const now = Date.now()
-          this.liveBars.set(newKey, {
-            open: 0, high: 0, low: 0, close: 0, volume: 0,
-            bucketMs: Math.floor(now / 1000) * 1000,
-          })
+          this.liveBars.set(newKey, { open: 0, high: 0, low: 0, close: 0, volume: 0, bucketMs: 0 })
         }
 
         console.log(`[LiveFeed] Re-keyed ${ticker} (${brokerId}): "${oldKey}" to "${newKey}"`)
@@ -159,11 +179,10 @@ export class LiveFeed extends EventEmitter {
   addInstrument(inst: Instrument) {
     const key = `${inst.brokerId}:${inst.brokerToken}`
     this.instruments.set(key, inst)
-    const now = Date.now()
-    const bucket = Math.floor(now / 60000) * 60000  // 1-minute bucket
+    // No bar until the first trading tick (its own minute, whatever the clock says)
     this.liveBars.set(key, {
       open: inst.basePrice, high: inst.basePrice, low: inst.basePrice,
-      close: inst.basePrice, volume: 0, bucketMs: bucket,
+      close: inst.basePrice, volume: 0, bucketMs: 0,
     })
     this.feedStatuses.set(inst.ticker, {
       ticker: inst.ticker,
@@ -193,17 +212,19 @@ export class LiveFeed extends EventEmitter {
 
   stop() {
     if (this.tickInterval) clearInterval(this.tickInterval)
-    if (this.barFlushInterval) clearInterval(this.barFlushInterval)
     if (this.logInterval) clearInterval(this.logInterval)
     this.tickInterval = null
-    this.barFlushInterval = null
     this.logInterval = null
+    if (this.saveBar) this.off('bar_finalized', this.saveBar)
+    this.saveBar = null
   }
 
   private _startTickGeneration() {
     this.tickInterval = setInterval(() => {
       const now = Date.now()
       
+      this.closeFinishedMinutes(now)
+
       // Sweep for stale feeds - 60s threshold for low-liquidity stocks
       const changed: SymbolFeedStatus[] = []
       for (const status of this.feedStatuses.values()) {
@@ -282,11 +303,11 @@ export class LiveFeed extends EventEmitter {
     }
 
     if (!inst) return
+    if (!(Number.isFinite(tick.lastPrice) && tick.lastPrice > 0)) return
 
     const ticker = inst.ticker
-    const now = tick.timestamp || Date.now()
-    // Use 1-minute buckets so OHLCV accumulates properly within each candle
-    // (matches Fyers 1-min chart aggregation)
+    const wallNow = Date.now()
+    const now = tick.timestamp || wallNow
     const bucket = Math.floor(now / 60000) * 60000
 
     const bar = this.liveBars.get(key)
@@ -295,51 +316,37 @@ export class LiveFeed extends EventEmitter {
     const newPrice = tick.lastPrice
     if (typeof tick.openInterest === 'number' && tick.openInterest > 0) this.lastOi.set(key, tick.openInterest)
     const oi = this.lastOi.get(key)
-    // Volume traded since the previous update. The feed sends periodic snapshots, not
-    // every trade, so summing last-traded-qty misses most volume; diff the day's running
-    // total instead. Fall back to last-traded-qty only for feeds without a running total.
-    let tickQty = tick.volume || 0
-    if (typeof tick.totalVolume === 'number' && tick.totalVolume >= 0) {
-      const prevCum = this.lastCumVolume.get(key)
-      this.lastCumVolume.set(key, tick.totalVolume)
-      if (prevCum === undefined) tickQty = 0             // first update after (re)connect: baseline only
-      else {
-        let delta = tick.totalVolume - prevCum
-        if (delta < -(2 ** 30)) delta += 2 ** 32          // int32 wrap on very heavy volume
-        tickQty = delta > 0 ? delta : 0                   // negative = new session reset
-      }
-    }
+    const tickQty = this.volumeSince(key, tick, now)
 
-    // New 1s bucket?
-    if (bucket !== bar.bucketMs) {
-      // Finalize old bar (only if it has valid data, avoid saving 0-value init bars)
-      if (bar.close > 0) {
-        this.emit('bar_finalized', { key, bar: { ...bar }, ticker, exchange: 'NSE' })
-      }
-      // New bar
-      this.liveBars.set(key, {
-        open: newPrice, high: newPrice, low: newPrice,
-        close: newPrice, volume: tickQty, bucketMs: bucket, oi,
-      })
-    } else {
-      // Update in-progress bar
-      if (bar.open === 0) {
-        bar.open = newPrice
-        bar.high = newPrice
-        bar.low = newPrice
-      } else {
+    // Snapshots of an earlier trade and updates outside trading hours show the price only
+    const trading = now >= wallNow - SNAPSHOT_AGE_MS && this.inSession(now, inst.exchange)
+    let barChanged = false
+    if (trading) {
+      if (bar.bucketMs === 0 || bucket > bar.bucketMs) {
+        // A new minute: the previous one is complete (unless the clock already closed it)
+        if (bar.bucketMs !== 0) this.closeBar(key, bar, ticker)
+        this.liveBars.set(key, {
+          open: newPrice, high: newPrice, low: newPrice,
+          close: newPrice, volume: tickQty, bucketMs: bucket, oi,
+        })
+        barChanged = true
+      } else if (bucket === bar.bucketMs && !bar.done) {
         bar.high = Math.max(bar.high, newPrice)
         bar.low = Math.min(bar.low, newPrice)
+        bar.close = newPrice
+        bar.volume += tickQty
+        bar.oi = oi
+        barChanged = true
       }
-      bar.close = newPrice
-      bar.volume += tickQty
-      bar.oi = oi
+      // Otherwise a late tick for a minute already closed: saved bars are not reopened
     }
 
     // Update feed status
     let status = this.feedStatuses.get(ticker)
     if (!status) return
-    
+    // An update older than the one shown (ticks overtaking each other) doesn't move the price back
+    if (now < (status.lastTickUtcMs || 0)) return
+
     const prevClose = status.prevClose || newPrice
     status.lastPrice = newPrice
     status.lastTickUtcMs = now
@@ -350,30 +357,102 @@ export class LiveFeed extends EventEmitter {
     status.status = 'RECEIVING' as any
     // How old the price is when it gets here: the exchange's own time of the update to now
     // (it used to be a made-up 5-10 ms). Feeds stamp whole seconds, so it is coarse.
-    const ageMs = tick.timestamp ? Math.max(0, Date.now() - tick.timestamp) : 0
+    const ageMs = tick.timestamp ? Math.max(0, wallNow - tick.timestamp) : 0
     status.internalLatencyMs = ageMs
     this.msgCount++
-    this.latencyHistory.push(ageMs)
-    if (this.latencyHistory.length > 500) this.latencyHistory.shift()
-
-    // Per-tick logging suppressed to prevent SQLite/WebSocket flood
-
-    // Emit live_bar_updated so IPC 7891 (server.ts) receives the current bar state
-    const currentBar = this.liveBars.get(key)
-    if (currentBar) {
-      // Per-bar-update logging suppressed to prevent SQLite/WebSocket flood
-      this.emit('live_bar_updated', { ticker, bar: { ...currentBar } })
+    // Snapshots of old trades aren't a delay (and would hold minutes open for longer)
+    if (ageMs < SNAPSHOT_AGE_MS) {
+      this.latencyHistory.push(ageMs)
+      if (this.latencyHistory.length > 500) this.latencyHistory.shift()
     }
+
+    // The in-progress bar to AmiBroker, the app and the other platforms, at once
+    if (barChanged) this.emit('live_bar_updated', { ticker, bar: { ...this.liveBars.get(key)! } })
 
     this._scheduleFeedBroadcast(status, now)
   }
 
-  private _startBarFlush() {
-    // Persist finalized bars to PostgreSQL every 250ms
-    const pendingBars: Parameters<typeof insertBarBatch>[0] = []
+  /**
+   * Volume traded since the previous update. The feed sends periodic snapshots, not every trade,
+   * so summing last-traded-qty misses most volume; the day's running total is diffed instead
+   * (last-traded-qty only for feeds without one). The first total of a day is a baseline. A
+   * total lower than the last one on the same day is an update that overtook a newer one, or
+   * an empty field: ignored, so the next update doesn't count the whole day's volume again.
+   */
+  private volumeSince(key: string, tick: { volume: number; totalVolume?: number }, tickMs: number): number {
+    if (!(typeof tick.totalVolume === 'number' && tick.totalVolume >= 0)) return tick.volume > 0 ? tick.volume : 0
+    const day = Math.floor((tickMs + IST_MS) / DAY_MS)
+    const prev = this.lastCumVolume.get(key)
+    if (!prev || prev.day !== day) {
+      this.lastCumVolume.set(key, { total: tick.totalVolume, day })
+      return 0
+    }
+    let delta = tick.totalVolume - prev.total
+    if (delta < -(2 ** 30)) delta += 2 ** 32          // int32 wrap on very heavy volume
+    if (delta <= 0) return 0
+    prev.total = tick.totalVolume
+    return delta
+  }
 
-    this.on('bar_finalized', ({ ticker, bar }) => {
-      pendingBars.push({
+  /** True when a tick at `utcMs` is trading time for the exchange (special sessions on closed days count) */
+  private inSession(utcMs: number, exchange: string): boolean {
+    const ex = (exchange || 'NSE').toUpperCase()
+    if (!FIXED_SESSION.has(ex)) return true
+    const day = Math.floor((utcMs + IST_MS) / DAY_MS)
+    const cacheKey = `${ex}:${day}`
+    let s = this.sessionCache.get(cacheKey)
+    if (s === undefined) {
+      const noon = day * DAY_MS - IST_MS + 12 * 3600_000
+      const w = getSessionWindowMs(noon, ex)
+      s = w ? { closed: isWeekend(noon) || isClosedDay(noon, ex), openMs: w.openMs, closeMs: w.closeMs } : null
+      if (this.sessionCache.size > 64) this.sessionCache.clear()
+      this.sessionCache.set(cacheKey, s)
+    }
+    if (!s || s.closed) return true   // Muhurat trading and other special sessions
+    return utcMs >= s.openMs && utcMs < s.closeMs
+  }
+
+  /** Closes a minute's bar once: handed to the database (bars without a price aren't saved) */
+  private closeBar(key: string, bar: LiveBar, ticker: string) {
+    if (bar.done) return
+    bar.done = true
+    if (!(bar.close > 0)) return
+    const inst = this.instruments.get(key)
+    this.emit('bar_finalized', { key, bar: { ...bar }, ticker, exchange: inst?.exchange || 'NSE' })
+  }
+
+  /**
+   * Closes the bars of minutes that are over, for symbols whose next tick hasn't come: without
+   * this a quiet symbol's last bar was saved only at its next trade (maybe the next day) and was
+   * lost when the engine stopped first. The wait covers the feed's usual delay, so ticks stamped
+   * in the last second of a minute still make it in.
+   */
+  closeFinishedMinutes(nowMs = Date.now()) {
+    const waitMs = CLOSE_GRACE_MS + Math.min(60_000, this.typicalDelayMs())
+    for (const [key, bar] of this.liveBars) {
+      if (bar.bucketMs === 0 || bar.done) continue
+      if (nowMs >= bar.bucketMs + 60_000 + waitMs) {
+        const inst = this.instruments.get(key)
+        if (inst) this.closeBar(key, bar, inst.ticker)
+      }
+    }
+  }
+
+  /** Median age of recent ticks (exchange stamp to arrival, including any PC clock offset) */
+  private typicalDelayMs(): number {
+    if (this.latencyHistory.length === 0) return 0
+    const sorted = [...this.latencyHistory].sort((a, b) => a - b)
+    return sorted[Math.floor(sorted.length / 2)]
+  }
+
+  private saveBar: ((e: { ticker: string; bar: LiveBar }) => void) | null = null
+
+  private _startBarFlush() {
+    // Closed bars go straight to the database's write buffer (committed every 2 s, and before
+    // any read of bars, so AmiBroker never asks for a minute that is in neither place)
+    if (this.saveBar) return
+    this.saveBar = ({ ticker, bar }) => {
+      insertBarBatch([{
         amibroker_ticker: ticker,
         ts_utc_ms: bar.bucketMs,
         open: bar.open,
@@ -382,20 +461,9 @@ export class LiveFeed extends EventEmitter {
         close: bar.close,
         volume: bar.volume,
         open_interest: bar.oi ?? null,
-      })
-    })
-
-    this.barFlushInterval = setInterval(() => {
-      if (pendingBars.length > 0) {
-        try {
-          insertBarBatch([...pendingBars])
-          this._emitLog('debug', 'LiveFeed', `Batch write: ${pendingBars.length} bars persisted (250ms flush)`)
-          pendingBars.length = 0
-        } catch (e) {
-          this._emitLog('error', 'LiveFeed', `Batch write failed: ${e}`)
-        }
-      }
-    }, 250)
+      }])
+    }
+    this.on('bar_finalized', this.saveBar)
   }
 
   private _startLogEmission() {

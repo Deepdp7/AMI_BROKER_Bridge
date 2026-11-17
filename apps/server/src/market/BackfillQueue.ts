@@ -58,6 +58,10 @@ export interface BackfillTask {
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000
+/** During the market, holes starting this recently are the live feed's to fill (it is still closing them) */
+const LIVE_OWNS_MS = 2 * 60_000
+/** A gap scan never marks the last minutes as verified: they are scanned again next time */
+const UNVERIFIED_RECENT_MS = 5 * 60_000
 /** Futures history window (days): near-month contracts only have about two months of trading worth keeping */
 export const FUTURES_HISTORY_DAYS = 60
 const FUTURES_RE = /\d{2}(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)FUT$/i
@@ -250,18 +254,17 @@ class BackfillQueueService extends EventEmitter {
           const istHHMM = nowIST.getUTCHours() * 100 + nowIST.getUTCMinutes()
           const isMarketOpen = istHHMM >= 915 && istHHMM < 1530  // 9:15 AM to 3:30 PM IST
           if (isMarketOpen) {
-            // Only skip if the gap STARTS within the last 5 minutes — live ticks handle those.
-            // If gap starts more than 5 minutes ago, it means the app was closed — fill it!
-            const fiveMinAgoMs = nowMs - 5 * 60 * 1000
-            if (gapFrom.getTime() >= fiveMinAgoMs) {
-              // Very recent gap — live ticks will cover it, skip
+            // The minute being traded and the one that just ended are the live feed's (it closes
+            // a minute a few seconds after it ends). Any older hole is one the live feed missed
+            // (app closed, feed dropped) and can't fill any more: fetched now. The skipped minutes
+            // stay unverified (the watermark stops short of them), so the next scan looks again.
+            if (gapFrom.getTime() >= nowMs - LIVE_OWNS_MS) {
               this.activeTickers.delete(gapKey)
               this.activeTickers.delete(ticker)
               this.settlePass(pass, true)
               return
             }
-            // Past intra-day gap (app was closed) — fill it even during live market
-            console.log(`[BackfillQueue] Intra-day gap fill (app was closed during market): ${ticker} ${gapFrom.toISOString().slice(0, 16)} → ${targetTo.toISOString().slice(0, 16)}`)
+            console.log(`[BackfillQueue] Intra-day gap fill (minutes the live feed missed): ${ticker} ${gapFrom.toISOString().slice(0, 16)} → ${targetTo.toISOString().slice(0, 16)}`)
           } else {
             // After market close: always allow
             console.log(`[BackfillQueue] Same-day gap fill allowed (market closed): ${ticker} ${gapFrom.toISOString().slice(0, 16)} → ${targetTo.toISOString().slice(0, 16)}`)
@@ -359,6 +362,9 @@ class BackfillQueueService extends EventEmitter {
   public enqueueGapPass(ticker: string, brokerId: string, brokerToken: string | number, gaps: { fromMs: number, toMs: number }[], scanToMs: number) {
     // Cancelled by the user: leave the watermark alone, so "Download now" still finds these gaps
     if (gaps.length > 0 && this.isSkipped(ticker)) return
+    // The last few minutes are never "verified": the live feed may still be writing them, a gap
+    // there is skipped (enqueueGapFill), and the broker's own bars for them may not be final yet
+    scanToMs = Math.min(scanToMs, Date.now() - UNVERIFIED_RECENT_MS)
     if (gaps.length === 0) {
       setVerifiedThroughMs(ticker, scanToMs)
       return
