@@ -13,6 +13,7 @@ import { broadcast } from './api/realtime'
 import { notifyAmiBrokerHistoryChanged } from './amibroker/ipcServer'
 import { startStallWatch } from './system/stallWatch'
 import { startPlatformBridges } from './api/routes/platforms'
+import { startLiveSlots } from './market/liveSlots'
 import type { AppSettings } from './types'
 
 /** Forwards service events to the app (WebSocket) and broker ticks into the live feed. Call once. */
@@ -45,6 +46,9 @@ export function wireEngineEvents() {
   brokerManager.on('master_sync_progress', (data) => broadcast('master_sync_progress', data))
   brokerManager.on('master_sync_complete', (data) => broadcast('master_sync_complete', data))
   brokerManager.on('master_sync_error', (data) => broadcast('master_sync_error', data))
+  // Fewer live symbols than tracked (Fyers Standard plan: 100): places go to AmiBroker's charts
+  startLiveSlots()
+
   brokerManager.on('symbol_resolved', (data: any) => {
     const existing = stmts.getSymbols.all() as any[]
     const symRecord = existing.find(s => (s.rawSymbol || s.raw_symbol) === data.raw && (s.brokerId || s.broker_id) === data.brokerId)

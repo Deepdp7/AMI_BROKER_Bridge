@@ -14,7 +14,7 @@ const dedupedLocalStorage: StateStorage = {
 
 // ===== Types =====
 export type BrokerStatus = 'connected' | 'reconnecting' | 'auth_required' | 'disconnected'
-export type FeedStatus = 'SUBSCRIBED' | 'RECEIVING' | 'STREAMING' | 'STALE' | 'CLOSED' | 'ERROR'
+export type FeedStatus = 'SUBSCRIBED' | 'RECEIVING' | 'STREAMING' | 'STALE' | 'CLOSED' | 'ERROR' | 'NOT_LIVE'
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug'
 
 export interface BrokerAccount {

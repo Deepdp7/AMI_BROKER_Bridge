@@ -7,6 +7,7 @@ import { brokerManager } from '../../brokers/BrokerManager'
 import { backfillQueue } from '../../market/BackfillQueue'
 import { backfilledTickers } from '../../market/state/backfillState'
 import { liveFeed } from '../../market/liveFeed'
+import { noteViewed } from '../../market/liveSlots'
 
 const router = Router()
 
@@ -105,6 +106,7 @@ router.get('/bars', async (req, res) => {
   brokerId = symRecord.brokerId || symRecord.broker_id
   // AmiBroker is loading this symbol: its pending downloads go first
   backfillQueue.prioritize(ticker)
+  noteViewed(ticker)
 
   if (!backfilledTickers.has(ticker) && brokerId && brokerId !== 'orphaned') {
     // Enqueue to the centralized rate-limited 1-year backfill queue

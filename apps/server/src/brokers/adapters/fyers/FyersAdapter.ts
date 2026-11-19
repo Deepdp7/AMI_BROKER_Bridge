@@ -8,6 +8,7 @@ import path from 'path'
 import readline from 'readline'
 import { FyersHSMClient } from './FyersHSMClient'
 import { RateLimiter } from '../../../lib/RateLimiter'
+import { learnFromFyersMessage, learnFromLiveCap, historyFloorMs, requestsLeftToday, noteRequest, msUntilNewDay } from './fyersPlan'
 import { SEARCH_FILTERS, category, type InstrumentCategory } from '../InstrumentMaster'
 
 /**
@@ -33,10 +34,35 @@ export function fyersCategory(exchange: string, code: number, id: string): Instr
   return option ? 'OPTSTK' : 'FUTSTK'
 }
 
-// Fyers history API, Standard plan (measured 2026-10-25): bursts of 5/s pass, but no more than
-// 50 requests are accepted in any 60 s; past that it answers -360 ("5 requests/second"). Shared
-// by every caller (backfill workers, auto-refresh, startup fetches).
-const historyLimiter = new RateLimiter(4, 48)
+// Fyers data APIs, Standard plan: 5 requests a second, 50 a minute (-360 past that), counted per
+// account. Going over the minute's limit more than 3 times in a day blocks the account for the
+// rest of the day, so this stays well under both (network jitter can bunch requests at Fyers'
+// end). Shared by every caller (backfill workers, auto-refresh, daily history, startup fetches).
+const historyLimiter = new RateLimiter(3, 45)
+let dailyLimitLoggedFor = 0
+
+/**
+ * Waits for a data request's turn: the per-second and per-minute pacing and, on the Standard
+ * plan, the day's allowance (when it is used up, requests wait for the next day instead of
+ * earning refusals; live prices don't use it).
+ */
+async function acquireDataRequest() {
+  while (requestsLeftToday() <= 0) {
+    const waitMs = msUntilNewDay()
+    if (dailyLimitLoggedFor !== Math.floor(Date.now() / 86_400_000)) {
+      dailyLimitLoggedFor = Math.floor(Date.now() / 86_400_000)
+      console.warn(`[FyersAdapter] Today's Fyers history allowance (Standard plan: 5,000 requests a day) is used up. Downloads and refreshes continue after midnight; live prices are not affected.`)
+    }
+    await new Promise(r => setTimeout(r, Math.min(waitMs + 1000, 10 * 60_000)))
+  }
+  await historyLimiter.acquire()
+  noteRequest()
+}
+
+/** Fyers' -50 for a start date before what the plan serves ("outside your Standard plan's historical data limit") */
+function isPlanRangeRefusal(data: any): boolean {
+  return data?.code === -50 && /historical data limit|outside your/i.test(JSON.stringify(data))
+}
 
 /** Fyers' "too many requests" answers: classic 429 and the plan limit (-360, "5 requests/second") */
 function isFyersRateLimit(data: any): boolean {
@@ -112,6 +138,8 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
   readonly dailyHistory = true
   /** History requests per minute allowed right now (the download queue picks the fastest broker) */
   historyRequestsPerMinute() { return historyLimiter.perMinuteBudget }
+  /** History requests the account's plan still allows today (Infinity: no daily cap known) */
+  historyRequestsLeftToday() { return requestsLeftToday() }
   private connected = false
   private accessToken: string = ''
   private appId: string = ''
@@ -164,6 +192,7 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
         this.hsmClient.on('log_entry', (msg) => (this as any).emit('log_entry', msg))
         this.hsmClient.on('auth_failed', () => (this as any).emit('auth_failed'))
         this.hsmClient.on('tick', (tick) => (this as any).emit('tick', tick))
+        this.hsmClient.on('live_cap', (cap) => { learnFromLiveCap(cap.accepted, cap.asked); (this as any).emit('live_cap', cap) })
         this.hsmClient.on('connected', () => {
           (this as any).emit('connection_state', 'CONNECTED')
           this.connected = true
@@ -222,6 +251,7 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
       this.hsmClient.on('log_entry', (msg) => (this as any).emit('log_entry', msg))
       this.hsmClient.on('auth_failed', () => (this as any).emit('auth_failed'))
       this.hsmClient.on('tick', (tick) => (this as any).emit('tick', tick))
+      this.hsmClient.on('live_cap', (cap) => { learnFromLiveCap(cap.accepted, cap.asked); (this as any).emit('live_cap', cap) })
       this.hsmClient.on('connected', () => {
         (this as any).emit('connection_state', 'CONNECTED')
         this.connected = true
@@ -600,22 +630,28 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
   /** Authenticated GET on the Fyers data API (option chain, quotes…), under the shared rate limit. */
   async dataApi(pathAndQuery: string): Promise<any> {
     if (!this.accessToken) throw new Error('Fyers is not connected — log in again from Broker Connection')
-    await historyLimiter.acquire()
+    await acquireDataRequest()
     const res = await fetch(`https://api-t1.fyers.in/data/${pathAndQuery}`, {
       headers: { Authorization: `${this.appId}:${this.accessToken}` },
       signal: AbortSignal.timeout(15000),
     })
     const data: any = await res.json().catch(() => ({}))
-    if (res.status === 429 || data?.code === 429) {
-      historyLimiter.pause(3000)
+    if (res.status === 429 || data?.code === 429 || isFyersRateLimit(data)) {
+      learnFromFyersMessage(String(data?.message || ''))
+      historyLimiter.limited()
       throw Object.assign(new Error('Fyers rate limit — try again in a moment'), { code: 429 })
     }
     if (!res.ok || (data?.code && data.code !== 200 && data.s !== 'ok')) throw new Error(data?.message || `Fyers data API error ${res.status}`)
     return data
   }
 
-  async getHistoricalBars(instrumentToken: string, interval: string, from: Date, to: Date): Promise<Bar[]> {
+  async getHistoricalBars(instrumentToken: string, interval: string, from: Date, to: Date, planRetry = false): Promise<Bar[]> {
     if (!this.accessToken) return []
+    const daily = interval === '1d' || interval === '1D'
+    // Older than the plan serves: nothing to ask for (it only earns a refusal, and uses the allowance)
+    const floorMs = historyFloorMs(daily)
+    if (floorMs && to.getTime() < floorMs) return []
+    if (floorMs && from.getTime() < floorMs) from = new Date(floorMs)
 
     let safeToken = instrumentToken
     if (safeToken.startsWith('NSE:') && !safeToken.includes('-') && !/FUT$/.test(safeToken) && !/\d+[CP]E$/.test(safeToken)) {
@@ -637,7 +673,7 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
     const fromStr = formatIST(from)
     const toStr = formatIST(to)
 
-    await historyLimiter.acquire()
+    await acquireDataRequest()
     // F&O contracts: open interest per candle too (7th value)
     const oiFlag = /(FUT|CE|PE)$/.test(safeToken) ? '&oi_flag=1' : ''
     const url = `https://api-t1.fyers.in/data/history?symbol=${encodeURIComponent(safeToken)}&resolution=${resolution}&date_format=1&range_from=${fromStr}&range_to=${toStr}&cont_flag=0${oiFlag}`
@@ -683,11 +719,19 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
       } else if (data.s === 'no_data') {
         return []
       } else if (isFyersRateLimit(data)) {
+        learnFromFyersMessage(String(data.message || ''))
         historyLimiter.limited()
         console.warn(`[FyersAdapter] Rate limit reached for ${instrumentToken} (${data.code} ${data.message || ''}): pausing, now ${historyLimiter.perMinuteBudget} requests/min`)
         const err: any = new Error(`429 request limit reached: ${data.message || ''}`)
         err.code = 429
         throw err
+      } else if (isPlanRangeRefusal(data)) {
+        // Before the plan's history window: learn the window, then ask once more for the part
+        // inside it (nothing, when the whole range is older)
+        learnFromFyersMessage(JSON.stringify(data))
+        if (planRetry || !historyFloorMs(daily)) return []
+        console.log(`[FyersAdapter] ${instrumentToken}: Fyers serves only the plan's history window; asking for the part inside it`)
+        return this.getHistoricalBars(instrumentToken, interval, from, to, true)
       } else {
         console.error(`[FyersAdapter] History API returned error for ${instrumentToken}:`, data)
           if (data.code === -16 || (data.message && String(data.message).toLowerCase().includes('authenticate'))) {
@@ -849,9 +893,11 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
 
   async unsubscribe(instruments: string[]): Promise<void> {
     try {
+      // The socket knows symbols by the names they were subscribed under (subscribe() maps the
+      // original name): passing only the resolved names ("NSE:TCS-EQ") unsubscribed nothing
       const resolvedInstruments = await Promise.all(instruments.map(i => this.resolveSymbol(i)))
       if (this.hsmClient) {
-        this.hsmClient.unsubscribe(resolvedInstruments)
+        this.hsmClient.unsubscribe([...new Set([...instruments, ...resolvedInstruments])])
       }
     } catch (e: any) {
       console.error('[FyersAdapter] unsubscribe error', e)

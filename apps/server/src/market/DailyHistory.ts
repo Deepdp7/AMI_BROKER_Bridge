@@ -17,12 +17,20 @@ import path from 'path'
 import { stmts, getAllSettings, upsertDailyBars, getOldestBarTimestampSec, DATA_DIR, repairBar, ORPHANED } from '../db'
 import { brokerManager } from '../brokers/BrokerManager'
 import { backfillQueue, isInvalidSymbolError } from './BackfillQueue'
+import { isMarketSession } from './MarketCalendar'
 
 const DAY_MS = 86_400_000
 /** Years of daily bars wanted when the setting isn't there (0 in the setting turns this off) */
 export const DEFAULT_DAILY_YEARS = 20
 /** Days per request: Fyers serves at most 366 daily bars per call; Kite, Angel 2000 */
 const CHUNK_DAYS = 365
+/**
+ * A broker with a daily request allowance (Fyers Standard: 5,000) gets daily-history requests
+ * only outside market hours (this long before the open to after the close), and only while this
+ * many are left: the market's refreshes and repairs come first.
+ */
+const MARKET_MARGIN_MS = 15 * 60_000
+const ALLOWANCE_KEPT = 1_500
 /** How often a round is tried (it waits for 1-minute downloads to finish first) */
 const ROUND_EVERY_MS = 60_000
 
@@ -80,6 +88,11 @@ export async function downloadDailyFor(sym: any, nowMs = Date.now()): Promise<Da
   const adapter: any = brokerManager.getAdapter(brokerId)
   if (!adapter) return 'later'
   if (!adapter.dailyHistory) return 'skipped'
+  const left = adapter.historyRequestsLeftToday?.()
+  if (typeof left === 'number' && Number.isFinite(left)) {
+    const nearMarket = [nowMs - MARKET_MARGIN_MS, nowMs, nowMs + MARKET_MARGIN_MS].some(t => isMarketSession(t, 'NSE'))
+    if (nearMarket || left < ALLOWANCE_KEPT) return 'later'
+  }
 
   const wantFromMs = nowMs - years * 365.25 * DAY_MS
   const oldestMinuteSec = await getOldestBarTimestampSec(ticker)

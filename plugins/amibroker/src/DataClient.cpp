@@ -20,6 +20,8 @@
 #include <deque>
 #include <chrono>
 #include <cmath>
+#include <condition_variable>
+#include <set>
 
 static std::thread   g_pollerThread;
 static std::mutex    g_pollerMutex;
@@ -368,6 +370,71 @@ void NoteFullLoad(const std::string& ticker) {
     SendToBridge(note);
 }
 
+// ---- Catch-up downloads, off AmiBroker's thread ----
+// Bars AmiBroker missed (a SYNC notice, a jump in the live bar) used to be fetched inside
+// GetQuotesEx, on AmiBroker's own thread. While the engine was busy (a 438-symbol refresh) every
+// open symbol waited there, up to seconds each: AmiBroker's data access time reached 450 ms a
+// refresh (load factor over 200%) and charts stuttered. Now GetQuotesEx only asks; this thread
+// fetches, one request at a time, and the next GetQuotesEx call merges what arrived (AmiBroker
+// is nudged to make that call soon).
+struct CatchUpJob { std::string ticker; double from = 0; int limit = 0; CatchUpResult info; };
+static std::deque<CatchUpJob> g_catchUpJobs;                 // guarded by g_pollerMutex
+static std::set<std::string> g_catchUpPending;               // queued, fetching, or fetched and not merged yet
+static std::map<std::string, CatchUpResult> g_catchUpDone;   // guarded by g_pollerMutex
+static std::condition_variable g_catchUpCv;
+static std::thread g_catchUpThread;
+
+bool RequestCatchUp(const std::string& ticker, double from, int limit, const CatchUpResult& info) {
+    {
+        std::lock_guard<std::mutex> lk(g_pollerMutex);
+        if (g_catchUpPending.count(ticker)) return false;
+        g_catchUpPending.insert(ticker);
+        CatchUpJob job;
+        job.ticker = ticker; job.from = from; job.limit = limit; job.info = info;
+        g_catchUpJobs.push_back(std::move(job));
+    }
+    g_catchUpCv.notify_one();
+    return true;
+}
+
+bool TakeCatchUpResult(const std::string& ticker, CatchUpResult& out) {
+    std::lock_guard<std::mutex> lk(g_pollerMutex);
+    auto it = g_catchUpDone.find(ticker);
+    if (it == g_catchUpDone.end()) return false;
+    out = std::move(it->second);
+    g_catchUpDone.erase(it);
+    g_catchUpPending.erase(ticker);
+    return true;
+}
+
+static void CatchUpThreadProc() {
+    while (!g_bShutdown) {
+        CatchUpJob job;
+        {
+            std::unique_lock<std::mutex> lk(g_pollerMutex);
+            g_catchUpCv.wait_for(lk, std::chrono::seconds(1), [] { return g_bShutdown || !g_catchUpJobs.empty(); });
+            if (g_bShutdown) break;
+            if (g_catchUpJobs.empty()) continue;
+            job = std::move(g_catchUpJobs.front());
+            g_catchUpJobs.pop_front();
+        }
+        std::vector<Bar> bars;
+        int got = FetchBarsFromAPI(job.ticker, job.limit, job.from, bars);
+        if (got < 0) CatchUpFailed();
+        Bar live{}; bool hasLive = false;
+        {
+            std::lock_guard<std::mutex> lk(g_pollerMutex);
+            job.info.got = got;
+            job.info.bars = std::move(bars);
+            g_catchUpDone[job.ticker] = std::move(job.info);
+            auto it = g_lastKnownBars.find(job.ticker);
+            if (it != g_lastKnownBars.end()) { live = it->second; hasLive = true; }
+        }
+        // AmiBroker calls GetQuotesEx for it soon (open charts also on their own refresh)
+        if (hasLive && live.close > 0) QueueNotify(job.ticker, live);
+    }
+}
+
 // SYNC|TICKER          -> bridge stored new recent history for TICKER
 // SYNC|TICKER|FROMSEC  -> bridge stored history for TICKER starting at FROMSEC (unix seconds),
 //                         possibly older than AmiBroker's last bar (a downtime hole)
@@ -435,6 +502,25 @@ bool SendToBridge(const std::string& line) {
     if (g_ipcSocket == INVALID_SOCKET) return false;
     std::string msg = line + "\n";
     return send(g_ipcSocket, msg.c_str(), (int)msg.size(), 0) == (int)msg.size();
+}
+
+// ---- Which symbols AmiBroker shows ----
+// The engine gives a broker's live places to these first when the broker streams fewer symbols
+// than are tracked (Fyers Standard plan: 100). A chart asks for its symbol every few seconds;
+// one notice per symbol every 15 s is enough to tell what is on screen.
+static std::map<std::string, ULONGLONG> g_viewSentAt;   // guarded by g_pollerMutex
+static const ULONGLONG VIEW_EVERY_MS = 15000;
+
+void ReportViewed(const std::string& ticker) {
+    {
+        std::lock_guard<std::mutex> lk(g_pollerMutex);
+        if (!g_ipcConnected) return;
+        ULONGLONG now = GetTickCount64();
+        ULONGLONG& last = g_viewSentAt[ticker];
+        if (last != 0 && now - last < VIEW_EVERY_MS) return;
+        last = now;
+    }
+    SendToBridge("VIEW|" + ticker);
 }
 
 // DataBridge Pro.exe from its uninstall entry (any view: AmiBroker is often 32-bit, the app 64-bit)
@@ -612,6 +698,7 @@ void StartPollingThread() {
         g_initTick = GetTickCount64();
         g_pollerThread = std::thread(PollerThreadProc);
         g_notifyThread = std::thread(NotifierThreadProc);
+        g_catchUpThread = std::thread(CatchUpThreadProc);
     }
 }
 
@@ -621,6 +708,12 @@ void StopPollingThread() {
     { std::lock_guard<std::mutex> lk(g_sendMutex); if (g_ipcSocket != INVALID_SOCKET) shutdown(g_ipcSocket, SD_BOTH); }
     if (g_pollerThread.joinable()) g_pollerThread.join();
     if (g_notifyThread.joinable()) g_notifyThread.join();
+    g_catchUpCv.notify_all();
+    if (g_catchUpThread.joinable()) g_catchUpThread.join();
+    {
+        std::lock_guard<std::mutex> lk(g_pollerMutex);
+        g_catchUpJobs.clear(); g_catchUpPending.clear(); g_catchUpDone.clear();
+    }
     CloseHttpSession();
 }
 

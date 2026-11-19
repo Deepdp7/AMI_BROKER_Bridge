@@ -63,6 +63,10 @@ export class RateLimiter {
   private async waitForSlot() {
     for (;;) {
       const now = Date.now()
+      // The PC clock was set back (e.g. synced after running fast): request times "in the future"
+      // would hold every request until the clock caught up with them
+      if (this.starts.length && this.starts[this.starts.length - 1] > now) this.starts = this.starts.filter(t => t <= now)
+      if (this.pausedUntil > now + 2 * 60_000) this.pausedUntil = now + 60_000
       while (this.starts.length && now - this.starts[0] >= 60_000) this.starts.shift()
       // Recover: +25% per 3 quiet minutes, up to the configured cap (5 → 48 in about half an hour)
       if (this.budget < this.perMinute && now - this.lastLimitedAt > 3 * 60_000) {

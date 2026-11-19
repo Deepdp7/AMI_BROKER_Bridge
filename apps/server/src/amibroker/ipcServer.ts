@@ -8,6 +8,7 @@
  *                    QUOTE|TICKER|last|open|high|low|prev|vol|oi|bid|ask|tickSec|bidQty|askQty
  *                                                     the day's quote for the Real-time Quote window
  *   plugin → engine  GET_QUOTES TICKER               bars for a symbol (auto-registers unknown ones)
+ *                    VIEW|TICKER                     AmiBroker asked for this symbol (live places, liveSlots.ts)
  *                    CMD|REPAIR|T, CMD|TODAY|T, CMD|TODAY_ALL   its right-click menu (pluginStatus.ts)
  *
  * History itself is served over HTTP (/api/feed/bars); this channel only pushes and nudges.
@@ -19,6 +20,7 @@ import { brokerManager } from '../brokers/BrokerManager'
 import { backfillQueue } from '../market/BackfillQueue'
 import { backfilledTickers } from '../market/state/backfillState'
 import { liveFeed } from '../market/liveFeed'
+import { noteViewed } from '../market/liveSlots'
 import { setRuntimeProbe } from '../ai/AiAssistant'
 import { startSymbolDetailsSync, schedulePush as pushSymbolDetailsSoon } from './symbolDetails'
 import { currentPluginStatus, statusLine, runPluginCommand, handlePluginNote } from './pluginStatus'
@@ -140,9 +142,7 @@ export function startAmiBrokerIpc() {
     notifyAmiBrokerHistoryChanged(ticker, fromSec)
   })
 
-  backfillQueue.on('backfill_completed', ({ ticker }: { ticker: string }) => {
-    notifyAmiBrokerHistoryChanged(ticker)
-  })
+  // A finished download needs no notice of its own: every chunk that changed bars sent one
 
   const ipcServer = net.createServer((socket) => {
     ipcClients.add(socket);
@@ -182,6 +182,8 @@ export function startAmiBrokerIpc() {
         for (const line of lines) {
           const msg = line.trim()
           if (msg.startsWith('NOTE|')) { handlePluginNote(msg); continue }
+          // A symbol AmiBroker is showing (charts report it every 15 s): it gets a live place first
+          if (msg.startsWith('VIEW|')) { noteViewed(msg.slice(5).trim()); continue }
           if (msg.startsWith('CMD|')) {
             // AmiBroker's right-click menu on the DataBridge light
             runPluginCommand(msg)

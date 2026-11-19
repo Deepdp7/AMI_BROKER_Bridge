@@ -116,6 +116,8 @@ export class FyersHSMClient extends EventEmitter {
   private lastTickLogTime = 0
 
   private tickStats = new Map<string, { ticks: number, lastTime: number }>()
+  /** Checks how many of the asked-for symbols Fyers took, once subscribing settles */
+  private capCheckTimer: ReturnType<typeof setTimeout> | null = null
   private statsTimer: NodeJS.Timeout | null = null
   private reconnectTimer: NodeJS.Timeout | null = null
 
@@ -363,27 +365,66 @@ export class FyersHSMClient extends EventEmitter {
       
       if (currentIndex < hsmTokens.length) {
         setTimeout(processNextBatch, 50) // Yield event loop
+      } else {
+        this.scheduleCapCheck()
       }
     }
     
     processNextBatch()
   }
 
+  /**
+   * Fyers answers each symbol it takes with a snapshot; past the plan's limit (Standard: 100
+   * symbols, per account) the rest are silently left out. A while after subscribing, the symbols
+   * that got no snapshot are reported ('live_cap') and taken off this socket's list, so that a
+   * reconnect asks for the ones that stream rather than whichever come first.
+   */
+  private scheduleCapCheck() {
+    if (this.capCheckTimer) clearTimeout(this.capCheckTimer)
+    this.capCheckTimer = setTimeout(() => {
+      this.capCheckTimer = null
+      if (!this.authenticated) return
+      const accepted = new Set<string>()
+      for (const topic of this.subscriptions.values()) {
+        const t = this.symbolMappings.get(topic)
+        if (t) accepted.add(t)
+      }
+      const asked = [...this.activeSubscriptions].filter(t => this.reverseMappings.has(t))
+      const live = asked.filter(t => accepted.has(t))
+      const waiting = asked.filter(t => !accepted.has(t))
+      if (live.length === 0) return   // nothing taken at all: a different problem (login, symbols)
+      this.emit('live_cap', { accepted: live.length, asked: asked.length, live, waiting })
+      if (waiting.length === 0) return
+      this.emitLog('warn', `[FYERS_HSM_LIMIT] Fyers streams ${live.length} of ${asked.length} symbols: the account's API plan allows ${live.length} live symbols (Standard plan: 100, Prime: 5,000). The others are kept up to date from history; symbols open in AmiBroker get the live places first.`)
+      for (const t of waiting) {
+        this.activeSubscriptions.delete(t)
+        this.pendingSubscriptions.delete(t)
+      }
+    }, 10_000)
+  }
+
   public unsubscribe(dbTickers: string[]) {
     dbTickers.forEach(t => {
       this.activeSubscriptions.delete(t)
       this.pendingSubscriptions.delete(t)
+      this.tickStats.delete(t)
+      this.lastTickState.delete(t)
     })
-    
-    if (this.authenticated) {
-      const hsmTokens: string[] = []
-      for (const t of dbTickers) {
-        const hsm = this.reverseMappings.get(t)
-        if (hsm) hsmTokens.push(hsm)
-      }
-      if (hsmTokens.length > 0) {
-        this.submitSubscriptionBatch(hsmTokens, 'U')
-      }
+    const hsmTokens: string[] = []
+    for (const t of dbTickers) {
+      const hsm = this.reverseMappings.get(t)
+      if (hsm) hsmTokens.push(hsm)
+    }
+    // Forget their topics: the count of symbols streaming (and the plan check) must not include them
+    const gone = new Set(hsmTokens)
+    for (const [topicId, topic] of this.subscriptions) {
+      if (!gone.has(topic)) continue
+      this.subscriptions.delete(topicId)
+      this.scripsData.delete(topicId)
+      this.indexData.delete(topicId)
+    }
+    if (this.authenticated && hsmTokens.length > 0) {
+      this.submitSubscriptionBatch(hsmTokens, 'U')
     }
   }
 

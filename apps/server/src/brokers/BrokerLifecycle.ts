@@ -14,6 +14,8 @@ import { brokerManager } from './BrokerManager'
 import { backfillQueue, FUTURES_HISTORY_DAYS } from '../market/BackfillQueue'
 import { liveFeed } from '../market/liveFeed'
 import { detectGaps } from '../market/GapDetector'
+import { isMarketSession } from '../market/MarketCalendar'
+import { waitingTickers } from '../market/liveSlots'
 import { backfilledTickers } from '../market/state/backfillState'
 import { getVerifiedThroughMs, clearVerifiedThrough } from '../market/state/coverageState'
 import { brokerLoginUrl, LOGIN_BROKERS, BROKER_NAMES, isDirectLogin } from './brokerAuth'
@@ -257,11 +259,12 @@ export async function queueCatchUp(brokerId: string): Promise<void> {
   if (catchUpRunning.has(brokerId) || !brokerManager.getAdapter(brokerId)) return
   catchUpRunning.add(brokerId)
   const started = Date.now()
-  let full = 0, gapped = 0, current = 0, cancelled = 0
+  let full = 0, gapped = 0, current = 0, cancelled = 0, noLivePlace = 0
   try {
     const depthDays = Number((getAllSettings() as any)?.backfillDepthDays) || 365
     const nowMs = Date.now()
     const symbols = [...(stmts.getSymbolsByBroker.all(brokerId) as any[])]
+    const waiting = waitingTickers()
 
     // Gap scans are database-only, so run a few symbols at a time
     await forEachLimit(symbols, 4, async (sym: any) => {
@@ -269,13 +272,17 @@ export async function queueCatchUp(brokerId: string): Promise<void> {
       if (!ticker) return
       // History cancelled by the user (download card): nothing until "Download now"
       if (backfillQueue.isSkipped(ticker)) { cancelled++; return }
+      // No live place on this broker's plan (Fyers Standard: 100 symbols): during its market the
+      // history refresh is its source, and today's "gaps" are minutes it never streamed. Queuing
+      // them here spent the day's history allowance a second time (338 symbols every half hour)
+      if (waiting.has(ticker) && isMarketSession(nowMs, sym.exchange || 'NSE')) { noLivePlace++; return }
       const r = await catchUpSymbol(sym, brokerId, depthDays, nowMs)
       if (r === 'full') full++
       else if (r === 'gaps') gapped++
       else current++
     })
 
-    console.log(`[CatchUp] ${brokerId}: ${gapped} symbol(s) with missing bars queued, ${full} full download(s), ${current} up to date${cancelled ? `, ${cancelled} cancelled by the user` : ''} (${((Date.now() - started) / 1000).toFixed(1)}s)`)
+    console.log(`[CatchUp] ${brokerId}: ${gapped} symbol(s) with missing bars queued, ${full} full download(s), ${current} up to date${cancelled ? `, ${cancelled} cancelled by the user` : ''}${noLivePlace ? `, ${noLivePlace} without a live place (kept up to date by the history refresh)` : ''} (${((Date.now() - started) / 1000).toFixed(1)}s)`)
     // History depth may have been raised since the last run: fetch any older years still missing
     await backfillQueue.extendAllHistory(depthDays)
   } finally {

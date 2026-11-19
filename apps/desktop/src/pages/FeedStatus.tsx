@@ -213,10 +213,14 @@ function StatusBadge({ status }: { status: SymbolFeed['status'] }) {
     STALE: { cls: 'badge-amber', label: 'Stale' },
     CLOSED: { cls: 'badge-gray', label: 'Closed' },
     ERROR: { cls: 'badge-red', label: 'Error' },
+    NOT_LIVE: { cls: 'badge-amber', label: 'Not live' },
   }
   const { cls, label } = map[status] || { cls: 'badge-gray', label: status }
+  const tip = status === 'NOT_LIVE'
+    ? "The broker's plan streams fewer symbols than you track (Fyers Standard: 100). Symbols open in AmiBroker get the live places first; this one is kept up to date from history refreshes."
+    : undefined
   return (
-    <span className={`badge ${cls}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+    <span className={`badge ${cls}`} title={tip} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
       {(status === 'STREAMING' || status === 'RECEIVING') && <span className="status-dot connected" style={{ width: 6, height: 6 }} />}
       {status === 'SUBSCRIBED' && <span className="status-dot" style={{ width: 6, height: 6, background: '#3b82f6' }} />}
       {label}

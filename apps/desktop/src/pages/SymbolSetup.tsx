@@ -65,8 +65,9 @@ function TypeTag({ type }: { type: string }) {
 }
 
 function StatusPill({ status }: { status: string }) {
-  const cls = status === 'STREAMING' || status === 'RECEIVING' ? 'badge-green' : status === 'STALE' ? 'badge-amber' : status === 'ERROR' ? 'badge-red' : 'badge-gray'
-  return <span className={`badge ${cls}`} style={{ fontSize: '0.62rem', padding: '0.12rem 0.5rem', textTransform: 'capitalize' }}>{status.toLowerCase()}</span>
+  const cls = status === 'STREAMING' || status === 'RECEIVING' ? 'badge-green' : status === 'STALE' || status === 'NOT_LIVE' ? 'badge-amber' : status === 'ERROR' ? 'badge-red' : 'badge-gray'
+  const tip = status === 'NOT_LIVE' ? "No live place: the broker's plan streams fewer symbols than you track (Fyers Standard: 100). Open it in AmiBroker to give it one; until then it is updated from history." : undefined
+  return <span className={`badge ${cls}`} title={tip} style={{ fontSize: '0.62rem', padding: '0.12rem 0.5rem', textTransform: 'capitalize' }}>{status === 'NOT_LIVE' ? 'not live' : status.toLowerCase()}</span>
 }
 
 /**

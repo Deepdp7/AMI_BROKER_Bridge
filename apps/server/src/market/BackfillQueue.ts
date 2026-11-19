@@ -807,12 +807,14 @@ class BackfillQueueService extends EventEmitter {
         }
 
         if (good.length > 0) {
-          await upsertBarsToHistory(task.ticker, good)
+          const changed = await upsertBarsToHistory(task.ticker, good)
           learnClosedDays(exchangeOf(task.ticker), task.ticker, chunkFrom.getTime(), currentTo.getTime(), good)
 
           // Tell AmiBroker after every chunk (not only when the whole task ends), with the
-          // oldest bar stored, so an open chart shows each piece of history as it lands
-          this.emit('bars_gap_filled', { ticker: task.ticker, fromSec: Math.floor(good[0].ts / 1000) })
+          // oldest bar stored, so an open chart shows each piece of history as it lands. Only
+          // when something changed: each notice has AmiBroker re-read the symbol, and "Refresh
+          // today" for 438 symbols sent 876 of them for mostly identical bars
+          if (changed > 0) this.emit('bars_gap_filled', { ticker: task.ticker, fromSec: Math.floor(good[0].ts / 1000) })
         }
 
         console.log(`[BackfillQueue] Saved ${good.length} bars for ${task.ticker} (${fromStr} to ${toStr})`)

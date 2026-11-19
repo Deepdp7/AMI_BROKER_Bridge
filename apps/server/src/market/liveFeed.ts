@@ -651,11 +651,25 @@ export class LiveFeed extends EventEmitter {
   /** Called by the IPC server whenever AmiBroker sends GET_QUOTES for this ticker. */
   private _streamingTimers: Map<string, ReturnType<typeof setTimeout>> = new Map()
 
+  /**
+   * Whether the broker streams this symbol (false: its plan's live places are taken, liveSlots.ts).
+   * A symbol without a place shows "Not live" instead of a "Subscribed" that never gets a price.
+   */
+  setLivePlace(ticker: string, live: boolean) {
+    const status = this.feedStatuses.get(ticker)
+    if (!status) return
+    if (!live && status.status !== 'NOT_LIVE') status.status = 'NOT_LIVE' as any
+    else if (live && status.status === 'NOT_LIVE') status.status = 'SUBSCRIBED' as any
+    else return
+    this._scheduleFeedBroadcast(status, Date.now())
+  }
+
   setStreaming(ticker: string) {
     const status = this.feedStatuses.get(ticker)
     if (!status) return
-    // Only upgrade status, don't downgrade if already RECEIVING (real tick)
-    if (status.status !== 'RECEIVING') {
+    // Only upgrade status, don't downgrade if already RECEIVING (real tick); a symbol without a
+    // live place stays "Not live" while AmiBroker shows it
+    if (status.status !== 'RECEIVING' && status.status !== 'NOT_LIVE') {
       status.status = 'STREAMING' as any
       this._scheduleFeedBroadcast(status, Date.now())
     }

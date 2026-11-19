@@ -14,6 +14,8 @@ import { stmts, upsertBarsToHistory, validateBar, repairBar, getAllSettings, ups
 import { brokerManager } from '../brokers/BrokerManager'
 import { backfillQueue } from './BackfillQueue'
 import { learnClosedDays } from './MarketCalendar'
+import { liveFeed } from './liveFeed'
+import { lastViewedAt } from './liveSlots'
 
 export interface AutoRefreshStatus {
   enabled: boolean
@@ -34,6 +36,18 @@ const IST_OFFSET_MS = 5.5 * 3600 * 1000
 const CONCURRENCY = 6            // request pacing comes from the broker adapter's shared rate limiter
 const RECHECK_MS = 5 * 60_000    // incremental passes re-check the minutes since the last pass plus this margin
 const ALLOWED_INTERVALS = [1, 2, 3, 5, 10, 15, 30]
+/** A symbol with a live tick this recent is streaming: its bars are being built from the feed */
+const LIVE_RECENT_MS = 3 * 60_000
+/** Shown in AmiBroker this recently: refreshed first */
+const VIEWED_RECENT_MS = 2 * 60_000
+/** Requests a broker with a daily allowance keeps back beyond one after-close pass (repairs, new symbols) */
+const ALLOWANCE_MARGIN = 150
+
+/** History requests a broker still allows today (Infinity: no daily cap) */
+function requestsLeft(adapter: any): number {
+  const left = adapter?.historyRequestsLeftToday?.()
+  return typeof left === 'number' ? left : Infinity
+}
 
 function istNow() {
   const ist = new Date(Date.now() + IST_OFFSET_MS)
@@ -81,13 +95,20 @@ class AutoRefreshService extends EventEmitter {
   private lastRunMs = 0
   /** Start of the last pass that reached every symbol: incremental passes re-check from there */
   private lastCompleteRunAt: number | null = null
+  /** ticker → when its bars were last checked against the broker (the least recent go first) */
+  private refreshedAt = new Map<string, number>()
+  /**
+   * Minutes between passes the brokers' daily allowance stretches to (0: the interval set): a
+   * pass costs one request per symbol, and the day's requests must last until the close.
+   */
+  private stretchMin = 0
 
   private scheduleNext() {
     // From the end of the last run, and never sooner than it took: with many symbols a run
     // fills the broker's rate limit for minutes, and back-to-back runs left nothing for downloads
     // (57 symbols, 1-min interval: runs of 4-5 min, one after the other, all afternoon).
     const base = this.status.lastRunAt !== null ? this.status.lastRunAt + this.lastRunMs : Date.now()
-    const gap = Math.max(this.status.intervalMin * 60_000, this.lastRunMs)
+    const gap = Math.max(this.status.intervalMin * 60_000, this.stretchMin * 60_000, this.lastRunMs)
     this.status.nextRunAt = this.status.enabled ? Math.max(Date.now(), base + gap) : null
   }
 
@@ -150,7 +171,8 @@ class AutoRefreshService extends EventEmitter {
     const full = fullDay || this.fullPassDoneFor !== date
     const writeFromMs = full ? 0 : (this.lastCompleteRunAt ?? 0) - RECHECK_MS
 
-    const symbols = (stmts.getSymbols.all() as any[]).filter(s => (s.brokerId || s.broker_id) && (s.brokerId || s.broker_id) !== 'orphaned')
+    const tracked = (stmts.getSymbols.all() as any[]).filter(s => (s.brokerId || s.broker_id) && (s.brokerId || s.broker_id) !== 'orphaned')
+    const symbols = this.passSymbols(tracked, fullDay, started)
     this.status.progressTotal = symbols.length
     this.publish()
 
@@ -175,6 +197,7 @@ class AutoRefreshService extends EventEmitter {
             barsSaved += good.length
           }
           symbolsDone++
+          this.refreshedAt.set(ticker, Date.now())
           return
         } catch (err: any) {
           const msg = err?.message || String(err)
@@ -218,6 +241,54 @@ class AutoRefreshService extends EventEmitter {
       this.publish()
     }
     return next >= symbols.length
+  }
+
+  /**
+   * The symbols one pass checks, in order. During the market, on a broker with a daily request
+   * allowance (Fyers Standard: 5,000), symbols streaming live prices are left to the after-close
+   * pass: the allowance goes to those without (their only source until then). The rest go
+   * shown-in-AmiBroker first, then longest since checked, so a pass cut short by a download
+   * doesn't leave the same symbols at the end of the list unchecked all day. A broker whose
+   * allowance is down to one after-close pass gets no more passes until then, and the time
+   * between passes stretches so the day's allowance lasts until the close.
+   */
+  private passSymbols(tracked: any[], fullDay: boolean, nowMs: number): any[] {
+    const tickerOf = (s: any) => s.amiBrokerTicker || s.amibroker_ticker
+    const adapterOf = (s: any) => brokerManager.getAdapter(s.brokerId || s.broker_id) as any
+    const perBroker = new Map<any, number>()
+    for (const s of tracked) perBroker.set(adapterOf(s), (perBroker.get(adapterOf(s)) ?? 0) + 1)
+    const streaming = (ticker: string) => {
+      const st = liveFeed.getFeedStatus(ticker)
+      return !!st && (st.status === 'RECEIVING' || st.status === 'STREAMING') && nowMs - (st.lastTickUtcMs || 0) < LIVE_RECENT_MS
+    }
+
+    let list = tracked
+    let held = 0
+    this.stretchMin = 0
+    if (!fullDay) {
+      list = tracked.filter(s => {
+        const adapter = adapterOf(s)
+        const left = requestsLeft(adapter)
+        if (!Number.isFinite(left)) return true
+        if (left <= (perBroker.get(adapter) ?? 0) + ALLOWANCE_MARGIN) { held++; return false }
+        return !streaming(tickerOf(s))
+      })
+      // Space the passes so what is left lasts until the close (one request per symbol and pass)
+      const ist = new Date(nowMs + IST_OFFSET_MS)
+      const minutesLeft = Math.max(1, 15 * 60 + 30 - (ist.getUTCHours() * 60 + ist.getUTCMinutes()))
+      for (const [adapter, count] of perBroker) {
+        const left = requestsLeft(adapter)
+        if (!Number.isFinite(left)) continue
+        const cost = list.filter(s => adapterOf(s) === adapter).length
+        const spare = left - count - ALLOWANCE_MARGIN
+        if (cost > 0 && spare > 0) this.stretchMin = Math.max(this.stretchMin, Math.ceil(minutesLeft * cost / spare))
+      }
+      if (held) console.log(`[AutoRefresh] ${held} symbol(s) wait for the after-close pass: their broker's daily history allowance is nearly used up`)
+      else if (this.stretchMin > this.status.intervalMin) console.log(`[AutoRefresh] Passes every ${this.stretchMin} min (not ${this.status.intervalMin}) so the broker's daily history allowance lasts until the close`)
+    }
+    const viewed = (s: any) => nowMs - lastViewedAt(tickerOf(s)) < VIEWED_RECENT_MS ? 1 : 0
+    return [...list].sort((a, b) =>
+      viewed(b) - viewed(a) || (this.refreshedAt.get(tickerOf(a)) ?? 0) - (this.refreshedAt.get(tickerOf(b)) ?? 0))
   }
 
   private lastPublishAt = 0

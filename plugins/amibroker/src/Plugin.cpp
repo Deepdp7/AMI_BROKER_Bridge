@@ -198,27 +198,50 @@ static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, in
     // This is called ~every 1 second by AmiBroker's realtime timer
     // and after every WM_USER_STREAMING_UPDATE we send.
     if (nLastValid >= 0) {
+        // The engine gives live places to the symbols AmiBroker shows (plans with few of them)
+        ReportViewed(pszTicker);
+
+        // --- CATCH-UP: bars AmiBroker missed, fetched in the background ---
+        // AmiBroker keeps its own local database, so after AmiBroker or the bridge was
+        // closed it already has bars (nLastValid >= 0) but nothing for the downtime.
+        // Re-sync once per bridge connection, when the bridge reports new history
+        // (SYNC|ticker), or when the live bar jumps over minutes we never received. The fetch
+        // runs on the plugin's own thread (RequestCatchUp); what it brought is merged here, in a
+        // later call. AmiBroker never waits for the engine here.
+        CatchUpResult done;
+        if (TakeCatchUpResult(pszTicker, done) && done.got >= 0) {
+            if (done.fullSync) MarkHistorySynced(pszTicker, done.epoch);
+            int count = MergeBars(pQuotes, nLastValid + 1, nSize, done.bars);
+            if (done.gapCheck) GapCheckResult(pszTicker, done.sinceMin, count != nLastValid + 1);
+            if (count != nLastValid + 1) {
+                char logBuf[160];
+                sprintf_s(logBuf, "[SYNC] %s caught up %d missed bar(s)", pszTicker, count - (nLastValid + 1));
+                LogPlugin(logBuf);
+            }
+            // The live bar below goes on top of what was merged
+            nLastValid = count - 1;
+            startIndex = count;
+            since = count > 0 ? QuotationToUnix(pQuotes[nLastValid]) : 0;
+        }
+
         Bar live; memset(&live, 0, sizeof(Bar));
         bool hasLive = GetCachedLiveBar(pszTicker, live) && live.timestamp > 0 && live.close > 0;
         double liveMin  = hasLive ? floor(live.timestamp / 60.0) * 60.0 : 0;
         double sinceMin = floor(since / 60.0) * 60.0;
 
-        // --- CATCH-UP PATH: fetch bars AmiBroker missed ---
-        // AmiBroker keeps its own local database, so after AmiBroker or the bridge was
-        // closed it already has bars (nLastValid >= 0) but nothing for the downtime.
-        // Re-sync once per bridge connection, when the bridge reports new history
-        // (SYNC|ticker), or when the live bar jumps over minutes we never received.
-        // None of this while DataBridge isn't answering (CatchUpAllowed): AmiBroker would wait
-        // on it for every symbol of a scan. A gap check that found nothing (minutes without
-        // trades) isn't repeated until AmiBroker's last bar moves on.
+        // None of this while DataBridge isn't answering (CatchUpAllowed). A gap check that
+        // found nothing (minutes without trades) isn't repeated until AmiBroker's last bar
+        // moves on.
         bool liveSkipsMinutes = hasLive && liveMin > sinceMin + 60;
-        bool canCatchUp = IsBridgeConnected() && CatchUpAllowed();
+        bool canCatchUp = nLastValid >= 0 && IsBridgeConnected() && CatchUpAllowed();
         bool fullSync = canCatchUp && NeedsHistorySync(pszTicker);
         bool gapCheck = !fullSync && canCatchUp && liveSkipsMinutes && GapCheckWorthIt(pszTicker, sinceMin) && TryBeginGapCheck(pszTicker);
         if (fullSync || gapCheck) {
-            std::vector<Bar> missed;
-            unsigned epoch = 0;
-            double announced = BeginHistorySync(pszTicker, epoch);
+            CatchUpResult want;
+            double announced = BeginHistorySync(pszTicker, want.epoch);
+            want.fullSync = fullSync;
+            want.gapCheck = gapCheck;
+            want.sinceMin = sinceMin;
             // Full sync (reconnect / bridge announced new history): re-fetch the last 24h so
             // broker-corrected candles overwrite live-built ones, or from the oldest bar the
             // bridge announced if that is earlier (a downtime hole behind newer live bars).
@@ -226,22 +249,9 @@ static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, in
             // (possibly partial) candle.
             double from = fullSync ? since - 86400 : since - 1;
             if (fullSync && announced > 0 && announced - 60 < from) from = announced - 60;
-            int got = FetchBarsFromAPI(pszTicker, nSize, from > 0 ? from : 0, missed);
-            if (got >= 0) {
-                if (fullSync) MarkHistorySynced(pszTicker, epoch);
-                int count = MergeBars(pQuotes, nLastValid + 1, nSize, missed);
-                if (gapCheck) GapCheckResult(pszTicker, sinceMin, count != nLastValid + 1);
-                if (count != nLastValid + 1) {
-                    char logBuf[160];
-                    sprintf_s(logBuf, "[SYNC] %s caught up %d missed bar(s)", pszTicker, count - (nLastValid + 1));
-                    LogPlugin(logBuf);
-                    return count;   // the engine's answer ends with the live bar
-                }
-                // Nothing new: the live bar below still goes in, in this same call
-            } else {
-                CatchUpFailed();
-            }
+            RequestCatchUp(pszTicker, from > 0 ? from : 0, nSize, want);
         }
+        if (nLastValid < 0) return 0;
 
         if (hasLive) {
             if (liveMin == sinceMin) {

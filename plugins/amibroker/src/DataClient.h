@@ -71,3 +71,21 @@ extern double BeginHistorySync(const std::string& ticker, unsigned& epoch);
 extern void MarkHistorySynced(const std::string& ticker, unsigned epoch);
 // Rate limiter for opportunistic gap checks (live bar skipped minutes). True at most once per 30s per ticker.
 extern bool TryBeginGapCheck(const std::string& ticker);
+
+// ---- Catch-up downloads, off AmiBroker's thread ----
+// What a background catch-up brought back, and what it was for
+struct CatchUpResult {
+    std::vector<Bar> bars;
+    int got = 0;            // bars fetched, -1 when the request failed
+    unsigned epoch = 0;     // BeginHistorySync's epoch (full syncs)
+    bool fullSync = false;
+    bool gapCheck = false;
+    double sinceMin = 0;    // AmiBroker's last minute when it was asked for (gap checks)
+};
+// Queues a fetch of the ticker's bars from `from` (unix s); false when one is already on its way
+extern bool RequestCatchUp(const std::string& ticker, double from, int limit, const CatchUpResult& info);
+// The fetched bars, once (true), to merge into AmiBroker's array
+extern bool TakeCatchUpResult(const std::string& ticker, CatchUpResult& out);
+// AmiBroker asked for this symbol: told to the engine (at most every 15 s), which gives a
+// broker's live places to the symbols on screen first
+extern void ReportViewed(const std::string& ticker);

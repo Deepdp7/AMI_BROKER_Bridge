@@ -81,6 +81,10 @@ export class BrokerManager extends EventEmitter {
     adapter.on('master_sync_complete', (data) => this.emit('master_sync_complete', data))
     adapter.on('master_sync_error', (data) => this.emit('master_sync_error', data))
     adapter.on('symbol_resolved', (data) => this.emit('symbol_resolved', { ...data, brokerId }))
+    // The broker streams fewer symbols than were asked for (Fyers Standard plan: 100)
+    adapter.on('live_cap', (data: any) => {
+      if (this.activeAdapters.get(brokerId) === adapter) this.emit('live_cap', { ...data, brokerId })
+    })
 
     try {
       this._emitLog('info', 'BrokerManager', `Connecting to broker ${brokerId} (${brokerType})...`)

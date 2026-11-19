@@ -5,7 +5,7 @@
 
 export type BrokerType = 'zerodha_kite' | 'angel_one' | 'upstox' | 'fyers' | 'dhan' | 'flattrade' | 'shoonya' | 'zebu' | 'tradesmart' | 'compositedge' | 'fivepaisa_xts' | 'jainam' | 'ibulls' | 'rmoney' | 'kotak_neo'
 export type BrokerStatus = 'connected' | 'reconnecting' | 'auth_required' | 'disconnected'
-export type FeedStatusType = 'SUBSCRIBED' | 'RECEIVING' | 'STREAMING' | 'STALE' | 'CLOSED' | 'ERROR'
+export type FeedStatusType = 'SUBSCRIBED' | 'RECEIVING' | 'STREAMING' | 'STALE' | 'CLOSED' | 'ERROR' | 'NOT_LIVE'
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug'
 export type ConnectionEventType = 'CONNECTED' | 'DISCONNECTED' | 'RECONNECTING' | 'AUTH_REQUIRED' | 'ERROR'
 export type UpdateChannel = 'stable' | 'beta'

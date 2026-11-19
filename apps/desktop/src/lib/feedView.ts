@@ -27,7 +27,7 @@ export function filterCounts(symbols: SymbolFeed[], pinned: Set<string>): Record
 }
 
 // Live first, then the ones waiting for data, then problems
-const STATUS_ORDER: Record<string, number> = { STREAMING: 0, RECEIVING: 1, SUBSCRIBED: 2, STALE: 3, CLOSED: 4, ERROR: 5 }
+const STATUS_ORDER: Record<string, number> = { STREAMING: 0, RECEIVING: 1, SUBSCRIBED: 2, STALE: 3, NOT_LIVE: 4, CLOSED: 5, ERROR: 6 }
 
 const VALUE: Record<SortKey, (s: SymbolFeed) => number | string> = {
   ticker: s => s.ticker || '',
