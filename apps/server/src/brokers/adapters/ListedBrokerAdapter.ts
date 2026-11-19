@@ -17,6 +17,13 @@ export interface FeedTick {
   totalVolume?: number
   timestampMs: number
   openInterest?: number
+  /** The previous session's close, for feeds that send it */
+  prevClose?: number
+  /** Best bid / ask and their quantities, for feeds that send them */
+  bid?: number
+  ask?: number
+  bidQty?: number
+  askQty?: number
 }
 
 export abstract class ListedBrokerAdapter extends EventEmitter implements IBrokerAdapter {
@@ -133,6 +140,8 @@ export abstract class ListedBrokerAdapter extends EventEmitter implements IBroke
       totalVolume: t.totalVolume,
       timestamp: t.timestampMs,
       openInterest: t.openInterest,
+      prevClose: t.prevClose,
+      bid: t.bid, ask: t.ask, bidQty: t.bidQty, askQty: t.askQty,
     })
   }
 

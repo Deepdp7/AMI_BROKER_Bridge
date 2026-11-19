@@ -17,6 +17,7 @@ import { startAmiBrokerIpc, notifyAmiBrokerHistoryChanged } from './amibroker/ip
 import { wireEngineEvents, startEngine } from './startup'
 import { startBackgroundJobs } from './jobs'
 import { startPeriodicCatchUp } from './brokers/BrokerLifecycle'
+import { startDailyHistory } from './market/DailyHistory'
 import { autoRefresh } from './market/AutoRefresh'
 import { morningBrief } from './ai/MorningBrief'
 
@@ -59,6 +60,8 @@ server.listen(HTTP_PORT, HOST, async () => {
   await syncCachesPromise
   startEngine()
   startPeriodicCatchUp()
+  // Daily bars for the years before 1-minute history starts (after 1-minute downloads, quietly)
+  startDailyHistory()
   // Automatic "Refresh All Today" while the market is open (settings are loaded by now)
   autoRefresh.start(notifyAmiBrokerHistoryChanged)
   morningBrief.start()

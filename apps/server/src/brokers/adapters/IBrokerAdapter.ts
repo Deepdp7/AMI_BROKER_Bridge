@@ -81,6 +81,9 @@ export interface IBrokerAdapter extends EventEmitter {
 
   // Historical
   getHistoricalBars(instrumentToken: string, interval: string, from: Date, to: Date): Promise<Bar[]>
+  /** getHistoricalBars takes '1d' and returns daily bars (365 days per request at most). Others read
+   *  '1d' as 1 minute, so daily history is never asked of them. */
+  readonly dailyHistory?: boolean
   
   // Real-time
   subscribe(instruments: string[]): Promise<void>

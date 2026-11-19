@@ -44,6 +44,10 @@ export interface HSMMappedTick {
   high?: number
   low?: number
   prevClose?: number
+  bid?: number
+  ask?: number
+  bidQty?: number
+  askQty?: number
   /** Open interest (F&O), a plain count */
   openInterest?: number
   updateType: 'snapshot' | 'live'
@@ -102,7 +106,7 @@ export class FyersHSMClient extends EventEmitter {
   private indexData = new Map<number, any>() // topic_id -> normalized snapshot
 
   // Dedup state: token -> { ltp, timestamp }
-  private lastTickState = new Map<string, { ltp: number, time: number, vol?: number, oi?: number }>()
+  private lastTickState = new Map<string, { ltp: number, time: number, vol?: number, oi?: number, bidAsk?: string }>()
 
   private lastMessageTime = 0
   private watchdogTimer: NodeJS.Timeout | null = null
@@ -646,10 +650,12 @@ export class FyersHSMClient extends EventEmitter {
     // Dedup logic
     const dedup = this.lastTickState.get(dbTicker)
     const cumVol = typeof rawData.vol_traded_today === 'number' ? rawData.vol_traded_today : undefined
-    if (dedup && dedup.ltp === ltp && dedup.time === tsMs && dedup.vol === cumVol && dedup.oi === rawData.OI) {
+    // Best bid / ask count too: an update that only moves them is news for the quote window
+    const bidAsk = `${rawData.bid_price}|${rawData.ask_price}|${rawData.bid_size}|${rawData.ask_size}`
+    if (dedup && dedup.ltp === ltp && dedup.time === tsMs && dedup.vol === cumVol && dedup.oi === rawData.OI && dedup.bidAsk === bidAsk) {
       return // Duplicate
     }
-    this.lastTickState.set(dbTicker, { ltp, time: tsMs, vol: cumVol, oi: rawData.OI })
+    this.lastTickState.set(dbTicker, { ltp, time: tsMs, vol: cumVol, oi: rawData.OI, bidAsk })
     
     const stat = this.tickStats.get(dbTicker) || { ticks: 0, lastTime: 0 }
     stat.ticks++
@@ -666,6 +672,10 @@ export class FyersHSMClient extends EventEmitter {
       high: rawData.high_price !== undefined ? rawData.high_price / totalDivisor : undefined,
       low: rawData.low_price !== undefined ? rawData.low_price / totalDivisor : undefined,
       prevClose: rawData.prev_close_price !== undefined ? rawData.prev_close_price / totalDivisor : undefined,
+      bid: rawData.bid_price > 0 ? rawData.bid_price / totalDivisor : undefined,
+      ask: rawData.ask_price > 0 ? rawData.ask_price / totalDivisor : undefined,
+      bidQty: rawData.bid_size > 0 ? rawData.bid_size : undefined,
+      askQty: rawData.ask_size > 0 ? rawData.ask_size : undefined,
       openInterest: rawData.OI > 0 ? rawData.OI : undefined,
       updateType
     }

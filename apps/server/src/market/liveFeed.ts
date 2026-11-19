@@ -48,12 +48,22 @@ interface LiveBar {
   oi?: number
   /** Closed and handed to the database: later ticks for this minute leave it alone */
   done?: boolean
+  /** Exchange time of the update the close comes from */
+  lastMs?: number
 }
 
 /** A minute is closed this long after it ends, plus the feed's usual delay (whole-second stamps, travel) */
 const CLOSE_GRACE_MS = 2000
-/** A tick stamped this much before now is a snapshot of an earlier trade (sent on subscribe): price only, no bar */
+/** The feed's spread of delays added to that wait is capped here */
+const MAX_EXTRA_WAIT_MS = 30_000
+/** A tick stamped this much before the feed's clock is a snapshot of an earlier trade (sent on subscribe): price only, no bar */
 const SNAPSHOT_AGE_MS = 5 * 60_000
+/** Tick ages further off than this tell nothing about the feed clock (yesterday's last trade, a broken stamp) */
+const CLOCK_SAMPLE_MAX_MS = 60 * 60_000
+/** Tick ages kept per broker to place its clock */
+const CLOCK_SAMPLES = 300
+/** The PC clock this far off the exchange's is worth a line in the log */
+const CLOCK_WARN_MS = 30_000
 const IST_MS = 19_800_000
 const DAY_MS = 86_400_000
 /** Exchanges on NSE's fixed 09:15-15:30 day. MCX and CDS are left alone: their evening close moves with US daylight saving */
@@ -249,7 +259,7 @@ export class LiveFeed extends EventEmitter {
 
   // BUG #5 FIX: processRealTick now handles key mismatch between Fyers resolved format
   // (e.g. "NSE:BPCL-EQ") and instruments Map key (e.g. "fyers-xxx:BPCL")
-  processRealTick(tick: { instrumentId: string, lastPrice: number, volume: number, totalVolume?: number, timestamp: number, openInterest?: number }, brokerId: string) {
+  processRealTick(tick: { instrumentId: string, lastPrice: number, volume: number, totalVolume?: number, timestamp: number, openInterest?: number, prevClose?: number, bid?: number, ask?: number, bidQty?: number, askQty?: number }, brokerId: string) {
     // First try: exact Map lookup using the raw brokerToken (tick.instrumentId)
     let key = `${brokerId}:${tick.instrumentId}`
     let inst = this.instruments.get(key)
@@ -309,6 +319,7 @@ export class LiveFeed extends EventEmitter {
     const wallNow = Date.now()
     const now = tick.timestamp || wallNow
     const bucket = Math.floor(now / 60000) * 60000
+    if (tick.timestamp) this.noteTickAge(brokerId, wallNow - tick.timestamp)
 
     const bar = this.liveBars.get(key)
     if (!bar) return
@@ -318,8 +329,11 @@ export class LiveFeed extends EventEmitter {
     const oi = this.lastOi.get(key)
     const tickQty = this.volumeSince(key, tick, now)
 
-    // Snapshots of an earlier trade and updates outside trading hours show the price only
-    const trading = now >= wallNow - SNAPSHOT_AGE_MS && this.inSession(now, inst.exchange)
+    // Snapshots of an earlier trade and updates outside trading hours show the price only. "Earlier"
+    // is judged by the feed's own clock, not the PC's: a PC clock minutes off used to make every
+    // tick look old (no live bars at all until the next history refresh)
+    const feedNow = wallNow - this.feedClock(brokerId, wallNow).offsetMs
+    const trading = now >= feedNow - SNAPSHOT_AGE_MS && this.inSession(now, inst.exchange)
     let barChanged = false
     if (trading) {
       if (bar.bucketMs === 0 || bucket > bar.bucketMs) {
@@ -327,19 +341,28 @@ export class LiveFeed extends EventEmitter {
         if (bar.bucketMs !== 0) this.closeBar(key, bar, ticker)
         this.liveBars.set(key, {
           open: newPrice, high: newPrice, low: newPrice,
-          close: newPrice, volume: tickQty, bucketMs: bucket, oi,
+          close: newPrice, volume: tickQty, bucketMs: bucket, oi, lastMs: now,
         })
         barChanged = true
       } else if (bucket === bar.bucketMs && !bar.done) {
+        // The close is the newest trade's price: an update that overtook a newer one only counts
+        // for the high, low and volume
+        const newest = now >= (bar.lastMs ?? 0)
+        const close = newest ? newPrice : bar.close
+        // An update that only moves the bid/ask (or repeats the price) leaves the bar as it was:
+        // nothing is sent on for it
+        barChanged = newPrice > bar.high || newPrice < bar.low || close !== bar.close || tickQty > 0 || (newest && oi !== bar.oi)
         bar.high = Math.max(bar.high, newPrice)
         bar.low = Math.min(bar.low, newPrice)
-        bar.close = newPrice
+        bar.close = close
         bar.volume += tickQty
-        bar.oi = oi
-        barChanged = true
+        if (newest) { bar.oi = oi; bar.lastMs = now }
       }
       // Otherwise a late tick for a minute already closed: saved bars are not reopened
     }
+    // The in-progress bar to AmiBroker, the app and the other platforms, at once (also for an
+    // update older than the price shown, which still changed the bar's high, low or volume)
+    if (barChanged) this.emit('live_bar_updated', { ticker, bar: { ...this.liveBars.get(key)! } })
 
     // Update feed status
     let status = this.feedStatuses.get(ticker)
@@ -347,11 +370,17 @@ export class LiveFeed extends EventEmitter {
     // An update older than the one shown (ticks overtaking each other) doesn't move the price back
     if (now < (status.lastTickUtcMs || 0)) return
 
-    const prevClose = status.prevClose || newPrice
+    // The broker's previous close (Fyers sends it) beats the one read from stored bars
+    if (typeof tick.prevClose === 'number' && tick.prevClose > 0) {
+      status.prevClose = tick.prevClose
+      this.brokerPrevCloseDay.set(ticker, Math.floor((now + IST_MS) / DAY_MS))
+    }
     status.lastPrice = newPrice
     status.lastTickUtcMs = now
-    status.change = +(newPrice - prevClose).toFixed(2)
-    status.changePercent = +((newPrice - prevClose) / prevClose * 100).toFixed(2)
+    this.updateChange(status)
+    // Best bid / ask (Fyers, Kite): the Real-time Quote window shows them
+    if (typeof tick.bid === 'number' && tick.bid > 0) { status.bid = tick.bid; status.bidQty = tick.bidQty }
+    if (typeof tick.ask === 'number' && tick.ask > 0) { status.ask = tick.ask; status.askQty = tick.askQty }
     status.volume = typeof tick.totalVolume === 'number' ? tick.totalVolume : status.volume + tickQty
     if (oi) status.openInterest = oi
     status.status = 'RECEIVING' as any
@@ -366,10 +395,31 @@ export class LiveFeed extends EventEmitter {
       if (this.latencyHistory.length > 500) this.latencyHistory.shift()
     }
 
-    // The in-progress bar to AmiBroker, the app and the other platforms, at once
-    if (barChanged) this.emit('live_bar_updated', { ticker, bar: { ...this.liveBars.get(key)! } })
-
     this._scheduleFeedBroadcast(status, now)
+  }
+
+  /** IST day for which the broker itself sent each symbol's previous close */
+  private brokerPrevCloseDay = new Map<string, number>()
+
+  /** Change against the previous close (none known: no change shown, rather than a wrong one) */
+  private updateChange(status: SymbolFeedStatus) {
+    const prev = status.prevClose
+    if (!(prev > 0) || !(status.lastPrice > 0)) { status.change = 0; status.changePercent = 0; return }
+    status.change = +(status.lastPrice - prev).toFixed(2)
+    status.changePercent = +((status.lastPrice - prev) / prev * 100).toFixed(2)
+  }
+
+  /**
+   * The previous session's close, worked out from stored bars (most brokers' feeds don't send
+   * it). Ignored when the broker sent its own for `day` (IST day number).
+   */
+  setPrevClose(ticker: string, prevClose: number, day: number) {
+    const status = this.feedStatuses.get(ticker)
+    if (!status || !(prevClose > 0) || this.brokerPrevCloseDay.get(ticker) === day) return
+    if (status.prevClose === prevClose) return
+    status.prevClose = prevClose
+    this.updateChange(status)
+    this._scheduleFeedBroadcast(status, Date.now())
   }
 
   /**
@@ -428,21 +478,58 @@ export class LiveFeed extends EventEmitter {
    * in the last second of a minute still make it in.
    */
   closeFinishedMinutes(nowMs = Date.now()) {
-    const waitMs = CLOSE_GRACE_MS + Math.min(60_000, this.typicalDelayMs())
     for (const [key, bar] of this.liveBars) {
       if (bar.bucketMs === 0 || bar.done) continue
-      if (nowMs >= bar.bucketMs + 60_000 + waitMs) {
-        const inst = this.instruments.get(key)
-        if (inst) this.closeBar(key, bar, inst.ticker)
+      const inst = this.instruments.get(key)
+      if (!inst) continue
+      // The minute is over by the feed's clock (the PC's may be minutes off), plus the spread of
+      // the feed's delays, so ticks stamped in its last second still make it in
+      const clock = this.feedClock(inst.brokerId, nowMs)
+      const feedNow = nowMs - clock.offsetMs
+      if (feedNow >= bar.bucketMs + 60_000 + CLOSE_GRACE_MS + Math.min(MAX_EXTRA_WAIT_MS, clock.spreadMs)) {
+        this.closeBar(key, bar, inst.ticker)
       }
     }
   }
 
-  /** Median age of recent ticks (exchange stamp to arrival, including any PC clock offset) */
-  private typicalDelayMs(): number {
-    if (this.latencyHistory.length === 0) return 0
-    const sorted = [...this.latencyHistory].sort((a, b) => a - b)
-    return sorted[Math.floor(sorted.length / 2)]
+  /** Recent tick ages per broker: arrival (PC clock) minus the exchange's stamp, so any PC clock offset included */
+  private tickAges = new Map<string, number[]>()
+  private clockCache = new Map<string, { at: number; offsetMs: number; spreadMs: number }>()
+  private clockWarnedAt = 0
+
+  private noteTickAge(brokerId: string, ageMs: number) {
+    if (!(Math.abs(ageMs) < CLOCK_SAMPLE_MAX_MS)) return
+    let ages = this.tickAges.get(brokerId)
+    if (!ages) this.tickAges.set(brokerId, ages = [])
+    ages.push(ageMs)
+    if (ages.length > CLOCK_SAMPLES) ages.shift()
+    // The first ticks of a feed place its clock at once (no waiting for the next recount)
+    if (ages.length <= 20) this.clockCache.delete(brokerId)
+  }
+
+  /**
+   * Where a broker's feed clock stands against the PC clock. offsetMs: how far the PC clock is
+   * ahead of the exchange's stamps, from the freshest recent ticks (a low percentile, so an odd
+   * stamp doesn't move it); negative when the PC clock is behind. spreadMs: how much later than
+   * those the usual tick arrives. Worked out at most once a second.
+   */
+  private feedClock(brokerId: string, nowMs: number): { offsetMs: number; spreadMs: number } {
+    const cached = this.clockCache.get(brokerId)
+    if (cached && nowMs - cached.at < 1000 && nowMs >= cached.at) return cached
+    const ages = this.tickAges.get(brokerId)
+    let offsetMs = 0, spreadMs = 0
+    if (ages?.length) {
+      const sorted = [...ages].sort((a, b) => a - b)
+      offsetMs = sorted[Math.floor((sorted.length - 1) * 0.05)]
+      spreadMs = Math.max(0, sorted[Math.floor(sorted.length / 2)] - offsetMs)
+    }
+    this.clockCache.set(brokerId, { at: nowMs, offsetMs, spreadMs })
+    if (Math.abs(offsetMs) > CLOCK_WARN_MS && (ages?.length ?? 0) >= 50 && nowMs - this.clockWarnedAt > 3600_000) {
+      this.clockWarnedAt = nowMs
+      const secs = Math.round(Math.abs(offsetMs) / 1000)
+      this._emitLog('warn', 'LiveFeed', `This PC's clock is about ${secs} s ${offsetMs > 0 ? 'ahead of' : 'behind'} the exchange's time. Live candles use the exchange's time, so they are not affected; set Windows to sync its clock automatically to keep other programs right.`)
+    }
+    return { offsetMs, spreadMs }
   }
 
   private saveBar: ((e: { ticker: string; bar: LiveBar }) => void) | null = null

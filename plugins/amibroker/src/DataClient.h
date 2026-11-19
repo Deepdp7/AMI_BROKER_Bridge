@@ -11,6 +11,12 @@ struct Bar {
 
 // Returns number of bars parsed, or -1 if the HTTP request itself failed.
 extern int  FetchBarsFromAPI(const std::string& ticker, int limit, double since, std::vector<Bar>& outBars);
+// Daily bars of the days before the ticker's 1-minute history (timestamp = the day's midnight,
+// India time); same return values
+extern int  FetchDailyFromAPI(const std::string& ticker, std::vector<Bar>& outBars);
+// AmiBroker's "Allow mixed EOD/intraday data" for the loaded database
+extern void SetMixedEod(bool allowed);
+extern bool MixedEodAllowed();
 // Appends the bars of "tsSec,open,high,low,close,volume[,oi]" lines in [p, end) to out
 extern void ParseBarsCsv(const char* p, const char* end, std::vector<Bar>& out);
 extern void StartPollingThread();
@@ -20,6 +26,14 @@ extern void SetAmiBrokerWindow(HWND hWnd);
 extern bool GetCachedLiveBar(const std::string& ticker, Bar& outBar);
 // The final state of the minute before the live bar's (false when there is none yet)
 extern bool GetCachedPrevBar(const std::string& ticker, Bar& outBar);
+// The Real-time Quote window's figures for a ticker: the day's (QUOTE| from the engine), the live
+// bar's price when no quote came yet. False when nothing is known.
+struct RecentInfo;
+extern bool FillRecentInfo(const std::string& ticker, RecentInfo& ri);
+// Symbols with a live bar from `sinceSec` (unix seconds) on
+extern int LiveSymbolCount(double sinceSec);
+// The database's "Number of bars" as last reported by AmiBroker (0 = not known yet)
+extern int GetDatabaseBars();
 
 // ---- The DataBridge light in AmiBroker's status bar and its right-click menu ----
 // level: 0 green, 1 yellow, 2 red, -1 DataBridge Pro not running

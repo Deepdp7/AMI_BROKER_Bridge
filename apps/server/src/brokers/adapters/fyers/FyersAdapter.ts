@@ -109,6 +109,7 @@ const MASTER_DOWNLOAD_TIMEOUT_MS = 120_000
 export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
   /** Fyers serves at most 100 days of intraday candles per history request */
   readonly maxIntradayHistoryDays = 95
+  readonly dailyHistory = true
   /** History requests per minute allowed right now (the download queue picks the fastest broker) */
   historyRequestsPerMinute() { return historyLimiter.perMinuteBudget }
   private connected = false

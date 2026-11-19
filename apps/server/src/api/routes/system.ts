@@ -6,6 +6,7 @@ import { liveFeed } from '../../market/liveFeed'
 import { backfillQueue } from '../../market/BackfillQueue'
 import { clearVerifiedThrough } from '../../market/state/coverageState'
 import { createBackup, readBackupInfo, stageRestore } from '../../system/Backup'
+import { forgetDailyFloor } from '../../market/DailyHistory'
 
 const router = Router()
 
@@ -110,6 +111,7 @@ router.post('/clean-database', (req, res) => {
     // 2. Wipe DB data (symbols, history, mappings, logs)
     cleanDatabase()
     clearVerifiedThrough()
+    forgetDailyFloor()
 
     res.json({ ok: true })
   } catch (err: any) {
@@ -130,6 +132,7 @@ router.post('/full-force-clean', (req, res) => {
     // 2. Factory wipe DB and cache
     fullForceClean()
     clearVerifiedThrough()
+    forgetDailyFloor()
 
     // 3. Return success, then kill the process to allow Tauri/Supervisor to restart it empty
     res.json({ ok: true })

@@ -160,11 +160,14 @@ describe('Kite live feed packets (big-endian)', () => {
     p.writeInt32BE(300000, 28)
     p.writeUInt32BE(1_792_731_540, 44)
     p.writeUInt32BE(1_792_731_541, 60)
+    // Depth: best bid at 64 (qty, price), best ask at 124
+    p.writeUInt32BE(150, 64); p.writeInt32BE(305050, 68)
+    p.writeUInt32BE(90, 124); p.writeInt32BE(305060, 128)
     const idx = Buffer.alloc(8)
     idx.writeUInt32BE(256265, 0)       // NIFTY 50 (segment 9), LTP mode
     idx.writeInt32BE(2_550_010, 4)
     const [eq, index] = parseKiteFrame(frame(p, idx))
-    expect(eq).toMatchObject({ token: 2953217, lastPrice: 3050.55, lastQty: 12, volume: 1_234_567, open: 3000, exchangeTs: 1_792_731_541 })
+    expect(eq).toMatchObject({ token: 2953217, lastPrice: 3050.55, lastQty: 12, volume: 1_234_567, open: 3000, exchangeTs: 1_792_731_541, bid: 3050.5, bidQty: 150, ask: 3050.6, askQty: 90 })
     expect(index).toEqual({ token: 256265, lastPrice: 25500.1 })
   })
 

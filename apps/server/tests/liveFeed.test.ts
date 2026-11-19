@@ -71,18 +71,25 @@ describe('LiveFeed', () => {
   })
 
   it('processes real ticks correctly', () => {
-    const sim3 = new LiveFeed()
-    sim3.addSymbolByTicker('RELIANCE', 'test-broker')
-    sim3.processRealTick({
-      instrumentId: 'NSE:RELIANCE-EQ',
-      lastPrice: 2500,
-      volume: 100,
-      timestamp: Date.now()
-    }, 'test-broker')
+    // During market hours (ticks outside them make no candle), whenever the test runs
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(Date.parse('2026-11-12T10:30:00+05:30'))
+    try {
+      const sim3 = new LiveFeed()
+      sim3.addSymbolByTicker('RELIANCE', 'test-broker')
+      sim3.processRealTick({
+        instrumentId: 'NSE:RELIANCE-EQ',
+        lastPrice: 2500,
+        volume: 100,
+        timestamp: Date.now()
+      }, 'test-broker')
 
-    const bar = sim3.getLiveBar('RELIANCE', 'test-broker')
-    expect(bar).toBeDefined()
-    expect(bar?.close).toBe(2500)
+      const bar = sim3.getLiveBar('RELIANCE', 'test-broker')
+      expect(bar).toBeDefined()
+      expect(bar?.close).toBe(2500)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })
 

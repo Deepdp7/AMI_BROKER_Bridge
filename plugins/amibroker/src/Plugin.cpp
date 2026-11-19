@@ -80,15 +80,32 @@ static void WriteBarToQuotation(struct Quotation* pQ, int idx, const Bar& b) {
 
 static double QuotationToUnix(const struct Quotation& q) {
     struct tm tv; memset(&tv, 0, sizeof(tv));
-    tv.tm_sec  = q.DateTime.PackDate.Second;
-    tv.tm_min  = q.DateTime.PackDate.Minute;
-    tv.tm_hour = q.DateTime.PackDate.Hour;
+    // An end-of-day bar (mixed EOD/intraday database) counts as its day's midnight
+    bool eod = q.DateTime.PackDate.Hour == DATE_EOD_HOURS;
+    tv.tm_sec  = eod ? 0 : q.DateTime.PackDate.Second;
+    tv.tm_min  = eod ? 0 : q.DateTime.PackDate.Minute;
+    tv.tm_hour = eod ? 0 : q.DateTime.PackDate.Hour;
     tv.tm_mday = q.DateTime.PackDate.Day;
     tv.tm_mon  = q.DateTime.PackDate.Month - 1;
     tv.tm_year = q.DateTime.PackDate.Year - 1900;
     tv.tm_isdst = -1;
     time_t t = mktime(&tv);
     return (t == (time_t)-1) ? 0 : (double)t;
+}
+
+// A daily bar as an end-of-day quotation: its India date (the engine stamps the day's midnight,
+// India time), with AmiBroker's EOD marker in place of a time
+static void WriteEodToQuotation(struct Quotation* pQ, int idx, const Bar& b) {
+    memset(&pQ[idx], 0, sizeof(struct Quotation));
+    pQ[idx].Price = b.close; pQ[idx].Open = b.open; pQ[idx].High = b.high; pQ[idx].Low = b.low;
+    pQ[idx].Volume = b.volume; pQ[idx].OpenInterest = b.oi;
+    time_t t = (time_t)b.timestamp + 19800;
+    struct tm d; gmtime_s(&d, &t);
+    pQ[idx].DateTime.PackDate.Year   = d.tm_year + 1900;
+    pQ[idx].DateTime.PackDate.Month  = d.tm_mon + 1;
+    pQ[idx].DateTime.PackDate.Day    = d.tm_mday;
+    pQ[idx].DateTime.PackDate.Hour   = DATE_EOD_HOURS;
+    pQ[idx].DateTime.PackDate.Minute = DATE_EOD_MINUTES;
 }
 
 static double QuotationMinute(const struct Quotation& q) { return floor(QuotationToUnix(q) / 60.0) * 60.0; }
@@ -268,7 +285,21 @@ static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, in
     if (GetCachedLiveBar(pszTicker, live) && live.timestamp > 0 && live.close > 0) {
         outBars.push_back(live);
     }
-    int count = MergeBars(pQuotes, 0, nSize, outBars);
+    // Mixed EOD/intraday database: the years before the 1-minute history as daily bars, first
+    int dailyCount = 0;
+    if (MixedEodAllowed()) {
+        std::vector<Bar> daily;
+        if (FetchDailyFromAPI(pszTicker, daily) > 0) {
+            // Room for all the 1-minute bars first; the oldest days go if the database is too small
+            int room = nSize - (int)outBars.size();
+            size_t skip = room <= 0 ? daily.size() : daily.size() > (size_t)room ? daily.size() - (size_t)room : 0;
+            for (size_t i = skip; i < daily.size(); i++) {
+                if (!(daily[i].close > 0)) continue;
+                WriteEodToQuotation(pQuotes, dailyCount++, daily[i]);
+            }
+        }
+    }
+    int count = MergeBars(pQuotes, dailyCount, nSize, outBars);
 
     char logBuf[128];
     sprintf_s(logBuf, "[GQE] %s nLV=%d returned=%d", pszTicker, nLastValid, count);
@@ -345,8 +376,10 @@ PLUGINAPI int Notify(struct PluginNotification* pNotification) {
     if (!pNotification) return 0;
     if (pNotification->hMainWnd)
         SetAmiBrokerWindow(pNotification->hMainWnd);
-    if ((pNotification->nReason & (REASON_DATABASE_LOADED | REASON_SETTINGS_CHANGE)) && pNotification->pWorkspace)
+    if ((pNotification->nReason & (REASON_DATABASE_LOADED | REASON_SETTINGS_CHANGE)) && pNotification->pWorkspace) {
         SetDatabaseBars(pNotification->pWorkspace->NumBars);
+        SetMixedEod(pNotification->pWorkspace->AllowMixedEODIntra != FALSE);
+    }
     if (pNotification->nReason & REASON_STATUS_RMBCLICK) {
         // The symbol on screen (StockInfo is new as of AmiBroker 5.30; older ones pass the old struct only)
         const char* ticker = NULL;
@@ -380,8 +413,123 @@ PLUGINAPI int SetSiteInterface(struct SiteInterface* pInterface) {
     return 1;
 }
 
+extern "C++" {
+// ---- File > Database Settings > Configure ----
+// What DataBridge Pro is doing right now, the AmiBroker settings it needs, and the actions of the
+// status light's menu. Brokers, symbols and history depth are set in the DataBridge Pro app.
+enum { CFG_OPEN = 101, CFG_TODAY_ALL, CFG_CLOSE, CFG_STATUS, CFG_TIMER = 1 };
+static const int ONE_YEAR_OF_MINUTES = 94000;   // ~250 sessions x 375 one-minute bars (NSE)
+
+static std::string ConfigStatusText() {
+    int level; std::string shortMsg, longMsg;
+    GetBridgeStatus(level, shortMsg, longMsg);
+    const char* light = level == 0 ? "Green" : level == 1 ? "Yellow" : level == 2 ? "Red" : "Grey";
+    std::string s = std::string("Status: ") + light + " - " + shortMsg + "\r\n" + longMsg + "\r\n\r\n";
+    int live = level >= 0 ? LiveSymbolCount((double)time(NULL) - 120) : 0;
+    s += "Symbols with live prices in the last 2 minutes: " + std::to_string(live) + "\r\n";
+    int bars = GetDatabaseBars();
+    s += "This database keeps: " + (bars > 0 ? std::to_string(bars) + " bars per symbol" : std::string("(not reported yet)"));
+    if (bars > 0 && bars < ONE_YEAR_OF_MINUTES) s += "  - less than a year of 1-minute bars";
+    return s;
+}
+
+static const char* CONFIG_HELP =
+    "DataBridge Pro brings your broker's prices and history to AmiBroker. Brokers, symbols and how many "
+    "years of history to download are set in the DataBridge Pro app on this PC.\r\n\r\n"
+    "Settings this database needs (File > Database Settings):\r\n"
+    "  - Base time interval: 1 minute\r\n"
+    "  - Number of bars: 100000 or more for a year of 1-minute history\r\n"
+    "  - Intraday settings: time shift 0 (prices arrive in India time)\r\n"
+    "  - Allow mixed EOD/intraday data: tick it for daily bars from the years before the\r\n"
+    "    1-minute history (stocks and indices; re-open a chart to load them)\r\n\r\n"
+    "Right-click the DataBridge light in the status bar for one symbol's history repair.";
+
+static LRESULT CALLBACK ConfigWndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
+    switch (msg) {
+    case WM_TIMER:
+        SetDlgItemTextA(hWnd, CFG_STATUS, ConfigStatusText().c_str());
+        return 0;
+    case WM_COMMAND:
+        switch (LOWORD(wp)) {
+        case CFG_OPEN: ShowDataBridge(); return 0;
+        case CFG_TODAY_ALL:
+            if (!SendToBridge("CMD|TODAY_ALL"))
+                MessageBoxA(hWnd, "DataBridge Pro is not running.", "DataBridge Pro", MB_OK | MB_ICONINFORMATION);
+            else
+                MessageBoxA(hWnd, "Today's bars of every symbol are being downloaded again. Open charts update when they arrive.",
+                            "DataBridge Pro", MB_OK | MB_ICONINFORMATION);
+            return 0;
+        case CFG_CLOSE: case IDCANCEL: DestroyWindow(hWnd); return 0;
+        }
+        break;
+    case WM_CLOSE: DestroyWindow(hWnd); return 0;
+    case WM_DESTROY: KillTimer(hWnd, CFG_TIMER); return 0;
+    }
+    return DefWindowProcA(hWnd, msg, wp, lp);
+}
+
+}  // extern "C++"
+
+EXTERN_C IMAGE_DOS_HEADER __ImageBase;
+
 PLUGINAPI int Configure(LPCTSTR pszPath, struct InfoSite* pSite) {
-    MessageBoxA(NULL, "DataBridge Pro is active.", "DataBridge Pro", MB_OK);
+    HINSTANCE hInst = (HINSTANCE)&__ImageBase;
+    static bool registered = false;
+    if (!registered) {
+        WNDCLASSA wc = {};
+        wc.lpfnWndProc = ConfigWndProc;
+        wc.hInstance = hInst;
+        wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);
+        wc.lpszClassName = "DataBridgeProConfig";
+        registered = RegisterClassA(&wc) != 0 || GetLastError() == ERROR_CLASS_ALREADY_EXISTS;
+    }
+    HWND owner = GetActiveWindow();
+
+    // Sizes in dialog-like units scaled to the screen's DPI
+    HDC dc = GetDC(NULL);
+    int dpi = dc ? GetDeviceCaps(dc, LOGPIXELSY) : 96;
+    if (dc) ReleaseDC(NULL, dc);
+    auto S = [dpi](int v) { return MulDiv(v, dpi, 96); };
+    NONCLIENTMETRICSA ncm = {}; ncm.cbSize = sizeof(ncm);
+    SystemParametersInfoA(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0);
+    HFONT font = CreateFontIndirectA(&ncm.lfMessageFont);
+
+    const int W = S(560), H = S(430), M = S(14);
+    RECT r = { 0, 0, W, H };
+    DWORD style = WS_POPUP | WS_CAPTION | WS_SYSMENU;
+    AdjustWindowRectEx(&r, style, FALSE, WS_EX_DLGMODALFRAME);
+    RECT ownerRect = {};
+    if (owner) GetWindowRect(owner, &ownerRect);
+    int x = owner ? ownerRect.left + ((ownerRect.right - ownerRect.left) - (r.right - r.left)) / 2 : CW_USEDEFAULT;
+    int y = owner ? ownerRect.top + ((ownerRect.bottom - ownerRect.top) - (r.bottom - r.top)) / 2 : CW_USEDEFAULT;
+    HWND hWnd = CreateWindowExA(WS_EX_DLGMODALFRAME, "DataBridgeProConfig", "DataBridge Pro", style,
+                                x, y, r.right - r.left, r.bottom - r.top, owner, NULL, hInst, NULL);
+    if (!hWnd) { if (font) DeleteObject(font); return 0; }
+
+    auto add = [&](const char* cls, const char* text, DWORD st, int id, int cx, int cy, int cw, int ch) {
+        HWND c = CreateWindowExA(0, cls, text, WS_CHILD | WS_VISIBLE | st, cx, cy, cw, ch, hWnd, (HMENU)(INT_PTR)id, hInst, NULL);
+        if (c && font) SendMessageA(c, WM_SETFONT, (WPARAM)font, TRUE);
+        return c;
+    };
+    add("STATIC", ConfigStatusText().c_str(), SS_LEFT, CFG_STATUS, M, M, W - 2 * M, S(110));
+    add("STATIC", "", SS_ETCHEDHORZ, 0, M, S(132), W - 2 * M, 2);
+    add("STATIC", CONFIG_HELP, SS_LEFT, 0, M, S(144), W - 2 * M, S(200));
+    const int bh = S(28), by = H - M - bh;
+    add("BUTTON", "Open DataBridge Pro", BS_PUSHBUTTON | WS_TABSTOP, CFG_OPEN, M, by, S(160), bh);
+    add("BUTTON", "Refresh today's bars (all)", BS_PUSHBUTTON | WS_TABSTOP, CFG_TODAY_ALL, M + S(170), by, S(200), bh);
+    add("BUTTON", "Close", BS_DEFPUSHBUTTON | WS_TABSTOP, CFG_CLOSE, W - M - S(100), by, S(100), bh);
+    SetTimer(hWnd, CFG_TIMER, 1000, NULL);
+
+    // Modal: AmiBroker's window waits until this one closes
+    if (owner) EnableWindow(owner, FALSE);
+    ShowWindow(hWnd, SW_SHOW);
+    MSG m;
+    while (IsWindow(hWnd) && GetMessageA(&m, NULL, 0, 0) > 0) {
+        if (!IsDialogMessageA(hWnd, &m)) { TranslateMessage(&m); DispatchMessageA(&m); }
+    }
+    if (owner) { EnableWindow(owner, TRUE); SetForegroundWindow(owner); }
+    if (font) DeleteObject(font);
     return 1;
 }
 
@@ -391,30 +539,7 @@ PLUGINAPI int SetTimeBase(int nTimeBase) {
 
 PLUGINAPI struct RecentInfo* GetRecentInfo(LPCTSTR pszTicker) {
     if (!pszTicker) return NULL;
-    Bar b; memset(&b, 0, sizeof(Bar));
-    if (!GetCachedLiveBar(pszTicker, b) || b.close <= 0.0f) return NULL;
-
-    memset(&g_recentInfoBuf, 0, sizeof(RecentInfo));
-    g_recentInfoBuf.nStructSize = sizeof(RecentInfo);
-    strncpy_s(g_recentInfoBuf.Name, pszTicker, sizeof(g_recentInfoBuf.Name) - 1);
-
-    g_recentInfoBuf.fOpen     = b.open;
-    g_recentInfoBuf.fHigh     = b.high;
-    g_recentInfoBuf.fLow      = b.low;
-    g_recentInfoBuf.fLast     = b.close;
-    g_recentInfoBuf.iTotalVol = (int)b.volume;
-    g_recentInfoBuf.iTradeVol = (int)b.volume;
-    g_recentInfoBuf.fOpenInt  = b.oi;
-
-    time_t t = (time_t)b.timestamp;
-    struct tm ti; localtime_s(&ti, &t);
-    g_recentInfoBuf.nDateUpdate = ((ti.tm_year+1900)*10000) + ((ti.tm_mon+1)*100) + ti.tm_mday;
-    g_recentInfoBuf.nTimeUpdate = (ti.tm_hour*10000) + (ti.tm_min*100) + ti.tm_sec;
-
-    g_recentInfoBuf.nBitmap = 0xFFFF;
-    // BARSREADY: AmiBroker will call GetQuotesEx to update chart
-    // INCOMPLETE: bar is still forming (don't close/finalize it)
-    g_recentInfoBuf.nStatus = RI_STATUS_UPDATE | RI_STATUS_TRADE | RI_STATUS_BARSREADY | RI_STATUS_INCOMPLETE;
+    if (!FillRecentInfo(pszTicker, g_recentInfoBuf)) return NULL;
     return &g_recentInfoBuf;
 }
 

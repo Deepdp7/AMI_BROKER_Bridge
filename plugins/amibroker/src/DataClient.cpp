@@ -72,6 +72,13 @@ bool GetCachedLiveBar(const std::string& ticker, Bar& outBar) {
     return false;
 }
 
+int LiveSymbolCount(double sinceSec) {
+    std::lock_guard<std::mutex> lk(g_pollerMutex);
+    int n = 0;
+    for (auto& kv : g_lastKnownBars) if (kv.second.timestamp >= sinceSec) n++;
+    return n;
+}
+
 bool GetCachedPrevBar(const std::string& ticker, Bar& outBar) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
     auto it = g_prevMinuteBars.find(ticker);
@@ -147,23 +154,100 @@ static void QueueNotify(const std::string& ticker, const Bar& b) {
     g_pendingNotify[ticker] = b;
 }
 
+// ---- The Real-time Quote window ----
+// QUOTE|TICKER|last|open|high|low|prev|vol|oi|bid|ask|tickSec from the engine: the day's figures.
+// The quote window used to be filled from the current 1-minute bar (its open/high/low/volume
+// shown as the day's) with every field marked valid, the previous close and change among them.
+struct DayQuote { float last, open, high, low, prev, vol, oi, bid, ask; double tickSec; float bidQty, askQty; };
+static std::map<std::string, DayQuote> g_quotes;            // guarded by g_pollerMutex
+
+static void HandleQuoteMessage(const std::string& raw) {
+    std::string line = raw;
+    if (!line.empty() && line.back() == '\r') line.pop_back();
+    std::vector<std::string> f;
+    size_t from = 0;
+    for (;;) {
+        size_t bar = line.find('|', from);
+        f.push_back(line.substr(from, bar == std::string::npos ? std::string::npos : bar - from));
+        if (bar == std::string::npos) break;
+        from = bar + 1;
+    }
+    if (f.size() < 13 || f[1].empty()) return;
+    DayQuote q{};
+    try {
+        q.last = std::stof(f[2]); q.open = std::stof(f[3]); q.high = std::stof(f[4]); q.low = std::stof(f[5]);
+        q.prev = std::stof(f[6]); q.vol = std::stof(f[7]); q.oi = std::stof(f[8]);
+        q.bid = std::stof(f[9]); q.ask = std::stof(f[10]); q.tickSec = std::stod(f[11]);
+        if (f.size() >= 14) { q.bidQty = std::stof(f[12]); q.askQty = std::stof(f[13]); }   // newer engines
+    } catch (...) { return; }
+    if (!(q.last > 0)) return;
+    Bar live{}; bool hasLive = false;
+    {
+        std::lock_guard<std::mutex> lk(g_pollerMutex);
+        g_quotes[f[1]] = q;
+        auto it = g_lastKnownBars.find(f[1]);
+        if (it != g_lastKnownBars.end()) { live = it->second; hasLive = true; }
+    }
+    // A price change without a new bar (after the close, a previous close found later): refresh
+    if (hasLive && live.close > 0) QueueNotify(f[1], live);
+}
+
+bool FillRecentInfo(const std::string& ticker, RecentInfo& ri) {
+    Bar b{}; bool hasBar = false;
+    DayQuote q{}; bool hasQuote = false;
+    {
+        std::lock_guard<std::mutex> lk(g_pollerMutex);
+        auto it = g_lastKnownBars.find(ticker);
+        if (it != g_lastKnownBars.end() && it->second.close > 0) { b = it->second; hasBar = true; }
+        auto qt = g_quotes.find(ticker);
+        if (qt != g_quotes.end()) { q = qt->second; hasQuote = true; }
+    }
+    if (!hasBar && !hasQuote) return false;
+
+    memset(&ri, 0, sizeof(ri));
+    ri.nStructSize = sizeof(RecentInfo);
+    strncpy_s(ri.Name, ticker.c_str(), sizeof(ri.Name) - 1);
+    int bits = RI_LAST | RI_DATEUPDATE;
+    ri.fLast = hasQuote ? q.last : b.close;
+    if (hasQuote && q.open > 0 && q.high > 0 && q.low > 0) {
+        ri.fOpen = q.open; ri.fHigh = q.high; ri.fLow = q.low;
+        bits |= RI_OPEN | RI_HIGHLOW;
+    }
+    if (hasQuote && q.vol > 0) {
+        ri.fTotalVol = q.vol;
+        ri.iTotalVol = q.vol > 2147483647.0f ? 2147483647 : (int)q.vol;
+        bits |= RI_TOTALVOL;
+    }
+    float oi = hasQuote && q.oi > 0 ? q.oi : (hasBar ? b.oi : 0);
+    if (oi > 0) { ri.fOpenInt = oi; bits |= RI_OPENINT; }
+    if (hasQuote && q.prev > 0) {
+        ri.fPrev = q.prev;
+        ri.fChange = ri.fLast - q.prev;
+        bits |= RI_PREVCHANGE;
+    }
+    if (hasQuote && q.bid > 0) { ri.fBid = q.bid; ri.iBidSize = (int)q.bidQty; bits |= RI_BID; }
+    if (hasQuote && q.ask > 0) { ri.fAsk = q.ask; ri.iAskSize = (int)q.askQty; bits |= RI_ASK; }
+    ri.nBitmap = bits;
+
+    double when = hasQuote && q.tickSec > 0 ? q.tickSec : b.timestamp;
+    time_t t = (time_t)when; struct tm ti;
+    if (t > 0 && localtime_s(&ti, &t) == 0) {
+        ri.nDateUpdate = ((ti.tm_year + 1900) * 10000) + ((ti.tm_mon + 1) * 100) + ti.tm_mday;
+        ri.nTimeUpdate = (ti.tm_hour * 10000) + (ti.tm_min * 100) + ti.tm_sec;
+    }
+    // BARSREADY: AmiBroker calls GetQuotesEx to update charts; INCOMPLETE: the bar is still forming
+    ri.nStatus = RI_STATUS_UPDATE | RI_STATUS_TRADE | RI_STATUS_BARSREADY | RI_STATUS_INCOMPLETE;
+    if (bits & (RI_BID | RI_ASK)) ri.nStatus |= RI_STATUS_BIDASK;
+    return true;
+}
+
 // Push a RecentInfo update so AmiBroker refreshes the symbol (and calls GetQuotesEx).
 // False when AmiBroker didn't take it within NOTIFY_WAIT_MS (busy): try again next round.
 static bool NotifyAmiBroker(const std::string& ticker, const Bar& b) {
     HWND hWnd = g_hAmiBrokerWnd;
     if (!hWnd || !IsWindow(hWnd)) return true;
     RecentInfo& ri = g_riSlots[ticker];
-    memset(&ri, 0, sizeof(ri));
-    ri.nStructSize = sizeof(RecentInfo);
-    strncpy_s(ri.Name, ticker.c_str(), sizeof(ri.Name)-1);
-    ri.fOpen=b.open; ri.fHigh=b.high; ri.fLow=b.low; ri.fLast=b.close;
-    ri.iTotalVol=(int)b.volume; ri.iTradeVol=(int)b.volume;
-    ri.fOpenInt=b.oi;
-    time_t t=(time_t)b.timestamp; struct tm ti; localtime_s(&ti,&t);
-    ri.nDateUpdate=((ti.tm_year+1900)*10000)+((ti.tm_mon+1)*100)+ti.tm_mday;
-    ri.nTimeUpdate=(ti.tm_hour*10000)+(ti.tm_min*100)+ti.tm_sec;
-    ri.nBitmap  = 0xFFFF;
-    ri.nStatus  = RI_STATUS_UPDATE|RI_STATUS_TRADE|RI_STATUS_BARSREADY|RI_STATUS_INCOMPLETE;
+    if (!FillRecentInfo(ticker, ri)) return true;
 
     DWORD_PTR res = 0;
     BOOL taken = SendMessageTimeoutA(hWnd, WM_USER_STREAMING_UPDATE, 0, (LPARAM)&ri,
@@ -245,6 +329,23 @@ static int g_numBars = 0;
 void SetDatabaseBars(int numBars) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
     g_numBars = numBars;
+}
+
+static bool g_mixedEod = false;   // guarded by g_pollerMutex
+
+void SetMixedEod(bool allowed) {
+    std::lock_guard<std::mutex> lk(g_pollerMutex);
+    g_mixedEod = allowed;
+}
+
+bool MixedEodAllowed() {
+    std::lock_guard<std::mutex> lk(g_pollerMutex);
+    return g_mixedEod;
+}
+
+int GetDatabaseBars() {
+    std::lock_guard<std::mutex> lk(g_pollerMutex);
+    return g_numBars;
 }
 
 void NoteFullLoad(const std::string& ticker) {
@@ -449,6 +550,7 @@ static void PollerThreadProc() {
                 acc.erase(0, p+1);
                 if (line.rfind("SYNC", 0) == 0) { HandleSyncMessage(line); continue; }
                 if (line.rfind("STATUS|", 0) == 0) { HandleStatusMessage(line); continue; }
+                if (line.rfind("QUOTE|", 0) == 0) { HandleQuoteMessage(line); continue; }
                 if (line.rfind("LIVE_BAR|", 0) != 0) continue;
 
                 // LIVE_BAR|TICKER|ts|open|high|low|close|volume
@@ -552,13 +654,9 @@ void CloseHttpSession() {
     if (g_httpSession) { WinHttpCloseHandle(g_httpSession); g_httpSession = NULL; }
 }
 
-int FetchBarsFromAPI(const std::string& ticker, int limit, double since, std::vector<Bar>& out) {
-    out.clear();
-    HINTERNET hS = HttpSession();
-    if (!hS) return -1;
-    HINTERNET hC = WinHttpConnect(hS, L"127.0.0.1", 7890, 0);
-    if (!hC) return -1;
+static int FetchBarsPath(const wchar_t* path, bool quick, std::vector<Bar>& out);
 
+int FetchBarsFromAPI(const std::string& ticker, int limit, double since, std::vector<Bar>& out) {
     wchar_t path[512];
     swprintf_s(path, L"/api/feed/bars?ticker=%hs", UrlEncode(ticker).c_str());
     if (limit > 0) {
@@ -569,6 +667,23 @@ int FetchBarsFromAPI(const std::string& ticker, int limit, double since, std::ve
         wchar_t tmp[64]; swprintf_s(tmp, L"&since=%lld", (long long)since);
         wcscat_s(path, tmp);
     }
+    return FetchBarsPath(path, since > 0, out);
+}
+
+int FetchDailyFromAPI(const std::string& ticker, std::vector<Bar>& out) {
+    wchar_t path[512];
+    swprintf_s(path, L"/api/feed/daily?ticker=%hs", UrlEncode(ticker).c_str());
+    return FetchBarsPath(path, false, out);
+}
+
+// GET `path` from the engine and parse its bar lines. `quick`: a small answer is expected (a
+// catch-up), so a slow one gives up sooner. -1 when the request failed.
+static int FetchBarsPath(const wchar_t* path, bool quick, std::vector<Bar>& out) {
+    out.clear();
+    HINTERNET hS = HttpSession();
+    if (!hS) return -1;
+    HINTERNET hC = WinHttpConnect(hS, L"127.0.0.1", 7890, 0);
+    if (!hC) return -1;
 
     HINTERNET hR = WinHttpOpenRequest(hC, L"GET", path, NULL, WINHTTP_NO_REFERER,
                                       WINHTTP_DEFAULT_ACCEPT_TYPES, 0);
@@ -576,7 +691,7 @@ int FetchBarsFromAPI(const std::string& ticker, int limit, double since, std::ve
     // This runs on AmiBroker's own thread. A full load (~100k bars) may take a few seconds when
     // the engine is busy; a catch-up is a few hundred bars, so a slow answer means trouble and
     // must not hold AmiBroker for long (the caller then pauses catch-ups, CatchUpFailed)
-    if (since > 0) WinHttpSetTimeouts(hR, 1000, 1000, 2000, 4000);
+    if (quick) WinHttpSetTimeouts(hR, 1000, 1000, 2000, 4000);
     else           WinHttpSetTimeouts(hR, 2000, 2000, 5000, 20000);
 
     BOOL ok = WinHttpSendRequest(hR, WINHTTP_NO_ADDITIONAL_HEADERS, 0,

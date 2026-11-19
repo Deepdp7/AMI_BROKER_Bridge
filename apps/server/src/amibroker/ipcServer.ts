@@ -5,6 +5,8 @@
  *                                                     (oi: open interest, 0 when unknown)
  *                    SYNC|TICKER[|fromSec]           stored history changed: re-fetch it over HTTP
  *                    STATUS|level|short|long         the DataBridge light in AmiBroker's status bar
+ *                    QUOTE|TICKER|last|open|high|low|prev|vol|oi|bid|ask|tickSec|bidQty|askQty
+ *                                                     the day's quote for the Real-time Quote window
  *   plugin → engine  GET_QUOTES TICKER               bars for a symbol (auto-registers unknown ones)
  *                    CMD|REPAIR|T, CMD|TODAY|T, CMD|TODAY_ALL   its right-click menu (pluginStatus.ts)
  *
@@ -20,9 +22,23 @@ import { liveFeed } from '../market/liveFeed'
 import { setRuntimeProbe } from '../ai/AiAssistant'
 import { startSymbolDetailsSync, schedulePush as pushSymbolDetailsSoon } from './symbolDetails'
 import { currentPluginStatus, statusLine, runPluginCommand, handlePluginNote } from './pluginStatus'
+import { quoteOf, startQuotes } from '../platforms/quotes'
 
 const ipcClients = new Set<net.Socket>()
 let lastLiveBarLogAt = 0
+
+/**
+ * QUOTE|TICKER|last|open|high|low|prevClose|volume|oi|bid|ask|tickSec|bidQty|askQty for AmiBroker's Real-time
+ * Quote window: the day's open/high/low and volume, not the current minute's ('' when the symbol
+ * has no price yet). 0 = not known.
+ */
+export function quoteMessage(ticker: string, nowMs = Date.now()): string {
+  const q = quoteOf(ticker, nowMs)
+  if (!q || !(q.status.lastPrice > 0)) return ''
+  const s = q.status
+  const n = (v: number | undefined) => (typeof v === 'number' && Number.isFinite(v) && v > 0 ? String(+v.toFixed(4)) : '0')
+  return `QUOTE|${ticker}|${n(s.lastPrice)}|${n(q.open)}|${n(q.high)}|${n(q.low)}|${n(s.prevClose)}|${n(s.volume)}|${n(s.openInterest)}|${n(s.bid)}|${n(s.ask)}|${Math.floor((s.lastTickUtcMs || 0) / 1000)}|${n(s.bidQty)}|${n(s.askQty)}\n`
+}
 
 // New history reaches AmiBroker through SYNC notices only (the plugin merges the bars in).
 // There used to be an OLE RefreshAll() after every finished download and on connect too; it
@@ -58,6 +74,7 @@ export function notifyAmiBrokerHistoryChanged(ticker: string, fromSec = 0) {
 /** Starts the plugin channel: live bars and history notices go out, GET_QUOTES is answered. */
 export function startAmiBrokerIpc() {
   setRuntimeProbe(() => ({ amibrokerConnections: ipcClients.size }))
+  startQuotes()
   startSymbolDetailsSync(() => ipcClients.size > 0)
 
   // The DataBridge light in AmiBroker's status bar: sent when it changes (checked every 3 s)
@@ -78,12 +95,22 @@ export function startAmiBrokerIpc() {
   // the newest state of each symbol's minute. Keyed by minute, not only symbol: the last update
   // of a minute that just ended is always sent, before the first one of the next minute.
   const pendingLive = new Map<string, string>()
+  // Symbols whose quote changed (price, day volume, previous close...): sent after the bars
+  const pendingQuotes = new Set<string>()
   let liveFlushQueued = false
+  const queueFlush = () => {
+    if (liveFlushQueued) return
+    liveFlushQueued = true
+    setImmediate(flushLive)
+  }
   const flushLive = () => {
     liveFlushQueued = false
-    if (pendingLive.size === 0) return
-    const msg = [...pendingLive.values()].join('')
+    if (pendingLive.size === 0 && pendingQuotes.size === 0) return
+    let msg = [...pendingLive.values()].join('')
+    for (const t of pendingQuotes) msg += quoteMessage(t)
     pendingLive.clear()
+    pendingQuotes.clear()
+    if (!msg) return
     if (Date.now() - lastLiveBarLogAt > 2000) {
       lastLiveBarLogAt = Date.now()
       console.log(`[IPC_LIVE_BAR] Broadcasted: ${msg.slice(0, msg.indexOf('\n'))}`)
@@ -98,10 +125,15 @@ export function startAmiBrokerIpc() {
     const key = `${ticker}|${ts}`
     pendingLive.delete(key)   // re-inserted last, so the order stays the order of the updates
     pendingLive.set(key, `LIVE_BAR|${ticker}|${ts}|${bar.open}|${bar.high}|${bar.low}|${bar.close}|${bar.volume}|${bar.oi || 0}\n`)
-    if (!liveFlushQueued) {
-      liveFlushQueued = true
-      setImmediate(flushLive)
-    }
+    queueFlush()
+  })
+
+  // The feed's status changes come at most 10 times a second (also price-only updates after the
+  // close, and a previous close found later): each becomes a QUOTE line
+  liveFeed.on('feed_update', ({ symbols }: { symbols: Array<{ ticker: string }> }) => {
+    if (ipcClients.size === 0 || !symbols?.length) return
+    for (const s of symbols) pendingQuotes.add(s.ticker)
+    queueFlush()
   })
 
   backfillQueue.on('bars_gap_filled', ({ ticker, fromSec }: { ticker: string, fromSec: number }) => {
@@ -126,6 +158,11 @@ export function startAmiBrokerIpc() {
 
     // The status light right away, not only at the next change
     try { socket.write(statusLine(currentPluginStatus())) } catch {}
+    // Every symbol's quote, so the Real-time Quote window is filled before the first tick
+    try {
+      const quotes = liveFeed.getFeedStatuses().map(s => quoteMessage(s.ticker)).join('')
+      if (quotes) socket.write(quotes)
+    } catch {}
 
     socket.on('error', (err) => {
       console.error('[IPC Error]', err.message)

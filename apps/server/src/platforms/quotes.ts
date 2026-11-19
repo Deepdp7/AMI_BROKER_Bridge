@@ -34,21 +34,49 @@ let lots = new Map<string, number>()
 let lotsAt = 0
 let started = false
 
-function start() {
+/** Starts keeping the day's open/high/low from live bars (and the stored ones, once a day) */
+export function startQuotes() {
   if (started) return
   started = true
   liveFeed.on('live_bar_updated', ({ ticker, bar }: { ticker: string; bar: any }) => {
     if (!(bar?.open > 0) || !bar.bucketMs) return
     dayStats.set(ticker, foldBar(dayStats.get(ticker), bar))
+    if (seeded.get(ticker) !== istMidnight(bar.bucketMs)) seedFromDatabase(ticker, bar.bucketMs)
   })
 }
+const start = startQuotes
 
-/** Today's stored bars of `ticker` folded in once per day (earlier minutes the live feed missed) */
+/** One symbol's quote with today's open/high/low (asks the database once a day for what's missing) */
+export function quoteOf(ticker: string, nowMs = Date.now()) {
+  start()
+  const s = liveFeed.getFeedStatus(ticker)
+  if (!s) return undefined
+  if (seeded.get(ticker) !== istMidnight(nowMs)) seedFromDatabase(ticker, nowMs)
+  const d = dayStats.get(ticker)
+  const today = d && d.day === istMidnight(nowMs) ? d : undefined
+  // The last price is part of the day's range even before its bar reached the stats
+  const last = s.lastPrice > 0 && s.lastTickUtcMs >= istMidnight(nowMs) ? s.lastPrice : 0
+  const high = Math.max(today?.high ?? 0, last)
+  const low = today?.low && last ? Math.min(today.low, last) : (today?.low || last)
+  return { status: s, open: today?.open || last, high, low }
+}
+
+/**
+ * Once per day per symbol, from the stored bars: today's open/high/low so far (earlier minutes
+ * the live feed missed), and the previous session's close. Most broker feeds don't send that
+ * close (Fyers, Kite and Dhan do, and theirs is used instead); without it the change was shown
+ * as 0.00% everywhere. From bars it is the session's last traded price, which can differ a
+ * little from the exchange's official close (an average of the last half hour on NSE).
+ */
 function seedFromDatabase(ticker: string, nowMs: number) {
   const day = istMidnight(nowMs)
   if (seeded.get(ticker) === day) return
   seeded.set(ticker, day)
-  readCandles(ticker, day, DAY_MS, day, 1).then(rows => {
+  // Daily candles of the last two weeks (long holidays included), buckets on IST days
+  readCandles(ticker, day - 14 * DAY_MS, DAY_MS, day, 15).then(rows => {
+    const before = rows.filter(r => r.t < day)
+    const prev = before[before.length - 1]
+    if (prev?.close > 0) liveFeed.setPrevClose(ticker, prev.close, Math.round((day + IST_MS) / DAY_MS))
     const c = rows[rows.length - 1]
     if (!c || istMidnight(c.t) !== day) return
     const live = dayStats.get(ticker)

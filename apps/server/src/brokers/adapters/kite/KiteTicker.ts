@@ -21,6 +21,11 @@ export interface KitePacket {
   low?: number
   close?: number
   oi?: number
+  /** Best bid / ask and their quantities (full mode's first depth level) */
+  bid?: number
+  ask?: number
+  bidQty?: number
+  askQty?: number
   /** Exchange timestamp, unix seconds (full mode only) */
   exchangeTs?: number
   lastTradeTs?: number
@@ -87,6 +92,13 @@ export function parseKitePacket(p: Buffer): KitePacket | null {
     out.lastTradeTs = p.readUInt32BE(44) || undefined
     out.oi = p.readUInt32BE(48)
     out.exchangeTs = p.readUInt32BE(60) || undefined
+  }
+  if (p.length >= 184) {
+    // Depth: 5 bids then 5 asks of 12 bytes (quantity u32, price i32, orders u16, padding)
+    out.bidQty = p.readUInt32BE(64)
+    out.bid = price(68)
+    out.askQty = p.readUInt32BE(124)
+    out.ask = price(128)
   }
   return out
 }

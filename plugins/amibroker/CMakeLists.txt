@@ -30,8 +30,9 @@ if(WIN32)
     )
 endif()
 
-# WinSock (live IPC on 7891), WinHTTP (history from 7890), user32 (SendMessage to AmiBroker)
-target_link_libraries(DataBridgePro ws2_32 winhttp user32)
+# WinSock (live IPC on 7891), WinHTTP (history from 7890), user32 (SendMessage to AmiBroker),
+# gdi32 (the Configure dialog's font)
+target_link_libraries(DataBridgePro ws2_32 winhttp user32 gdi32)
 
 set_target_properties(DataBridgePro PROPERTIES PREFIX "")
 # AmiBroker plugins traditionally use the .dll extension

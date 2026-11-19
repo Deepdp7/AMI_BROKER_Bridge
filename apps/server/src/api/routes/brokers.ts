@@ -12,6 +12,7 @@ import { pendingLogins, activateBroker, loginDirect } from '../../brokers/Broker
 import { addSymbolsToBroker } from '../../brokers/addSymbols'
 import { brokerLoginUrl, LOGIN_BROKERS, BROKERS, isDirectLogin } from '../../brokers/brokerAuth'
 import type { BrokerAccount } from '../../types'
+import { forgetDailyFloor } from '../../market/DailyHistory'
 
 export { pendingLogins }
 
@@ -410,6 +411,7 @@ router.delete('/:id/symbols/:ticker', (req, res) => {
     // Clear from backfill Set and cancel any ongoing queue tasks
     backfilledTickers.delete(ticker)
     clearVerifiedThrough(ticker)
+    forgetDailyFloor(ticker)
     backfillQueue.cancel(ticker)
     res.json({ ok: true })
   } catch (e) {

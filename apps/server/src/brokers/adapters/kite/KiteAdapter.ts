@@ -98,6 +98,7 @@ function kiteInterval(interval: string): string {
 export class KiteAdapter extends ListedBrokerAdapter {
   /** Kite serves at most 60 days of 1-minute candles per request */
   readonly maxIntradayHistoryDays = 55
+  readonly dailyHistory = true
   /** History requests per minute allowed right now (the download queue picks the fastest broker) */
   historyRequestsPerMinute() { return historyLimiter.perMinuteBudget }
   protected readonly label = 'Kite'
@@ -176,6 +177,8 @@ export class KiteAdapter extends ListedBrokerAdapter {
         totalVolume: p.volume,
         timestampMs: ts ? ts * 1000 : Date.now(),
         openInterest: p.oi,
+        prevClose: p.close,   // Kite's "close" is the previous day's
+        bid: p.bid, ask: p.ask, bidQty: p.bidQty, askQty: p.askQty,
       })
     })
     ticker.on('connected', () => this.emit('connection_state', 'CONNECTED'))

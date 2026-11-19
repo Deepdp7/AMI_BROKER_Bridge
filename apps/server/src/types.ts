@@ -51,6 +51,8 @@ export interface SymbolFeedStatus {
   openInterest?: number
   bid?: number
   ask?: number
+  bidQty?: number
+  askQty?: number
 }
 
 export interface Bar1s {

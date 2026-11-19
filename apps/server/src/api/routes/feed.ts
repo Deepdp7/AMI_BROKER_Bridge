@@ -2,7 +2,7 @@
  * History for the AmiBroker plugin (DataBridgePro.dll). Mounted at /api/feed.
  */
 import { Router } from 'express'
-import { getAllSettings, stmts, syncCachesPromise } from '../../db'
+import { getAllSettings, stmts, syncCachesPromise, dailyCsvBefore, getOldestBarTimestampSec } from '../../db'
 import { brokerManager } from '../../brokers/BrokerManager'
 import { backfillQueue } from '../../market/BackfillQueue'
 import { backfilledTickers } from '../../market/state/backfillState'
@@ -22,6 +22,19 @@ setInterval(() => {
     }
   }
 }, 10000).unref() // Runs every 10 seconds
+
+// ===== Daily bars before the 1-minute history (AmiBroker's mixed EOD/intraday mode) =====
+// GET /api/feed/daily?ticker=RELIANCE → "tsSec,open,high,low,close,volume" lines, ascending, of
+// the days before the symbol's first 1-minute bar (the days after are built from 1-minute bars),
+// then END. tsSec is the day's midnight in India time.
+router.get('/daily', async (req, res) => {
+  await syncCachesPromise
+  const ticker = String(req.query.ticker || '').split(',')[0].trim()
+  if (!ticker) return res.status(400).send('ticker is required')
+  const oldestMinuteSec = await getOldestBarTimestampSec(ticker)
+  const csv = dailyCsvBefore(ticker, oldestMinuteSec || Math.floor(Date.now() / 1000))
+  res.type('text/plain').send(csv ? csv + '\nEND' : 'END\n')
+})
 
 // ===== AmiBroker DLL Data Endpoint =====
 // GET /api/feed/bars?ticker=NIFTY%2050&limit=5000

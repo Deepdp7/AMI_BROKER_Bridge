@@ -156,6 +156,20 @@ const SCHEMA = `
     oi INTEGER,
     PRIMARY KEY (tid, ts)
   ) WITHOUT ROWID;
+
+  -- Daily bars from the broker for the years before 1-minute history starts (AmiBroker's mixed
+  -- EOD/intraday mode). ts = the IST day's midnight, unix seconds; prices as in bars.
+  CREATE TABLE IF NOT EXISTS daily_bars (
+    tid INTEGER NOT NULL,
+    ts INTEGER NOT NULL,
+    open INTEGER,
+    high INTEGER,
+    low INTEGER,
+    close INTEGER,
+    volume INTEGER,
+    oi INTEGER,
+    PRIMARY KEY (tid, ts)
+  ) WITHOUT ROWID;
 `
 
 // Another engine process can hold the file for a moment (the desktop app restarting a crashed
@@ -242,6 +256,15 @@ const q = {
   lastBarTs: sqlite.prepare('SELECT ts FROM bars WHERE tid = ? ORDER BY ts DESC LIMIT 1'),
   oldestBarTs: sqlite.prepare('SELECT ts FROM bars WHERE tid = ? ORDER BY ts ASC LIMIT 1'),
   deleteTickerBars: sqlite.prepare('DELETE FROM bars WHERE tid = ?'),
+  deleteTickerDaily: sqlite.prepare('DELETE FROM daily_bars WHERE tid = ?'),
+  upsertDailyBar: sqlite.prepare(`
+    INSERT INTO daily_bars (tid, ts, open, high, low, close, volume, oi) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT (tid, ts) DO UPDATE SET
+      open = excluded.open, high = excluded.high, low = excluded.low, close = excluded.close, volume = excluded.volume,
+      oi = COALESCE(excluded.oi, daily_bars.oi)
+  `),
+  dailyBefore: sqlite.prepare('SELECT ts, open, high, low, close, volume FROM daily_bars WHERE tid = ? AND ts < ? ORDER BY ts'),
+  oldestDailyTs: sqlite.prepare('SELECT ts FROM daily_bars WHERE tid = ? ORDER BY ts ASC LIMIT 1'),
 
   upsertBroker: sqlite.prepare(`
     INSERT INTO brokers (id, broker_type, label, credential_ref, status, health_score, reconnect_count_1h, account_id, created_at, last_connected_at)
@@ -423,6 +446,50 @@ export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<H
     }
     return changed
   })
+}
+
+// ===== Daily bars (years before the 1-minute history) =====
+const IST_SEC = 19_800
+const DAY_SEC = 86_400
+/** Midnight (IST) of the IST day `utcSec` falls on, unix seconds */
+const istDaySec = (utcSec: number) => Math.floor((utcSec + IST_SEC) / DAY_SEC) * DAY_SEC - IST_SEC
+
+/**
+ * Stores broker daily bars (any time of day the broker stamps them with: brokers use IST
+ * midnight, UTC midnight or the session open, all the same IST day). Today and later are left
+ * out: the current day comes from the 1-minute bars. Returns how many were written.
+ */
+export function upsertDailyBars(amibrokerTicker: string, bars: HistoryBar[]): number {
+  const today = istDaySec(Date.now() / 1000)
+  const byDay = new Map<number, HistoryBar>()
+  for (const b of bars) {
+    const day = istDaySec(Math.floor(b.ts / 1000))
+    if (day < today && validateBar(b.open, b.high, b.low, b.close, Number(b.volume) || 0)) byDay.set(day, b)
+  }
+  if (byDay.size === 0) return 0
+  return tx(() => {
+    const tid = tickerId(amibrokerTicker)
+    for (const [day, b] of byDay) {
+      const oi = Number(b.openInterest)
+      q.upsertDailyBar.run(tid, day, px(b.open), px(b.high), px(b.low), px(b.close), Math.round(Number(b.volume) || 0), oi > 0 ? Math.round(oi) : null)
+    }
+    return byDay.size
+  })
+}
+
+/** Daily bars of the IST days before the day of `beforeSec`, "tsSec,o,h,l,c,v" lines ascending */
+export function dailyCsvBefore(amibrokerTicker: string, beforeSec: number): string {
+  const tid = tickerIds.get(amibrokerTicker)
+  if (tid === undefined) return ''
+  const rows = q.dailyBefore.all(tid, istDaySec(beforeSec)) as any[]
+  return rows.map(r => `${r.ts},${r.open / PRICE_SCALE},${r.high / PRICE_SCALE},${r.low / PRICE_SCALE},${r.close / PRICE_SCALE},${r.volume ?? 0}`).join('\n')
+}
+
+/** Oldest stored daily bar (unix seconds), 0 when there is none */
+export function getOldestDailyTimestampSec(amibrokerTicker: string): number {
+  const tid = tickerIds.get(amibrokerTicker)
+  if (tid === undefined) return 0
+  return Number((q.oldestDailyTs.get(tid) as any)?.ts ?? 0)
 }
 
 /**
@@ -648,7 +715,7 @@ export const stmts = {
       tx(() => {
         q.deleteSymbol.run(brokerId, ticker)
         const tid = tickerIds.get(ticker)
-        if (tid !== undefined) q.deleteTickerBars.run(tid)
+        if (tid !== undefined) { q.deleteTickerBars.run(tid); q.deleteTickerDaily.run(tid) }
       })
     }
   },
@@ -728,7 +795,7 @@ export const stmts = {
 export function cleanDatabase() {
   pendingBarsAppends.clear()
   pendingLogs.length = 0
-  sqlite.exec('DELETE FROM symbols; DELETE FROM bars; DELETE FROM tickers; DELETE FROM logs; DELETE FROM connection_events;')
+  sqlite.exec('DELETE FROM symbols; DELETE FROM bars; DELETE FROM daily_bars; DELETE FROM tickers; DELETE FROM logs; DELETE FROM connection_events;')
   symbolsCache.length = 0
   tickerIds.clear()
 }
@@ -737,7 +804,7 @@ export function cleanDatabase() {
 export function fullForceClean() {
   pendingBarsAppends.clear()
   pendingLogs.length = 0
-  sqlite.exec('DELETE FROM symbols; DELETE FROM bars; DELETE FROM tickers; DELETE FROM brokers; DELETE FROM settings; DELETE FROM logs; DELETE FROM connection_events;')
+  sqlite.exec('DELETE FROM symbols; DELETE FROM bars; DELETE FROM daily_bars; DELETE FROM tickers; DELETE FROM brokers; DELETE FROM settings; DELETE FROM logs; DELETE FROM connection_events;')
   brokersCache.length = 0
   symbolsCache.length = 0
   tickerIds.clear()
