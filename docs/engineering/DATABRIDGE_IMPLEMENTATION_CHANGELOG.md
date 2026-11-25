@@ -41,6 +41,44 @@ One entry per stage, newest at the top. An entry is written when its stage is fi
 - No source files were changed.
 - Next: Stage 0 (instrumentation and baseline harness).
 
+## Stage 9: stress testing and validation (2026-11-25)
+
+**Findings addressed:** every scenario of TESTING_AND_VALIDATION that the harness or the unit tests can run; the 2-hour soak; one defect of Stage 4a found by the soak and fixed. **Discrepancies:** see ROOT_CAUSE_ANALYSIS (four rows, Stage 9).
+
+**Changes**
+- `db/maintenance.ts`, `db/index.ts`: **the WAL never started over during a long download**, so it grew to the engine's own 20,000-page limit and the engine checkpointed inside a commit on its own thread after all (1.09 s once in the soak, 782 ms under disk contention, tens of ms otherwise, about every 80 MB written). When the log holds 16 MB of pages after the worker's copy, the engine now holds its history slices, its live-bar flush and its log flush (they wait in memory; nothing is dropped) while the worker copies the rest and makes the first write of the new log itself (a one-row table `wal_restarts`). That first write syncs the log's header to the disk, which the engine's thread then no longer does. At most 10 s of hold should the worker not answer. Tried first and not kept: RESTART from the worker (it holds the write lock while it copies and syncs: 180 ms commits).
+- `tests/dbMaintenance.test.ts`: a log written without a pause starts over at least twice (3-5 times in runs; once, by chance, with the hold switched off: the test fails then).
+- Harness (`tests/perf/run.ts`, `fakePlugin.ts`): scenario `soak` (bursts of downloads and a health scan every 10 minutes, memory every 10 s, each minute's numbers, slopes); the fake broker is attached for it (it was not, and the first soak downloaded nothing: stopped after 52 minutes and run again); the fake plugin moves minutes older than 5 minutes to a file during a soak (its own memory would otherwise look like the engine's); result files are named to the second (two runs in one minute overwrote each other).
+
+**Checks**
+- `npm run typecheck --prefix apps/server`: pass. `npm test --prefix apps/server`: **460 passed**, 0 failed (48 files).
+- `npm run typecheck --prefix apps/desktop`: pass. `npm test --prefix apps/desktop`: 138 passed.
+- Plugin: not changed since the review (112 checks there); not rebuilt.
+- Harness: 14 scenarios plus `explain` on `4e5a279`, the history scenarios again on the final code, the 2-hour soak, a 20-minute soak on the final code. **Integrity 0 mismatches in every run** (the soak: 60,500 bars, 14.4 M updates).
+
+**Before → after** (the full tables are in the baseline document, "Final comparison")
+| Metric | Stage 0 | Final |
+|---|---|---|
+| loop.lag_ms, live500_backfill, p99 / max | 266 / 315 | 27-39 / 75-84 |
+| tick.feed_to_ipc_ms, live500_backfill, p99 | 242 | 0.23-0.25 |
+| catch-up answer p99 during a health scan | 1,936 | 2.26 |
+| catch-up answer p99 during downloads | 354 | 36-40 |
+| engine CPU / RSS peak during downloads | 111% / 1,944 MB | 46-49% / 817-843 MB |
+| soak: RSS slope, integrity | - | -7.7 MB/h, 0 mismatches |
+| soak, first minute: loop lag max | - | 1,092 (`4e5a279`) → 31 (final) |
+
+**Acceptance criteria (TESTING_AND_VALIDATION)**: met: 2 (feed to the plugin's channel p99 0.25 ms during downloads), 3 (notice p95 51 ms, Stage 2), 4 (every queue bounded in the soak), 5 (0 mismatches everywhere), 6-8 (unit tests), 9 (memory; CPU less than half during downloads; live-only 4.0% against 2.2%, a 60 s run against a 180 s one, where start-up counts for more), 11 (catch-ups p99 under 40 ms). **Not met: 1**, loop lag p99 ≤ 10 ms and max ≤ 50 ms during downloads (27-39 / 75-84): the harness runs its fake plugin and fake broker on the engine's thread and makes 600 history requests a minute where Fyers allows 45, so the live session decides it. **10** was withdrawn in Stage 0 (an import was never slow in the engine). **Scenario 13 (disk contention) fails**, before and after this stage: seconds-long commits on the engine's thread while another program writes gigabytes to the disk (see the baseline). Only moving every write off that thread (roadmap 3e) would remove it.
+
+**Not done / follow-ups**
+- The 2-hour soak was not repeated on the final code (memory is not affected by the change; the 20-minute one was).
+- **3e (one database writer thread) is reopened** by scenario 13: a decision for the user, a larger change than any stage so far.
+- The worker's TRUNCATE after 30 s idle still leaves the first write of the empty log (and its header sync) to the engine: once per quiet spell, not during downloads.
+- Manual scenarios 10, 11, 22 and the live session checklist are the user's.
+
+**For the user**
+- **Engine only; no new DLL in this stage.** The DLL to install is the one of the review (`plugins/amibroker/DataBridgePro.dll`, built 25 Nov 19:51); yours is the 18 Nov build. Close AmiBroker first and keep the old one as `DataBridgePro.dll.bak`.
+- The live session checklist in the baseline document, on a market day, with the rebuilt engine (`npm run build:server`) and the new DLL.
+
 ## Review of Stages 0-8 (2026-11-25)
 
 Every commit of the branch re-read against the roadmap. Not a stage: defects found in the review and fixed, each with a test that fails on the code before it.

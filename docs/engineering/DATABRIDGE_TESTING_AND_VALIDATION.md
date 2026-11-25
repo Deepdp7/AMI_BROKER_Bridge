@@ -74,6 +74,8 @@ These are provisional. Finalize the numbers after the Stage 0 baseline, and writ
 | 10 | Faster symbol import | `import500` at least 5× faster |
 | 11 | Steady AmiBroker updates under load | catch-up p99 ≤ 250 ms during backfill and health scans; zero global catch-up pauses; live session: `busy` and `sendmsg_ms` no worse than baseline |
 
+**Results after Stage 9** (the numbers: baseline document, "Final comparison"; summary: the Stage 9 changelog entry): met 2-9 and 11; **1 not met in the harness** (loop lag p99 27-39 ms, max 75-84 ms during downloads; the live session decides); 10 withdrawn in Stage 0. Scenario 13 (disk contention) **fails** before and after Stage 9; scenario 13 is now run with `dd ... conv=fsync` in a loop for the whole run (a single cached `dd` ended in 2.7 s and proved nothing). Scenarios 10, 11, 22 and the live session are the user's.
+
 ## Reporting
 
 At the end of each stage, the changelog entry lists:

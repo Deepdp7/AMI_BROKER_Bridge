@@ -327,6 +327,68 @@ What this does not show: AmiBroker's own cost of taking 20 notices a second (the
 
 The harness's backfilled symbols have no live feed and their history is fetched while the host reads them, so this run shows that the new DLL and the new engine work together and that a ranged fetch happens on the wire; the number of bytes is measured with the fake plugin above and the range logic by `plugin_tests.cpp` (105 checks).
 
+## Final comparison (Stage 9)
+
+Same machine as the baseline. Code: `4e5a279` (Stages 0-8 and their review) for the scenarios without history writes, and the same plus the Stage 9 checkpoint change for those with history writes (it changes nothing else). One run each unless two are given. p50 / p95 / p99 / max in ms.
+
+### Against the Stage 0 baseline
+
+| Scenario | Metric | Stage 0 | Final |
+|---|---|---|---|
+| `live500` (2) | loop.lag_ms | 0.143 / 0.306 / 0.655 / 2.00 | 0.17 / 0.54 / 0.72 / 3.41 |
+| | tick.feed_to_ipc_ms | 0.055 / 0.143 / 0.230 / 2.50 | 0.05 / 0.11 / 0.19 / 0.54 |
+| | CPU of one core / RSS peak | 2.2% (180 s) / 184 MB | 4.0% (60 s: start-up counts for more) / 187 MB |
+| `live500_backfill` (4, 5, 12) | loop.lag_ms | 10.4 / 219 / **266** / 315 | 0.49 / 7.8-9.5 / **27-39** / 75-84 (2 runs) |
+| | tick.feed_to_ipc_ms | 1.06 / 35.9 / **242** / 340 | 0.05 / 0.14-0.16 / **0.23-0.25** / 0.6-1.7 |
+| | db.history_tx_ms | 20.3 / 35.9 / 47.8 / 51.7 (a chunk) | 1.4-1.6 / 1.9 / 2.5-2.7 / 15.5-17.8 (a slice of 2,000 rows) |
+| | http.feed_bars_ms (catch-ups) | 27 / 242 / 354 / 375 | 13.8 / 32.6 / 35.9-39.5 / 48-50 |
+| | WAL file at most | 8.5 MB (checkpoints inside COMMIT) | 26 MB (82 MB on `4e5a279`, see below) |
+| | engine CPU / RSS peak | 111% / 1,944 MB | 46-49% / 817-843 MB |
+| `live500_health` (5) | catch-up answer p99 / max | 1,936 / 1,936 | 2.26 / 25 |
+| | loop.lag_ms p99 / max | 0.79 / 4.2 | 1.70 / 10.3 |
+| `live500_backpressure` (16) | ipc.writable_hwm | 1.25 MB, growing with the pause | 1.05 MB, bounded |
+| `import500` (3) | engine time / subscribe calls / log lines | 60 ms / 500 / 2,001 | 40 ms / 1 / 4 |
+| | loop lag max with the downloads started | 241 | 64-70 |
+| `restart_storm` (9) | 300 serial 24-hour catch-ups | (not in Stage 0) | 0.94 ms each, loop lag p99 1.55 |
+| integrity, every scenario | mismatches | 0 | 0 |
+
+### The scenarios first run in Stage 9
+
+| # | Scenario | Result | Pass? |
+|---|---|---|---|
+| 1 | one symbol, 5 updates/s (`live100 --symbols 1 --rate 5`) | feed_to_ipc p99 0.11 ms, loop lag p99 0.45 ms, integrity 0 | yes |
+| 6 | 500 symbols x 10 updates/s (`--rate 10`, 5,000 ticks/s, 6,970 lines/s) | loop lag 0.41 / 1.16 / 1.87 / 6.1, feed_to_ipc p99 0.54, socket buffer never above 0, CPU 6.8%, integrity 0 (315,029 updates) | yes |
+| 19, 20 | duplicates 10%, swapped neighbours 5% (`--dup 0.1 --swap 0.05`) | integrity 0 (no volume counted twice, the newest trade closes the bar), loop lag p99 1.16 | yes |
+| 14 | every core busy (`cpu_burn.js`, 24 threads) during `live500_backfill` | loop lag 3.0-3.3 / 22-25 / 53-64 / 98-109 (2 runs), feed_to_ipc p99 0.21-0.28, socket buffer 0, integrity 0. Latency rises and comes back; no queue grows | yes |
+| 13 | a 2 GB file written again and again to the same disk (`dd ... conv=fsync`, 75 s) during `live500_backfill` | **the engine's thread stops for seconds**: loop lag max 1.9-5.9 s in 5 runs (3 with the Stage 9 change, 2 without: the same order). Integrity 0 in all | **no**, see below |
+| 15, 17 | 2-hour soak (next table) | | yes |
+
+### The 2-hour soak (15, 17)
+
+500 symbols x 4 updates a second (2,000 ticks/s, 3,940 lines/s to the plugin) for 7,200 s; the plugin asks for a catch-up every 200 ms; every 10 minutes 10 symbols with a year of history to download and a health scan. At the start it also downloaded the 100 synthetic symbols again (they were not marked as downloaded): 500 chunks and 9.8 M rows that overwrite existing ones, the heaviest write load of all runs. Code `4e5a279`.
+
+| | Result |
+|---|---|
+| RSS slope after the first 20 minutes | **-7.7 MB/h** (heap -0.42 MB/h); average 534 MB in the first 20 minutes, 502 in the middle, 526 in the last 10; peak 803 MB (a download burst) |
+| loop.lag_ms p99, per third (median minute / worst minute) | 0.96 / 389 (the first minute); 1.06 / 1.87; 1.55 / 2.74 |
+| loop.lag_ms max, each minute after the first | 2-69 ms (bursts: 44-69 ms) |
+| high-water marks | ipc pending 500 in the first minute, at most 142 after; socket buffer 0; live bars waiting for the database at most 247; WAL file at most 64 MB |
+| downloads, health scans | 1,100 chunks (21.7 M bars); 12 scans, 133-204 ms (the first 770 ms) |
+| integrity | **0 mismatches**: 60,500 bars, 14.4 M updates |
+
+**The first minute: a 1.09 s stall, fixed in Stage 9.** One history slice took 1,080 ms while the WAL reached 64 MB. During a long download the checkpoint worker of Stage 4 copied the log, but the engine had always committed more by the time the copy ended, so the log never started over: it grew to the engine's own limit (20,000 pages, about 80 MB) and the engine checkpointed inside a commit, on its own thread, about every 13 s at the soak's write rate. Measured in the first 100 s of the soak (same load, run again 4 times):
+
+| | `4e5a279` | RESTART from the worker (not kept) | engine holds history saves, worker copies the rest (first version) | final: plus the worker makes the first write of the new log |
+|---|---|---|---|---|
+| WAL file at most | 78 MB, cut back 4 times (the engine's checkpoint) | 64 MB | 41 MB | 21 MB |
+| db.history_tx_ms max | 51 (1,080 in the soak) | 200 | 9.8 | 12.6 |
+| loop.lag_ms p99 / max | 13.8 / 50.5 | 22.3 / 197 | 12.6 / 29.1 | 20.3 / 39.0 |
+| history saves held | - | - | 21 times, p50 8.6 ms, max 186 | max 1.19 s (once, a slow checkpoint) |
+
+A 20-minute soak on the fixed code: first minute loop lag max 31 ms (1,092 before), slice max 10 ms, integrity 0 (2.4 M updates). The 2-hour memory result is not repeated: the change holds history saves for milliseconds, it keeps nothing.
+
+**Disk contention (13) is not met, before or after Stage 9.** While another program writes gigabytes to the same disk, a commit on the engine's thread sometimes waits for seconds (db.history_tx_ms max 0.9-5.9 s), and the live ticks wait with it. The checkpoints are not the cause: they run on the worker, and the slowest commit is not a checkpoint (the WAL stayed under the engine's limit in those runs). What the commit waits for was not identified here; it is consistent with Windows holding back buffered writes while that much is waiting to go to the disk. Nothing in the engine's thread can avoid it as long as that thread writes to the database: that is roadmap item 3e (one writer thread for all writes), closed after Stage 4 as not needed and reopened by this result (the user decides). An earlier run that passed had `dd` writing into the file cache only (2.7 s, no `fsync`).
+
 ## Live baseline checklist (the user runs this)
 
 **Added in Stage 5:** after starting AmiBroker with DataBridge Pro running, find the line `[SymbolDetails] ... sent to AmiBroker (connect)` or `... symbol list is up to date ... nothing sent` in the engine log (Activity page, or `backend.log`). Note "in N s" for a full push (delete `symbol-details.last.json` in `%APPDATA%\DataBridgePro\amibroker` first to force one), and whether AmiBroker stutters while it runs: that is R5.

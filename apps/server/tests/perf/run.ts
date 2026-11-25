@@ -5,7 +5,7 @@
  * docs/engineering/DATABRIDGE_PERFORMANCE_BASELINE.md.
  *
  *   npm run perf --prefix apps/server -- --scenario live500 --seconds 180
- *   scenarios: idle live100 live500 live500_backfill live500_health live500_backpressure restart_storm import500 explain
+ *   scenarios: idle live100 live500 live500_backfill live500_health live500_backpressure restart_storm soak import500 explain
  *   options:   --seconds N  --symbols N  --rate R (updates per symbol per second)  --dup P  --swap P
  *   DATABRIDGE_PERF=0 runs with the metrics off (to measure what they cost)
  *
@@ -45,6 +45,8 @@ interface Scenario {
   synthetic?: boolean
   importCount?: number
   explain?: boolean
+  /** A long run: every 10 minutes a burst of downloads and a health scan; memory and each minute's numbers are kept (see the soak block) */
+  soak?: boolean
   /** After an engine restart the plugin asks for the last 24 hours of every symbol AmiBroker shows, one after the other (3 passes over the synthetic symbols) */
   storm?: boolean
 }
@@ -57,6 +59,8 @@ const SCENARIOS: Record<string, Scenario> = {
   live500_health: { symbols: 500, rate: 2, seconds: 120, health: true, catchUps: true, synthetic: true },
   live500_backpressure: { symbols: 500, rate: 2, seconds: 60, backpressure: { afterS: 15, forS: 10 } },
   restart_storm: { symbols: 500, rate: 2, seconds: 40, storm: true, synthetic: true },
+  // 2 hours at twice the expected rate (500 symbols x 4 updates a second), the fake plugin always asking for catch-ups
+  soak: { symbols: 500, rate: 4, seconds: 7200, soak: true, catchUps: true, synthetic: true },
   import500: { symbols: 0, rate: 0, seconds: 0, importCount: 500 },
   explain: { symbols: 0, rate: 0, seconds: 0, explain: true },
 }
@@ -172,7 +176,7 @@ async function main() {
   startStallWatch()
 
   const fake = makeFakeHistoryAdapter()
-  const useFake = !!(sc.backfill || sc.importCount)
+  const useFake = !!(sc.backfill || sc.importCount || sc.soak)
   if (useFake) (brokerManager as any).activeAdapters.set(BROKER, fake)
 
   // ---- symbols ----
@@ -235,6 +239,7 @@ async function main() {
   const rssStart = Math.round(process.memoryUsage().rss / 1048576)
   const timers: NodeJS.Timeout[] = []
   let running = true
+  let loadArchive = () => {}
 
   if (sc.backfill) {
     let next = 0
@@ -270,6 +275,72 @@ async function main() {
       extra['restartStorm'] = { requests, seconds: +((performance.now() - startedAt) / 1000).toFixed(2), msPerRequest: +((performance.now() - startedAt) / Math.max(1, requests)).toFixed(2) }
     })()
   }
+  if (sc.soak) {
+    // Every 10 minutes (the first after 2): ten symbols of a year of history to download, and a health scan
+    let burst = 0
+    const bursts: Array<{ atS: number; symbols: number }> = []
+    const healthRuns: Array<{ atS: number; ms: number }> = []
+    const startBurst = () => {
+      burst++
+      for (let k = 0; k < 10; k++) {
+        const t = `SK${String(burst).padStart(2, '0')}${String(k).padStart(2, '0')}`
+        db.stmts.insertSymbol.run(symbolRow(t, 'NSE', 'EQ'))
+        backfillQueue.enqueue(t, BROKER, t, 365)
+      }
+      bursts.push({ atS: Math.round((performance.now() - t0) / 1000), symbols: 10 })
+    }
+    const scan = async () => { const s0 = performance.now(); await computeHealth(true); healthRuns.push({ atS: Math.round((s0 - t0) / 1000), ms: Math.round(performance.now() - s0) }) }
+    const every = (firstMs: number, fn: () => void) => { timers.push(setTimeout(() => { fn(); timers.push(setInterval(fn, 600_000)) }, firstMs)) }
+    every(120_000, startBurst)
+    every(120_000, () => { void scan() })
+
+    // Memory every 10 s, and each minute the engine closed: what a long run could show growing
+    const memory: Array<{ atS: number; rssMb: number; heapMb: number }> = []
+    const minutes: Array<Record<string, number>> = []
+    let lastMinuteAt = 0
+    timers.push(setInterval(() => {
+      const m = process.memoryUsage()
+      memory.push({ atS: Math.round((performance.now() - t0) / 1000), rssMb: +(m.rss / 1048576).toFixed(1), heapMb: +(m.heapUsed / 1048576).toFixed(1) })
+      const w = perf.snapshot().lastMinute
+      if (w && w.startedAt !== lastMinuteAt) {
+        lastMinuteAt = w.startedAt
+        const h = (k: string, f: 'p99' | 'max' | 'p50') => w.hist[k]?.[f] ?? 0
+        const g = (k: string) => w.gauges[k]?.max ?? 0
+        minutes.push({
+          atS: Math.round((w.startedAt - Date.now() + (performance.now() - t0)) / 1000 + w.seconds),
+          lagP99: h('loop.lag_ms', 'p99'), lagMax: h('loop.lag_ms', 'max'), feedToIpcP99: h('tick.feed_to_ipc_ms', 'p99'),
+          feedBarsP99: h('http.feed_bars_ms', 'p99'), historyTxMax: h('db.history_tx_ms', 'max'),
+          pendingLiveMax: g('ipc.pending_live'), writableHwm: g('ipc.writable_hwm'), pendingBarsMax: g('db.pending_live_bars'), walBytesMax: g('db.wal_bytes'),
+          rssMb: +(m.rss / 1048576).toFixed(1),
+        })
+      }
+    }, 10_000))
+    // The fake plugin remembers every minute of every symbol (30,000 an hour) in this same process: moved to a file as
+    // it goes, or a long run would show the harness's memory growing instead of the engine's
+    const archive = path.join(tmp, 'plugin-minutes.txt')
+    timers.push(setInterval(() => plugin.archiveBefore(Math.floor(Date.now() / 60_000) * 60 - 300, archive), 60_000))
+    loadArchive = () => plugin.loadArchive(archive)
+    extra['soak'] = () => {
+      // Slope of the memory after the first 20 minutes (the engine settles: caches fill, the heap grows to its working size)
+      const slope = (pick: (x: { atS: number; rssMb: number; heapMb: number }) => number) => {
+        const pts = memory.filter(x => x.atS >= 1200)
+        if (pts.length < 10) return null
+        const n = pts.length, mx = pts.reduce((a, b) => a + b.atS, 0) / n, my = pts.reduce((a, b) => a + pick(b), 0) / n
+        const sxy = pts.reduce((a, b) => a + (b.atS - mx) * (pick(b) - my), 0), sxx = pts.reduce((a, b) => a + (b.atS - mx) ** 2, 0)
+        return +((sxy / sxx) * 3600).toFixed(2)   // MB per hour
+      }
+      const rssAt = (from: number, to: number) => { const p = memory.filter(x => x.atS >= from && x.atS < to); return p.length ? +(p.reduce((a, b) => a + b.rssMb, 0) / p.length).toFixed(1) : null }
+      const lag = (from: number, to: number) => { const p = minutes.filter(x => x.atS >= from && x.atS < to).map(x => x.lagP99).sort((a, b) => a - b); return p.length ? { minutes: p.length, medianP99: p[Math.floor(p.length / 2)], worstP99: p[p.length - 1] } : null }
+      const last = memory.length ? memory[memory.length - 1].atS : 0
+      return {
+        rssSlopeMbPerHour: slope(x => x.rssMb), heapSlopeMbPerHour: slope(x => x.heapMb),
+        rssAvgFirst20Min: rssAt(0, 1200), rssAvgMiddle: rssAt(last / 2 - 300, last / 2 + 300), rssAvgLast10Min: rssAt(last - 600, last + 1), rssPeakMb: Math.max(0, ...memory.map(x => x.rssMb)),
+        loopLagP99ByThird: [lag(0, last / 3), lag(last / 3, 2 * last / 3), lag(2 * last / 3, last + 1)],
+        highest: { lagMax: Math.max(0, ...minutes.map(x => x.lagMax)), pendingLive: Math.max(0, ...minutes.map(x => x.pendingLiveMax)), writableHwm: Math.max(0, ...minutes.map(x => x.writableHwm)), pendingBars: Math.max(0, ...minutes.map(x => x.pendingBarsMax)), walBytes: Math.max(0, ...minutes.map(x => x.walBytesMax)), feedBarsP99: Math.max(0, ...minutes.map(x => x.feedBarsP99)), historyTxMax: Math.max(0, ...minutes.map(x => x.historyTxMax)) },
+        bursts, downloads: { chunksServed: fake.stats.chunks, barsServed: fake.stats.bars }, healthRuns, memory: memory.filter((_, i) => i % 6 === 0), minutes,
+      }
+    }
+  }
   if (sc.health) {
     void (async () => {
       let rounds = 0
@@ -296,10 +367,12 @@ async function main() {
   const pluginReport = perf.plugin()
   if (pluginReport) extra['plugin report (NOTE|PERF)'] = pluginReport.values
   if (typeof extra['backfill'] === 'function') extra['backfill'] = (extra['backfill'] as () => unknown)()
+  if (typeof extra['soak'] === 'function') extra['soak'] = (extra['soak'] as () => unknown)()
 
   // The numbers are taken before the integrity check, which reads every ticker back through the database readers
   const snap = perf.snapshot().sinceStart
   const clean = dup === 0 && swap === 0
+  loadArchive()
   const integrity = await checkIntegrity(clean)
   await finish({ cpuSeconds: (cpu.user + cpu.system) / 1e6, wall, rssStart, rssPeak, snap, integrity })
 
@@ -384,7 +457,8 @@ async function main() {
     }
     const resultsDir = path.join(__dirname, 'results')
     fs.mkdirSync(resultsDir, { recursive: true })
-    const stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 13).replace('T', '-')
+    // To the second: two short runs of the same scenario in one minute overwrote each other's file
+    const stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15).replace('T', '-')
     const file = path.join(resultsDir, `${stamp}-${name}${perfOff ? '-perf0' : ''}.json`)
     fs.writeFileSync(file, JSON.stringify(result, null, 2))
     say('\n' + renderReport(result) + `\n\nSaved: ${file}`)

@@ -5,6 +5,7 @@
  *
  * It can stop reading for a while (to see what the engine does with a plugin that is not keeping up).
  */
+import fs from 'fs'
 import net from 'net'
 import http from 'http'
 import { Histogram } from '../../src/system/perf'
@@ -62,6 +63,28 @@ export class FakePlugin {
     this.lines = this.liveLines = this.quoteLines = this.syncLines = this.lateMinuteLines = 0
     this.httpRequests = this.httpFailures = 0
     this.httpBytes.clear()
+  }
+
+  /** Moves the minutes before `minSec` from memory to a file (a soak: see run.ts). A later update of one is kept in memory again and wins over the file. */
+  archiveBefore(minSec: number, file: string) {
+    let out = ''
+    for (const [key, b] of this.state) {
+      if (Number(key.slice(key.lastIndexOf('|') + 1)) >= minSec) continue
+      out += `${key},${b.open},${b.high},${b.low},${b.close},${b.volume}\n`
+      this.state.delete(key)
+    }
+    if (out) fs.appendFileSync(file, out)
+  }
+
+  /** Brings the archived minutes back, for the integrity check */
+  loadArchive(file: string) {
+    if (!fs.existsSync(file)) return
+    const archived = new Map<string, PluginBar>()
+    for (const line of fs.readFileSync(file, 'utf8').split('\n')) {
+      const [key, o, h, l, c, v] = line.split(',')
+      if (key) archived.set(key, { open: Number(o), high: Number(h), low: Number(l), close: Number(c), volume: Number(v) })
+    }
+    for (const [key, b] of archived) if (!this.state.has(key)) this.state.set(key, b)
   }
 
   /** Stops reading from the socket for `ms`: the engine's writes pile up meanwhile */

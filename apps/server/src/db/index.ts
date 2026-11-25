@@ -23,7 +23,7 @@ import type { DatabaseSync as DatabaseSyncT } from 'node:sqlite'
 import type { AppSettings, ExchangeRegistry } from '../types'
 import { EventEmitter } from 'events'
 import { readBarsCsv, setReaderDbFile } from './reader'
-import { startMaintenance, MAINTENANCE_ENABLED, BACKSTOP_CHECKPOINT_PAGES, JOURNAL_SIZE_LIMIT_BYTES } from './maintenance'
+import { startMaintenance, historyWritesAllowed, writesHeld, MAINTENANCE_ENABLED, BACKSTOP_CHECKPOINT_PAGES, JOURNAL_SIZE_LIMIT_BYTES } from './maintenance'
 import { importFromPostgresIfNeeded } from './pgImport'
 import { applyPendingRestore } from './restore'
 import { isSealed, open, seal, secretsEncrypted } from '../lib/secretBox'
@@ -491,7 +491,7 @@ function flushLiveBars(force = false) {
     }
   }
 }
-setInterval(flushLiveBars, 2000).unref()
+setInterval(() => { if (!writesHeld()) flushLiveBars() }, 2000).unref()   // (held: db/maintenance.ts)
 
 // Levels for /api/diagnostics/perf: how big the write-ahead log is and how many live bars wait to be committed
 const pendingLiveBars = () => { let n = 0; for (const bars of pendingBarsAppends.values()) n += bars.length; return n }
@@ -594,6 +594,8 @@ export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<H
     for (let from = 0; from < rows.length; from += HISTORY_SLICE_ROWS) {
       endSyncPart()
       await takeSliceTurn()   // live ticks, timers and requests get their turns in between
+      const held = historyWritesAllowed()   // the checkpoint worker is copying the end of the log (db/maintenance.ts)
+      if (held) await held
       syncStartedAt = performance.now()
       const startedAt = performance.now()
       const end = Math.min(rows.length, from + HISTORY_SLICE_ROWS)
@@ -753,7 +755,7 @@ function flushLogs() {
     console.error('[DB] Failed to write logs:', err)
   }
 }
-setInterval(flushLogs, 1000).unref()
+setInterval(() => { if (!writesHeld()) flushLogs() }, 1000).unref()   // (held: db/maintenance.ts)
 
 export function appendLog(level: string, component: string, message: string) {
   pendingLogs.push([Date.now(), level, component, message])

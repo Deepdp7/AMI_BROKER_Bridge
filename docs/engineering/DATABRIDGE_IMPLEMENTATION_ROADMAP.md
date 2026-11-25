@@ -688,6 +688,8 @@ Keep the per-symbol error logging and the `{ added, total }` result.
 
 ## Stage 9: stress testing and validation
 
+> **Done (2026-11-25), with the differences listed in ROOT_CAUSE_ANALYSIS (Stage 9).** Every harness scenario and the 2-hour soak ran; integrity 0 mismatches in all; RSS slope -7.7 MB/h. The soak found a defect of 4a (the log never started over during a long download, so the engine's own checkpoint ran inside a commit, up to 1.09 s): fixed in `db/maintenance.ts` (the engine holds its timed writes while the worker copies the rest and makes the new log's first write). Not met: loop lag p99 ≤ 10 ms / max ≤ 50 ms during downloads in the harness (27-39 / 75-84 ms; the live session decides), and scenario 13 (disk contention: seconds-long commits before and after this stage). **3e is reopened by scenario 13**, for the user to decide. Final tables: baseline document, "Final comparison".
+
 - Run every scenario in [DATABRIDGE_TESTING_AND_VALIDATION.md](DATABRIDGE_TESTING_AND_VALIDATION.md).
 - **Soak:** 2 hours of `live500` at 2× rate (4 updates/s per symbol), with a backfill and health scans repeating every 10 minutes.
   - **Pass:** RSS slope under 5 MB per hour after warm-up, every high-water mark bounded, zero integrity mismatches, loop-lag p99 on target throughout.
