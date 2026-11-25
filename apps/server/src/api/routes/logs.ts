@@ -5,6 +5,7 @@ import path from 'path'
 import os from 'os'
 import type { LogEntry } from '../../types'
 import { perf } from '../../system/perf'
+import { APP_VERSION } from '../../system/version'
 
 const router = Router()
 
@@ -37,7 +38,7 @@ router.post('/export', async (_req, res) => {
 
     const bundle = {
       exportedAt: new Date().toISOString(),
-      version: '1.0.0',
+      version: APP_VERSION,
       // Anonymize sensitive info
       settings: { ...settings, amiBrokerPath: '<redacted>' },
       logCount: logs.length,

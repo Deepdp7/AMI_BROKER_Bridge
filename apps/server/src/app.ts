@@ -14,6 +14,7 @@ import aiRouter from './api/routes/ai'
 import feedRouter from './api/routes/feed'
 import symbolsRouter from './api/routes/symbols'
 import platformsRouter from './api/routes/platforms'
+import { APP_VERSION } from './system/version'
 
 export const app = express()
 
@@ -84,7 +85,7 @@ app.use('/api/platforms', platformsRouter)
 
 // Health check (used by the app to detect that the engine is up)
 app.get('/api/ping', (_req, res) => {
-  res.json({ ok: true, version: '1.0.0', ts: Date.now() })
+  res.json({ ok: true, version: APP_VERSION, ts: Date.now() })
 })
 
 // 404 handler

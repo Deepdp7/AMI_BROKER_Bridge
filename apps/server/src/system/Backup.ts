@@ -12,6 +12,7 @@ import path from 'path'
 import { DATA_DIR, DB_FILE, flushPendingBars, loadSqlite } from '../db'
 import { backupDatabaseTo } from '../db/reader'
 import { BACKUP_STATE_FILES, pendingRestorePath } from '../db/restore'
+import { APP_VERSION } from './version'
 
 const FORMAT = 'databridge-backup'
 const FORMAT_VERSION = 1
@@ -22,15 +23,6 @@ export interface BackupInfo {
   symbols: number
   bars: number
   bytes: number
-}
-
-function appVersion(): string {
-  try {
-    // The root package.json (two levels above apps/server) in development; stamped into the exe otherwise
-    return process.env.DATABRIDGE_VERSION || require('../../../../package.json').version || ''
-  } catch {
-    return ''
-  }
 }
 
 /** Writes a backup to `file` (replacing it). Runs the heavy copy on a reader thread. */
@@ -52,7 +44,7 @@ export async function createBackup(file: string): Promise<BackupInfo> {
     meta.run('format', FORMAT)
     meta.run('version', String(FORMAT_VERSION))
     meta.run('createdAt', new Date().toISOString())
-    meta.run('appVersion', appVersion())
+    meta.run('appVersion', APP_VERSION)
     const files = db.prepare('INSERT INTO backup_files (name, content) VALUES (?, ?)')
     for (const name of BACKUP_STATE_FILES) {
       const src = path.join(DATA_DIR, name)
