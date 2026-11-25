@@ -10,7 +10,7 @@
  *                    STATUS|level|short|long         the DataBridge light in AmiBroker's status bar
  *                    QUOTE|TICKER|last|open|high|low|prev|vol|oi|bid|ask|tickSec|bidQty|askQty
  *                                                     the day's quote for the Real-time Quote window
- *   plugin → engine  GET_QUOTES TICKER               bars for a symbol (auto-registers unknown ones)
+ *   plugin → engine  GET_QUOTES TICKER               not served any more (the first plugin versions asked for bars here): answered END
  *                    VIEW|TICKER                     AmiBroker asked for this symbol (live places, liveSlots.ts)
  *                    CMD|REPAIR|T, CMD|TODAY|T, CMD|TODAY_ALL   its right-click menu (pluginStatus.ts)
  *
@@ -18,10 +18,7 @@
  */
 import net = require('net')
 import { AMIBROKER_IPC_PORT, HOST } from '../config'
-import { getAllSettings, stmts } from '../db'
-import { brokerManager } from '../brokers/BrokerManager'
 import { backfillQueue } from '../market/BackfillQueue'
-import { backfilledTickers } from '../market/state/backfillState'
 import { liveFeed } from '../market/liveFeed'
 import { noteViewed } from '../market/liveSlots'
 import { setRuntimeProbe } from '../ai/AiAssistant'
@@ -32,6 +29,7 @@ import { quoteOf, startQuotes } from '../platforms/quotes'
 
 const ipcClients = new Set<net.Socket>()
 let lastLiveBarLogAt = 0
+let warnedGetQuotes = false
 
 /** A client whose socket holds this much unsent data is not written to until it has taken it (see flushLive) */
 const CONGESTED_BYTES = 1_048_576
@@ -98,7 +96,7 @@ export function notifyAmiBrokerHistoryChanged(ticker: string, fromSec = 0, toSec
   }, 1000)
 }
 
-/** Starts the plugin channel: live bars and history notices go out, GET_QUOTES is answered. */
+/** Starts the plugin channel: live bars, quotes and history notices go out; the plugin's VIEW, NOTE and CMD lines come in. */
 export function startAmiBrokerIpc() {
   setRuntimeProbe(() => ({ amibrokerConnections: ipcClients.size }))
   startQuotes()
@@ -138,6 +136,21 @@ export function startAmiBrokerIpc() {
   }
   const liveClients = new Map<net.Socket, LiveClient>()
   let liveFlushQueued = false
+
+  // A symbol's QUOTE (the day's figures for the Real-time Quote window) goes out at most every QUOTE_EVERY_MS: a busy
+  // symbol changes its quote with every tick, and the window shows it a few times a second at best. What waits is
+  // sent with the symbol's newest figures when its time comes (one timer, set for the earliest). LIVE_BAR is not limited.
+  const QUOTE_EVERY_MS = 250
+  const lastQuoteAt = new Map<string, number>()
+  let quoteTimer: NodeJS.Timeout | null = null
+  let quoteTimerDue = 0
+  const armQuoteTimer = (dueMs: number) => {
+    if (quoteTimer && quoteTimerDue <= dueMs) return
+    if (quoteTimer) clearTimeout(quoteTimer)
+    quoteTimerDue = dueMs
+    quoteTimer = setTimeout(() => { quoteTimer = null; quoteTimerDue = 0; queueFlush() }, Math.max(1, dueMs - Date.now()))
+    quoteTimer.unref()
+  }
   // Sent at the end of the current task (one write per feed packet), not in the next turn of the event loop:
   // that turn first runs everything else that is waiting (a history chunk takes 40-60 ms), and live bars waited
   // behind it (measured: p99 from a bar being ready to its write 181 ms during downloads, 0.7 ms now).
@@ -161,6 +174,8 @@ export function startAmiBrokerIpc() {
     const now = performance.now()
     const sendMs = Date.now()
     const quotes = new Map<string, string>()   // one quote line per symbol, however many clients
+    const quoted = new Set<string>()           // symbols whose quote went out in this flush
+    let nextQuoteDue = Infinity                // the earliest time a quote that had to wait may go
     for (const [socket, c] of liveClients) {
       if (c.pendingLive.size === 0 && c.pendingQuotes.size === 0) continue
       perf.gauge('ipc.pending_live', c.pendingLive.size)
@@ -172,12 +187,18 @@ export function startAmiBrokerIpc() {
       }
       let lines = c.pendingLive.size
       for (const t of c.pendingQuotes) {
+        const due = (lastQuoteAt.get(t) ?? 0) + QUOTE_EVERY_MS
+        if (due > sendMs) {   // sent a moment ago: it stays queued and goes out, with its newest figures, when due
+          nextQuoteDue = Math.min(nextQuoteDue, due)
+          perf.count('ipc.quotes_deferred')
+          continue
+        }
         let q = quotes.get(t)
         if (q === undefined) quotes.set(t, q = quoteMessage(t))
-        if (q) { msg += q; lines++ }
+        c.pendingQuotes.delete(t)
+        if (q) { msg += q; lines++; quoted.add(t) }
       }
       c.pendingLive.clear()
-      c.pendingQuotes.clear()
       if (!msg) continue
       if (Date.now() - lastLiveBarLogAt > 2000) {
         lastLiveBarLogAt = Date.now()
@@ -194,6 +215,8 @@ export function startAmiBrokerIpc() {
         socket.once('drain', () => { c.congestedSince = 0; queueFlush() })
       }
     }
+    for (const t of quoted) lastQuoteAt.set(t, sendMs)
+    if (nextQuoteDue !== Infinity) armQuoteTimer(nextQuoteDue)
   }
 
   liveFeed.on('live_bar_updated', (data: { ticker: string, bar: any, at?: number }) => {
@@ -266,7 +289,7 @@ export function startAmiBrokerIpc() {
       liveClients.delete(socket)
     })
 
-    socket.on('data', async (data) => {
+    socket.on('data', (data) => {
       try {
         socketBuffer += data.toString()
         const lines = socketBuffer.split('\n')
@@ -285,95 +308,15 @@ export function startAmiBrokerIpc() {
             continue
           }
           if (msg.startsWith('GET_QUOTES')) {
-            const parts = msg.split(' ')
-            const ticker = parts[1]
-
-            // Mark this symbol as STREAMING so the UI shows live status
-            if (ticker) liveFeed.setStreaming(ticker)
-
-            let brokerId = ''
-            const existing = stmts.getSymbols.all() as any[]
-            const symRecord = existing.find(s => {
-              const t = s.amiBrokerTicker || s.amibroker_ticker
-              if (t !== ticker) return false
-              const bId = s.brokerId || s.broker_id
-              return brokerManager.getAdapter(bId) !== undefined
-            }) || existing.find(s => s.amiBrokerTicker === ticker || s.amibroker_ticker === ticker)
-            
-            if (!symRecord) {
-              // AUTO-REGISTER: Symbol not in DB but AmiBroker is requesting it.
-              // This happens when user manually types a symbol directly in AmiBroker.
-              // Find the first active broker and auto-add so streaming works.
-              const activeBrokers = stmts.getBrokers.all() as any[]
-              const activeBroker = activeBrokers.find((b: any) => brokerManager.getAdapter(b.id))
-              if (activeBroker && ticker && ticker.trim().length >= 2) {
-                const adapter = brokerManager.getAdapter(activeBroker.id)
-                if (adapter) {
-                  console.log(`[IPC_AUTO_REG] AmiBroker requested unknown symbol "${ticker}" — auto-registering...`)
-                  try {
-                    const resolvedToken = (adapter as any).resolveSymbol ? await (adapter as any).resolveSymbol(ticker) : ticker
-                    const exchMatch = resolvedToken.match(/^([A-Z]+):/)
-                    const exchange = exchMatch ? exchMatch[1] : 'NSE'
-                    const instrType = /FUT|CE|PE/.test(resolvedToken) ? 'FUT' : 'EQ'
-
-                    stmts.insertSymbol.run({
-                      broker_id: activeBroker.id,
-                      instrument_id: resolvedToken,
-                      amibroker_ticker: ticker,
-                      exchange,
-                      instrument_type: instrType,
-                      raw_symbol: resolvedToken,
-                      created_at: Date.now(),
-                    })
-
-                    liveFeed.addInstrument({
-                      ticker, exchange: exchange as any, instrumentType: instrType as any,
-                      basePrice: 0, volatility: 0, avgVolume: 0,
-                      brokerId: activeBroker.id, brokerToken: resolvedToken,
-                    })
-
-                    await brokerManager.subscribe(activeBroker.id, [resolvedToken])
-
-                    const settings = getAllSettings() as any
-                    const backfillDepth = Number(settings?.backfillDepthDays) || 365
-                    backfillQueue.enqueue(ticker, activeBroker.id, resolvedToken, backfillDepth)
-                    console.log(`[IPC_AUTO_REG] "${ticker}" → "${resolvedToken}" registered, subscribed, backfill queued.`)
-                  } catch (autoRegErr) {
-                    console.error(`[IPC_AUTO_REG] Failed to auto-register "${ticker}":`, autoRegErr)
-                  }
-                }
-              }
-              socket.write('END\n')
-              continue
+            // The first plugin versions asked for a symbol's bars here (and added unknown symbols). Nothing built from
+            // this repository has sent it since: history is read over HTTP (/api/feed/bars). Answering it with bars would
+            // put up to 100,000 lines into the live socket, in front of every tick behind them.
+            if (!warnedGetQuotes) {
+              warnedGetQuotes = true
+              console.warn('[IPC] A plugin sent GET_QUOTES (an old DataBridgePro.dll?). It is not served any more: install the DLL that came with this version.')
             }
-
-            brokerId = symRecord.brokerId || symRecord.broker_id
-
-            // Fetch real historical data from memory/disk (zero parse CSV)
-            let response = await stmts.getBarsCsvByTickerAsync.get(ticker, 100000)
-            if (response.length > 0 && !response.endsWith('\n')) {
-              response += '\n'
-            }
-            
-            if (!backfilledTickers.has(ticker) && brokerId) {
-              const settings = getAllSettings() as any
-              const backfillDepth = Number(settings?.backfillDepthDays) || 365
-              backfillQueue.enqueue(ticker, brokerId, symRecord.rawSymbol || symRecord.raw_symbol || symRecord.instrumentId || symRecord.instrument_id || ticker, backfillDepth)
-            }
-
-            // Append in-progress live bar if available and has a valid price
-            const liveBar = liveFeed.getLiveBar(ticker, brokerId)
-            if (liveBar && liveBar.close > 0) {
-              const ts = Math.floor(liveBar.bucketMs / 1000)
-              response += `${ts},${liveBar.open},${liveBar.high},${liveBar.low},${liveBar.close},${liveBar.volume}${liveBar.oi ? `,${liveBar.oi}` : ''}\n`
-            }
-
-            if (response.length === 0) {
-              socket.write('END\n')
-              continue
-            }
-
-            socket.write(response + 'END\n')
+            socket.write('END\n')
+            continue
           }
         }
       } catch (err) {

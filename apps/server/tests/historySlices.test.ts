@@ -7,6 +7,7 @@ import { describe, it, expect } from 'vitest'
 import request from 'supertest'
 import { app } from '../src/app'
 import * as db from '../src/db'
+import { perf } from '../src/system/perf'
 
 // A past weekday session minute (Tue 2026-10-20 10:00 IST = 04:30 UTC)
 const T = Date.UTC(2026, 9, 20, 4, 30) / 1000
@@ -47,6 +48,20 @@ describe('history upserts in slices', () => {
     const { result, turns } = await turnsDuring(() => db.upsertBarsToHistory('SLICE2', Array.from({ length: 100 }, (_, i) => bar(i))))
     expect(result).toBe(100)
     expect(turns).toBe(0)
+  })
+
+  it('chunks saved at the same time take turns: one slice per turn of the event loop, whoever it belongs to', async () => {
+    await db.syncCachesPromise
+    const rows = db.HISTORY_SLICE_ROWS * 3                             // three slices each
+    const sliceCount = () => (perf.snapshot().sinceStart.hist['db.history_tx_ms']?.count ?? 0)
+    const before = sliceCount()
+    const { result, turns } = await turnsDuring(() => Promise.all(Array.from({ length: 6 }, (_, k) =>
+      db.upsertBarsToHistory(`TAKE${k}`, Array.from({ length: rows }, (_, i) => bar(i))))))
+    expect(result).toEqual(Array(6).fill(rows))
+    expect(sliceCount() - before).toBe(18)
+    // Six chunks of three slices: each slice has a turn of its own (it was about three turns in all, with all six
+    // chunks' slices in the same turn)
+    expect(turns).toBeGreaterThanOrEqual(17)
   })
 
   it('historyRangeSec: the oldest and the newest bar, in seconds', () => {

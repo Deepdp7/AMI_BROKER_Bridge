@@ -41,7 +41,7 @@ apps/
         routes/               one file per URL prefix (/api/brokers, /api/feed, …)
         realtime.ts           WebSocket push to the app
       amibroker/
-        ipcServer.ts          TCP line protocol to the plugin (LIVE_BAR, SYNC, GET_QUOTES)
+        ipcServer.ts          TCP line protocol to the plugin (LIVE_BAR, QUOTE, SYNC, VIEW)
       brokers/
         BrokerManager.ts      connected broker sessions
         BrokerLifecycle.ts    login, symbol hand-over, catch-up after downtime

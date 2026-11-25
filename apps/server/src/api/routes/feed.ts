@@ -13,6 +13,27 @@ import { perf } from '../../system/perf'
 const router = Router()
 
 const feedResponseCache = new Map<string, { ts: number, data: string }>()
+/** The answers kept for the 50 ms throttle never hold more than this much text (a full load of one symbol is ~4 MB; a scan asks for hundreds) */
+const FEED_CACHE_MAX_BYTES = 16 * 1024 * 1024
+let feedCacheBytes = 0
+
+/** Keeps an answer for the throttle; the oldest ones go first when the total would pass the limit */
+function cacheResponse(key: string, data: string) {
+  const old = feedResponseCache.get(key)
+  if (old) { feedCacheBytes -= old.data.length; feedResponseCache.delete(key) }
+  if (data.length > FEED_CACHE_MAX_BYTES) return   // too big to keep (it would be gone in 50 ms anyway)
+  feedResponseCache.set(key, { ts: Date.now(), data })
+  feedCacheBytes += data.length
+  for (const [k, v] of feedResponseCache) {          // a Map walks in the order the entries were added
+    if (feedCacheBytes <= FEED_CACHE_MAX_BYTES) break
+    feedResponseCache.delete(k)
+    feedCacheBytes -= v.data.length
+  }
+}
+
+/** How much the throttle holds right now (for the diagnostics page and the tests) */
+export function feedCacheStats() { return { entries: feedResponseCache.size, bytes: feedCacheBytes } }
+perf.probe('feedCache', feedCacheStats)
 
 // BUG FIX: Prevent infinite RAM growth (Memory Leak) by clearing stale cache entries
 setInterval(() => {
@@ -21,6 +42,7 @@ setInterval(() => {
     // If cache entry is older than 5 seconds, delete it (the cache is only meant for 50ms throttling)
     if (now - value.ts > 5000) {
       feedResponseCache.delete(key)
+      feedCacheBytes -= value.data.length
     }
   }
 }, 10000).unref() // Runs every 10 seconds
@@ -114,7 +136,7 @@ router.get('/bars', async (req, res) => {
     // a lost symbol mapping must never blank a chart that has years of bars in the database.
     if (!csv) console.log(`[API] AmiBroker requested unknown symbol ${ticker}, ignoring. Please add it via the UI.`)
     csv = csv ? csv + '\nEND' : 'END\n'
-    feedResponseCache.set(cacheKey, { ts: Date.now(), data: csv })
+    cacheResponse(cacheKey, csv)
     return reply(csv)
   }
   brokerId = symRecord.brokerId || symRecord.broker_id
@@ -129,21 +151,19 @@ router.get('/bars', async (req, res) => {
     backfillQueue.enqueue(ticker, brokerId, symRecord.rawSymbol || symRecord.raw_symbol || symRecord.instrumentId || symRecord.instrument_id || ticker, backfillDepth)
   }
 
-  // Append in-progress live bar if available and has a valid price (a range up to `until` is history only)
+  // Append in-progress live bar if available and has a valid price (a range up to `until` is history only).
+  // The database answer holds only bars newer than `since` already (the query says so), so nothing is cut
+  // from it here: splitting, testing and joining 30,000 lines of text per catch-up held the engine's thread
+  // for milliseconds each. The live line goes in when it is newer than `since` and than the last stored bar.
   const liveBar = until > 0 ? undefined : liveFeed.getLiveBar(ticker, brokerId)
   if (liveBar && liveBar.close > 0) {
     const ts = Math.floor(liveBar.bucketMs / 1000)
-    const liveCsvLine = `${ts},${liveBar.open},${liveBar.high},${liveBar.low},${liveBar.close},${liveBar.volume}${liveBar.oi ? `,${liveBar.oi}` : ''}`
-    csv = csv ? csv + '\n' + liveCsvLine : liveCsvLine
-  }
-
-  // Filter by 'since' if provided
-  if (since > 0 && csv) {
-    csv = csv.split('\n').filter(line => {
-      if (!line) return false
-      const ts = parseInt(line.split(',')[0])
-      return ts > since
-    }).join('\n')
+    const lastRow = csv.lastIndexOf('\n') + 1
+    const lastStoredTs = csv ? Number(csv.slice(lastRow, csv.indexOf(',', lastRow))) : 0
+    if (ts > since && ts > lastStoredTs) {
+      const liveCsvLine = `${ts},${liveBar.open},${liveBar.high},${liveBar.low},${liveBar.close},${liveBar.volume}${liveBar.oi ? `,${liveBar.oi}` : ''}`
+      csv = csv ? csv + '\n' + liveCsvLine : liveCsvLine
+    }
   }
 
   if (!csv) {
@@ -152,7 +172,7 @@ router.get('/bars', async (req, res) => {
     csv = csv + '\nEND'
   }
 
-    feedResponseCache.set(cacheKey, { ts: Date.now(), data: csv })
+  cacheResponse(cacheKey, csv)
   return reply(csv)
 })
 

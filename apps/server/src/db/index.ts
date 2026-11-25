@@ -475,6 +475,25 @@ export function historyRangeSec(bars: Array<{ ts: number }>): { fromSec: number;
 export const HISTORY_SLICE_ROWS = Math.max(1, Number(process.env.DATABRIDGE_HISTORY_SLICE_ROWS) || 2000)   // the variable is for measuring (a huge value: one transaction per chunk, as before)
 
 /**
+ * One history slice per turn of the event loop, however many chunks are being saved. Each chunk used to give the
+ * loop a turn between its own slices (setImmediate), but six chunks saved at once ran their six slices in the same
+ * turn, and a live tick (or the answer to AmiBroker) waited for all of them: 6 x 2 ms plus the parsing of the
+ * answers. A chunk now takes a turn for each slice; the first slice of a quiet moment goes at once, the others queue
+ * and are let go one a turn, in the order they asked.
+ */
+let sliceTurnTaken = false
+const sliceTurnQueue: Array<() => void> = []
+function takeSliceTurn(): Promise<void> {
+  if (!sliceTurnTaken) { sliceTurnTaken = true; setImmediate(passSliceTurn); return Promise.resolve() }
+  return new Promise<void>(resolve => sliceTurnQueue.push(resolve))
+}
+function passSliceTurn() {
+  const next = sliceTurnQueue.shift()
+  if (next) { setImmediate(passSliceTurn); next() }   // the turn stays taken: the next slice has this one
+  else sliceTurnTaken = false
+}
+
+/**
  * Upserts broker history bars (bar objects, or "tsSec,open,high,low,close,volume" lines); returns
  * how many rows were inserted or actually changed. Broker history replaces bars built from live
  * ticks for the same minute (live inserts never overwrite history). The rows are committed in
@@ -508,6 +527,9 @@ export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<H
   const rows = [...byMinute]
   let changed = 0
   for (let from = 0; from < rows.length; from += HISTORY_SLICE_ROWS) {
+    endSyncPart()
+    await takeSliceTurn()   // live ticks, timers and requests get their turns in between
+    syncStartedAt = performance.now()
     const startedAt = performance.now()
     changed += tx(() => {
       const tid = tickerId(amibrokerTicker)
@@ -521,11 +543,6 @@ export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<H
       return sliceChanged
     })
     perf.record('db.history_tx_ms', performance.now() - startedAt)
-    if (from + HISTORY_SLICE_ROWS < rows.length) {
-      endSyncPart()
-      await new Promise<void>(r => setImmediate(r))   // live ticks, timers and requests get their turn
-      syncStartedAt = performance.now()
-    }
   }
   endSyncPart()
   perf.count('db.history_rows', rows.length)

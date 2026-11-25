@@ -41,12 +41,19 @@ app.use((err: Error & { type?: string }, _req: express.Request, res: express.Res
   next(err)
 })
 
+/** Asked for again and again by the plugin, Excel and the app's own pages: a line for each only fills the log (and the disk) */
+const QUIET_PATHS = new Set([
+  '/api/feed/bars', '/api/feed/daily',            // AmiBroker's plugin
+  '/api/platforms/quotes', '/api/platforms/bars', // Excel's live prices, other platforms
+  '/api/diagnostics/perf',                        // read by hand or by a script: reading it leaves no trace
+  '/api/backfill/status', '/api/symbols/health',  // the app's pages, every few seconds while they are open
+  '/api/ping',
+])
+
 // Structured request logger (filters high-frequency feed polling from flooding stdout)
 app.use((req, _res, next) => {
-  // Polled every second or faster (AmiBroker's plugin, Excel's live prices): not logged
-  // (a card asks for its company's logo, a screenful of them at a time: not logged either)
-  // (the performance numbers are read by hand or by a script: not logged, so reading them leaves no trace)
-  if (req.path !== '/api/feed/bars' && req.path !== '/api/feed/daily' && req.path !== '/api/platforms/quotes' && req.path !== '/api/platforms/bars' && req.path !== '/api/diagnostics/perf' && !req.path.startsWith('/api/symbols/logo/')) {
+  // (a card asks for its company's logo, a screenful of them at a time: not logged either; nor is the live status the app polls)
+  if (!QUIET_PATHS.has(req.path) && !req.path.startsWith('/api/symbols/logo/') && !req.path.startsWith('/api/status/')) {
     console.log(JSON.stringify({
       ts: new Date().toISOString(),
       method: req.method,

@@ -41,6 +41,46 @@ One entry per stage, newest at the top. An entry is written when its stage is fi
 - No source files were changed.
 - Next: Stage 0 (instrumentation and baseline harness).
 
+## Stage 6: front-end, back-end and IPC cleanup (2026-11-25)
+
+**Findings addressed:** P14 (6b), P15 (6a), P16 (6e), the QUOTE rate (6d); 6c was done in Stage 4c. Verified against the code at `40b9d0e` first: as described.
+**Discrepancies found while verifying and measuring:** six, in ROOT_CAUSE_ANALYSIS "Discrepancies" (6a, 6b, 6d, 6e, and the profile that led to the slice scheduler).
+
+**Changes**
+- Engine `app.ts` (6a): the request log leaves out `/api/status/*`, `/api/backfill/status`, `/api/symbols/health`, `/api/ping` besides the paths it left out already.
+- Engine `api/routes/feed.ts` (6b): the catch-up answer is the database's text as it is (the query already says `ts > since`); the live line is added only when it is newer than `since` and than the last stored bar, and not for a range (`until`). The answers kept for the 50 ms throttle are bounded at 16 MB in all, the oldest first (`feedCacheStats`, also on the diagnostics page as `feedCache`).
+- Engine `amibroker/ipcServer.ts` (6d): a symbol's QUOTE goes out at most every 250 ms, always with its newest figures (what waits is sent by one timer set for the earliest due time); LIVE_BAR is not limited. `ipc.quotes_deferred` counts them.
+- Engine `amibroker/ipcServer.ts` (6e): `GET_QUOTES`, which no plugin sends (see the discrepancy row), is answered `END` with a one-time warning; the auto-register code and the imports it needed are gone, and the comments in `config.ts`, `liveFeed.ts` and the README say what the channel carries now.
+- Engine `db/index.ts` (a follow-up of 3a, found by profiling): `takeSliceTurn`: history slices take one turn of the event loop each, across all chunks being saved, instead of every chunk yielding for itself.
+- Tests: `cleanup` (5: the answer with and without `since`/`until` and its live line, the 16 MB bound over 20 big symbols, the log, the QUOTE rate over real sockets, `GET_QUOTES`), `historySlices` (+1: six chunks at once take 18 turns for 18 slices). The three that follow from breaking the code on purpose (QUOTE limit off, bound lifted, old yield) all fail.
+
+**Checks**
+- `npm run typecheck --prefix apps/server`: pass. `npm test --prefix apps/server`: 434 passed, 2 failed (the same 2: noren, upstoxAngel).
+- `npm run typecheck --prefix apps/desktop`: pass. `npm test --prefix apps/desktop`: 137 of 137 (not touched).
+- The plugin is **not changed** in this stage (no new DLL).
+- Harness: integrity 0 mismatches in every run.
+
+**Before to after** (`live500_backfill`, two 90 s runs each; details in DATABRIDGE_PERFORMANCE_BASELINE.md)
+| Metric | Before (Stage 4 end) | After |
+|---|---|---|
+| Loop lag p95 / worst | 16.8 / 77-92 ms | **10.4 / 64-71 ms** (p99 39-43 ms: unchanged) |
+| Catch-up answer p50 / p95 / p99 (engine side) | 20-22 / 48 / 58-64 ms | **15 / 33-36 / 40-43 ms** |
+| What the plugin waits for an answer, p50 / p99 | 24.5 / 85 ms | **18.4 / 58 ms** |
+| Engine memory at its peak | 1.09-1.12 GB | **0.82-0.85 GB** |
+| Request-log lines for the app's polling | one per request | none |
+
+**Not done / follow-ups**
+- **The loop lag p99 in `live500_backfill` is still about 40 ms.** The profile (CPU, 40 s) shows the main thread idle 70% of the time and nothing above 1% apart from the 2 ms SQLite slices (16%) and the fake broker's JSON parsing (3%): there is no long call left in the engine's own code to remove. The harness runs its fake plugin and fake broker in the same thread and makes 10 chunks a second against a real broker's 45 a minute, so the live baseline is where this number means something. If it is still high there, the next thing to try is moving the JSON parse of a broker's answer off the main thread (Stage 3e's idea, for the parse only).
+- `liveFeed.setStreaming` is unused now (only `GET_QUOTES` called it); left in place.
+- QUOTE limiting only shows on symbols that change more than 4 times a second.
+- The DLL installed in your AmiBroker (`C:\Program Files (x86)\AmiBroker\Plugins\DataBridgePro.dll`) is a build of 18 Nov: it has none of the Stage 2 and 3 plugin changes yet (the notifier, the 120-minute memory, the range catch-up).
+
+**For the user**
+- **No new DLL in this stage; but the Stage 2/3 DLL is still not installed** (yours is from 18 Nov): close AmiBroker, keep the old `DataBridgePro.dll` as `DataBridgePro.dll.bak`, copy in `plugins\amibroker\DataBridgePro.dll`, start AmiBroker. It works with the older and the newer engine alike.
+- **The engine changes need the rebuilt engine** (`npm run build:server`) or `npm run dev`.
+- In the engine log, the polling lines are gone: if you want to check something about the app's polling, `/api/status/feed` and the others are not logged any more.
+- If the log shows `[IPC] A plugin sent GET_QUOTES`, an old plugin is installed: tell me.
+
 ## Stage 5: symbol management (2026-11-25)
 
 **Findings addressed:** P13 (5a), P7 (5b), P12 (5c). Verified against the code at `3e15e07` first: as described (P13 already reduced by the Stage 0 baseline: the engine's own work is small; the per-symbol subscribe calls, log lines and transactions are what the batching removes).

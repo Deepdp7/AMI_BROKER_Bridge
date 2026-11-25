@@ -705,7 +705,7 @@ export class LiveFeed extends EventEmitter {
     if (list.length) this._emitLog('info', 'LiveFeed', `${list.length} symbols added${list.length <= 5 ? `: ${list.map(s => s.ticker).join(', ')}` : ` (${list[0].ticker} ... ${list[list.length - 1].ticker})`}`)
   }
 
-  /** Called by the IPC server whenever AmiBroker sends GET_QUOTES for this ticker. */
+  /** (Unused since the plugin stopped sending GET_QUOTES.) Marks a ticker as streaming for a few seconds. */
   private _streamingTimers: Map<string, ReturnType<typeof setTimeout>> = new Map()
 
   /**

@@ -627,6 +627,8 @@ Keep the per-symbol error logging and the `{ added, total }` result.
 
 ## Stage 6: front-end, back-end and IPC cleanup (P14, P15, P16, QUOTE rate)
 
+> **Done (2026-11-25), with the differences listed in ROOT_CAUSE_ANALYSIS (6a-6e and the slice scheduler).** Engine only (no new DLL). 6c (sharing the health request) was done in 4c and is checked by `DataHealth.test.tsx`. Added after profiling: history slices take one turn of the event loop each, across all chunks (`takeSliceTurn` in `db/index.ts`).
+
 - **6a: request logger** (`app.ts:44-57`): also skip `/api/symbols/health`, `/api/backfill/status`, `/api/status/*` and `/api/diagnostics/perf`.
 - **6b: P14** (`feed.ts`):
   - remove the `since` re-filter (:127-133);

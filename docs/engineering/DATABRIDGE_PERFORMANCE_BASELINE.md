@@ -187,6 +187,21 @@ Read it against live500 above: the same 500 symbols and the same updates, and th
 - **Still above the 10 ms target** (p99 40 ms, max 77-92 ms). A chunk is now all small pieces; what remains is the catch-up answers built on the main thread (`/api/feed/bars` splits, filters and joins the text of 30,000 lines for a `since` request: P14, Stage 6b) and the harness's own load (10 chunks a second; a real broker allows 45 a minute, so about one in 13).
 - **`cache_size` 64 MB on the writer (A/B, not kept)**: slice p50 2.26 ms (same), p99 3.31 ms (3.65); loop lag p99 93 ms (113, within the run-to-run spread). **`mmap_size` 256 MB on the readers (A/B, not kept)**: reader.exec_ms.csv 20.3 / 43.4 / 47.8 (20.3 / 43.4 / 52.6), wait p95 8.6 ms (13.8). Neither gives a difference larger than the variation between identical runs on this machine, and the harness database (a few hundred MB, mostly in the file cache) is the case where they would help least: a client's 2 GB database could behave differently, so both stay as settings for measuring (`DATABRIDGE_SQLITE_CACHE_KIB`, `DATABRIDGE_SQLITE_MMAP_MB`) and neither is on by default.
 
+**After Stage 6** (6b, the `since` answer built from the database text as it is, and the bound on the throttle's answers; then the one-slice-per-turn scheduler for history saves; 90 s runs, two each, the Stage 4 runs above as "before"):
+
+| | Stage 4 final (2 runs) | 6b (2 runs) | 6b + one slice per turn (2 runs) |
+|---|---|---|---|
+| loop.lag_ms p50 / p95 / p99 / max | 0.28-0.31 / 16.8 / 39.5-43.4 / 77-92 | 0.31-0.34 / 13.8-15.2 / 43.4 / 88.6-98.6 | 0.31 / **10.4** / 39.5-43.4 / **64-71** |
+| http.feed_bars_ms (catch-ups) p50 / p95 / p99 | 20-22 / 47.8 / 58-64 ms | **15.2 / 32.6 / 43.4** | 15.2 / 35.9 / 39.5-43.4 |
+| the fake plugin's wait for an answer p50 / p99 | 24.5 / 84.6 ms | **18.4 / 58-64 ms** | 18.4 / 58 ms |
+| engine RSS peak | 1,086-1,118 MB | **806-842 MB** | 817-852 MB |
+| engine CPU, of one core | 58% | 55% | 55-60% |
+| history slice db.history_tx_ms max | 5.4-5.7 ms | | 5.2 and 20 ms |
+| integrity | 0 | 0 | 0 |
+
+- **6b**: a catch-up answer is no longer split, tested and joined again line by line (about 30,000 lines each, 10 a second in this scenario): the answers are 25% faster at the median and 30% at p95, and the engine holds a quarter less memory at its peak (the answers kept for the 50 ms throttle used to pile up to hundreds of MB during a scan of big symbols: now at most 16 MB). It did not move the loop lag p99.
+- **Where the rest of the loop lag is**: a CPU profile of this scenario (40 s, `node --cpu-prof`) shows the main thread idle 70% of the time, 16% in the SQLite slices (2 ms each, 12 or so per chunk), 3% in the fake broker's own JSON parsing, and nothing else above 1%. The long "busy" stretches in it are the event loop running many small callbacks one after the other, not one long call: six chunks saved at once each queued a slice for the same turn of the loop, and the lag probe is answered once per turn. The scheduler lets one slice run per turn whoever it belongs to: p95 15 to 10 ms and the worst case 90 to 65 ms, p99 still about 40 ms. What is left cannot be told from the harness itself: the fake plugin and the fake broker run in the engine's own thread here (reading 1.2 MB answers 10 times a second, parsing 2.5 MB of JSON per chunk), which a real AmiBroker and a real broker do in their own processes, and a real broker allows 45 requests a minute where this scenario makes 600.
+
 ### `live500_health` (synthetic 100-symbol year database)
 
 | Metric | p50 | p95 | p99 | max | after 4b | after 4c | final |
