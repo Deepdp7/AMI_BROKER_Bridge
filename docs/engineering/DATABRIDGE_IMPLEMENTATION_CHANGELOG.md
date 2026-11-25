@@ -41,6 +41,48 @@ One entry per stage, newest at the top. An entry is written when its stage is fi
 - No source files were changed.
 - Next: Stage 0 (instrumentation and baseline harness).
 
+## Stage 2: live tick pipeline (2026-11-25)
+
+**Findings addressed:** P3, P4, P10, D1, and the flush timing (2e). Verified against the code at `4067f86` first: all as described.
+**Discrepancies found while verifying:** none. Three found while measuring, all in ROOT_CAUSE_ANALYSIS "Discrepancies" (2a, 2b, 2e).
+
+**Changes**
+- Plugin `BarMerge.h/.cpp` (new): the merge code moved out of `Plugin.cpp` unchanged; `ParseLiveBarLine` / `ParseQuoteLine` (`std::from_chars`, no locale, no allocation per field); `RecentBars`, the live bar of a symbol plus the final state of each minute that closed since (120 at most), with the rule for when it is complete.
+- Plugin `DataClient.cpp` (P3, P4):
+  - the notifier waits for a change and sends a notice at once, at least 50 ms apart, on a high-resolution timer. It woke every 150 ms before.
+  - the three per-symbol maps are one `RecentBars` map; coverage starts again on every connection to the engine.
+  - lines are read in place and cut off once per read, not once per line; one wake-up of the notifier per read.
+- Plugin `Plugin.cpp`: `GetQuotesEx` hands over the closed minutes since AmiBroker's last bar from memory (that last bar too, with its final values); the engine is asked over HTTP only when the ring cannot be complete for the gap.
+- Plugin tests: `tests/plugin_tests.cpp` (79 checks), `npm run test:plugin`; `tests/dll_host.cpp` + `build-dll-host.bat`, the stand-in for AmiBroker. `build.bat` and `CMakeLists.txt` build `BarMerge.cpp`.
+- Engine `ipcServer.ts` (D1, 2e): what waits to go out is kept per client; a client whose socket holds 1 MB is not written to until it drains, and gets the newest state of every symbol and minute then (nothing is lost: the plugin keeps only that). A client that takes nothing for 60 s, or has 200,000 updates waiting, is disconnected (it reconnects and fetches what it missed). The flush is at the end of the current task by default.
+- Engine `liveFeed.ts` (P10): `getLiveBar` is a lookup through an index kept in step with every re-key, move and removal; a tick id that matches no symbol is searched for once, until the symbol list changes (`feed.fallback_scans` counts the searches).
+
+**Checks**
+- `npm run typecheck --prefix apps/server`: pass. `npm test --prefix apps/server`: 390 passed, 2 failed (the same 2: noren, upstoxAngel). 7 new tests (`ipcBackpressure`, `liveFeedLookup`).
+- `npm run typecheck --prefix apps/desktop`: pass. `npm test --prefix apps/desktop`: 136 of 136 (not touched).
+- `npm run build:plugin`: built. `npm run test:plugin`: 79 checks, 0 failed (and 2 deliberate breakages of `RecentBars` were caught by it).
+- Harness: integrity 0 mismatches in every run (live500, live500_backfill, live500_backpressure, and the real DLL runs).
+
+**Before to after** (details in DATABRIDGE_PERFORMANCE_BASELINE.md)
+| Metric | Before | After |
+|---|---|---|
+| Notice to AmiBroker, change received to sent (real DLL, p95) | 173 ms | **51 ms** (gaps 150-173 ms became 50.1-51.6 ms; 6.3 to 19.8 notices a second, 20 is the limit) |
+| A symbol nobody read for 5 minutes | missed minutes asked of the engine, merged later | all of them from memory; no request to the engine (real DLL, 330 s) |
+| Bar ready to written on AmiBroker's channel during downloads (p99) | 181 ms | 0.66 ms (the loop lag itself is unchanged: Stage 3) |
+| Plugin paused 10 s (socket buffer) | 1.25 MB and growing | 1.05 MB, then it stops; at most one entry per symbol and minute waits |
+| GetQuotesEx fast path p99 | 18.7 us | 10.6-12.8 us |
+
+**Not done / follow-ups**
+- The Fyers ticks are still handed on with a `setImmediate` in `FyersHSMClient.processQueue`; the harness feeds the engine past that client, so the effect of removing it cannot be measured here. Left as it is.
+- What the plugin sends a symbol that was never read after a reconnection is unchanged (a full sync of the last 24 h over HTTP); Stage 3d narrows it.
+- The host answers a notice at once. How AmiBroker copes with up to 20 notices a second, with real charts and scans, is for the live checklist: look at `sendmsg_p99`, `busy` and AmiBroker's own load. If it is too much, `MIN_NOTICE_GAP` (DataClient.cpp) is the one number to raise.
+
+**For the user**
+- **Install the rebuilt plugin:** close AmiBroker, keep the old `DataBridgePro.dll` in its Plugins folder as `DataBridgePro.dll.bak`, copy in `plugins\amibroker\DataBridgePro.dll`, start AmiBroker. It works with the older and the newer engine alike. To go back, put the `.bak` back.
+- The engine changes need the rebuilt engine (`npm run build:server`) or `npm run dev`.
+- On a market day, run the live checklist (DATABRIDGE_PERFORMANCE_BASELINE.md): compare `notify_p95`, `visible_p95`, `sendmsg_p99`, `busy`. Tell me if charts redraw more than before.
+- The real-DLL tests appended a few hundred lines (SIM symbols, `NOTE|PERF` reports) to `C:\Users\Public\DataBridgePro_plugin.log`.
+
 ## Stage 1: critical bug fixes (2026-11-25)
 
 **Findings addressed:** B1, B2, B3, B4, P8, P9 (verified against the code at `6a3c451` first: all as described, only line numbers had moved).

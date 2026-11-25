@@ -2,12 +2,7 @@
 #include <string>
 #include <vector>
 #include <windows.h>
-
-struct Bar {
-    double timestamp;
-    float open, high, low, close, volume;
-    float oi;   // open interest (F&O), 0 when unknown
-};
+#include "BarMerge.h"   // Bar, and what is kept of each symbol's recent minutes
 
 // Returns number of bars parsed, or -1 if the HTTP request itself failed.
 extern int  FetchBarsFromAPI(const std::string& ticker, int limit, double since, std::vector<Bar>& outBars);
@@ -24,8 +19,9 @@ extern void StopPollingThread();
 extern void UpdateActiveSymbol(const std::string& ticker);
 extern void SetAmiBrokerWindow(HWND hWnd);
 extern bool GetCachedLiveBar(const std::string& ticker, Bar& outBar);
-// The final state of the minute before the live bar's (false when there is none yet)
-extern bool GetCachedPrevBar(const std::string& ticker, Bar& outBar);
+// The closed minutes from `fromMin` (included) to `toMin` (excluded) that were received live, ascending, added
+// to `out`. True when none can be missing: every minute after `fromMin` happened while the engine was connected.
+extern bool GetCachedBarsBetween(const std::string& ticker, double fromMin, double toMin, std::vector<Bar>& out);
 // The Real-time Quote window's figures for a ticker: the day's (QUOTE| from the engine), the live
 // bar's price when no quote came yet. False when nothing is known.
 struct RecentInfo;

@@ -106,15 +106,15 @@ Machine: Intel Core Ultra 9 275HX, 24 threads, 31 GB RAM, Windows 10.0.26300, No
 
 | Metric | p50 | p95 | p99 | max | after Stage 1 | after Stage 2 | after Stage 3 | after Stage 4 | final |
 |---|---|---|---|---|---|---|---|---|---|
-| loop.lag_ms | 0.143 | 0.306 | 0.655 | 2.00 | 0.118 / 0.448 / 1.83 | | | | |
-| tick.rx_to_feed_ms | 0.05 (floor) | 0.05 | 0.05 | 0.16 | 0.05 / 0.05 / 0.14 | | | | |
-| tick.feed_to_ipc_ms | 0.055 | 0.143 | 0.230 | 2.50 | 0.067 / 0.278 / 2.32 | | | | |
-| fake-plugin transit ms (1 ms clock) | 0.05 | - | 1.06 | 2.0 | 0.05 / 1.06 / 2.0 | | | | |
-| ipc.writes/s | 62 (1,979 lines/s) | | | | 63 (1,975 lines/s) | | | | |
-| db.live_flush_ms (every 2 s) | 0.87 | 1.8 | 1.8 | 1.8 | 1.6 (one sample: 60 s run) | | | | |
-| CPU % (engine, of one core) | 2.2 | | | | 3.4 (a 60 s run: start-up counts for more than in 180 s) | | | | |
-| RSS peak MB | 184 | | | | 184 | | | | |
-| integrity mismatches | 0 (1,500 bars, 78,007 updates) | | | | 0 (1,000 bars, 63,000 updates) | | | | |
+| loop.lag_ms | 0.143 | 0.306 | 0.655 | 2.00 | 0.118 / 0.448 / 1.83 | 0.253 / 1.28 / 8.55 (one spike in 5,007 samples) | | | |
+| tick.rx_to_feed_ms | 0.05 (floor) | 0.05 | 0.05 | 0.16 | 0.05 / 0.05 / 0.14 | 0.05 / 0.05 / 0.24 | | | |
+| tick.feed_to_ipc_ms | 0.055 | 0.143 | 0.230 | 2.50 | 0.067 / 0.278 / 2.32 | 0.050 / 0.278 / 1.18 | | | |
+| fake-plugin transit ms (1 ms clock) | 0.05 | - | 1.06 | 2.0 | 0.05 / 1.06 / 2.0 | 0.05 / 1.06 / 9.0 | | | |
+| ipc.writes/s | 62 (1,979 lines/s) | | | | 63 (1,975 lines/s) | 68 (1,973 lines/s) | | | |
+| db.live_flush_ms (every 2 s) | 0.87 | 1.8 | 1.8 | 1.8 | 1.6 (one sample: 60 s run) | 1.0 / 2.8 (2 samples) | | | |
+| CPU % (engine, of one core) | 2.2 | | | | 3.4 (a 60 s run: start-up counts for more than in 180 s) | 4.8 | | | |
+| RSS peak MB | 184 | | | | 184 | 172 | | | |
+| integrity mismatches | 0 (1,500 bars, 78,007 updates) | | | | 0 (1,000 bars, 63,000 updates) | 0 (1,000 bars, 63,007 updates) | | | |
 
 ### `live500_backfill` (plus 50 symbols × 365 days)
 
@@ -134,6 +134,18 @@ Machine: Intel Core Ultra 9 275HX, 24 threads, 31 GB RAM, Windows 10.0.26300, No
 
 **After Stage 1** (a second 91 s run, same scenario): loop.lag_ms p50 / p99 / max 0.60 / 242 / 299 ms; tick.feed_to_ipc_ms 0.49 / 181 / 290 ms; backfill.chunk_cpu_ms 35.9 / 57.8 / 61.2 ms; 906 chunks, 0 failed history requests; integrity 0 mismatches (1,000 bars, 92,998 updates). Stage 1 does not touch this path, so this run differs from the baseline only by run-to-run variation (the two baseline runs of this scenario also differ, p99 lag 242-266 ms). The one number Stage 1 is meant to move: `catchup.state_writes` was 476 and 597 in the two baseline runs and is **205** now (2.3 a second). Since Stage 1 they are background writes, at most one per file every 500 ms, not whole-file writes on the engine's thread at every change.
 
+**After Stage 2** (the flush at the end of the task, 90 s, one run each way on the same machine; "feed_to_ipc" = a bar ready to its write on AmiBroker's channel):
+
+| | before (Stage 1 build) p50 / p95 / p99 / max | after p50 / p95 / p99 / max |
+|---|---|---|
+| tick.feed_to_ipc_ms | 0.34 / 16.8 / **181** / 276 | 0.067 / 0.45 / **0.66** / 1.9 |
+| loop.lag_ms | 0.60 / 181 / 242 / 286 | 1.87 / 200 / 266 / 311 |
+| http.feed_bars_ms (catch-ups) | 24.5 / 102 / 242 / 336 | 27.0 / 165 / 292 / 390 |
+| ipc.writes a second | 61 | 68 |
+| integrity | 0 mismatches | 0 mismatches |
+
+The loop lag is **not** better: the engine's one thread is still busy for 200-300 ms at a time with history chunks (Stage 3 changes that). What changed is that a bar that has been processed is written at once, instead of waiting in line behind the next chunk. A tick that arrives *while* a chunk is being processed still waits for that chunk.
+
 Read it against live500 above: the same 500 symbols and the same updates, and the loop lag goes from p99 0.66 ms to **266 ms**, and the time from a bar being ready to its write on AmiBroker's channel from p99 0.23 ms to **242 ms** (max 340 ms). Each history chunk holds the engine's one thread for 36 ms (median; 64 ms at p99), of which the database save is 20 ms. At 10 chunks a second that is about a third of the thread, in blocks. The loop lag is larger than any single chunk (up to 315 ms) because the catch-up answers are also built on that thread: the plugin asks for "from the announced start up to now", about 3.4 MB per symbol on average (P5), and `/api/feed/bars` re-filters those on the main thread (P14).
 
 ### `live500_health` (synthetic 100-symbol year database)
@@ -152,10 +164,10 @@ The 9.4 M-row database is about one fifth the size of a client's (500 symbols x 
 
 | Metric | Baseline | after 2c |
 |---|---|---|
-| ipc.writable_hwm bytes | 1,246,409 (grows with the pause: about 125 KB a second at 500 symbols) | |
-| engine RSS growth MB | 22 (149 to 171) | |
-| lines in the burst after the pause | all 90,113 lines of the run arrive; transit p99 9,937 ms, max 10,002 ms | |
-| integrity mismatches | 0 (1,000 bars, 48,000 updates) | |
+| ipc.writable_hwm bytes | 1,246,409 (grows with the pause: about 125 KB a second at 500 symbols) | **1,052,425**, then it stops growing: the limit is 1 MB, and what changes after that waits as at most one entry per symbol and minute (500 here) |
+| engine RSS growth MB | 22 (149 to 171) | 20 (166 to 186). A 10 s pause only just reaches the limit; the unit test pauses longer: nothing grows past it |
+| lines in the burst after the pause | all 90,113 lines of the run arrive; transit p99 9,937 ms, max 10,002 ms | 59,257 LIVE_BAR lines for 62,998 updates: the newest state of each minute, not every update; transit p99 9,937 ms (the pause) |
+| integrity mismatches | 0 (1,000 bars, 48,000 updates) | 0 (1,000 bars, 62,998 updates) |
 
 ### `import500`
 
@@ -198,6 +210,24 @@ A small loader played AmiBroker's part (loaded `DataBridgePro.dll`, gave it a wi
 | lines | 24,176 | |
 
 473 notices reached the loader's window in 80 s (about 6 a second) and the three symbols' bars were updated. The plugin log carries the same report line.
+
+**After Stage 2** (the rebuilt DLL, `tests/dll_host.cpp` as the host, the harness engine with 100 symbols updating twice a second, 72 s, 3 symbols read; the Stage 0 DLL tried the same way for the "before"):
+
+| Plugin figure | Stage 0 DLL | Stage 2 DLL | Meaning |
+|---|---|---|---|
+| gap between notices (host side) min / p50 / p95 / max | 150 / 157 / 166 / 173 ms | **50.1 / 50.5 / 50.9 / 51.6 ms** | the notifier now sends a notice as soon as something changed, at most one every 50 ms |
+| notices a second | 6.3 | 19.8 | the upper limit by design is 20 |
+| notify p95 | 173 ms | **51.1 ms** | a change received to the notice sent |
+| visible p95 | 165 ms | 47.8 ms | latest update to first read |
+| gqe_fast p99 | 18.7 us | 10.6-12.8 us | GetQuotesEx with bars in memory |
+| transit p99, sendmsg p99, busy | 5.9 ms, 1.3 ms, 0 | 1.7 ms, 0.7 ms, 0 | |
+| integrity | 0 mismatches | 0 mismatches | |
+
+With the first version of the new notifier (a plain sleep for the gap) the gaps were 50-73 ms and notify p95 70 ms: Windows rounds a sleep up to its 15.6 ms clock tick. The shipped one waits on a high-resolution timer owned by the notifier thread (no change to the clock tick, which would affect all of AmiBroker).
+
+**A symbol nobody read for 5 minutes** (330 s run: 2 symbols read all the time, one read in the first 20 s and the last 8 s only): it came back with 8 bars, the same as the two that were read all the time, and the plugin log has no "caught up" line for it after its first read; the per-minute reports show catchup_p99 = 0 for the rest of the run. Its missed minutes came from the plugin's memory. 6,531 notices in 330 s, 0 busy, integrity 0 mismatches.
+
+What this does not show: AmiBroker's own cost of taking 20 notices a second (the host answers at once). `sendmsg_p99` and `busy` in the live checklist are where it would show.
 
 ## Live baseline checklist (the user runs this)
 

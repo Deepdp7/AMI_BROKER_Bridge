@@ -8,6 +8,7 @@
 #include <math.h>
 #include <time.h>
 #include "Plugin.h"
+#include "BarMerge.h"
 #include "DataClient.h"
 
 struct SiteInterface gSite;
@@ -19,167 +20,6 @@ static void LogPlugin(const char* msg) {
         fprintf(fp, "%s\n", msg);
         fclose(fp);
     }
-}
-
-// localtime_s for many bar times: a full load converts ~100k of them. The UTC offset is looked
-// up once per UTC hour (clock changes, where there are any, fall on those), the date is plain
-// arithmetic (days → year/month/day, H. Hinnant's civil_from_days).
-static void LocalTimeOf(time_t t, struct tm& out) {
-    thread_local time_t cachedHour = -1;
-    thread_local long long offset = 0;
-    time_t hour = t - (t % 3600);
-    if (hour != cachedHour) {
-        struct tm lt; memset(&lt, 0, sizeof(lt));
-        if (localtime_s(&lt, &hour) != 0) { memset(&out, 0, sizeof(out)); localtime_s(&out, &t); return; }
-        offset = (long long)_mkgmtime(&lt) - (long long)hour;
-        cachedHour = hour;
-    }
-    long long wall = (long long)t + offset;
-    long long days = wall >= 0 ? wall / 86400 : (wall - 86399) / 86400;
-    int secs = (int)(wall - days * 86400);
-    days += 719468;
-    long long era = (days >= 0 ? days : days - 146096) / 146097;
-    unsigned doe = (unsigned)(days - era * 146097);
-    unsigned yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
-    unsigned doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
-    unsigned mp = (5 * doy + 2) / 153;
-    unsigned d = doy - (153 * mp + 2) / 5 + 1;
-    unsigned m = mp < 10 ? mp + 3 : mp - 9;
-    long long y = (long long)yoe + era * 400 + (m <= 2 ? 1 : 0);
-    memset(&out, 0, sizeof(out));
-    out.tm_year = (int)(y - 1900);
-    out.tm_mon = (int)m - 1;
-    out.tm_mday = (int)d;
-    out.tm_hour = secs / 3600;
-    out.tm_min = (secs / 60) % 60;
-    out.tm_sec = secs % 60;
-}
-
-static void WriteBarToQuotation(struct Quotation* pQ, int idx, const Bar& b) {
-    if (b.timestamp <= 0) return;
-    pQ[idx].Price        = b.close;
-    pQ[idx].Open         = b.open;
-    pQ[idx].High         = b.high;
-    pQ[idx].Low          = b.low;
-    pQ[idx].Volume       = b.volume;
-    pQ[idx].OpenInterest = b.oi;
-    pQ[idx].AuxData1     = 0;
-    pQ[idx].AuxData2     = 0;
-    time_t t = (time_t)b.timestamp;
-    struct tm tm_out;
-    LocalTimeOf(t, tm_out);
-    pQ[idx].DateTime.PackDate.MicroSec = 0;
-    pQ[idx].DateTime.PackDate.MilliSec = 0;
-    pQ[idx].DateTime.PackDate.Second   = tm_out.tm_sec;
-    pQ[idx].DateTime.PackDate.Minute   = tm_out.tm_min;
-    pQ[idx].DateTime.PackDate.Hour     = tm_out.tm_hour;
-    pQ[idx].DateTime.PackDate.Day      = tm_out.tm_mday;
-    pQ[idx].DateTime.PackDate.Month    = tm_out.tm_mon + 1;
-    pQ[idx].DateTime.PackDate.Year     = tm_out.tm_year + 1900;
-}
-
-static double QuotationToUnix(const struct Quotation& q) {
-    struct tm tv; memset(&tv, 0, sizeof(tv));
-    // An end-of-day bar (mixed EOD/intraday database) counts as its day's midnight
-    bool eod = q.DateTime.PackDate.Hour == DATE_EOD_HOURS;
-    tv.tm_sec  = eod ? 0 : q.DateTime.PackDate.Second;
-    tv.tm_min  = eod ? 0 : q.DateTime.PackDate.Minute;
-    tv.tm_hour = eod ? 0 : q.DateTime.PackDate.Hour;
-    tv.tm_mday = q.DateTime.PackDate.Day;
-    tv.tm_mon  = q.DateTime.PackDate.Month - 1;
-    tv.tm_year = q.DateTime.PackDate.Year - 1900;
-    tv.tm_isdst = -1;
-    time_t t = mktime(&tv);
-    return (t == (time_t)-1) ? 0 : (double)t;
-}
-
-// A daily bar as an end-of-day quotation: its India date (the engine stamps the day's midnight,
-// India time), with AmiBroker's EOD marker in place of a time
-static void WriteEodToQuotation(struct Quotation* pQ, int idx, const Bar& b) {
-    memset(&pQ[idx], 0, sizeof(struct Quotation));
-    pQ[idx].Price = b.close; pQ[idx].Open = b.open; pQ[idx].High = b.high; pQ[idx].Low = b.low;
-    pQ[idx].Volume = b.volume; pQ[idx].OpenInterest = b.oi;
-    time_t t = (time_t)b.timestamp + 19800;
-    struct tm d; gmtime_s(&d, &t);
-    pQ[idx].DateTime.PackDate.Year   = d.tm_year + 1900;
-    pQ[idx].DateTime.PackDate.Month  = d.tm_mon + 1;
-    pQ[idx].DateTime.PackDate.Day    = d.tm_mday;
-    pQ[idx].DateTime.PackDate.Hour   = DATE_EOD_HOURS;
-    pQ[idx].DateTime.PackDate.Minute = DATE_EOD_MINUTES;
-}
-
-static double QuotationMinute(const struct Quotation& q) { return floor(QuotationToUnix(q) / 60.0) * 60.0; }
-static double BarMinute(const Bar& b) { return floor(b.timestamp / 60.0) * 60.0; }
-
-// First index in pQ[0..count) whose minute is >= `minute` (binary search).
-static int LowerBoundMinute(const struct Quotation* pQ, int count, double minute) {
-    int lo = 0, hi = count;
-    while (lo < hi) {
-        int mid = (lo + hi) / 2;
-        if (QuotationMinute(pQ[mid]) < minute) lo = mid + 1; else hi = mid;
-    }
-    return lo;
-}
-
-// Merge ascending bars into pQ[0..count): a bar in the same minute as an existing quotation
-// overwrites it (broker history correcting live-built candles); bars for minutes AmiBroker
-// does not have are inserted in time order, also in the middle of the array. That is how a
-// hole left while the bridge was closed gets filled even after newer live bars were already
-// appended (they used to be ignored, so the hole stayed in AmiBroker's database for good).
-// Only the part from the first incoming minute on is rebuilt, so the live-tick path stays
-// cheap. When the array is full the oldest quotations are dropped. Returns the new count.
-static int MergeBars(struct Quotation* pQ, int count, int nSize, const std::vector<Bar>& bars) {
-    // Incoming bars: valid, ascending, one per minute (last wins)
-    std::vector<const Bar*> in;
-    for (const Bar& b : bars) {
-        if (b.timestamp <= 0 || b.close <= 0) continue;
-        if (!in.empty()) {
-            double last = BarMinute(*in.back()), m = BarMinute(b);
-            if (m == last) { in.back() = &b; continue; }
-            if (m < last) continue;   // out of order (input is ascending): ignore
-        }
-        in.push_back(&b);
-    }
-    if (in.empty()) return count;
-
-    int k = LowerBoundMinute(pQ, count, BarMinute(*in.front()));   // pQ[0..k) stays as it is
-    std::vector<struct Quotation> tail;
-    tail.reserve((size_t)(count - k) + in.size());
-    int i = k;
-    size_t j = 0;
-    while (i < count || j < in.size()) {
-        if (j >= in.size()) { tail.push_back(pQ[i++]); continue; }
-        double bm = BarMinute(*in[j]);
-        if (i < count) {
-            double qm = QuotationMinute(pQ[i]);
-            if (qm < bm) { tail.push_back(pQ[i++]); continue; }
-            if (qm == bm) {
-                struct Quotation q = pQ[i++];
-                WriteBarToQuotation(&q, 0, *in[j++]);
-                tail.push_back(q);
-                continue;
-            }
-        }
-        struct Quotation q;
-        memset(&q, 0, sizeof(q));
-        WriteBarToQuotation(&q, 0, *in[j++]);
-        tail.push_back(q);
-    }
-
-    // Keep the newest nSize quotations: drop from the front (oldest) if needed
-    int total = k + (int)tail.size();
-    int drop = total > nSize ? total - nSize : 0;
-    if (drop >= k) {
-        size_t skip = (size_t)(drop - k);
-        memcpy(pQ, tail.data() + skip, (tail.size() - skip) * sizeof(struct Quotation));
-        return (int)(tail.size() - skip);
-    }
-    if (drop > 0) {
-        memmove(pQ, pQ + drop, (size_t)(k - drop) * sizeof(struct Quotation));
-        k -= drop;
-    }
-    memcpy(pQ + k, tail.data(), tail.size() * sizeof(struct Quotation));
-    return k + (int)tail.size();
 }
 
 static int DoGetQuotesExImpl(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, int nSize, struct Quotation* pQuotes) {
@@ -229,13 +69,20 @@ static int DoGetQuotesExImpl(LPCTSTR pszTicker, int nPeriodicity, int nLastValid
         double liveMin  = hasLive ? floor(live.timestamp / 60.0) * 60.0 : 0;
         double sinceMin = floor(since / 60.0) * 60.0;
 
+        // The minutes that closed since AmiBroker's last bar, from memory: this plugin has been receiving them
+        // live. AmiBroker's own last minute is among them, with its final values (the next minute may have
+        // started before AmiBroker read its last ticks). `covered`: no minute in between can be missing, so
+        // nothing needs asking the engine.
+        std::vector<Bar> closed;
+        bool covered = hasLive && liveMin > sinceMin && GetCachedBarsBetween(pszTicker, sinceMin, liveMin, closed);
+
         // None of this while DataBridge isn't answering (CatchUpAllowed). A gap check that
         // found nothing (minutes without trades) isn't repeated until AmiBroker's last bar
         // moves on.
         bool liveSkipsMinutes = hasLive && liveMin > sinceMin + 60;
         bool canCatchUp = nLastValid >= 0 && IsBridgeConnected() && CatchUpAllowed();
         bool fullSync = canCatchUp && NeedsHistorySync(pszTicker);
-        bool gapCheck = !fullSync && canCatchUp && liveSkipsMinutes && GapCheckWorthIt(pszTicker, sinceMin) && TryBeginGapCheck(pszTicker);
+        bool gapCheck = !fullSync && canCatchUp && liveSkipsMinutes && !covered && GapCheckWorthIt(pszTicker, sinceMin) && TryBeginGapCheck(pszTicker);
         if (fullSync || gapCheck) {
             CatchUpResult want;
             double announced = BeginHistorySync(pszTicker, want.epoch);
@@ -259,15 +106,10 @@ static int DoGetQuotesExImpl(LPCTSTR pszTicker, int nPeriodicity, int nLastValid
                 WriteBarToQuotation(pQuotes, nLastValid, live);
                 return nLastValid + 1;
             } else if (liveMin > sinceMin) {
-                // New minute candle (MergeBars shifts out the oldest bar if the array is full).
-                // The minute before goes in too, with its final values: AmiBroker's copy of it
-                // may be from before its last ticks (the next minute started in between).
-                std::vector<Bar> bars;
-                Bar prev; memset(&prev, 0, sizeof(Bar));
-                if (GetCachedPrevBar(pszTicker, prev) && prev.close > 0 &&
-                    BarMinute(prev) >= sinceMin && BarMinute(prev) < liveMin) bars.push_back(prev);
-                bars.push_back(live);
-                return MergeBars(pQuotes, startIndex, nSize, bars);
+                // New minute candle (MergeBars shifts out the oldest bar if the array is full): the closed
+                // minutes since AmiBroker's last bar, then the live one
+                closed.push_back(live);
+                return MergeBars(pQuotes, startIndex, nSize, closed);
             }
         }
         // No new live data - return what AmiBroker already has

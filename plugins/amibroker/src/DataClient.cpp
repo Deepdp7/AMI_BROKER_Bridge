@@ -28,10 +28,18 @@
 static std::thread   g_pollerThread;
 static std::mutex    g_pollerMutex;
 static bool          g_bShutdown = false;
-static std::map<std::string, Bar>    g_lastKnownBars;
-// The final state of the minute before g_lastKnownBars' one: AmiBroker may not have read it yet
-// when the next minute started (it reads about once a second, less often during scans)
-static std::map<std::string, Bar>    g_prevMinuteBars;
+// Per symbol: the newest live bar, and the final state of each minute that closed since (up to 120 of them).
+// AmiBroker reads a symbol when a chart, watch list or scan asks for it, so a symbol nobody looked at for a few
+// minutes has several minutes to hand over at once, from here and not from the engine (guarded by g_pollerMutex)
+static std::map<std::string, RecentBars> g_recent;
+
+// A symbol's newest live bar (caller holds g_pollerMutex)
+static bool LiveOf(const std::string& ticker, Bar& out) {
+    auto it = g_recent.find(ticker);
+    if (it == g_recent.end() || !it->second.HasLive()) return false;
+    out = it->second.Live();
+    return true;
+}
 static HWND          g_hAmiBrokerWnd = NULL;
 // The engine connection, for the right-click menu's commands (guarded by g_sendMutex)
 static SOCKET        g_ipcSocket = INVALID_SOCKET;
@@ -112,9 +120,9 @@ void SetAmiBrokerWindow(HWND hWnd) {
 
 bool GetCachedLiveBar(const std::string& ticker, Bar& outBar) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
-    auto it = g_lastKnownBars.find(ticker);
-    if (it == g_lastKnownBars.end()) return false;
-    outBar = it->second;
+    auto it = g_recent.find(ticker);
+    if (it == g_recent.end() || !it->second.HasLive()) return false;
+    outBar = it->second.Live();
     // AmiBroker is reading this symbol's live bar: if it changed since the last read, how long was it waiting?
     auto unseen = g_firstUnseenMs.find(ticker);
     if (unseen != g_firstUnseenMs.end()) {
@@ -133,15 +141,14 @@ bool GetCachedLiveBar(const std::string& ticker, Bar& outBar) {
 int LiveSymbolCount(double sinceSec) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
     int n = 0;
-    for (auto& kv : g_lastKnownBars) if (kv.second.timestamp >= sinceSec) n++;
+    for (auto& kv : g_recent) if (kv.second.HasLive() && kv.second.Live().timestamp >= sinceSec) n++;
     return n;
 }
 
-bool GetCachedPrevBar(const std::string& ticker, Bar& outBar) {
+bool GetCachedBarsBetween(const std::string& ticker, double fromMin, double toMin, std::vector<Bar>& out) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
-    auto it = g_prevMinuteBars.find(ticker);
-    if (it != g_prevMinuteBars.end()) { outBar = it->second; return true; }
-    return false;
+    auto it = g_recent.find(ticker);
+    return it != g_recent.end() && it->second.Between(fromMin, toMin, out);
 }
 
 bool IsBridgeConnected() {
@@ -198,9 +205,13 @@ bool TryBeginGapCheck(const std::string& ticker) {
 // kept AmiBroker busy, the socket reader sat in that wait, ticks piled up in the socket, and
 // when AmiBroker came free it got all of them one by one (each redrawing charts): it froze,
 // caught up, froze again. Now the reader only records the newest bar per ticker; a separate
-// thread announces each changed ticker at most every NOTIFY_EVERY_MS and never waits long.
-static const DWORD NOTIFY_EVERY_MS = 150;
+// thread announces the changes and never waits long. It sends a notice as soon as something has
+// changed, but at least MIN_NOTICE_GAP apart (20 a second at most): what changes in between goes out
+// with the next one. It used to wake every 150 ms whatever happened, so every update waited up to 150 ms
+// (75 ms on average) for its notice even when AmiBroker was idle.
+static const std::chrono::milliseconds MIN_NOTICE_GAP(50);
 static const UINT  NOTIFY_WAIT_MS  = 1000;
+static std::condition_variable g_notifyCv;        // something is waiting for a notice, or shutdown
 static std::thread g_notifyThread;
 // firstRecvMs: when the oldest change still waiting for its notice arrived (for the notice delay)
 struct PendingNotify { Bar bar; double firstRecvMs; };
@@ -217,8 +228,11 @@ static void MarkPendingNotify(const std::string& ticker, const Bar& b, double re
 }
 
 static void QueueNotify(const std::string& ticker, const Bar& b) {
-    std::lock_guard<std::mutex> lk(g_pollerMutex);
-    MarkPendingNotify(ticker, b, NowUnixMs());
+    {
+        std::lock_guard<std::mutex> lk(g_pollerMutex);
+        MarkPendingNotify(ticker, b, NowUnixMs());
+    }
+    g_notifyCv.notify_one();
 }
 
 // ---- The Real-time Quote window ----
@@ -228,35 +242,21 @@ static void QueueNotify(const std::string& ticker, const Bar& b) {
 struct DayQuote { float last, open, high, low, prev, vol, oi, bid, ask; double tickSec; float bidQty, askQty; };
 static std::map<std::string, DayQuote> g_quotes;            // guarded by g_pollerMutex
 
-static void HandleQuoteMessage(const std::string& raw) {
-    std::string line = raw;
-    if (!line.empty() && line.back() == '\r') line.pop_back();
-    std::vector<std::string> f;
-    size_t from = 0;
-    for (;;) {
-        size_t bar = line.find('|', from);
-        f.push_back(line.substr(from, bar == std::string::npos ? std::string::npos : bar - from));
-        if (bar == std::string::npos) break;
-        from = bar + 1;
-    }
-    if (f.size() < 13 || f[1].empty()) return;
+static void HandleQuoteMessage(std::string_view raw) {
+    QuoteLine ql;
+    if (!ParseQuoteLine(raw, ql) || !(ql.last > 0)) return;
     DayQuote q{};
-    try {
-        q.last = std::stof(f[2]); q.open = std::stof(f[3]); q.high = std::stof(f[4]); q.low = std::stof(f[5]);
-        q.prev = std::stof(f[6]); q.vol = std::stof(f[7]); q.oi = std::stof(f[8]);
-        q.bid = std::stof(f[9]); q.ask = std::stof(f[10]); q.tickSec = std::stod(f[11]);
-        if (f.size() >= 14) { q.bidQty = std::stof(f[12]); q.askQty = std::stof(f[13]); }   // newer engines
-    } catch (...) { return; }
-    if (!(q.last > 0)) return;
+    q.last = ql.last; q.open = ql.open; q.high = ql.high; q.low = ql.low; q.prev = ql.prev;
+    q.vol = ql.vol; q.oi = ql.oi; q.bid = ql.bid; q.ask = ql.ask; q.tickSec = ql.tickSec;
+    q.bidQty = ql.bidQty; q.askQty = ql.askQty;
     Bar live{}; bool hasLive = false;
     {
         std::lock_guard<std::mutex> lk(g_pollerMutex);
-        g_quotes[f[1]] = q;
-        auto it = g_lastKnownBars.find(f[1]);
-        if (it != g_lastKnownBars.end()) { live = it->second; hasLive = true; }
+        g_quotes[ql.ticker] = q;
+        hasLive = LiveOf(ql.ticker, live);
     }
     // A price change without a new bar (after the close, a previous close found later): refresh
-    if (hasLive && live.close > 0) QueueNotify(f[1], live);
+    if (hasLive && live.close > 0) QueueNotify(ql.ticker, live);
 }
 
 bool FillRecentInfo(const std::string& ticker, RecentInfo& ri) {
@@ -264,8 +264,7 @@ bool FillRecentInfo(const std::string& ticker, RecentInfo& ri) {
     DayQuote q{}; bool hasQuote = false;
     {
         std::lock_guard<std::mutex> lk(g_pollerMutex);
-        auto it = g_lastKnownBars.find(ticker);
-        if (it != g_lastKnownBars.end() && it->second.close > 0) { b = it->second; hasBar = true; }
+        hasBar = LiveOf(ticker, b) && b.close > 0;
         auto qt = g_quotes.find(ticker);
         if (qt != g_quotes.end()) { q = qt->second; hasQuote = true; }
     }
@@ -364,10 +363,37 @@ static void ReportPerfIfDue() {
 // real-time windows and reads every symbol's newest quote itself (GetRecentInfo, GetQuotesEx),
 // as the ADK's own sample plugin does. One notice per symbol meant a few hundred live futures
 // made it redraw thousands of times a second.
+// Sleeps for `d` with a high-resolution timer owned by this thread (Windows 10 1803 and later). Plain sleeps are
+// rounded up to the 15.6 ms clock tick, which stretched the 50 ms gap to 50-73 ms; changing the clock tick
+// (timeBeginPeriod) would do it for the whole of AmiBroker, so that is not done. Older Windows: a plain sleep.
+static void SleepPrecisely(HANDLE hiresTimer, std::chrono::steady_clock::duration d) {
+    if (d <= std::chrono::steady_clock::duration::zero()) return;
+    if (hiresTimer) {
+        LARGE_INTEGER due;
+        due.QuadPart = -(LONGLONG)(std::chrono::duration_cast<std::chrono::nanoseconds>(d).count() / 100);   // relative, 100 ns units
+        if (SetWaitableTimer(hiresTimer, &due, 0, NULL, NULL, FALSE)) { WaitForSingleObject(hiresTimer, 1000); return; }
+    }
+    std::this_thread::sleep_for(d);
+}
+
 static void NotifierThreadProc() {
+    using Clock = std::chrono::steady_clock;
+    Clock::time_point lastNotice{};                  // none yet: the first notice goes out at once
+    const DWORD CREATE_HIGH_RESOLUTION = 0x00000002; // CREATE_WAITABLE_TIMER_HIGH_RESOLUTION
+    HANDLE hiresTimer = CreateWaitableTimerExW(NULL, NULL, CREATE_HIGH_RESOLUTION, TIMER_ALL_ACCESS);   // NULL on older Windows
     while (!g_bShutdown) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(NOTIFY_EVERY_MS));
+        {
+            std::unique_lock<std::mutex> lk(g_pollerMutex);
+            // Wakes as soon as something is waiting; the one-second limit is only for the minute report and shutdown
+            g_notifyCv.wait_for(lk, std::chrono::seconds(1), [] { return g_bShutdown || !g_pendingNotify.empty(); });
+        }
+        if (g_bShutdown) break;
         ReportPerfIfDue();
+        // Too soon after the last notice: wait out the rest of the gap; whatever changes meanwhile goes in this one
+        if (lastNotice != Clock::time_point{}) {
+            Clock::duration since = Clock::now() - lastNotice;
+            if (since < MIN_NOTICE_GAP) SleepPrecisely(hiresTimer, MIN_NOTICE_GAP - since);
+        }
         std::map<std::string, PendingNotify> batch;
         { std::lock_guard<std::mutex> lk(g_pollerMutex); batch.swap(g_pendingNotify); }
         if (batch.empty() || g_bShutdown) continue;
@@ -379,14 +405,17 @@ static void NotifierThreadProc() {
             oldestRecvMs = (std::min)(oldestRecvMs, it->second.firstRecvMs);
         }
         { std::lock_guard<std::mutex> pk(g_perfMutex); g_hNotify.Record(NowUnixMs() - oldestRecvMs); }
-        if (NotifyAmiBroker(newest->first, newest->second.bar)) continue;
-        // AmiBroker is busy: try again next round (newer bars that came meanwhile win)
+        bool taken = NotifyAmiBroker(newest->first, newest->second.bar);
+        lastNotice = Clock::now();       // from when AmiBroker answered: a busy one is not asked again at once
+        if (taken) continue;
+        // AmiBroker is busy: try again after the gap (newer bars that came meanwhile win)
         std::lock_guard<std::mutex> lk(g_pollerMutex);
         for (auto& kv : batch) {
             auto put = g_pendingNotify.emplace(kv.first, kv.second);
             if (!put.second) put.first->second.firstRecvMs = (std::min)(put.first->second.firstRecvMs, kv.second.firstRecvMs);
         }
     }
+    if (hiresTimer) CloseHandle(hiresTimer);
 }
 
 // ---- Keeping AmiBroker from waiting on DataBridge ----
@@ -537,8 +566,7 @@ static void CatchUpThreadProc() {
             job.info.got = got;
             job.info.bars = std::move(bars);
             g_catchUpDone[job.ticker] = std::move(job.info);
-            auto it = g_lastKnownBars.find(job.ticker);
-            if (it != g_lastKnownBars.end()) { live = it->second; hasLive = true; }
+            hasLive = LiveOf(job.ticker, live);
         }
         // AmiBroker calls GetQuotesEx for it soon (open charts also on their own refresh)
         if (hasLive && live.close > 0) QueueNotify(job.ticker, live);
@@ -575,8 +603,7 @@ static void HandleSyncMessage(const std::string& line) {
             auto it = g_syncFrom.find(ticker);
             if (it == g_syncFrom.end() || fromSec < it->second) g_syncFrom[ticker] = fromSec;
         }
-        auto it = g_lastKnownBars.find(ticker);
-        if (it != g_lastKnownBars.end()) { live = it->second; hasLive = true; }
+        hasLive = LiveOf(ticker, live);
     }
     // Nudge AmiBroker so an open chart pulls the new bars right away.
     if (hasLive && live.close > 0) QueueNotify(ticker, live);
@@ -681,22 +708,11 @@ void ShowDataBridge() {
     }).detach();
 }
 
-// Records a LIVE_BAR: the newest bar of the ticker, and the final state of the minute before it
-// (caller holds g_pollerMutex). recvMs: when the line was read, for the timing numbers only.
+// Records a LIVE_BAR (caller holds g_pollerMutex): the newest bar of the ticker, and the final state of
+// each minute before it (RecentBars). recvMs: when the line was read, for the timing numbers only.
 static void KeepLiveBar(const std::string& ticker, const Bar& b, double recvMs) {
-    double m = floor(b.timestamp / 60.0);
-    auto it = g_lastKnownBars.find(ticker);
-    if (it != g_lastKnownBars.end()) {
-        double cur = floor(it->second.timestamp / 60.0);
-        if (m < cur) {
-            // An update of the minute before (it reached us after the new one): keep it there
-            auto pv = g_prevMinuteBars.find(ticker);
-            if (pv != g_prevMinuteBars.end() && floor(pv->second.timestamp / 60.0) == m) pv->second = b;
-            return;
-        }
-        if (m > cur) g_prevMinuteBars[ticker] = it->second;
-    }
-    g_lastKnownBars[ticker] = b;
+    // A late update of a minute that already closed goes into its place in the ring; AmiBroker has nothing to be told
+    if (g_recent[ticker].OnLive(b) != RecentBars::LiveUpdated) return;
     MarkPendingNotify(ticker, b, recvMs);
     g_lastRecvMs[ticker] = recvMs;
     g_firstUnseenMs.emplace(ticker, recvMs);   // stays the oldest change until AmiBroker reads the bar
@@ -725,6 +741,9 @@ static void PollerThreadProc() {
             std::lock_guard<std::mutex> lk(g_pollerMutex);
             g_ipcConnected = true;
             ++g_connGeneration;
+            // The minutes since the last update were not received: the recent minutes kept per symbol
+            // are complete only from the first update that arrives now
+            for (auto& kv : g_recent) kv.second.ResetCoverage();
         }
         { std::lock_guard<std::mutex> lk(g_sendMutex); g_ipcSocket = s; }
         LogDebug("[IPC] Connected to 7891");
@@ -737,74 +756,40 @@ static void PollerThreadProc() {
 
         char buf[4096]; std::string acc;
         while (!g_bShutdown) {
-            int n = recv(s, buf, sizeof(buf)-1, 0);
+            int n = recv(s, buf, sizeof(buf), 0);
             if (n < 0 && WSAGetLastError() == WSAETIMEDOUT) continue;
             if (n <= 0) break;
             double recvMs = NowUnixMs();      // when this read returned: the end of the engine -> plugin transit
-            buf[n] = '\0'; acc += buf;
+            acc.append(buf, (size_t)n);
 
-            size_t p;
+            // Lines are read in place and what was used is cut off once, not once per line
+            size_t pos = 0, nl;
             unsigned linesRead = 0;
-            while ((p = acc.find('\n')) != std::string::npos) {
-                std::string line = acc.substr(0, p);
-                acc.erase(0, p+1);
+            bool liveChanged = false;
+            while ((nl = acc.find('\n', pos)) != std::string::npos) {
+                std::string_view line(acc.data() + pos, nl - pos);
+                pos = nl + 1;
                 linesRead++;
-                if (line.rfind("SYNC", 0) == 0) { HandleSyncMessage(line); continue; }
-                if (line.rfind("STATUS|", 0) == 0) { HandleStatusMessage(line); continue; }
-                if (line.rfind("QUOTE|", 0) == 0) { HandleQuoteMessage(line); continue; }
-                if (line.rfind("LIVE_BAR|", 0) != 0) continue;
+                auto starts = [&](std::string_view tag) { return line.substr(0, tag.size()) == tag; };
+                if (starts("SYNC")) { HandleSyncMessage(std::string(line)); continue; }
+                if (starts("STATUS|")) { HandleStatusMessage(std::string(line)); continue; }
+                if (starts("QUOTE|")) { HandleQuoteMessage(line); continue; }
+                if (!starts("LIVE_BAR|")) continue;
 
-                // LIVE_BAR|TICKER|ts|open|high|low|close|volume[|oi[|sendMs]]
-                // oi (open interest) comes from newer engines, sendMs (the engine's clock when it wrote the line)
-                // from the newest ones; both are optional, so any engine works with this plugin
-                size_t p1=line.find('|',9);               if(p1==std::string::npos) continue; // after LIVE_BAR|
-                size_t p2=line.find('|',p1+1);            if(p2==std::string::npos) continue; // after ticker
-                size_t p3=line.find('|',p2+1);            if(p3==std::string::npos) continue; // after ts
-                size_t p4=line.find('|',p3+1);            if(p4==std::string::npos) continue; // after open
-                size_t p5=line.find('|',p4+1);            if(p5==std::string::npos) continue; // after high
-                size_t p6=line.find('|',p5+1);            if(p6==std::string::npos) continue; // after low
-                // p6+1 to p7 = close, p7+1 to end = volume (no p7 needed)
-                size_t p7=line.find('|',p6+1);            // after volume: open interest follows (newer engines)
-                size_t p8=(p7!=std::string::npos) ? line.find('|',p7+1) : std::string::npos;   // after open interest: sendMs
-
-                std::string ticker = line.substr(9, p1-9);
-
-                Bar b{};
-                double sendMs = 0; bool haveSend = false;
-                try {
-                    b.timestamp = std::stod(line.substr(p1+1, p2-p1-1));
-                    b.open  = std::stof(line.substr(p2+1, p3-p2-1));
-                    b.high  = std::stof(line.substr(p3+1, p4-p3-1));
-                    b.low   = std::stof(line.substr(p4+1, p5-p4-1));
-                    b.close = std::stof(line.substr(p5+1, p6-p5-1));
-                    // volume: from p6+1 to p7 (or end of string)
-                    std::string volStr = (p7!=std::string::npos) 
-                        ? line.substr(p6+1, p7-p6-1) 
-                        : line.substr(p6+1);
-                    // trim CR if any
-                    if (!volStr.empty() && volStr.back()=='\r') volStr.pop_back();
-                    b.volume = std::stof(volStr);
-                    if (p7 != std::string::npos) {
-                        std::string oiStr = (p8 != std::string::npos) ? line.substr(p7+1, p8-p7-1) : line.substr(p7+1);
-                        if (!oiStr.empty() && oiStr.back()=='\r') oiStr.pop_back();
-                        b.oi = oiStr.empty() ? 0.0f : std::stof(oiStr);
-                    }
-                } catch(...) { continue; }
-
-                // Only for the timing numbers: a bad one must never cost the bar
-                if (p8 != std::string::npos) {
-                    try { sendMs = std::stod(line.substr(p8+1)); haveSend = sendMs > 0; } catch(...) {}
-                }
-                if (haveSend) {
+                LiveBarLine lb;
+                if (!ParseLiveBarLine(line, lb)) continue;
+                if (lb.sendMs > 0) {              // only the engines that stamp their lines; the timing numbers only
                     std::lock_guard<std::mutex> pk(g_perfMutex);
-                    g_hTransit.Record(recvMs - sendMs);
+                    g_hTransit.Record(recvMs - lb.sendMs);
                 }
-
                 {
                     std::lock_guard<std::mutex> lk(g_pollerMutex);
-                    KeepLiveBar(ticker, b, recvMs);
+                    KeepLiveBar(lb.ticker, lb.bar, recvMs);
                 }
+                liveChanged = true;
             }
+            acc.erase(0, pos);
+            if (liveChanged) g_notifyCv.notify_one();    // one wake-up for everything this read brought
             if (linesRead) { std::lock_guard<std::mutex> pk(g_perfMutex); g_perfLines += linesRead; }
         }
         { std::lock_guard<std::mutex> lk(g_sendMutex); g_ipcSocket = INVALID_SOCKET; }
@@ -834,6 +819,7 @@ void StopPollingThread() {
     g_bShutdown = true;
     // Wake the reader now rather than at its next one-second timeout
     { std::lock_guard<std::mutex> lk(g_sendMutex); if (g_ipcSocket != INVALID_SOCKET) shutdown(g_ipcSocket, SD_BOTH); }
+    g_notifyCv.notify_all();
     if (g_pollerThread.joinable()) g_pollerThread.join();
     if (g_notifyThread.joinable()) g_notifyThread.join();
     g_catchUpCv.notify_all();

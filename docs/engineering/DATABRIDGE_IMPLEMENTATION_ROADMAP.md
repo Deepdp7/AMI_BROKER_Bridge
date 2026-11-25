@@ -282,6 +282,8 @@ Add `const CORES = Math.max(1, os.availableParallelism())` at module level and u
 
 ## Stage 2: live tick pipeline (P3, P4, P10, D1, plus a measured flush change)
 
+> **Done (2026-11-25), with three differences from the text below (see the Discrepancies table in ROOT_CAUSE_ANALYSIS):** the notifier sleeps on a high-resolution timer, because a plain sleep stretched the 50 ms gap to 50-73 ms; `RecentBars` holds the live bar itself and `GetCachedPrevBar` is gone; the flush at the end of the task is now the default (`DATABRIDGE_IPC_FLUSH=immediate` restores the old timing). Stage 3d builds on `BarMerge.h/.cpp`, `RecentBars`, and `tests/dll_host.cpp` (a stand-in for AmiBroker that loads the DLL: `plugins\amibroker\tests\build-dll-host.bat`).
+
 ### 2a. P3: event-driven notifier (`DataClient.cpp:146-287`)
 - Add `static std::condition_variable g_notifyCv;` and a `MIN_GAP_MS = 50` constant, replacing `NOTIFY_EVERY_MS`.
 - **The loop:**

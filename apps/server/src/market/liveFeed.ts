@@ -78,6 +78,10 @@ interface CumVolume { total: number; day: number }
 export class LiveFeed extends EventEmitter {
   private instruments: Map<string, Instrument> = new Map()
   private liveBars: Map<string, LiveBar> = new Map()
+  /** `${brokerId}|${ticker}` -> that instrument's key in `instruments` / `liveBars`: finding a symbol's bar is a lookup, not a scan of every symbol */
+  private keyByTicker = new Map<string, string>()
+  /** Ticks `${brokerId}:${instrumentId}` that matched no instrument, even by the slow search: not searched for again until the symbol list changes */
+  private unknownIds = new Set<string>()
   private feedStatuses: Map<string, SymbolFeedStatus> = new Map()
   private startTime = Date.now()
   private tickInterval: ReturnType<typeof setInterval> | null = null
@@ -121,15 +125,15 @@ export class LiveFeed extends EventEmitter {
   }
 
   getLiveBar(ticker: string, brokerId: string) {
-    // Scan liveBars Map for the instrument matching ticker + brokerId
-    // brokerToken key may be in either raw or resolved form
-    for (const [key, bar] of this.liveBars) {
-      const inst = this.instruments.get(key)
-      if (inst && inst.ticker === ticker && inst.brokerId === brokerId) {
-        return bar
-      }
-    }
-    return undefined
+    // The key may be in the raw or the resolved form of the broker's token: the index follows it
+    const key = this.keyByTicker.get(`${brokerId}|${ticker}`)
+    return key === undefined ? undefined : this.liveBars.get(key)
+  }
+
+  /** Points a symbol at its key; what a tick could not be matched to before may match now */
+  private indexInstrument(brokerId: string, ticker: string, key: string) {
+    this.keyByTicker.set(`${brokerId}|${ticker}`, key)
+    this.unknownIds.clear()
   }
 
   /**
@@ -150,6 +154,7 @@ export class LiveFeed extends EventEmitter {
         // Re-key instruments Map
         this.instruments.delete(oldKey)
         this.instruments.set(newKey, inst)
+        this.indexInstrument(brokerId, ticker, newKey)
 
         // Re-key liveBars Map (preserve the existing bar state)
         const existingBar = this.liveBars.get(oldKey)
@@ -176,9 +181,12 @@ export class LiveFeed extends EventEmitter {
       if (inst.ticker !== ticker) continue
       if (inst.brokerId === toBrokerId) return true
       const newKey = `${toBrokerId}:${inst.brokerToken}`
+      const fromBrokerId = inst.brokerId
       inst.brokerId = toBrokerId
       this.instruments.delete(oldKey)
       this.instruments.set(newKey, inst)
+      this.keyByTicker.delete(`${fromBrokerId}|${ticker}`)
+      this.indexInstrument(toBrokerId, ticker, newKey)
       const bar = this.liveBars.get(oldKey)
       this.liveBars.delete(oldKey)
       if (bar) this.liveBars.set(newKey, bar)
@@ -196,6 +204,7 @@ export class LiveFeed extends EventEmitter {
   addInstrument(inst: Instrument) {
     const key = `${inst.brokerId}:${inst.brokerToken}`
     this.instruments.set(key, inst)
+    this.indexInstrument(inst.brokerId, inst.ticker, key)
     // No bar until the first trading tick (its own minute, whatever the clock says)
     this.liveBars.set(key, {
       open: inst.basePrice, high: inst.basePrice, low: inst.basePrice,
@@ -276,7 +285,9 @@ export class LiveFeed extends EventEmitter {
 
     // Second try: fallback scan to handle resolved vs original ticker mismatch
     // e.g. Fyers sends "NSE:BPCL-EQ" but Map has key "fyers-abc:BPCL"
-    if (!inst) {
+    // (once per unknown id: a feed that keeps sending a symbol nobody tracks used to be searched for on every update)
+    if (!inst && !this.unknownIds.has(key)) {
+      perf.count('feed.fallback_scans')
       for (const [k, instrument] of this.instruments) {
         if (instrument.brokerId !== brokerId) continue
 
@@ -315,10 +326,15 @@ export class LiveFeed extends EventEmitter {
             this.liveBars.delete(k)
             if (existingBar) this.liveBars.set(newKey, existingBar)
             key = newKey
+            this.indexInstrument(brokerId, instrument.ticker, newKey)
           }
           console.log(`[LiveFeed] Auto-resolved key: "${k}" to "${key}" for tick ${tick.instrumentId}`)
           break
         }
+      }
+      if (!inst) {
+        if (this.unknownIds.size >= 10_000) this.unknownIds.clear()
+        this.unknownIds.add(key)
       }
     }
 
@@ -710,6 +726,8 @@ export class LiveFeed extends EventEmitter {
   removeAllInstruments() {
     this.instruments.clear()
     this.liveBars.clear()
+    this.keyByTicker.clear()
+    this.unknownIds.clear()
     this.feedStatuses.clear()
     this.lastCumVolume.clear()
     this.lastOi.clear()
@@ -727,11 +745,13 @@ export class LiveFeed extends EventEmitter {
       const key = `${brokerId}:${brokerToken}`
       this.instruments.delete(key)
       this.liveBars.delete(key)
+      if (this.keyByTicker.get(`${brokerId}|${ticker}`) === key) this.keyByTicker.delete(`${brokerId}|${ticker}`)
     } else {
       for (const [key, inst] of this.instruments) {
         if (inst.ticker === ticker && inst.brokerId === brokerId) {
           this.instruments.delete(key)
           this.liveBars.delete(key)
+          if (this.keyByTicker.get(`${brokerId}|${ticker}`) === key) this.keyByTicker.delete(`${brokerId}|${ticker}`)
           break
         }
       }

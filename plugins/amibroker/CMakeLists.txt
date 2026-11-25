@@ -17,6 +17,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 add_library(DataBridgePro SHARED
     src/Plugin.cpp
     src/DataClient.cpp
+    src/BarMerge.cpp
     DataBridgePro.def
 )
 
