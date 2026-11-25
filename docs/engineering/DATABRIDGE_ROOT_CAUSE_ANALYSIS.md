@@ -353,3 +353,28 @@ Record any finding here that does not match the code when re-checked, with the c
 | 2026-11-25 | 3d | The roadmap said a failed background catch-up "doesn't pause anything else" | With one catch-up thread and a stuck engine, 400 symbols would each wait out their own timeout (4 s) in turn, for half an hour | A failure holds back only that symbol (2 s doubling to 60 s), but three failures in a row, whichever symbols, pause all catch-ups for 15 s as before. The slow path (full load on AmiBroker's own thread) keeps the global pause. |
 | 2026-11-25 | 3d | The roadmap expected the catch-up bytes per symbol to fall 2.5-4× | Measured 2.0× (mean 2.46 MB to 1.22 MB, max 10.6 MB to 4.17 MB) in the harness: its chunks are 95 days, and the saving is the tail from a chunk to now | As implemented. The saving grows with the length of the download. |
 | 2026-11-25 | 3b | (harness) The classes would be seen in `limiter.wait_ms.<name>.<class>` | 711 of 906 harness chunks were `interactive`: the harness's plugin requests the symbols over `/api/feed/bars`, which makes them "a chart is waiting", as AmiBroker does | By design; refresh against bulk is covered by the unit tests, not by this harness. |
+| 2026-11-25 | 3a (corrects the Stage 3 entry) | Stage 3 said the loop lag that remained came from "the repair, validate and `Map` of the 25,000 bars before the first slice and `learnClosedDays` after the last one (estimated 15-25 ms)" | Timed piece by piece (37,875 bars): repair 1 ms, validate 1 ms, the save 40 ms in 19 slices of about 2 ms, **`learnClosedDays` 22 ms in one piece** (a `Date` and an ISO text date made for every bar to find its day). It was the longest piece left in a chunk | `learnClosedDays` counts days with integer maths and makes a text date once per day: 1.5 ms. Loop lag p99 in `live500_backfill` 112 to 40 ms, chunk work 52 to 22 ms (median), engine CPU 98% to 58% |
+| 2026-11-25 | 4a | The roadmap expected checkpoints to be the main cause of the stalls ("periodic stalls of 10-200 ms") | With the worker, a history slice's p99 is 3.7 ms (16.8 ms with it switched off, 24.5 ms in the Stage 3 run) but the loop lag p99 was the same with and without it (112.7 ms both). The checkpoints cost the commit that triggered them 10-20 ms now and then; what held the thread for tens of ms was `learnClosedDays` (see above) | The worker stays (the slice is now a steady 2-4 ms, the max 5 ms instead of 73-80 ms); the stall that mattered is fixed separately |
+| 2026-11-25 | 4a | The metric `db.checkpoint_ms` was in the Stage 0 list | It was never implemented in Stage 0 (the checkpoints ran inside COMMIT, where they could not be timed) | Recorded now, from the worker (`db.checkpoint_ms`, per mode, `db.checkpoints`, `db.checkpoints_busy`) |
+| 2026-11-25 | 4a | TRUNCATE "only when the main thread reports no writes for 30 s and neither NSE nor MCX is in session"; the log checked every 5 s | The worker looks at the log file's own modification time (no write for 30 s) and no market clock: the file is the direct evidence, and `db` must not import `market` (cycle). It looks every 1 s: the harness writes 9 MB a second, and 5 s of that is 11,000 of the 20,000 pages of the engine's own limit | As implemented. A session with no write for 30 s is rare; a TRUNCATE then takes the log's write lock for the time of the copy (milliseconds after 30 s idle) |
+| 2026-11-25 | 4c | Counts per symbol "from the depth start"; the old query counted bars from `fromMs` exactly | The new counts are by whole IST day from the day that contains `fromMs`, so the first day of the window counts all its bars (the old one only those after `fromMs`) | The `bars` shown for a symbol can be a few hundred more on the first day of the window; `firstDay`, `missingDays` and the status are the same except when a symbol's history ends exactly on that day |
+| 2026-11-25 | 4b | Lanes: interactive 1 worker, bulk 2 workers | A third reader thread (about 10 MB). The old `dayCounts` op and `readDayCounts` are removed | As implemented |
+| 2026-11-25 | 4c | UI: a shared in-flight request across `useDataHealth` instances | Only one place uses the hook (Symbol Setup); the sharing also covers the 60 s refresh and the "downloads finished" look arriving together | As implemented; after a repair the picture is asked for anew |
+
+## Query plans (Stage 4d)
+
+`npm run perf --prefix apps/server -- --scenario explain` (SQLite `EXPLAIN QUERY PLAN`, 2026-11-25). Every query the engine runs on a hot path is a search of the primary key `(tid, ts)`:
+
+| Query | Plan |
+|---|---|
+| `deleteTickerBars`, `lastBarTs`, `oldestBarTs` | `SEARCH bars USING PRIMARY KEY (tid=?)` |
+| `reader.rawBars` (bars for AmiBroker, with `until`), `reader.bounds` | `SEARCH bars USING PRIMARY KEY (tid=? AND ts>? AND ts<?)` |
+| `reader.gapPairs` | the same search, then `SCAN` of its own result for the window function (not of the table), `USE TEMP B-TREE FOR ORDER BY` |
+| `reader.rangeRows` (candles), `reader.hiLo` | `SEARCH bars USING PRIMARY KEY (tid=? AND ts>?)` |
+| `reader.dayRange` (health, new) | `SEARCH bars USING PRIMARY KEY (tid=? AND ts>? AND ts<?)`, `USE TEMP B-TREE FOR GROUP BY` |
+| `reader.dayRows` (health, removed) | **`SCAN b`**, `SEARCH t USING INTEGER PRIMARY KEY`, `USE TEMP B-TREE FOR GROUP BY`: the only table scan; it is gone |
+| `dailyBefore` | `SEARCH daily_bars USING PRIMARY KEY (tid=? AND ts<?)` |
+| `getTickerId`, `reader.tidOf` | `SEARCH tickers USING COVERING INDEX sqlite_autoindex_tickers_1 (name=?)` |
+| `recentEvents` | `SEARCH connection_events USING INDEX connection_events_broker_ts (broker_id=?)` |
+
+No index is needed.

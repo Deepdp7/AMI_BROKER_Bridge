@@ -159,3 +159,51 @@ describe('Data health', () => {
     }
   })
 })
+
+describe('Data health: only what was written is counted again', () => {
+  const readCount = async () => (await import('../src/system/perf')).perf.snapshot().sinceStart.counters['health.ranges_read'] ?? 0
+  const byTicker = (list: any[]) => Object.fromEntries(list.map(h => [h.ticker, h]))
+
+  it('a day written since the last look is the only thing read, and the picture follows it', async () => {
+    const before = byTicker(await health.computeHealth(true))
+    expect(before.HGAPS.missingDays).toBe(2)
+    const reads = await readCount()
+
+    // History fills one of the two missing days of HGAPS
+    await addBars('HGAPS', [tradingDays[3]])
+    const after = byTicker(await health.computeHealth(true))
+    expect(after.HGAPS.missingDays).toBe(1)
+    expect(after.HGAPS.bars).toBe(before.HGAPS.bars + 1)
+    expect(await readCount() - reads).toBe(1)          // one symbol, one day: nothing else was read
+    expect(after.HFULL).toEqual(before.HFULL)
+  })
+
+  it('matches a full recount after live bars, history, a new symbol and a removed symbol', async () => {
+    await health.computeHealth(true)
+    // live bars (the path every closed minute takes)
+    db.insertBarBatch([{ amibroker_ticker: 'HEMPTY', ts_utc_ms: tenAm(tradingDays[5]), open: 10, high: 11, low: 9, close: 10, volume: 3 }])
+    db.flushPendingBars()
+    // history for a symbol that did not exist at the last look
+    addSymbol('HNEW')
+    await addBars('HNEW', tradingDays.slice(2))
+    // a symbol removed together with its bars
+    db.stmts.deleteSymbol.run('fyers-h', 'HCANCEL')
+    // history on top of a day that already has bars (changes the day's count only if a minute is new)
+    await db.upsertBarsToHistory('HFULL', [{ ts: tenAm(tradingDays[8]) + 60_000, open: 1, high: 2, low: 1, close: 1, volume: 1 }])
+
+    const incremental = await health.computeHealth(true)
+    health.forgetHealthState()
+    const full = await health.computeHealth(true)
+    expect(incremental).toEqual(full)
+    expect(byTicker(incremental).HEMPTY.bars).toBe(1)
+    expect(byTicker(incremental).HNEW.firstDay).toBe(dayStr(tradingDays[2]))
+    expect(byTicker(incremental).HFULL.bars).toBe(tradingDays.length + 1)
+  })
+
+  it('a wiped database empties the picture', async () => {
+    await health.computeHealth(true)
+    db.cleanDatabase()
+    const all = await health.computeHealth(true)
+    expect(all).toEqual([])
+  })
+})

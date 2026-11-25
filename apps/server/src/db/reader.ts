@@ -3,8 +3,12 @@
  *
  * SQLite calls are synchronous, so a multi-year chart load (hundreds of thousands of bars)
  * or a year-long gap scan would stall live ticks if run on the engine thread. These run on
- * two read-only connections in worker threads instead (WAL lets them read while the engine
+ * read-only connections in worker threads instead (WAL lets them read while the engine
  * writes).
+ *
+ * Two lanes, so work nobody is waiting for can never queue in front of a request AmiBroker is
+ * waiting for: `interactive` (one worker) serves the plugin's history requests (/api/feed/bars);
+ * `bulk` (two workers) serves everything else: data health, gap scans, candles, backups, exports.
  *
  * The worker is plain JavaScript passed as a string (eval), so it also runs from the single
  * packaged .exe, where there is no separate script file to point a Worker at.
@@ -21,6 +25,7 @@ process.emitWarning = emitWarning
 
 const db = new DatabaseSync(workerData.file, { readOnly: true })
 db.exec('PRAGMA busy_timeout = 5000')
+if (workerData.mmapBytes > 0) db.exec('PRAGMA mmap_size = ' + workerData.mmapBytes)
 const S = 10000
 
 const tidOf = db.prepare('SELECT id FROM tickers WHERE name = ?')
@@ -48,10 +53,9 @@ const gapPairs = db.prepare(
 const bounds = db.prepare('SELECT MIN(ts) AS first, MAX(ts) AS last FROM bars WHERE tid = ? AND ts >= ? AND ts <= ?')
 const rangeRows = db.prepare('SELECT ts, open, high, low, close, volume FROM bars WHERE tid = ? AND ts >= ? ORDER BY ts')
 const hiLo = db.prepare('SELECT MAX(high) AS hi, MIN(low) AS lo FROM bars WHERE tid = ? AND ts >= ?')
-// Days (IST day number) with at least one bar, per ticker: data health in Symbol Setup
-const dayRows = db.prepare(
-  'SELECT t.name AS ticker, (b.ts + 19800) / 86400 AS d, COUNT(*) AS n FROM bars b JOIN tickers t ON t.id = b.tid ' +
-  'WHERE b.ts >= ? GROUP BY b.tid, d')
+// Days (IST day number) with bars, and how many, in one ticker's time range: data health in Symbol Setup
+// (a range of the primary key (tid, ts), so only that ticker's rows are read)
+const dayRange = db.prepare('SELECT (ts + 19800) / 86400 AS d, COUNT(*) AS n FROM bars WHERE tid = ? AND ts >= ? AND ts < ? GROUP BY d')
 
 const ops = {
   csv({ ticker, since, limit, until }) {
@@ -102,15 +106,13 @@ const ops = {
     db.exec("VACUUM INTO '" + String(path).replace(/'/g, "''") + "'")
     return true
   },
-  // Per ticker: the IST day numbers that have bars, and the bar count, since fromSec
-  dayCounts({ fromSec }) {
-    const out = {}
-    for (const r of dayRows.iterate(fromSec)) {
-      const e = out[r.ticker] || (out[r.ticker] = { days: [], bars: 0 })
-      e.days.push(r.d)
-      e.bars += r.n
-    }
-    return out
+  // For each { ticker, fromSec, toSec } (toSec excluded): [[IST day number, bar count], ...] ascending; [] for an unknown ticker
+  dayCountsRanges({ ranges }) {
+    return ranges.map(r => {
+      const t = tidOf.get(r.ticker)
+      if (!t) return []
+      return dayRange.all(t.id, r.fromSec, r.toSec).map(x => [x.d, x.n])
+    })
   },
 }
 
@@ -127,17 +129,22 @@ parentPort.on('message', ({ id, op, args }) => {
 })
 `
 
-type Op = 'csv' | 'gaps' | 'candles' | 'hiLo' | 'dayCounts' | 'backupTo'
+type Op = 'csv' | 'gaps' | 'candles' | 'hiLo' | 'dayCountsRanges' | 'backupTo'
+export type Lane = 'interactive' | 'bulk'
+/** Which lane an operation uses unless its caller says otherwise */
+const DEFAULT_LANE: Record<Op, Lane> = { csv: 'interactive', gaps: 'bulk', candles: 'bulk', hiLo: 'bulk', dayCountsRanges: 'bulk', backupTo: 'bulk' }
 interface Pending { resolve: (v: any) => void; reject: (e: Error) => void; op: Op; sentAt: number }
 interface Reader { worker: Worker; pending: Map<number, Pending> }
 
 const epochNow = () => performance.timeOrigin + performance.now()
 
-const READERS = 2
-const readers: (Reader | null)[] = new Array(READERS).fill(null)
+/** The worker slots of each lane */
+const LANE_SLOTS: Record<Lane, number[]> = { interactive: [0], bulk: [1, 2] }
+const readers: (Reader | null)[] = new Array(3).fill(null)
 let dbFile = ''
 let nextId = 1
-let nextReader = 0
+// Memory-mapped reads (megabytes of the file a reader maps; 0 = off). Only set for measuring: DATABRIDGE_SQLITE_MMAP_MB
+const MMAP_BYTES = Math.max(0, Number(process.env.DATABRIDGE_SQLITE_MMAP_MB) || 0) * 1024 * 1024
 
 /** Called once by db.ts with the database path (after the schema exists). */
 export function setReaderDbFile(file: string) {
@@ -145,7 +152,7 @@ export function setReaderDbFile(file: string) {
 }
 
 function startReader(slot: number): Reader {
-  const worker = new Worker(WORKER_SOURCE, { eval: true, workerData: { file: dbFile } })
+  const worker = new Worker(WORKER_SOURCE, { eval: true, workerData: { file: dbFile, mmapBytes: MMAP_BYTES } })
   worker.unref()
   const reader: Reader = { worker, pending: new Map() }
   const fail = (err: Error) => {
@@ -167,9 +174,17 @@ function startReader(slot: number): Reader {
   return reader
 }
 
-function call<T>(op: Op, args: object): Promise<T> {
+/** Requests waiting or running on each worker, for /api/diagnostics/perf */
+perf.probe('readers', () => ({
+  interactive: LANE_SLOTS.interactive.map(i => readers[i]?.pending.size ?? 0),
+  bulk: LANE_SLOTS.bulk.map(i => readers[i]?.pending.size ?? 0),
+}))
+
+function call<T>(op: Op, args: object, lane: Lane = DEFAULT_LANE[op]): Promise<T> {
   if (!dbFile) return Promise.reject(new Error('database reader not configured'))
-  const slot = nextReader++ % READERS
+  // The worker of the lane with the fewest requests waiting (the first of them when they are equal)
+  let slot = LANE_SLOTS[lane][0]
+  for (const i of LANE_SLOTS[lane]) if ((readers[i]?.pending.size ?? 0) < (readers[slot]?.pending.size ?? 0)) slot = i
   const reader = readers[slot] || startReader(slot)
   const id = nextId++
   return new Promise<T>((resolve, reject) => {
@@ -178,9 +193,13 @@ function call<T>(op: Op, args: object): Promise<T> {
   })
 }
 
-/** "tsSec,open,high,low,close,volume" lines strictly newer than `sinceSec` (and, when given, not newer than `untilSec`): the newest `limit`, ascending. */
-export function readBarsCsv(ticker: string, sinceSec: number, limit: number, untilSec = 0): Promise<string> {
-  return call<string>('csv', { ticker, since: sinceSec, limit, until: untilSec })
+/**
+ * "tsSec,open,high,low,close,volume" lines strictly newer than `sinceSec` (and, when given, not newer than `untilSec`):
+ * the newest `limit`, ascending. `lane`: the plugin's requests are interactive (the default); an export or a
+ * platform's feed passes 'bulk', so a large one can never delay what AmiBroker is waiting for.
+ */
+export function readBarsCsv(ticker: string, sinceSec: number, limit: number, untilSec = 0, lane?: Lane): Promise<string> {
+  return call<string>('csv', { ticker, since: sinceSec, limit, until: untilSec }, lane)
 }
 
 /** Adjacent stored bars more than `intervalSec` apart in [fromSec, toSec], plus the first/last bar there. */
@@ -201,7 +220,10 @@ export function backupDatabaseTo(path: string) {
   return call<boolean>('backupTo', { path })
 }
 
-/** Per ticker, the IST day numbers (days since 1970 in IST) that have bars since fromSec */
-export function readDayCounts(fromSec: number) {
-  return call<Record<string, { days: number[]; bars: number }>>('dayCounts', { fromSec })
+/**
+ * For each range ({ ticker, fromSec, toSec }: toSec excluded): the IST days (days since 1970 in IST) that have
+ * bars in it, with how many, ascending. [] for a ticker with no bars.
+ */
+export function readDayCountsRanges(ranges: Array<{ ticker: string; fromSec: number; toSec: number }>) {
+  return call<Array<Array<[number, number]>>>('dayCountsRanges', { ranges })
 }

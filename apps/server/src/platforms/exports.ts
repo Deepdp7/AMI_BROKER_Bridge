@@ -180,7 +180,7 @@ export async function exportHistory(kind: 'ninjatrader8' | 'csv', tickers?: stri
   let files = 0, bars = 0
   for (const s of storedSymbols()) {
     if (wanted && !wanted.has(s.ticker)) continue
-    const csv = await readBarsCsv(s.ticker, 0, MAX_BARS)
+    const csv = await readBarsCsv(s.ticker, 0, MAX_BARS, 0, 'bulk')
     if (!csv) continue
     const body = kind === 'ninjatrader8' ? ninjaLines(csv) : csvLines(csv)
     const name = kind === 'ninjatrader8' ? `${safeFileName(s.ticker)}.Last.txt` : `${safeFileName(s.ticker)}.csv`

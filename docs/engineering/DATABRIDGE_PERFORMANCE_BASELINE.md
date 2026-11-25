@@ -120,17 +120,17 @@ Machine: Intel Core Ultra 9 275HX, 24 threads, 31 GB RAM, Windows 10.0.26300, No
 
 | Metric | p50 | p95 | p99 | max | after 3a | after 3b–3d | after 4a | final |
 |---|---|---|---|---|---|---|---|---|
-| loop.lag_ms | 10.4 | 219 | 266 | 315 | | 0.87 / 43.4 / 77.0 / 132 | | |
-| tick.feed_to_ipc_ms | 1.06 | 35.9 | 242 | 340 | | 0.050 / 0.157 / 0.253 / 2.18 | | |
-| history.parse_ms | 4.0 | 5.3 | 6.5 | 9.2 | | 4.0 / 7.8 / 10.4 / 13.2 | | |
-| backfill.chunk_cpu_ms | 35.9 | 52.6 | 63.6 | 70.5 | | 43.4 / 70 / 77 / 95 (the sum of the pieces, see 3a: not the same thing as before) | | |
-| db.history_tx_ms | 20.3 | 35.9 | 47.8 | 51.7 | | 1.7 / 3.3 / 24.5 / 42.6 (one slice of 2,000 rows; before: one chunk) | | |
-| http.feed_bars_ms (the fake plugin's catch-ups) | 27.0 | 242 | 354 | 375 | | 24.5 / 57.8 / 84.6 / 152 | | |
-| db.wal_bytes max | 8.5 MB | | | | | 5.2 MB | | |
+| loop.lag_ms | 10.4 | 219 | 266 | 315 | | 0.87 / 43.4 / 77.0 / 132 | 0.28 / 16.8 / 39.5 / 91.8 (second run: 0.31 / 16.8 / 43.4 / 77.0) | |
+| tick.feed_to_ipc_ms | 1.06 | 35.9 | 242 | 340 | | 0.050 / 0.157 / 0.253 / 2.18 | 0.050 / 0.118 / 0.190 / 0.75 | |
+| history.parse_ms | 4.0 | 5.3 | 6.5 | 9.2 | | 4.0 / 7.8 / 10.4 / 13.2 | (unchanged) | |
+| backfill.chunk_cpu_ms | 35.9 | 52.6 | 63.6 | 70.5 | | 43.4 / 70 / 77 / 95 (the sum of the pieces, see 3a: not the same thing as before) | 22.3 / 29.7 / 32.6 / 34.2 | |
+| db.history_tx_ms | 20.3 | 35.9 | 47.8 | 51.7 | | 1.7 / 3.3 / 24.5 / 42.6 (one slice of 2,000 rows; before: one chunk) | 1.55 / 2.06 / 2.74 / 5.4 (a slice) | |
+| http.feed_bars_ms (the fake plugin's catch-ups) | 27.0 | 242 | 354 | 375 | | 24.5 / 57.8 / 84.6 / 152 | 20.3 / 47.8 / 63.6 / 79.7 | |
+| db.wal_bytes max | 8.5 MB | | | | | 5.2 MB | 64-68 MB, steady (journal_size_limit; the worker empties it every second or so) | |
 | chunks/min | 597 (906 in 91 s, 21.1 M bars) | | | | | 598 (906 in 91 s) | | |
 | catch-up bytes per symbol | mean 3.4 MB, max 10.6 MB (582 symbols) | | | | | mean 1.22 MB, max 4.17 MB (613 symbols) | | |
-| CPU % (engine, of one core) / RSS peak | 111 / 1,944 MB | | | | | 76 / 1,296 MB | | |
-| integrity mismatches | 0 (1,500 bars, 93,068 updates) | | | | | 0 (1,000 bars, 92,998 updates) | | |
+| CPU % (engine, of one core) / RSS peak | 111 / 1,944 MB | | | | | 76 / 1,296 MB | 58 / 1,118 MB | |
+| integrity mismatches | 0 (1,500 bars, 93,068 updates) | | | | | 0 (1,000 bars, 92,998 updates) | 0 (1,000 bars, 93,016 updates) | |
 
 **After Stage 1** (a second 91 s run, same scenario): loop.lag_ms p50 / p99 / max 0.60 / 242 / 299 ms; tick.feed_to_ipc_ms 0.49 / 181 / 290 ms; backfill.chunk_cpu_ms 35.9 / 57.8 / 61.2 ms; 906 chunks, 0 failed history requests; integrity 0 mismatches (1,000 bars, 92,998 updates). Stage 1 does not touch this path, so this run differs from the baseline only by run-to-run variation (the two baseline runs of this scenario also differ, p99 lag 242-266 ms). The one number Stage 1 is meant to move: `catchup.state_writes` was 476 and 597 in the two baseline runs and is **205** now (2.3 a second). Since Stage 1 they are background writes, at most one per file every 500 ms, not whole-file writes on the engine's thread at every change.
 
@@ -168,17 +168,38 @@ The "before" run agrees with the earlier baseline runs (loop.lag_ms p99 242-266 
 
 Read it against live500 above: the same 500 symbols and the same updates, and the loop lag goes from p99 0.66 ms to **266 ms**, and the time from a bar being ready to its write on AmiBroker's channel from p99 0.23 ms to **242 ms** (max 340 ms). Each history chunk holds the engine's one thread for 36 ms (median; 64 ms at p99), of which the database save is 20 ms. At 10 chunks a second that is about a third of the thread, in blocks. The loop lag is larger than any single chunk (up to 315 ms) because the catch-up answers are also built on that thread: the plugin asks for "from the announced start up to now", about 3.4 MB per symbol on average (P5), and `/api/feed/bars` re-filters those on the main thread (P14).
 
+**After Stage 4** (4a, and the piece that turned out to matter more: `learnClosedDays`, see the Discrepancies table; 90 s runs on the same machine in one sitting):
+
+| | Stage 3 (the run above) | 4a: worker checkpoints, p50 / p95 / p99 / max | 4a switched off (`DATABRIDGE_MAINTENANCE=0`) | 4a + `learnClosedDays` fix, run 1 | run 2 |
+|---|---|---|---|---|---|
+| loop.lag_ms | 0.87 / 43.4 / 77.0 / 132 | 2.49 / 57.8 / 112.7 / 226 | 3.01 / 63.6 / 112.7 / 186 | **0.28 / 16.8 / 39.5 / 91.8** | 0.31 / 16.8 / 43.4 / 77.0 |
+| tick.feed_to_ipc_ms | 0.050 / 0.157 / 0.253 / 2.18 | 0.055 / 0.253 / 0.492 / 0.85 | 0.055 / 0.230 / 0.370 / 1.33 | 0.050 / 0.118 / 0.190 / 0.75 | 0.050 / 0.118 / 0.190 / 0.81 |
+| db.history_tx_ms (a slice of 2,000 rows) | 1.7 / 3.3 / 24.5 / 42.6 | 2.26 / 3.31 / **3.65** / 73.1 | 2.26 / 3.31 / **16.75** / 80.4 | 1.55 / 2.06 / 2.74 / **5.4** | 1.55 / 1.87 / 2.26 / 5.7 |
+| backfill.chunk_cpu_ms | 43.4 / 70 / 77 / 95 | 52.6 / 63.6 / 70 / 133 | 52.6 / 77 / 84.6 / 124 | **22.3 / 29.7 / 32.6 / 34.2** | 24.5 / 27 / 29 / 29 |
+| http.feed_bars_ms (catch-ups) | 24.5 / 57.8 / 84.6 / 152 | 32.6 / 84.6 / 150 / 198 | 32.6 / 84.6 / 124 / 184 | 20.3 / 47.8 / 63.6 / 79.7 | 22.3 / 47.8 / 57.8 / 98 |
+| reader.wait_ms.csv | 0.08 / 0.60 / 39.5 / 52 | 0.08 / 13.8 / 32.6 / 45 | 0.09 / 13.8 / 39.5 / 51 | 0.07 / 0.25 / 16.8 / 29 | 0.08 / 0.19 / 24.5 / 46 |
+| db.checkpoint_ms (on the worker) | - | 29.7 / 52.6 / 65 / 65 (89 in 90 s) | - | (same) | |
+| engine CPU, of one core | 76% | 98.5% | 94% | **58%** | 58% |
+| integrity | 0 | 0 | 0 | 0 | 0 |
+
+- **Checkpoints (4a)**: with the worker, a slice's p99 is 3.7 ms; with it switched off (the same code otherwise) 16.8 ms. The checkpoints themselves are not cheaper: 30 ms (median) each, 89 of them in 90 s, but they now happen on the worker's thread. The log file stays at its 64 MB limit while the download runs (it is reused, not grown) and is emptied to zero bytes after 30 s without writes.
+- **The loop lag p99 is the same with and without the worker (112.7 ms both)**: checkpoints were not what held the thread. The pieces of a chunk were timed on their own (37,875 bars): repair 1 ms, validate 1 ms, the save 40 ms in 19 slices of about 2 ms each, and **`learnClosedDays` 22 ms in one piece** (a `Date` and a text date made for each of the 37,875 bars). Making the text date once per day instead brought it to 1.5 ms, and the loop lag p99 from 112 to **40 ms**, the longest piece of a chunk from 22 ms to about 3 ms, the engine's CPU from 98% to 58%.
+- **Still above the 10 ms target** (p99 40 ms, max 77-92 ms). A chunk is now all small pieces; what remains is the catch-up answers built on the main thread (`/api/feed/bars` splits, filters and joins the text of 30,000 lines for a `since` request: P14, Stage 6b) and the harness's own load (10 chunks a second; a real broker allows 45 a minute, so about one in 13).
+- **`cache_size` 64 MB on the writer (A/B, not kept)**: slice p50 2.26 ms (same), p99 3.31 ms (3.65); loop lag p99 93 ms (113, within the run-to-run spread). **`mmap_size` 256 MB on the readers (A/B, not kept)**: reader.exec_ms.csv 20.3 / 43.4 / 47.8 (20.3 / 43.4 / 52.6), wait p95 8.6 ms (13.8). Neither gives a difference larger than the variation between identical runs on this machine, and the harness database (a few hundred MB, mostly in the file cache) is the case where they would help least: a client's 2 GB database could behave differently, so both stay as settings for measuring (`DATABRIDGE_SQLITE_CACHE_KIB`, `DATABRIDGE_SQLITE_MMAP_MB`) and neither is on by default.
+
 ### `live500_health` (synthetic 100-symbol year database)
 
 | Metric | p50 | p95 | p99 | max | after 4b | after 4c | final |
 |---|---|---|---|---|---|---|---|
-| health.compute_ms | 2,162 | 2,190 | 2,190 | 2,190 | | | |
-| health.scan_ms | 2,162 | 2,188 | 2,188 | 2,188 | | | |
-| reader.wait_ms.csv | 0.13 | 1,787 | 1,932 | 1,932 | | | |
-| http.feed_bars_ms (catch-ups) | 0.60 | 1,787 | 1,936 | 1,936 | | | |
-| catch-up failures (over 4 s) | 0 of 435 | | | | | | |
+| health.compute_ms | 2,162 | 2,190 | 2,190 | 2,190 | (with 4c) | 2.5 / 5.3 / 11.4 / 938 (the first one, which counts every symbol; 118 later ones read only what was written) | |
+| health.scan_ms (one request) | 2,162 | 2,188 | 2,188 | 2,188 | (with 4c) | 0.06 / 20.3 / 20.3 / 26.9 (620 requests, 1,600 ranges) | |
+| reader.wait_ms.csv | 0.13 | 1,787 | 1,932 | 1,932 | 0.11 / 0.25 / 0.45 / 36.6 | 0.11 / 0.25 / 0.45 / 36.6 | |
+| http.feed_bars_ms (catch-ups) | 0.60 | 1,787 | 1,936 | 1,936 | 0.54 / 0.96 / 1.70 / 38.6 | 0.54 / 0.96 / 1.70 / 38.6 | |
+| catch-up failures (over 4 s) | 0 of 435 | | | | 0 of 582 | 0 of 582 | |
 
 The 9.4 M-row database is about one fifth the size of a client's (500 symbols x a year is about 1.9 GB). A scan of 2.2 s here means about 10 s there, against the plugin's 4 s catch-up timeout. The live feed is not affected (loop lag p99 0.79 ms, max 4.2 ms): this costs AmiBroker its history requests, not its live ticks (B5). `EXPLAIN QUERY PLAN` shows why: the health query is the only one that does `SCAN b`; every other query uses the primary key.
+
+**After Stage 4** (4b and 4c were measured together: one run of 120 s, health recomputed once a second, 100 symbols x a year, the fake plugin asking for a catch-up every 200 ms): a catch-up of the plugin used to wait up to 1.9 s behind the health scan on the same reader (p99 1,932 ms; on a client's database five times larger, about 10 s against the plugin's 4 s timeout). It now waits **0.45 ms (p99), 36.6 ms at the worst**: the scan is not on its worker any more (own lane) and mostly does not happen (only what was written is counted again: 1,600 small range reads for the whole run). The first picture, which counts every symbol, takes 0.94 s here (was 2.2 s, also because two bulk workers share it); every later one 2.5 ms (p50), 11 ms (p99). The live feed was not affected before and is not now (loop lag p99 1.9 ms).
 
 ### `live500_backpressure` (fake plugin pauses reads for 10 s)
 

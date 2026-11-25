@@ -398,7 +398,7 @@ Add `const CORES = Math.max(1, os.availableParallelism())` at module level and u
 
 ## Stage 3: backfill isolation (P1, P5, P6, and P7's interaction)
 
-> **Done (2026-11-25) except 3e, with the differences listed in ROOT_CAUSE_ANALYSIS (3a, 3b, 3d).** 3e (the database writer thread) is **not started**: its trigger (loop.lag_ms p99 above 10 ms after 3a-3d) is met (77 ms), but the numbers say the remaining stalls are the checkpoints (Stage 4a) and the catch-up answers (Stage 6b), which a writer thread would not remove. Decide again after 4a: if p99 is still over 10 ms then, 3e is the next step. New code: `lib/priority.ts`, `db/index.ts` (`HISTORY_SLICE_ROWS`, `historyRangeSec`), `BarMerge.h/.cpp` (`ParseSyncLine`, `SyncRange`, `RetryBackoff`).
+> **Done (2026-11-25) except 3e, with the differences listed in ROOT_CAUSE_ANALYSIS (3a, 3b, 3d).** 3e (the database writer thread) is **not started**: its trigger (loop.lag_ms p99 above 10 ms after 3a-3d) is met (77 ms), but the numbers say the remaining stalls are the checkpoints (Stage 4a) and the catch-up answers (Stage 6b), which a writer thread would not remove. Decided after 4a: **3e is not needed**. The remaining stall was not the database write but `learnClosedDays` (22 ms in one piece per chunk, fixed in Stage 4: loop lag p99 112 to 40 ms). What is left is the catch-up answers built on the main thread (P14, Stage 6b); a writer thread would remove neither. Reopen 3e only if the live baseline shows engine stalls caused by writes. New code: `lib/priority.ts`, `db/index.ts` (`HISTORY_SLICE_ROWS`, `historyRangeSec`), `BarMerge.h/.cpp` (`ParseSyncLine`, `SyncRange`, `RetryBackoff`).
 
 ### 3a. P1: commit history in slices (`db/index.ts:419-449`)
 - Keep building `byMinute` as today. Then commit in slices of `HISTORY_SLICE_ROWS = 2000`: `changed += tx(() => { … slice … })`.
@@ -503,6 +503,8 @@ export function currentPriority(): Priority { return store.getStore() ?? 'refres
 ---
 
 ## Stage 4: SQLite (P2, B5, C1)
+
+> **Done (2026-11-25), with the differences listed in ROOT_CAUSE_ANALYSIS (4a, 4c, and a correction to 3a).** New: `db/maintenance.ts` (the checkpoint worker), `barWrites` in `db/index.ts`, lanes and `dayCountsRanges` in `db/reader.ts`, an incremental `market/DataHealth.ts`, and a faster `learnClosedDays` (found while measuring, see below). `cache_size` and `mmap_size` were A/B tested and **not kept** (no gain beyond the run-to-run spread); they remain env settings for measuring. 4d: all hot queries are primary-key searches; nothing to index.
 
 ### 4a. P2: checkpoints off the main thread
 **`db/index.ts` `SCHEMA`:** add `PRAGMA wal_autocheckpoint = 20000;` (a backstop only) and `PRAGMA journal_size_limit = 67108864;`.

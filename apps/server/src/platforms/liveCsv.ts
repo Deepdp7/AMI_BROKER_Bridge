@@ -60,14 +60,14 @@ export async function updateCsvFiles(into?: string): Promise<{ folder: string; a
     }
     if (since <= 0) {
       // No file yet (or an empty one): its whole history
-      const csv = await readBarsCsv(s.ticker, 0, MAX_BARS).catch(() => '')
+      const csv = await readBarsCsv(s.ticker, 0, MAX_BARS, 0, 'bulk').catch(() => '')
       if (!csv) continue
       await fs.promises.writeFile(file, csvLines(csv) + '\n')
       added += csv.split('\n').filter(Boolean).length
       lastSec.set(s.ticker, Number(csv.trimEnd().split('\n').pop()!.split(',')[0]) || 0)
       continue
     }
-    const csv = await readBarsCsv(s.ticker, since, MAX_BARS).catch(() => '')
+    const csv = await readBarsCsv(s.ticker, since, MAX_BARS, 0, 'bulk').catch(() => '')
     if (!csv.trim()) { lastSec.set(s.ticker, since); continue }
     const rows = csvLines(csv).split('\n').slice(1)   // without the header
     try {

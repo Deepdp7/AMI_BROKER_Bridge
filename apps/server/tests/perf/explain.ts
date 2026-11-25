@@ -36,10 +36,16 @@ const QUERIES: Q[] = [
   { name: 'reader.rangeRows (candles)', sql: 'SELECT ts, open, high, low, close, volume FROM bars WHERE tid = ? AND ts >= ? ORDER BY ts', params: [1, 0] },
   { name: 'reader.hiLo', sql: 'SELECT MAX(high) AS hi, MIN(low) AS lo FROM bars WHERE tid = ? AND ts >= ?', params: [1, 0] },
   {
-    name: 'reader.dayRows (history health)',
+    name: 'reader.dayRange (history health, since Stage 4c: one ticker, a range of days)',
+    sql: 'SELECT (ts + 19800) / 86400 AS d, COUNT(*) AS n FROM bars WHERE tid = ? AND ts >= ? AND ts < ? GROUP BY d',
+    params: [1, 0, 2e9],
+  },
+  {
+    name: 'reader.dayRows (history health before Stage 4c: every ticker, removed)',
     sql: 'SELECT t.name AS ticker, (b.ts + 19800) / 86400 AS d, COUNT(*) AS n FROM bars b JOIN tickers t ON t.id = b.tid WHERE b.ts >= ? GROUP BY b.tid, d',
     params: [0],
   },
+  { name: 'reader.tidOf', sql: 'SELECT id FROM tickers WHERE name = ?', params: ['X'] },
 ]
 
 /** One block of text: each query and the plan SQLite picks for it */

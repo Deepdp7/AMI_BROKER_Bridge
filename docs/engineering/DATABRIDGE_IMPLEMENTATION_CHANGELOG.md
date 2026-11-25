@@ -41,6 +41,53 @@ One entry per stage, newest at the top. An entry is written when its stage is fi
 - No source files were changed.
 - Next: Stage 0 (instrumentation and baseline harness).
 
+## Stage 4: SQLite (2026-11-25)
+
+**Findings addressed:** P2 (4a), B5 (4b, 4c), C1 (A/B, not kept), 4d (plans). Verified against the code at `542159a` first: all as described (checkpoints inside COMMIT with default settings; the health query is the only table scan; reads round-robin over two workers).
+**Discrepancies found while verifying and measuring:** seven, all in ROOT_CAUSE_ANALYSIS "Discrepancies" (the important one: the stall that remained after Stage 3 was `learnClosedDays`, not checkpoints).
+
+**Changes**
+- Engine `db/maintenance.ts` (new, 4a): a worker with its own read-write connection copies the write-ahead log into the database file (PASSIVE, never blocks the writer) when the log passes 16 MB or a minute after the last one, and empties the log file (TRUNCATE) once nothing was written for 30 s. `db/index.ts`: the engine's own connection keeps an automatic checkpoint only as a last resort (20,000 pages instead of the default 1,000) and `journal_size_limit` is 64 MB; a PASSIVE checkpoint on exit. If the worker dies it is restarted after 30 s and the last-resort limit takes over meanwhile. `DATABRIDGE_MAINTENANCE=0` switches all of it off (the old settings). New metrics: `db.checkpoint_ms` (per mode), `db.checkpoints`, `db.checkpoints_busy`, `db.checkpoint_errors`, `db.maintenance_restarts`.
+- Engine `db/reader.ts` (4b): two lanes. `interactive` (one worker) serves the plugin's history requests; `bulk` (two workers) serves gap scans, candles, high/low, backups, health and the exports of the platforms (`platforms/mt5.ts`, `exports.ts`, `liveCsv.ts` ask for it). A request goes to the worker of its lane with the fewest waiting. The probe `readers` shows what waits on each.
+- Engine `market/DataHealth.ts`, `db/index.ts`, `db/reader.ts` (4c): `barWrites` ('changed' with the minutes written, 'removed', 'reset') tells what the database wrote. The health keeps per symbol the bars of each IST day (16-bit counts, 2 bytes a day: 3 MB for 438 symbols at 10 years) and counts again only the days written since (a symbol at a time on the bulk lane at first, two requests at once). The old whole-table `dayCounts` is removed. `forgetHealthState()` brings the first-time count back.
+- Desktop `DataHealth.tsx` (4c): one request at a time for the health picture; after a repair it asks anew.
+- Engine `market/MarketCalendar.ts`: `learnClosedDays` finds each bar's day with integer maths and makes a text date once per day (22 ms to 1.5 ms per chunk of 38,000 bars; same result).
+- Settings for measuring only: `DATABRIDGE_SQLITE_CACHE_KIB` (writer page cache), `DATABRIDGE_SQLITE_MMAP_MB` (readers). Not on by default (A/B showed nothing beyond run-to-run variation).
+- Harness `tests/perf/explain.ts`: the new query; plans recorded in ROOT_CAUSE_ANALYSIS "Query plans".
+- Tests: `dbMaintenance` (the worker copies and empties the log while the writer goes on, the settings of the connection, the lanes, the range counts), `dataHealth` (3 new: only a written day is read, equals a full recount after live bars + history + a new + a removed symbol, a wipe), `marketCalendar` (1), `DataHealth.test.tsx` (1).
+
+**Checks**
+- `npm run typecheck --prefix apps/server`: pass. `npm test --prefix apps/server`: 410 passed, 2 failed (the same 2: noren, upstoxAngel). 8 new tests; dropping the `changed` listener on purpose made two of them fail.
+- `npm run typecheck --prefix apps/desktop`: pass. `npm test --prefix apps/desktop`: 137 of 137 (one new).
+- The plugin is **not changed** in this stage (no new DLL).
+- Harness: integrity 0 mismatches in every run.
+
+**Before to after** (details in DATABRIDGE_PERFORMANCE_BASELINE.md)
+| Metric | Before | After |
+|---|---|---|
+| `live500_backfill`: loop.lag_ms p50 / p95 / p99 / max | 2.5-4.0 / 58-200 / 112-266 / 186-317 (Stage 3 build: 0.87 / 43 / 77 / 132 in its best run) | **0.3 / 16.8 / 40 / 77-92** |
+| a history slice's transaction (p99 / max) | 16.8-24.5 / 73-80 ms | **2.3-2.7 / 5.4-5.7 ms** |
+| longest single piece of one chunk (`learnClosedDays`) | 22 ms | 1.5 ms |
+| chunk work (backfill.chunk_cpu_ms p50 / p99) | 43-52 / 77-85 ms | **22-25 / 29-33 ms** |
+| engine CPU in that scenario (one core) | 94-98% | **58%** |
+| `live500_health`: a plugin catch-up waiting behind the health scan (reader.wait_ms.csv p99 / max) | 1,932 / 1,932 ms | **0.45 / 36.6 ms** |
+| `live500_health`: catch-up answer p99 | 1,936 ms | **1.7 ms** |
+| `live500_health`: the health picture (compute) | 2,162 ms every time | first 938 ms, then **2.5 ms (p50), 11 ms (p99)** |
+
+**Not done / follow-ups**
+- **The loop lag p99 in `live500_backfill` is 40 ms, not under 10 ms.** What is left is not the database: the catch-up answers built on the main thread (P14: `/api/feed/bars` splits, filters and joins the text again, Stage 6b) and the harness's pace (10 chunks a second against a real broker's 45 a minute). 6b is the next step for that number; it can be done before Stage 5 if you prefer.
+- **3e (database writer thread) is not needed** on these numbers: see ROADMAP.
+- `cache_size` and `mmap_size` could behave differently on a client's 2 GB database than on the harness's: the settings are there for the live checklist.
+- The first health picture after a start counts every symbol (one request each, two at a time): about 1 s per 100 symbols-years on this machine, on the bulk lane, so nothing else waits for it.
+- The memory: two more worker threads (a third reader, the checkpoint worker), about 10-20 MB.
+
+**For the user**
+- **No new DLL.** The plugin is the one from Stage 3.
+- **The engine changes need the rebuilt engine** (`npm run build:server`) or `npm run dev`.
+- On a market day: do the numbers of the live checklist (`/api/diagnostics/perf`: `db.checkpoint_ms`, `readers`, `reader.wait_ms.csv`) look like the harness? Symbol Setup should show its health lines at once the second time.
+- If anything about the database behaves strangely, `DATABRIDGE_MAINTENANCE=0` in the engine's environment restores the old checkpoint settings (and nothing else).
+- The log file next to the database (`databridge.db-wal`) can be up to 64 MB while a big download runs; it is emptied when the engine is idle.
+
 ## Stage 3: backfill isolation (2026-11-25)
 
 **Findings addressed:** P1 (3a), P6 (3b, 3c), P5 (3d). 3e (database writer thread) not started, see below. Verified against the code at `2130a20` first: all as described.

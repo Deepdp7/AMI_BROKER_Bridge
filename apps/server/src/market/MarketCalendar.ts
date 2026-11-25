@@ -184,19 +184,27 @@ export function learnClosedDays(exchange: string, ticker: string, fromMs: number
   if (bars.length === 0) return
   const cal = calendarOf(exchange)
   const c = learnedFor(cal)
-  const spans = new Map<string, { first: number; last: number }>()
+  // Days are told apart by their number (integer maths); a text date is made once per day, not once per bar:
+  // a 35,000-bar chunk spent about 20 ms of the engine's one thread on making 35,000 dates
+  const spanOf = new Map<number, { first: number; last: number }>()
   let first = Infinity, last = -Infinity
+  let runDay = NaN, run: { first: number; last: number } | undefined
   for (const b of bars) {
     if (b.ts < fromMs || b.ts > toMs) continue
-    const d = toISTDateStr(b.ts)
-    const s = spans.get(d)
-    if (!s) spans.set(d, { first: b.ts, last: b.ts })
-    else { if (b.ts < s.first) s.first = b.ts; if (b.ts > s.last) s.last = b.ts }
+    const day = Math.floor((b.ts + IST_OFFSET_MS) / 86400_000)
+    if (day !== runDay) {   // bars come in time order: the same day as the bar before, almost always
+      runDay = day
+      run = spanOf.get(day)
+      if (!run) spanOf.set(day, run = { first: b.ts, last: b.ts })
+    }
+    if (b.ts < run!.first) run!.first = b.ts
+    if (b.ts > run!.last) run!.last = b.ts
     if (b.ts < first) first = b.ts
     if (b.ts > last) last = b.ts
   }
-  if (spans.size === 0) return
-  const fullDays = new Set([...spans].filter(([, s]) => s.last - s.first >= FULL_DAY_SPAN_MS).map(([d]) => d))
+  if (spanOf.size === 0) return
+  const fullDays = new Set<string>()
+  for (const [day, s] of spanOf) if (s.last - s.first >= FULL_DAY_SPAN_MS) fullDays.add(new Date(day * 86400_000).toISOString().slice(0, 10))
 
   let changed = false
   const quiet = c.quiet.get(ticker)

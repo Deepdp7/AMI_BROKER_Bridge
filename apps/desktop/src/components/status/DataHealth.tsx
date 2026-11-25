@@ -14,6 +14,19 @@ export type { SymbolHealth }
 /** The last picture, kept while the app runs: coming back to Symbol Setup shows it at once */
 let lastList: SymbolHealth[] | null = null
 
+/**
+ * The request for the picture that is on its way: everything that asks for it meanwhile (several
+ * places on the page, the 60 s resync, the "downloads finished" look) shares that one answer. After a
+ * repair the picture is asked for anew (`fresh`): an answer that was already on its way may predate it.
+ */
+let inflight: ReturnType<typeof api.getSymbolHealth> | null = null
+function requestHealth(fresh = false) {
+  if (inflight && !fresh) return inflight
+  const request: ReturnType<typeof api.getSymbolHealth> = api.getSymbolHealth().finally(() => { if (inflight === request) inflight = null })
+  inflight = request
+  return request
+}
+
 /** Loads health for every symbol; refreshes on the 60 s resync and shortly after downloads finish */
 export function useDataHealth() {
   const [list, setList] = useState<SymbolHealth[] | null>(lastList)
@@ -21,16 +34,17 @@ export function useDataHealth() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const retry = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const load = useCallback(() => {
-    api.getSymbolHealth().then(r => {
+  const run = useCallback((fresh: boolean) => {
+    requestHealth(fresh).then(r => {
       lastList = r.symbols
       setList(r.symbols)
       // The engine sent an older picture for speed and is working out a new one: look again shortly
       if (r.fresh === false && !retry.current) {
-        retry.current = setTimeout(() => { retry.current = null; load() }, 3000)
+        retry.current = setTimeout(() => { retry.current = null; run(false) }, 3000)
       }
     }).catch(() => {})
   }, [])
+  const load = useCallback(() => run(false), [run])
 
   useEffect(() => { load() }, [load])
   useEngineRefresh(load)
@@ -63,9 +77,9 @@ export function useDataHealth() {
       toast.error('Repair failed', e?.message || String(e))
     } finally {
       setRepairing(null)
-      load()
+      run(true)
     }
-  }, [load])
+  }, [run])
 
   const isRepairing = (ticker: string) => repairing === 'all' || (repairing instanceof Set && repairing.has(ticker))
   return { list, byTicker, repair, isRepairing, repairingAll: repairing === 'all' }

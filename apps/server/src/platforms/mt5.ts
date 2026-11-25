@@ -79,7 +79,7 @@ async function writeSymbolsAndHistory(mql5: string, all: boolean) {
   for (const s of symbols) {
     const file = path.join(dir, 'hist', `${safeFileName(mt5Name(s.ticker))}.csv`)
     if (!all && fs.existsSync(file)) continue
-    const csv = await readBarsCsv(s.ticker, 0, HISTORY_BARS)
+    const csv = await readBarsCsv(s.ticker, 0, HISTORY_BARS, 0, 'bulk')
     if (csv) await fs.promises.writeFile(file, mt5HistoryLines(csv))
   }
 }
@@ -140,7 +140,7 @@ async function writeRecent() {
   const since = Math.floor(Date.now() / 1000) - RECENT_DAYS * 86_400
   const parts: string[] = []
   for (const s of storedSymbols()) {
-    const csv = await readBarsCsv(s.ticker, since, 5_000).catch(() => '')
+    const csv = await readBarsCsv(s.ticker, since, 5_000, 0, 'bulk').catch(() => '')
     if (csv) parts.push(mt5HistoryLines(csv, `${mt5Name(s.ticker)},`))
   }
   await writeAll('recent.csv', parts.join('\n'))

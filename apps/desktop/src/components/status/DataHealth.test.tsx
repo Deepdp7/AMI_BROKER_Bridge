@@ -85,6 +85,30 @@ describe('Health line while it is not known yet', () => {
   })
 })
 
+describe('One request at a time', () => {
+  it('everything that asks while a request is on its way shares its answer; a repair asks anew', async () => {
+    const get = api.getSymbolHealth as unknown as ReturnType<typeof vi.fn>
+    let answer!: (v: any) => void
+    get.mockImplementationOnce(() => new Promise(r => { answer = r }))
+    const hooks: Array<ReturnType<typeof useDataHealth>> = []
+    function Probe() { hooks.push(useDataHealth()); return null }
+    render(<><Probe /><Probe /><Probe /></>)
+    await settle()
+    expect(get).toHaveBeenCalledTimes(1)                   // three places on the page, one request
+    answer({ symbols: [hl('S', 'complete')], fresh: true })
+    await settle()
+    expect(hooks.at(-1)!.byTicker.get('S')?.status).toBe('complete')
+
+    // The next look is a request of its own again
+    get.mockClear()
+    h.list = [hl('S', 'missing', 1)]
+    const last = hooks.at(-1)!
+    await act(async () => { await last.repair(['S']) })
+    await settle()
+    expect(get).toHaveBeenCalledTimes(1)                   // after the repair, asked anew
+  })
+})
+
 describe('Loading the picture', () => {
   it('keeps the last picture for the next visit, and looks again soon after an older one', async () => {
     vi.useFakeTimers()

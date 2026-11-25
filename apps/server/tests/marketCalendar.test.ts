@@ -133,6 +133,22 @@ describe('Learned closed days', () => {
     expect(cal.isNSEHoliday(Date.parse('2027-11-01T06:00:00Z'))).toBe(true)
   })
 
+  it('bars in any order, and a session that crosses midnight India time, are told apart by day the same way', () => {
+    // Mon 1 Nov 2027 has no bars; the days around it do. The bars are shuffled and a late-evening session runs past midnight.
+    const [f, t] = range('2027-10-29', '2027-11-02')
+    const bars = [...sessionBars('2027-10-29'), ...sessionBars('2027-11-02')]
+    const shuffled = bars.map((b, i) => ({ b, k: (i * 7919) % bars.length })).sort((a, c) => a.k - c.k).map(x => x.b)
+    for (const who of ['AAA', 'BBB']) cal.learnClosedDays('NSE', who, f, t, shuffled)
+    expect(cal.isNSEHoliday(Date.parse('2027-11-01T06:00:00Z'))).toBe(true)
+    expect(cal.isNSEHoliday(Date.parse('2027-10-29T06:00:00Z'))).toBe(false)
+    // An evening session (MCX): 23:00 IST on the 29th to 01:00 IST on the 30th is two IST days, and neither is a full day alone
+    cal.resetLearnedClosedDays()
+    const night = Array.from({ length: 120 }, (_, i) => ({ ts: Date.parse('2027-10-29T23:00:00Z') - IST + i * 60_000 }))
+    for (const who of ['AAA', 'BBB']) cal.learnClosedDays('MCX', who, f, t, [...sessionBars('2027-10-28'), ...night, ...sessionBars('2027-11-02')])
+    expect(cal.isClosedDay(Date.parse('2027-11-01T06:00:00Z'), 'MCX')).toBe(true)
+    expect(cal.isClosedDay(Date.parse('2027-10-30T06:00:00Z'), 'MCX')).toBe(false)   // Saturday: not a "closed day" of the calendar
+  })
+
   it('learns nothing from days at the edges of a response (before listing, today)', () => {
     const [f, t] = range('2027-01-25', '2027-01-29')
     for (const who of ['AAA', 'BBB']) cal.learnClosedDays('NSE', who, f, t, sessionBars('2027-01-27', '2027-01-28'))

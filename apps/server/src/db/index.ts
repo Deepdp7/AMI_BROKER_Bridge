@@ -21,7 +21,9 @@ import fs from 'fs'
 import dotenv from 'dotenv'
 import type { DatabaseSync as DatabaseSyncT } from 'node:sqlite'
 import type { AppSettings, ExchangeRegistry } from '../types'
+import { EventEmitter } from 'events'
 import { readBarsCsv, setReaderDbFile } from './reader'
+import { startMaintenance, MAINTENANCE_ENABLED, BACKSTOP_CHECKPOINT_PAGES, JOURNAL_SIZE_LIMIT_BYTES } from './maintenance'
 import { importFromPostgresIfNeeded } from './pgImport'
 import { applyPendingRestore } from './restore'
 import { isSealed, open, seal, secretsEncrypted } from '../lib/secretBox'
@@ -185,7 +187,27 @@ for (let attempt = 1; ; attempt++) {
   }
 }
 
+// The log's checkpoints run on a worker thread (maintenance.ts); this connection keeps an automatic one only
+// as a last resort, far above the default 1,000 pages, so no commit of the engine's thread waits for the disk
+if (MAINTENANCE_ENABLED) {
+  sqlite.exec(`PRAGMA wal_autocheckpoint = ${BACKSTOP_CHECKPOINT_PAGES}; PRAGMA journal_size_limit = ${JOURNAL_SIZE_LIMIT_BYTES};`)
+}
+// Page cache of this connection in KiB (SQLite's default is 2,000: 2 MB). Only set for measuring.
+const cacheKiB = Number(process.env.DATABRIDGE_SQLITE_CACHE_KIB)
+if (cacheKiB > 0) sqlite.exec(`PRAGMA cache_size = -${Math.floor(cacheKiB)}`)
+
 setReaderDbFile(DB_FILE)
+startMaintenance(DB_FILE)
+
+/**
+ * What changed in the bars table, for whoever keeps a picture derived from it (the data health page):
+ *   'changed' (ticker, fromSec, toSec)  bars were written between those minutes (unix seconds)
+ *   'removed' (ticker)                  the ticker's bars were deleted
+ *   'reset'                             everything was deleted or replaced
+ * Emitted from here only: this module imports nothing from market/.
+ */
+export const barWrites = new EventEmitter()
+barWrites.setMaxListeners(50)
 
 /** Runs `fn` in one transaction (one disk commit for many rows). Not re-entrant. */
 function tx<T>(fn: () => T): T {
@@ -344,7 +366,7 @@ loadCaches()
 
 async function syncCaches() {
   try {
-    if (await importFromPostgresIfNeeded(sqlite)) loadCaches()
+    if (await importFromPostgresIfNeeded(sqlite)) { loadCaches(); barWrites.emit('reset') }
   } catch (err) {
     console.error('[DB] PostgreSQL import failed (continuing with the local database):', err)
   }
@@ -383,15 +405,22 @@ function flushLiveBars() {
   const startedAt = performance.now()
   let rows = 0
   try {
+    const ranges: Array<[string, number, number]> = []
     tx(() => {
       for (const [ticker, bars] of batch) {
         const tid = tickerId(ticker)
+        let lo = Infinity, hi = 0
         for (const b of bars) {
-          q.insertLiveBar.run(tid, Math.floor(b.ts_utc_ms / 1000), px(b.open), px(b.high), px(b.low), px(b.close), Math.round(b.volume || 0), b.open_interest == null ? null : Math.round(b.open_interest))
+          const ts = Math.floor(b.ts_utc_ms / 1000)
+          q.insertLiveBar.run(tid, ts, px(b.open), px(b.high), px(b.low), px(b.close), Math.round(b.volume || 0), b.open_interest == null ? null : Math.round(b.open_interest))
+          if (ts < lo) lo = ts
+          if (ts > hi) hi = ts
           rows++
         }
+        if (hi > 0) ranges.push([ticker, lo, hi])
       }
     })
+    for (const [ticker, lo, hi] of ranges) barWrites.emit('changed', ticker, lo, hi)
     perf.record('db.live_flush_ms', performance.now() - startedAt)
     perf.count('db.live_flush_rows', rows)
   } catch (err) {
@@ -501,6 +530,11 @@ export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<H
   endSyncPart()
   perf.count('db.history_rows', rows.length)
   perf.count('db.history_changed', changed)
+  if (changed > 0) {
+    let lo = Infinity, hi = 0
+    for (const [tsSec] of rows) { if (tsSec < lo) lo = tsSec; if (tsSec > hi) hi = tsSec }
+    barWrites.emit('changed', amibrokerTicker, lo, hi)
+  }
   return changed
 }
 
@@ -773,6 +807,7 @@ export const stmts = {
         const tid = tickerIds.get(ticker)
         if (tid !== undefined) { q.deleteTickerBars.run(tid); q.deleteTickerDaily.run(tid) }
       })
+      barWrites.emit('removed', ticker)
     }
   },
 
@@ -854,6 +889,7 @@ export function cleanDatabase() {
   sqlite.exec('DELETE FROM symbols; DELETE FROM bars; DELETE FROM daily_bars; DELETE FROM tickers; DELETE FROM logs; DELETE FROM connection_events;')
   symbolsCache.length = 0
   tickerIds.clear()
+  barWrites.emit('reset')
 }
 
 /** Factory reset: every table. */
@@ -864,6 +900,7 @@ export function fullForceClean() {
   brokersCache.length = 0
   symbolsCache.length = 0
   tickerIds.clear()
+  barWrites.emit('reset')
   settingsCache.clear()
   for (const [k, v] of Object.entries(defaultSettings)) settingsCache.set(k, v)
 }
@@ -898,6 +935,9 @@ function closeDb() {
   if (closed) return
   closed = true
   try { flushPendingBars() } catch {}
+  // Copy what the log holds into the database file if nothing is reading (never waits: PASSIVE), so the
+  // next start does not have to replay a log of up to 80 MB
+  if (MAINTENANCE_ENABLED) { try { sqlite.exec('PRAGMA wal_checkpoint(PASSIVE)') } catch {} }
   try { sqlite.close() } catch {}
 }
 process.on('exit', closeDb)
