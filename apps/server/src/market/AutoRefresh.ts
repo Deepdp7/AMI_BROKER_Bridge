@@ -10,9 +10,9 @@
  * Runs quietly: no backfill banner / desktop notifications (unlike the manual button).
  */
 import { EventEmitter } from 'events'
-import { stmts, upsertBarsToHistory, validateBar, repairBar, getAllSettings, upsertSettings } from '../db'
+import { stmts, upsertBarsToHistory, historyRangeSec, validateBar, repairBar, getAllSettings, upsertSettings } from '../db'
 import { brokerManager } from '../brokers/BrokerManager'
-import { backfillQueue } from './BackfillQueue'
+import { withPriority } from '../lib/priority'
 import { learnClosedDays } from './MarketCalendar'
 import { liveFeed } from './liveFeed'
 import { lastViewedAt } from './liveSlots'
@@ -63,9 +63,9 @@ class AutoRefreshService extends EventEmitter {
   private timer: NodeJS.Timeout | null = null
   private closePassDoneFor = ''
   private fullPassDoneFor = ''
-  private notifySync: (ticker: string) => void = () => {}
+  private notifySync: (ticker: string, fromSec?: number, toSec?: number) => void = () => {}
 
-  start(notifySync: (ticker: string) => void) {
+  start(notifySync: (ticker: string, fromSec?: number, toSec?: number) => void) {
     this.notifySync = notifySync
     const s = getAllSettings() as any
     if (s.autoRefreshEnabled !== undefined) this.status.enabled = String(s.autoRefreshEnabled) !== 'false'
@@ -133,16 +133,10 @@ class AutoRefreshService extends EventEmitter {
     }
     if (this.status.nextRunAt === null) { this.scheduleNext(); this.publish() }
     if (!closePass && this.status.nextRunAt && Date.now() < this.status.nextRunAt) return
-    // Don't compete with a history download for the broker's rate limit; try again next tick
-    if (backfillQueue.hasActiveWork()) {
-      if (this.status.waitingFor !== 'history-download') {
-        this.status.waitingFor = 'history-download'
-        this.publish()
-      }
-      return
-    }
-
-    this.status.waitingFor = null
+    // A history download no longer holds a pass back: the broker's rate limiter serves a refresh
+    // before a bulk download request (lib/priority.ts), and on a plan with few live places the refresh
+    // is the only way the other symbols get today's bars. `waitingFor` stays for the page that shows it.
+    if (this.status.waitingFor !== null) { this.status.waitingFor = null; this.publish() }
     if (closePass) this.closePassDoneFor = date
     this.run(closePass).then(finished => {
       // A close pass cut short by a download runs again (until 16:00)
@@ -184,14 +178,15 @@ class AutoRefreshService extends EventEmitter {
         try {
           const raw = sym.rawSymbol || sym.raw_symbol || ticker
           const token = adapter.resolveSymbol ? await adapter.resolveSymbol(raw, sym.exchange) : raw
-          const bars: any[] = await adapter.getHistoricalBars(token, '1m', from, to)
+          const bars: any[] = await withPriority<any[]>('refresh', () => adapter.getHistoricalBars(token, '1m', from, to))
           const good = (bars || []).map(repairBar).filter(b => b.ts >= writeFromMs && validateBar(b.open, b.high, b.low, b.close, b.volume))
           if (good.length > 0) {
             const changed = await upsertBarsToHistory(ticker, good)
             learnClosedDays(sym.exchange || 'NSE', ticker, from.getTime(), to.getTime(), good)
             if (changed > 0) {
               // Only make AmiBroker re-read symbols whose data actually changed
-              this.notifySync(ticker)
+              const { fromSec, toSec } = historyRangeSec(good)
+              this.notifySync(ticker, fromSec, toSec)
               barsChanged += changed
             }
             barsSaved += good.length
@@ -213,13 +208,10 @@ class AutoRefreshService extends EventEmitter {
     }
 
     let next = 0
-    // A history download (new symbols, catch-up) gets the broker's rate limit: stop here, and the
-    // next pass starts over once the queue is empty
-    const yieldToDownload = () => backfillQueue.hasActiveWork()
     try {
       // Small worker pool: requests overlap; the adapter's rate limiter spaces their starts
       const worker = async () => {
-        while (next < symbols.length && this.status.enabled && !yieldToDownload()) {
+        while (next < symbols.length && this.status.enabled) {
           await refreshOne(symbols[next++])
           this.status.progressDone++
           this.publishThrottled()
@@ -236,7 +228,7 @@ class AutoRefreshService extends EventEmitter {
       this.status.lastRunBars = barsSaved
       this.scheduleNext()
       const secs = ((Date.now() - started) / 1000).toFixed(1)
-      const stopped = next < symbols.length ? ` — stopped early for a history download (${symbols.length - next} left)` : ''
+      const stopped = next < symbols.length ? ` — stopped early, auto-refresh was turned off (${symbols.length - next} left)` : ''
       console.log(`[AutoRefresh] Checked ${symbolsDone} symbol(s) against the broker in ${secs}s — ${barsChanged} bar(s) corrected${full ? ' (full day)' : ''}${stopped}`)
       this.publish()
     }

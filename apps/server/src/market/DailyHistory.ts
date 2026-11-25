@@ -16,6 +16,7 @@ import fs from 'fs'
 import path from 'path'
 import { stmts, getAllSettings, upsertDailyBars, getOldestBarTimestampSec, DATA_DIR, repairBar, ORPHANED } from '../db'
 import { brokerManager } from '../brokers/BrokerManager'
+import { withPriority } from '../lib/priority'
 import { backfillQueue, isInvalidSymbolError } from './BackfillQueue'
 import { isMarketSession } from './MarketCalendar'
 
@@ -107,7 +108,7 @@ export async function downloadDailyFor(sym: any, nowMs = Date.now()): Promise<Da
     const fromMs = Math.max(wantFromMs, endMs - CHUNK_DAYS * DAY_MS)
     let bars: any[]
     try {
-      bars = (await adapter.getHistoricalBars(token, '1d', new Date(fromMs), new Date(endMs))) || []
+      bars = (await withPriority<any[]>('bulk', () => adapter.getHistoricalBars(token, '1d', new Date(fromMs), new Date(endMs)))) || []
     } catch (err: any) {
       if (isInvalidSymbolError(err)) { floors.set(ticker, wantFromMs); saveFloors(); return 'skipped' }
       console.warn(`[DailyHistory] ${ticker}: ${err?.message || err} (trying again later)`)

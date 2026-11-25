@@ -431,12 +431,31 @@ const HISTORY_SETTLE_MS = 30_000
 /** A broker history bar; `ts` is the minute's start in UTC ms */
 export interface HistoryBar { ts: number; open: number; high: number; low: number; close: number; volume: number; openInterest?: number }
 
+/** Oldest and newest bar time (unix seconds) of some history bars: the range a "history changed" notice covers */
+export function historyRangeSec(bars: Array<{ ts: number }>): { fromSec: number; toSec: number } {
+  let lo = Infinity, hi = 0
+  for (const b of bars) { if (b.ts < lo) lo = b.ts; if (b.ts > hi) hi = b.ts }
+  return { fromSec: Number.isFinite(lo) ? Math.floor(lo / 1000) : 0, toSec: Math.floor(hi / 1000) }
+}
+
+/**
+ * Rows per history transaction. A 35,000-bar chunk in one transaction held the engine's one
+ * thread for ~50 ms, and live ticks waited behind it; at 2,000 rows a slice takes ~2-3 ms and the
+ * event loop gets a turn between slices.
+ */
+export const HISTORY_SLICE_ROWS = Math.max(1, Number(process.env.DATABRIDGE_HISTORY_SLICE_ROWS) || 2000)   // the variable is for measuring (a huge value: one transaction per chunk, as before)
+
 /**
  * Upserts broker history bars (bar objects, or "tsSec,open,high,low,close,volume" lines); returns
  * how many rows were inserted or actually changed. Broker history replaces bars built from live
- * ticks for the same minute (live inserts never overwrite history).
+ * ticks for the same minute (live inserts never overwrite history). The rows are committed in
+ * slices of HISTORY_SLICE_ROWS with a turn for the event loop between them; they are independent,
+ * so a caller that sees the promise reject can simply run it again. `work.syncMs` (optional)
+ * collects the time this call held the thread without yielding.
  */
-export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<HistoryBar | string>): Promise<number> {
+export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<HistoryBar | string>, work?: { syncMs: number }): Promise<number> {
+  let syncStartedAt = performance.now()
+  const endSyncPart = () => { if (work) work.syncMs += performance.now() - syncStartedAt }
   // Skip the still-forming minute, and one that ended only seconds ago: the broker's bar for it
   // can still be missing its last trades, and would replace the complete bar built from live
   // ticks (live inserts never overwrite history). Later passes write those minutes.
@@ -455,20 +474,32 @@ export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<H
     const tsSec = Math.floor(bar.ts / 1000)
     if (tsSec < firstUnsettledSec) byMinute.set(tsSec, bar)
   }
-  if (byMinute.size === 0) return 0
+  if (byMinute.size === 0) { endSyncPart(); return 0 }
 
-  const startedAt = performance.now()
-  const changed = tx(() => {
-    const tid = tickerId(amibrokerTicker)
-    let changed = 0
-    for (const [tsSec, b] of byMinute) {
-      const oi = Number(b.openInterest)
-      changed += Number(q.upsertHistoryBar.run(tid, tsSec, px(b.open), px(b.high), px(b.low), px(b.close), Math.round(Number(b.volume) || 0), oi > 0 ? Math.round(oi) : null).changes)
+  const rows = [...byMinute]
+  let changed = 0
+  for (let from = 0; from < rows.length; from += HISTORY_SLICE_ROWS) {
+    const startedAt = performance.now()
+    changed += tx(() => {
+      const tid = tickerId(amibrokerTicker)
+      let sliceChanged = 0
+      const end = Math.min(rows.length, from + HISTORY_SLICE_ROWS)
+      for (let i = from; i < end; i++) {
+        const [tsSec, b] = rows[i]
+        const oi = Number(b.openInterest)
+        sliceChanged += Number(q.upsertHistoryBar.run(tid, tsSec, px(b.open), px(b.high), px(b.low), px(b.close), Math.round(Number(b.volume) || 0), oi > 0 ? Math.round(oi) : null).changes)
+      }
+      return sliceChanged
+    })
+    perf.record('db.history_tx_ms', performance.now() - startedAt)
+    if (from + HISTORY_SLICE_ROWS < rows.length) {
+      endSyncPart()
+      await new Promise<void>(r => setImmediate(r))   // live ticks, timers and requests get their turn
+      syncStartedAt = performance.now()
     }
-    return changed
-  })
-  perf.record('db.history_tx_ms', performance.now() - startedAt)
-  perf.count('db.history_rows', byMinute.size)
+  }
+  endSyncPart()
+  perf.count('db.history_rows', rows.length)
   perf.count('db.history_changed', changed)
   return changed
 }
@@ -802,12 +833,12 @@ export const stmts = {
     }
   },
 
-  // Bars strictly newer than `sinceSec` (newest `limit` of them), ascending CSV
+  // Bars strictly newer than `sinceSec` (newest `limit` of them), ascending CSV; with `untilSec` (> 0), none newer than that
   getBarsCsvSinceAsync: {
-    get: async (amibrokerTicker: string, sinceSec: number, limit: number = 50000): Promise<string> => {
+    get: async (amibrokerTicker: string, sinceSec: number, limit: number = 50000, untilSec: number = 0): Promise<string> => {
       try {
         flushLiveBars()
-        return await readBarsCsv(amibrokerTicker, Math.floor(sinceSec), limit)
+        return await readBarsCsv(amibrokerTicker, Math.floor(sinceSec), limit, Math.floor(untilSec))
       } catch (err) {
         console.error('[DB] Failed to get bars CSV since:', err)
         return ''

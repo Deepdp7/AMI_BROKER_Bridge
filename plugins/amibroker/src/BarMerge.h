@@ -2,6 +2,7 @@
 // The parts of the plugin that need no sockets, threads or AmiBroker calls: merging bars into AmiBroker's
 // quotation array, reading the engine's lines, and what is kept of each symbol's recent minutes. Kept apart
 // so they can be tested on their own (tests/plugin_tests.cpp).
+#include <algorithm>
 #include <deque>
 #include <string>
 #include <string_view>
@@ -46,6 +47,44 @@ struct QuoteLine {
 };
 // QUOTE|TICKER|last|open|high|low|prev|vol|oi|bid|ask|tickSec[|bidQty|askQty]
 bool ParseQuoteLine(std::string_view line, QuoteLine& out);
+
+// ---- History announcements ----
+struct SyncNotice {
+    std::string ticker;
+    double from = 0;         // unix seconds, 0 = not given
+    double to = 0;           // unix seconds, 0 = not given (up to now)
+};
+// SYNC|TICKER[|FROMSEC[|TOSEC]]: the engine stored history for the ticker, from FROMSEC to TOSEC. An engine that
+// doesn't know the end sends no TOSEC; an older plugin reads "FROMSEC|TOSEC" as FROMSEC. False for SYNC_ALL,
+// an empty ticker or a line that is not a SYNC.
+bool ParseSyncLine(std::string_view line, SyncNotice& out);
+
+// What the engine announced for one symbol since it last synced, as one range to fetch. It is a range only
+// while every announcement had both ends and the symbol did not owe a sync of its last 24 hours anyway
+// (it was not synced since the connection to the engine was made): otherwise the fetch runs from
+// `from` up to now, as it always did.
+struct SyncRange {
+    double from = 0;         // oldest start announced, 0 = none given
+    double to = 0;           // newest end announced
+    bool open = false;       // a notice had no end, or the symbol owed a full sync
+    bool any = false;        // at least one notice
+    void Add(double fromSec, double toSec, bool owesFullSync);
+    void MarkOpen() { open = true; }
+    bool IsRange() const { return any && !open && from > 0 && to >= from; }
+};
+
+// How long to leave a symbol alone after a catch-up for it failed: 2 s, doubling to 60 s, until one succeeds.
+// One symbol failing (a big answer that timed out) must not hold back the others.
+class RetryBackoff {
+public:
+    static const unsigned long long FIRST_MS = 2000, MAX_MS = 60000;
+    bool Allowed(unsigned long long nowMs) const { return nowMs >= until_; }
+    void Failed(unsigned long long nowMs) { delay_ = delay_ ? (std::min)(delay_ * 2, MAX_MS) : FIRST_MS; until_ = nowMs + delay_; }
+    void Succeeded() { delay_ = 0; until_ = 0; }
+    unsigned long long DelayMs() const { return delay_; }
+private:
+    unsigned long long delay_ = 0, until_ = 0;
+};
 
 // ---- What is kept of one symbol's recent minutes ----
 // AmiBroker reads a symbol only when a chart, a watch list or a scan asks for it: a symbol nobody looked at

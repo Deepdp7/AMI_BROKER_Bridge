@@ -59,26 +59,39 @@ export function quoteMessage(ticker: string, nowMs = Date.now()): string {
 
 /**
  * Tell the AmiBroker plugin that new historical bars were stored for `ticker`, from `fromSec`
- * on when known ("SYNC|TICKER|fromSec"). The plugin re-fetches from there and merges the bars
- * in, also into the middle of its chart (a downtime hole), immediately for open charts,
- * otherwise the next time the symbol is viewed. Notices are coalesced per ticker for 1 s, so a
- * multi-chunk download sends one notice with the oldest start instead of one per chunk.
+ * on when known ("SYNC|TICKER|fromSec"), up to `toSec` when that is known too
+ * ("SYNC|TICKER|fromSec|toSec"). The plugin re-fetches that range and merges the bars in, also
+ * into the middle of its chart (a downtime hole), immediately for open charts, otherwise the
+ * next time the symbol is viewed. Notices are coalesced per ticker for 1 s, so a multi-chunk
+ * download sends one notice with the oldest start and the newest end instead of one per chunk.
+ * (A plugin that doesn't know the end reads "from|to" as "from" and fetches up to now, as before.)
  */
-const pendingSyncFrom = new Map<string, number>() // ticker -> oldest fromSec (0 = none given)
+interface PendingSync { from: number; to: number; open: boolean }
+const pendingSync = new Map<string, PendingSync>() // from: oldest start (0 = none given); to: newest end; open: a notice without an end was among them
 let syncFlushTimer: NodeJS.Timeout | null = null
-export function notifyAmiBrokerHistoryChanged(ticker: string, fromSec = 0) {
+export function notifyAmiBrokerHistoryChanged(ticker: string, fromSec = 0, toSec = 0) {
   // Keep the oldest start that was given: a notice without one ("recent bars changed") is
-  // already covered by the plugin's default re-read of the last 24 h
-  const prev = pendingSyncFrom.get(ticker) ?? 0
-  pendingSyncFrom.set(ticker, prev && fromSec ? Math.min(prev, fromSec) : prev || fromSec)
+  // already covered by the plugin's default re-read of the last 24 h. A notice without an end
+  // means "up to now", which no end of another notice can narrow.
+  const prev = pendingSync.get(ticker)
+  if (!prev) {
+    pendingSync.set(ticker, { from: fromSec, to: toSec, open: !(toSec > 0) })
+  } else {
+    prev.from = prev.from && fromSec ? Math.min(prev.from, fromSec) : prev.from || fromSec
+    if (toSec > 0) prev.to = Math.max(prev.to, toSec)
+    else prev.open = true
+  }
   if (syncFlushTimer) return
   syncFlushTimer = setTimeout(() => {
     syncFlushTimer = null
-    const batch = [...pendingSyncFrom]
-    pendingSyncFrom.clear()
+    const batch = [...pendingSync]
+    pendingSync.clear()
     perf.count('sync.notices')
     perf.count('sync.tickers', batch.length)
-    const msg = batch.map(([t, from]) => (from > 0 ? `SYNC|${t}|${from}\n` : `SYNC|${t}\n`)).join('')
+    const msg = batch.map(([t, s]) => {
+      if (!(s.from > 0)) return `SYNC|${t}\n`
+      return !s.open && s.to >= s.from ? `SYNC|${t}|${s.from}|${s.to}\n` : `SYNC|${t}|${s.from}\n`
+    }).join('')
     ipcClients.forEach(client => {
       try { client.write(msg) } catch {}
     })
@@ -216,8 +229,8 @@ export function startAmiBrokerIpc() {
     queueFlush()
   })
 
-  backfillQueue.on('bars_gap_filled', ({ ticker, fromSec }: { ticker: string, fromSec: number }) => {
-    notifyAmiBrokerHistoryChanged(ticker, fromSec)
+  backfillQueue.on('bars_gap_filled', ({ ticker, fromSec, toSec }: { ticker: string, fromSec: number, toSec?: number }) => {
+    notifyAmiBrokerHistoryChanged(ticker, fromSec, toSec)
   })
 
   // A finished download needs no notice of its own: every chunk that changed bars sent one

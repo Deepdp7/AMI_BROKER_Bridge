@@ -233,6 +233,30 @@ bool ParseQuoteLine(std::string_view line, QuoteLine& out) {
     return true;
 }
 
+bool ParseSyncLine(std::string_view line, SyncNotice& out) {
+    line = WithoutCr(line);
+    std::string_view f[5];
+    int n = SplitBars(line, f, 5);
+    if (n < 2 || f[0] != "SYNC" || f[1].empty()) return false;
+    SyncNotice s;
+    s.ticker.assign(f[1]);
+    // A number that does not read is "not given": the symbol is then synced as for a notice without a range
+    double v;
+    if (n >= 3 && Num(f[2], v) && v > 0) s.from = v;
+    if (n >= 4 && Num(f[3], v) && v > 0) s.to = v;
+    if (s.from == 0) s.to = 0;   // an end without a start says nothing
+    out = std::move(s);
+    return true;
+}
+
+void SyncRange::Add(double fromSec, double toSec, bool owesFullSync) {
+    any = true;
+    from = from > 0 && fromSec > 0 ? (std::min)(from, fromSec) : (from > 0 ? from : fromSec);
+    if (toSec > 0) to = (std::max)(to, toSec);
+    else open = true;                       // "up to now": no end of another notice narrows that
+    if (owesFullSync) open = true;
+}
+
 // ---------------------------------------------------------------------------------------------
 // RecentBars
 // ---------------------------------------------------------------------------------------------

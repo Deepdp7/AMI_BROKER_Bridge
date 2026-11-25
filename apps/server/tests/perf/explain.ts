@@ -26,7 +26,7 @@ const QUERIES: Q[] = [
   { name: 'dailyBefore', sql: 'SELECT ts, open, high, low, close, volume FROM daily_bars WHERE tid = ? AND ts < ? ORDER BY ts', params: [1, 1] },
   { name: 'recentEvents', sql: 'SELECT * FROM connection_events WHERE broker_id = ? ORDER BY ts_utc_ms DESC LIMIT ?', params: ['x', 10] },
   // src/db/reader.ts: the worker's statements
-  { name: 'reader.rawBars (bars for AmiBroker)', sql: 'SELECT ts, open, high, low, close, volume, oi FROM bars WHERE tid = ? AND ts > ? ORDER BY ts DESC LIMIT ?', params: [1, 0, 100000] },
+  { name: 'reader.rawBars (bars for AmiBroker)', sql: 'SELECT ts, open, high, low, close, volume, oi FROM bars WHERE tid = ? AND ts > ? AND ts <= ? ORDER BY ts DESC LIMIT ?', params: [1, 0, 9e15, 100000] },
   {
     name: 'reader.gapPairs',
     sql: 'SELECT prev, ts FROM (SELECT ts, LAG(ts) OVER (ORDER BY ts) AS prev FROM bars WHERE tid = ? AND ts >= ? AND ts <= ?) WHERE prev IS NOT NULL AND ts - prev > ? ORDER BY ts',

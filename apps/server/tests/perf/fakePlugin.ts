@@ -30,12 +30,13 @@ export class FakePlugin {
   private socket: net.Socket | null = null
   private pending = ''
   private newestMinute = new Map<string, number>()
-  private catchUpQueue: Array<{ ticker: string; since: number }> = []
+  private catchUpQueue: Array<{ ticker: string; since: number; until: number }> = []
   private catchUpBusy = false
   private catchUpTimer: NodeJS.Timeout | null = null
   private agent = new http.Agent({ keepAlive: true, maxSockets: 4 })
 
-  constructor(private ipcPort: number, private httpPort: number) {}
+  /** `rangeSync` off: behaves like the plugin of before Stage 3 (a SYNC fetch always runs to now) */
+  constructor(private ipcPort: number, private httpPort: number, private rangeSync = true) {}
 
   connect(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -96,22 +97,26 @@ export class FakePlugin {
     else this.newestMinute.set(ticker, ts)
   }
 
-  /** SYNC|ticker|fromSec: what the engine says changed; the real plugin then fetches history from there to now */
+  /**
+   * SYNC|ticker|fromSec[|toSec]: what the engine says changed. The plugin of Stage 3 fetches just that range; the
+   * plugin of before (and this one with `rangeSync` off) fetches from there to now.
+   */
   private onSync(line: string) {
     this.syncLines++
-    const [, ticker, from] = line.split('|')
+    const [, ticker, from, to] = line.split('|')
     this.syncBy.add(ticker)
     const fromSec = Number(from) || Math.floor(Date.now() / 1000) - 86400
-    this.catchUpQueue.push({ ticker, since: Math.max(0, fromSec - 60) })
+    const until = this.rangeSync && Number(from) > 0 && Number(to) >= Number(from) ? Number(to) + 60 : 0
+    this.catchUpQueue.push({ ticker, since: Math.max(0, fromSec - 60), until })
     this.drainCatchUps()
   }
 
-  /** Asks for the bars of a ticker newer than `since` (unix s), as the plugin's catch-up does; resolves when answered */
-  fetchBars(ticker: string, since: number): Promise<number> {
+  /** Asks for the bars of a ticker newer than `since` (unix s) and, if `until` > 0, not newer than that, as the plugin's catch-up does; resolves when answered */
+  fetchBars(ticker: string, since: number, until = 0): Promise<number> {
     return new Promise(resolve => {
       const started = performance.now()
       this.httpRequests++
-      const url = `/api/feed/bars?ticker=${encodeURIComponent(ticker)}&limit=100000&since=${since}`
+      const url = `/api/feed/bars?ticker=${encodeURIComponent(ticker)}&limit=100000&since=${since}${until > 0 ? `&until=${until}` : ''}`
       const req = http.get({ host: '127.0.0.1', port: this.httpPort, path: url, agent: this.agent, timeout: 4000 }, res => {
         let bytes = 0
         res.on('data', d => { bytes += d.length })
@@ -130,7 +135,7 @@ export class FakePlugin {
     if (this.catchUpBusy) return
     this.catchUpBusy = true
     try {
-      for (let job = this.catchUpQueue.shift(); job; job = this.catchUpQueue.shift()) await this.fetchBars(job.ticker, job.since)
+      for (let job = this.catchUpQueue.shift(); job; job = this.catchUpQueue.shift()) await this.fetchBars(job.ticker, job.since, job.until)
     } finally { this.catchUpBusy = false }
   }
 

@@ -20,6 +20,7 @@ import {
   flushPendingBars,
   deduplicateAndCompactDiskBars,
   upsertBarsToHistory,
+  historyRangeSec,
   validateBar,
   repairBar,
   getAllSettings,
@@ -27,6 +28,7 @@ import {
   upsertSettings,
 } from '../db'
 import { brokerManager } from '../brokers/BrokerManager'
+import { withPriority } from '../lib/priority'
 import { backfilledTickers } from './state/backfillState'
 import { getVerifiedThroughMs, setVerifiedThroughMs, getHistoryFloorMs, setHistoryFloorMs } from './state/coverageState'
 import { detectGaps, formatGapSummary } from './GapDetector'
@@ -56,6 +58,7 @@ export interface BackfillTask {
   pass?: GapPass            // Gap-detection pass this task belongs to
   skippedChunk?: boolean    // A chunk was given up after max retries (range not fully filled)
   floorMs?: number          // On full success, history is known complete back to here
+  interactive?: boolean     // Someone is waiting for it (a manual "Refresh today", a symbol that just went live): its requests go first
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000
@@ -286,6 +289,7 @@ class BackfillQueueService extends EventEmitter {
           gapFrom,
           pass,
           floorMs,
+          interactive: forceEvenDuringMarket || undefined,
         })
 
         const existingStatus = backfillStatusMap.get(ticker)
@@ -683,11 +687,13 @@ class BackfillQueueService extends EventEmitter {
    */
   private async fetchChunk(task: BackfillTask, route: ChunkRoute, from: Date, to: Date): Promise<any[] | null> {
     // The slot was taken by pickRoute; it is given back here
+    // The broker's rate limiter serves a symbol a chart is waiting for (or a manual refresh) before a bulk download
+    const priority = task.interactive || this.priorityTickers.has(task.ticker) ? 'interactive' : 'bulk'
     try {
-      if (!route.helper) return (await route.adapter.getHistoricalBars(route.token, '1m', from, to)) || []
+      if (!route.helper) return (await withPriority<any[]>(priority, () => route.adapter.getHistoricalBars(route.token, '1m', from, to))) || []
       const key = `${route.id}:${task.ticker}`
       try {
-        const bars = (await route.adapter.getHistoricalBars(route.token, '1m', from, to)) || []
+        const bars = (await withPriority<any[]>(priority, () => route.adapter.getHistoricalBars(route.token, '1m', from, to))) || []
         if (bars.length === 0) {
           this.helperEmptyAt.set(key, to.getTime())
           console.log(`[BackfillQueue] ${route.id} has no ${task.ticker} bars for ${from.toISOString().slice(0, 10)} → ${to.toISOString().slice(0, 10)}; ${task.brokerId} fetches that period`)
@@ -799,9 +805,11 @@ class BackfillQueueService extends EventEmitter {
       // A helper broker couldn't serve this chunk: it stays queued, unchanged, for the symbol's own broker
       if (fetched === null) return true
       this.chunkDoneAt.push(Date.now())
-      // From here to learnClosedDays the engine's one thread is busy with this chunk (backfill.chunk_cpu_ms);
-      // the save is a single transaction for now, so the await below gives nothing else a turn
-      const chunkWorkStartedAt = performance.now()
+      // backfill.chunk_cpu_ms is the time the engine's one thread spends on this chunk without a break:
+      // the sum of the synchronous pieces (repair and validate, the slices of the save, learnClosedDays).
+      // The save awaits between its slices, so the waiting in between is not counted.
+      const work = { syncMs: 0 }
+      let pieceStartedAt = performance.now()
       const bars = fetched.map(repairBar)
 
       if (bars && bars.length > 0) {
@@ -816,15 +824,19 @@ class BackfillQueueService extends EventEmitter {
         }
 
         if (good.length > 0) {
-          const changed = await upsertBarsToHistory(task.ticker, good)
+          work.syncMs += performance.now() - pieceStartedAt
+          const changed = await upsertBarsToHistory(task.ticker, good, work)
+          pieceStartedAt = performance.now()
           learnClosedDays(exchangeOf(task.ticker), task.ticker, chunkFrom.getTime(), currentTo.getTime(), good)
-          perf.record('backfill.chunk_cpu_ms', performance.now() - chunkWorkStartedAt)
+          work.syncMs += performance.now() - pieceStartedAt
+          perf.record('backfill.chunk_cpu_ms', work.syncMs)
 
           // Tell AmiBroker after every chunk (not only when the whole task ends), with the
           // oldest bar stored, so an open chart shows each piece of history as it lands. Only
           // when something changed: each notice has AmiBroker re-read the symbol, and "Refresh
           // today" for 438 symbols sent 876 of them for mostly identical bars
-          if (changed > 0) this.emit('bars_gap_filled', { ticker: task.ticker, fromSec: Math.floor(good[0].ts / 1000) })
+          // (with the range of the chunk, so the plugin fetches only that part of the history)
+          if (changed > 0) this.emit('bars_gap_filled', { ticker: task.ticker, ...historyRangeSec(good) })
         }
 
         console.log(`[BackfillQueue] Saved ${good.length} bars for ${task.ticker} (${fromStr} to ${toStr})`)

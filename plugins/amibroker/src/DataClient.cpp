@@ -57,8 +57,8 @@ static std::map<std::string, unsigned>  g_syncedGeneration;
 static std::map<std::string, ULONGLONG> g_lastGapCheck;
 // Bumped by every SYNC|ticker, so an announcement arriving during a fetch is not lost
 static std::map<std::string, unsigned>  g_syncEpoch;
-// Oldest bar time announced (SYNC|ticker|fromSec) since the ticker last synced
-static std::map<std::string, double>    g_syncFrom;
+// What was announced (SYNC|ticker|fromSec|toSec) since the ticker last synced
+static std::map<std::string, SyncRange> g_syncRange;
 
 // ---- How long the plugin's own steps take ----
 // Once a minute they go to the engine as one line (NOTE|PERF|key=value|...) for /api/diagnostics/perf and
@@ -78,6 +78,8 @@ static PerfHist g_hCatchUp(0.05);     // one background history download (ms)
 static unsigned g_perfBusy = 0;       // notices AmiBroker did not take within the wait
 static unsigned g_perfCatchUpFail = 0;
 static unsigned g_perfCatchUpBars = 0;
+static unsigned g_perfCatchUps = 0;       // background history downloads
+static unsigned g_perfCatchUpRanged = 0;  // of those, the ones that asked for a range only (SYNC|ticker|from|to)
 static unsigned g_perfLines = 0;      // lines read from the engine
 
 static double NowUnixMs() {
@@ -177,18 +179,18 @@ bool NeedsHistorySync(const std::string& ticker) {
     return it == g_syncedGeneration.end() || it->second != g_connGeneration;
 }
 
-double BeginHistorySync(const std::string& ticker, unsigned& epoch) {
+SyncRange BeginHistorySync(const std::string& ticker, unsigned& epoch) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
     epoch = g_syncEpoch[ticker];
-    auto it = g_syncFrom.find(ticker);
-    return it == g_syncFrom.end() ? 0 : it->second;
+    auto it = g_syncRange.find(ticker);
+    return it == g_syncRange.end() ? SyncRange() : it->second;
 }
 
 void MarkHistorySynced(const std::string& ticker, unsigned epoch) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
     if (g_syncEpoch[ticker] != epoch) return;   // newer history announced meanwhile: sync again
     g_syncedGeneration[ticker] = g_connGeneration;
-    g_syncFrom.erase(ticker);
+    g_syncRange.erase(ticker);
 }
 
 bool TryBeginGapCheck(const std::string& ticker) {
@@ -346,14 +348,14 @@ static void ReportPerfIfDue() {
     {
         std::lock_guard<std::mutex> lk(g_perfMutex);
         sprintf_s(line, "NOTE|PERF|transit_p50=%.3f|transit_p99=%.3f|notify_p95=%.3f|notify_max=%.3f|sendmsg_p99=%.3f|busy=%u|"
-                        "gqe_fast_p99_us=%.1f|gqe_slow_max_ms=%.1f|visible_p95=%.3f|stale_p95=%.3f|catchup_p99=%.1f|catchup_fail=%u|catchup_bars=%u|lines=%u",
+                        "gqe_fast_p99_us=%.1f|gqe_slow_max_ms=%.1f|visible_p95=%.3f|stale_p95=%.3f|catchup_p99=%.1f|catchup_fail=%u|catchup_bars=%u|lines=%u|catchup_n=%u|catchup_ranged=%u",
                   g_hTransit.Percentile(50), g_hTransit.Percentile(99), g_hNotify.Percentile(95), g_hNotify.maxValue,
                   g_hSendMsg.Percentile(99), g_perfBusy, g_hGqeFast.Percentile(99), g_hGqeSlow.maxValue,
                   g_hVisible.Percentile(95), g_hStale.Percentile(95), g_hCatchUp.Percentile(99), g_perfCatchUpFail,
-                  g_perfCatchUpBars, g_perfLines);
+                  g_perfCatchUpBars, g_perfLines, g_perfCatchUps, g_perfCatchUpRanged);
         g_hTransit.Reset(); g_hNotify.Reset(); g_hSendMsg.Reset(); g_hGqeFast.Reset(); g_hGqeSlow.Reset();
         g_hVisible.Reset(); g_hStale.Reset(); g_hCatchUp.Reset();
-        g_perfBusy = 0; g_perfCatchUpFail = 0; g_perfCatchUpBars = 0; g_perfLines = 0;
+        g_perfBusy = 0; g_perfCatchUpFail = 0; g_perfCatchUpBars = 0; g_perfLines = 0; g_perfCatchUps = 0; g_perfCatchUpRanged = 0;
     }
     LogDebug(line);
     SendToBridge(line);
@@ -419,9 +421,9 @@ static void NotifierThreadProc() {
 }
 
 // ---- Keeping AmiBroker from waiting on DataBridge ----
-// Catch-up fetches (bars missed, run on AmiBroker's own thread): when one fails or times out
-// the engine is busy or gone, and trying again for every symbol of a scan would freeze
-// AmiBroker each time. They pause for a while instead; AmiBroker keeps what it has meanwhile.
+// Loading a symbol's whole history (GetQuotesEx, on AmiBroker's own thread): when one fails or times
+// out the engine is busy or gone, and trying again for every symbol of a scan would freeze AmiBroker
+// each time. All of them pause for a while instead; AmiBroker keeps what it has meanwhile.
 static ULONGLONG g_catchUpPausedUntil = 0;        // guarded by g_pollerMutex
 static const ULONGLONG CATCH_UP_PAUSE_MS = 15000;
 
@@ -434,6 +436,39 @@ void CatchUpFailed() {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
     g_catchUpPausedUntil = GetTickCount64() + CATCH_UP_PAUSE_MS;
     LogDebug("[SYNC] DataBridge did not answer: catch-up paused for 15 s");
+}
+
+// Background catch-ups (a symbol's missed bars, fetched on the plugin's own thread): a failure holds back
+// only that symbol, 2 s and then twice as long, up to 60 s, until one works. Nothing waits on them, so one
+// big answer that timed out must not stop the others. Three failures in a row, whichever symbols, mean the
+// engine itself does not answer: then all catch-ups pause as above.
+static std::map<std::string, RetryBackoff> g_catchUpBackoff;   // guarded by g_pollerMutex
+static int g_catchUpFailStreak = 0;                            // guarded by g_pollerMutex
+static const int CATCH_UP_STREAK_PAUSE = 3;
+
+bool CatchUpAllowedFor(const std::string& ticker) {
+    std::lock_guard<std::mutex> lk(g_pollerMutex);
+    auto it = g_catchUpBackoff.find(ticker);
+    return it == g_catchUpBackoff.end() || it->second.Allowed(GetTickCount64());
+}
+
+static void CatchUpResultFor(const std::string& ticker, bool ok) {
+    bool pause = false;
+    char buf[200] = "";
+    {
+        std::lock_guard<std::mutex> lk(g_pollerMutex);
+        if (ok) {
+            g_catchUpBackoff.erase(ticker);
+            g_catchUpFailStreak = 0;
+        } else {
+            RetryBackoff& b = g_catchUpBackoff[ticker];
+            b.Failed(GetTickCount64());
+            sprintf_s(buf, "[SYNC] %s: DataBridge did not answer, trying it again in %llu s", ticker.c_str(), b.DelayMs() / 1000);
+            if (++g_catchUpFailStreak >= CATCH_UP_STREAK_PAUSE) { g_catchUpFailStreak = 0; pause = true; }
+        }
+    }
+    if (*buf) LogDebug(buf);
+    if (pause) CatchUpFailed();
 }
 
 // A gap check that found nothing (a contract with minutes without trades): not again until
@@ -509,20 +544,20 @@ void NoteFullLoad(const std::string& ticker) {
 // refresh (load factor over 200%) and charts stuttered. Now GetQuotesEx only asks; this thread
 // fetches, one request at a time, and the next GetQuotesEx call merges what arrived (AmiBroker
 // is nudged to make that call soon).
-struct CatchUpJob { std::string ticker; double from = 0; int limit = 0; CatchUpResult info; };
+struct CatchUpJob { std::string ticker; double from = 0; double until = 0; int limit = 0; CatchUpResult info; };
 static std::deque<CatchUpJob> g_catchUpJobs;                 // guarded by g_pollerMutex
 static std::set<std::string> g_catchUpPending;               // queued, fetching, or fetched and not merged yet
 static std::map<std::string, CatchUpResult> g_catchUpDone;   // guarded by g_pollerMutex
 static std::condition_variable g_catchUpCv;
 static std::thread g_catchUpThread;
 
-bool RequestCatchUp(const std::string& ticker, double from, int limit, const CatchUpResult& info) {
+bool RequestCatchUp(const std::string& ticker, double from, double until, int limit, const CatchUpResult& info) {
     {
         std::lock_guard<std::mutex> lk(g_pollerMutex);
         if (g_catchUpPending.count(ticker)) return false;
         g_catchUpPending.insert(ticker);
         CatchUpJob job;
-        job.ticker = ticker; job.from = from; job.limit = limit; job.info = info;
+        job.ticker = ticker; job.from = from; job.until = until; job.limit = limit; job.info = info;
         g_catchUpJobs.push_back(std::move(job));
     }
     g_catchUpCv.notify_one();
@@ -552,14 +587,16 @@ static void CatchUpThreadProc() {
         }
         std::vector<Bar> bars;
         double fetchStartedAt = NowUnixMs();
-        int got = FetchBarsFromAPI(job.ticker, job.limit, job.from, bars);
+        int got = FetchBarsFromAPI(job.ticker, job.limit, job.from, job.until, bars);
         {
             std::lock_guard<std::mutex> pk(g_perfMutex);
             g_hCatchUp.Record(NowUnixMs() - fetchStartedAt);
+            g_perfCatchUps++;
+            if (job.until > 0) g_perfCatchUpRanged++;
             if (got < 0) g_perfCatchUpFail++;
             else g_perfCatchUpBars += (unsigned)got;
         }
-        if (got < 0) CatchUpFailed();
+        CatchUpResultFor(job.ticker, got >= 0);
         Bar live{}; bool hasLive = false;
         {
             std::lock_guard<std::mutex> lk(g_pollerMutex);
@@ -573,10 +610,11 @@ static void CatchUpThreadProc() {
     }
 }
 
-// SYNC|TICKER          -> bridge stored new recent history for TICKER
-// SYNC|TICKER|FROMSEC  -> bridge stored history for TICKER starting at FROMSEC (unix seconds),
-//                         possibly older than AmiBroker's last bar (a downtime hole)
-// SYNC_ALL             -> force every ticker to re-sync
+// SYNC|TICKER                -> bridge stored new recent history for TICKER
+// SYNC|TICKER|FROMSEC        -> bridge stored history for TICKER starting at FROMSEC (unix seconds),
+//                               possibly older than AmiBroker's last bar (a downtime hole)
+// SYNC|TICKER|FROMSEC|TOSEC  -> ... and not beyond TOSEC: only that range is fetched
+// SYNC_ALL                   -> force every ticker to re-sync
 static void HandleSyncMessage(const std::string& line) {
     if (line.rfind("SYNC_ALL", 0) == 0) {
         std::lock_guard<std::mutex> lk(g_pollerMutex);
@@ -584,25 +622,20 @@ static void HandleSyncMessage(const std::string& line) {
         LogDebug("[SYNC] all tickers marked for history re-sync");
         return;
     }
-    std::string rest = line.substr(5);
-    if (!rest.empty() && rest.back() == '\r') rest.pop_back();
-    double fromSec = 0;
-    size_t bar = rest.find('|');
-    std::string ticker = rest.substr(0, bar);
-    if (bar != std::string::npos) {
-        try { fromSec = std::stod(rest.substr(bar + 1)); } catch (...) { fromSec = 0; }
-    }
-    if (ticker.empty()) return;
+    SyncNotice notice;
+    if (!ParseSyncLine(line, notice)) return;
+    const std::string& ticker = notice.ticker;
 
     Bar live{}; bool hasLive = false;
     {
         std::lock_guard<std::mutex> lk(g_pollerMutex);
+        // A symbol not synced since the connection was made still owes the last 24 hours: its fetch is not
+        // narrowed to the announced range
+        auto synced = g_syncedGeneration.find(ticker);
+        bool owesFullSync = synced == g_syncedGeneration.end() || synced->second != g_connGeneration;
         g_syncedGeneration.erase(ticker);
         ++g_syncEpoch[ticker];
-        if (fromSec > 0) {
-            auto it = g_syncFrom.find(ticker);
-            if (it == g_syncFrom.end() || fromSec < it->second) g_syncFrom[ticker] = fromSec;
-        }
+        g_syncRange[ticker].Add(notice.from, notice.to, owesFullSync);
         hasLive = LiveOf(ticker, live);
     }
     // Nudge AmiBroker so an open chart pulls the new bars right away.
@@ -744,6 +777,9 @@ static void PollerThreadProc() {
             // The minutes since the last update were not received: the recent minutes kept per symbol
             // are complete only from the first update that arrives now
             for (auto& kv : g_recent) kv.second.ResetCoverage();
+            // Every symbol owes a sync of its last 24 hours now: what was announced before no longer
+            // says all that was missed
+            for (auto& kv : g_syncRange) kv.second.MarkOpen();
         }
         { std::lock_guard<std::mutex> lk(g_sendMutex); g_ipcSocket = s; }
         LogDebug("[IPC] Connected to 7891");
@@ -863,7 +899,10 @@ void CloseHttpSession() {
 
 static int FetchBarsPath(const wchar_t* path, bool quick, std::vector<Bar>& out);
 
-int FetchBarsFromAPI(const std::string& ticker, int limit, double since, std::vector<Bar>& out) {
+// A catch-up this many minutes long or shorter is expected to be a small answer
+static const double QUICK_MAX_MINUTES = 5000;
+
+int FetchBarsFromAPI(const std::string& ticker, int limit, double since, double until, std::vector<Bar>& out) {
     wchar_t path[512];
     swprintf_s(path, L"/api/feed/bars?ticker=%hs", UrlEncode(ticker).c_str());
     if (limit > 0) {
@@ -874,7 +913,14 @@ int FetchBarsFromAPI(const std::string& ticker, int limit, double since, std::ve
         wchar_t tmp[64]; swprintf_s(tmp, L"&since=%lld", (long long)since);
         wcscat_s(path, tmp);
     }
-    return FetchBarsPath(path, since > 0, out);
+    if (until > 0) {
+        wchar_t tmp[64]; swprintf_s(tmp, L"&until=%lld", (long long)until);
+        wcscat_s(path, tmp);
+    }
+    // Quick timeouts for a catch-up of a few days at most (the range says how much is coming); a year of
+    // missed history is a big answer and gets the long ones, so it does not time out and get asked again
+    double spanMin = since > 0 ? ((until > 0 ? until : NowUnixMs() / 1000.0) - since) / 60.0 : 0;
+    return FetchBarsPath(path, since > 0 && spanMin <= QUICK_MAX_MINUTES, out);
 }
 
 int FetchDailyFromAPI(const std::string& ticker, std::vector<Bar>& out) {

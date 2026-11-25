@@ -28,10 +28,12 @@ const tidOf = db.prepare('SELECT id FROM tickers WHERE name = ?')
 // F&O bars with open interest as a 7th value. Built here from the raw numbers: formatting each
 // row in SQL (printf + group_concat) took ~80 ms for 100k bars, this ~65 ms, with the same text
 // (prices are stored ×10000, so they have at most ~10 significant digits and print the same).
-const rawBars = db.prepare('SELECT ts, open, high, low, close, volume, oi FROM bars WHERE tid = ? AND ts > ? ORDER BY ts DESC LIMIT ?')
+// "until" (inclusive) is for a catch-up of a known range (SYNC|ticker|from|to); without one it is far in the future
+const rawBars = db.prepare('SELECT ts, open, high, low, close, volume, oi FROM bars WHERE tid = ? AND ts > ? AND ts <= ? ORDER BY ts DESC LIMIT ?')
 if (typeof rawBars.setReturnArrays === 'function') rawBars.setReturnArrays(true)
-function barsCsv(tid, since, limit) {
-  const rows = rawBars.all(tid, since, limit)
+const NO_END = 9e15
+function barsCsv(tid, since, limit, until) {
+  const rows = rawBars.all(tid, since, until, limit)
   const lines = new Array(rows.length)
   for (let i = rows.length - 1, j = 0; i >= 0; i--, j++) {
     const r = rows[i]
@@ -52,9 +54,9 @@ const dayRows = db.prepare(
   'WHERE b.ts >= ? GROUP BY b.tid, d')
 
 const ops = {
-  csv({ ticker, since, limit }) {
+  csv({ ticker, since, limit, until }) {
     const t = tidOf.get(ticker)
-    return t ? barsCsv(t.id, since, limit) : ''
+    return t ? barsCsv(t.id, since, limit, until > 0 ? until : NO_END) : ''
   },
   gaps({ ticker, fromSec, toSec, intervalSec }) {
     const t = tidOf.get(ticker)
@@ -176,9 +178,9 @@ function call<T>(op: Op, args: object): Promise<T> {
   })
 }
 
-/** "tsSec,open,high,low,close,volume" lines strictly newer than `sinceSec`: the newest `limit`, ascending. */
-export function readBarsCsv(ticker: string, sinceSec: number, limit: number): Promise<string> {
-  return call<string>('csv', { ticker, since: sinceSec, limit })
+/** "tsSec,open,high,low,close,volume" lines strictly newer than `sinceSec` (and, when given, not newer than `untilSec`): the newest `limit`, ascending. */
+export function readBarsCsv(ticker: string, sinceSec: number, limit: number, untilSec = 0): Promise<string> {
+  return call<string>('csv', { ticker, since: sinceSec, limit, until: untilSec })
 }
 
 /** Adjacent stored bars more than `intervalSec` apart in [fromSec, toSec], plus the first/last bar there. */

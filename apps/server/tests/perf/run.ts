@@ -186,7 +186,7 @@ async function main() {
     backfilledTickers.add(t)
   }
 
-  const plugin = new FakePlugin(IPC_PORT, HTTP_PORT)
+  const plugin = new FakePlugin(IPC_PORT, HTTP_PORT, !process.argv.includes('--old-sync'))
   await plugin.connect()
   const feed = new SimFeed(brokerManager, { brokerId: BROKER, tickers, rate: sc.rate, dup, swap })
   const extra: Record<string, unknown> = {}

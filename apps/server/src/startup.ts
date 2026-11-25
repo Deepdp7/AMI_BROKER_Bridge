@@ -1,7 +1,8 @@
 /**
  * Engine startup: wires the services' events to the app's WebSocket and connects the brokers.
  */
-import { getAllSettings, stmts, upsertBarsToHistory } from './db'
+import { getAllSettings, stmts, upsertBarsToHistory, historyRangeSec } from './db'
+import { withPriority, setPrioritiesEnabled } from './lib/priority'
 import { brokerManager } from './brokers/BrokerManager'
 import { activateBroker, openBrokerLogin } from './brokers/BrokerLifecycle'
 import { liveFeed } from './market/liveFeed'
@@ -18,6 +19,9 @@ import type { AppSettings } from './types'
 
 /** Forwards service events to the app (WebSocket) and broker ticks into the live feed. Call once. */
 export function wireEngineEvents() {
+  // The setting `historyPriorities` (no screen for it; on unless set to false) switches the broker request priorities off
+  setPrioritiesEnabled(() => String((getAllSettings() as any).historyPriorities) !== 'false')
+
   // Live feed → app
   liveFeed.on('feed_update', (payload) => {
     broadcast('feed_update', payload)
@@ -95,11 +99,12 @@ async function fetchTodayBars(adapter: any, ticker: string) {
     
     broadcast('log_entry', { level: 'info', component: 'Backfill', message: `Fetching today's bars for ${ticker} (${brokerToken})...` })
     
-    const bars = await adapter.getHistoricalBars(brokerToken, '1m', from, to)
+    const bars = await withPriority<any[]>('refresh', () => adapter.getHistoricalBars(brokerToken, '1m', from, to))
     if (bars && bars.length > 0) {
       await upsertBarsToHistory(ticker, bars)
       console.log(`[Init] Incremental update: added ${bars.length} bars for ${ticker} (today)`)
-      notifyAmiBrokerHistoryChanged(ticker, Math.floor(bars[0].ts / 1000))
+      const { fromSec, toSec } = historyRangeSec(bars)
+      notifyAmiBrokerHistoryChanged(ticker, fromSec, toSec)
       broadcast('log_entry', { level: 'success', component: 'Backfill', message: `Added ${bars.length} bars for ${ticker} (today)` })
     } else {
       broadcast('log_entry', { level: 'warn', component: 'Backfill', message: `No bars returned for ${ticker} today.` })

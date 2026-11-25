@@ -95,6 +95,8 @@ export interface AppSettings {
   backfillDepthDays: number
   /** Spread history downloads over every connected broker (the fastest free one fetches each chunk) */
   historyUseAllBrokers: boolean
+  /** A broker's history requests are served by urgency: a chart's, then the auto-refresh's, then bulk downloads (off: in the order they came) */
+  historyPriorities?: boolean
   lateToleranaceSeconds: number
   clockSkewThresholdSeconds: number
   // Backfill engine config

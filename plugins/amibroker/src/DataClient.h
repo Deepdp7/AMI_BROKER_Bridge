@@ -4,8 +4,9 @@
 #include <windows.h>
 #include "BarMerge.h"   // Bar, and what is kept of each symbol's recent minutes
 
+// The newest `limit` bars after `since` (unix s) and, when `until` > 0, not after `until`.
 // Returns number of bars parsed, or -1 if the HTTP request itself failed.
-extern int  FetchBarsFromAPI(const std::string& ticker, int limit, double since, std::vector<Bar>& outBars);
+extern int  FetchBarsFromAPI(const std::string& ticker, int limit, double since, double until, std::vector<Bar>& outBars);
 // Daily bars of the days before the ticker's 1-minute history (timestamp = the day's midnight,
 // India time); same return values
 extern int  FetchDailyFromAPI(const std::string& ticker, std::vector<Bar>& outBars);
@@ -45,9 +46,13 @@ extern void CloseHttpSession();
 extern void PerfRecordGetQuotes(bool fastPath, double micros);
 
 // ---- Keeping AmiBroker from waiting on DataBridge ----
-// Catch-up fetches pause for a while after one failed or timed out (engine busy or gone)
+// Loading a symbol's history on AmiBroker's own thread: all of them pause for a while after one failed or
+// timed out (engine busy or gone)
 extern bool CatchUpAllowed();
 extern void CatchUpFailed();
+// Background catch-ups: a symbol whose fetch failed waits 2 s, then twice as long up to 60 s; only three
+// failures in a row pause everything (CatchUpFailed)
+extern bool CatchUpAllowedFor(const std::string& ticker);
 // A gap check that found nothing is not repeated until AmiBroker's last bar moves on
 extern bool GapCheckWorthIt(const std::string& ticker, double sinceMin);
 extern void GapCheckResult(const std::string& ticker, double sinceMin, bool foundBars);
@@ -64,9 +69,9 @@ extern bool WaitForBridge(DWORD maxMs);
 // True if this ticker has not been re-synced since the last (re)connect to the bridge,
 // or the bridge announced new history for it (SYNC|ticker[|fromSec]).
 extern bool NeedsHistorySync(const std::string& ticker);
-// Starts a catch-up fetch: returns the oldest bar time the bridge announced for this ticker
-// (0 if none) and the announcement epoch it belongs to.
-extern double BeginHistorySync(const std::string& ticker, unsigned& epoch);
+// Starts a catch-up fetch: returns what the bridge announced for this ticker since it last synced
+// (a range to fetch, or only a start) and the announcement epoch it belongs to.
+extern SyncRange BeginHistorySync(const std::string& ticker, unsigned& epoch);
 // Marks the ticker synced, unless the bridge announced more history after BeginHistorySync.
 extern void MarkHistorySynced(const std::string& ticker, unsigned epoch);
 // Rate limiter for opportunistic gap checks (live bar skipped minutes). True at most once per 30s per ticker.
@@ -82,8 +87,9 @@ struct CatchUpResult {
     bool gapCheck = false;
     double sinceMin = 0;    // AmiBroker's last minute when it was asked for (gap checks)
 };
-// Queues a fetch of the ticker's bars from `from` (unix s); false when one is already on its way
-extern bool RequestCatchUp(const std::string& ticker, double from, int limit, const CatchUpResult& info);
+// Queues a fetch of the ticker's bars after `from` (unix s) and, when `until` > 0, up to it; false when one is
+// already on its way
+extern bool RequestCatchUp(const std::string& ticker, double from, double until, int limit, const CatchUpResult& info);
 // The fetched bars, once (true), to merge into AmiBroker's array
 extern bool TakeCatchUpResult(const std::string& ticker, CatchUpResult& out);
 // AmiBroker asked for this symbol: told to the engine (at most every 15 s), which gives a

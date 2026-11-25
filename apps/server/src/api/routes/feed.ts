@@ -80,9 +80,11 @@ router.get('/bars', async (req, res) => {
   }
 
   const since = Number(req.query.since) || 0
+  // A catch-up of a known range (SYNC|ticker|from|to) asks for the bars up to `until` only; without it, up to now
+  const until = Number(req.query.until) || 0
 
   // 50ms Throttling Cache (Ultra-low CPU overhead)
-  const cacheKey = `${ticker}:${limit}:${since}`
+  const cacheKey = `${ticker}:${limit}:${since}:${until}`
   const cached = feedResponseCache.get(cacheKey)
   if (cached && (Date.now() - cached.ts < 50)) {
     return reply(cached.data)
@@ -103,8 +105,8 @@ router.get('/bars', async (req, res) => {
   }) || existing.find(s => s.amiBrokerTicker === ticker || s.amibroker_ticker === ticker)
 
   // Catch-up requests from the plugin pass `since`: filter in SQL instead of loading `limit` rows
-  let csv = since > 0
-    ? await stmts.getBarsCsvSinceAsync.get(ticker, since, limit)
+  let csv = since > 0 || until > 0
+    ? await stmts.getBarsCsvSinceAsync.get(ticker, since, limit, until)
     : await stmts.getBarsCsvByTickerAsync.get(ticker, limit)
 
   if (!symRecord) {
@@ -127,8 +129,8 @@ router.get('/bars', async (req, res) => {
     backfillQueue.enqueue(ticker, brokerId, symRecord.rawSymbol || symRecord.raw_symbol || symRecord.instrumentId || symRecord.instrument_id || ticker, backfillDepth)
   }
 
-  // Append in-progress live bar if available and has a valid price
-  const liveBar = liveFeed.getLiveBar(ticker, brokerId)
+  // Append in-progress live bar if available and has a valid price (a range up to `until` is history only)
+  const liveBar = until > 0 ? undefined : liveFeed.getLiveBar(ticker, brokerId)
   if (liveBar && liveBar.close > 0) {
     const ts = Math.floor(liveBar.bucketMs / 1000)
     const liveCsvLine = `${ts},${liveBar.open},${liveBar.high},${liveBar.low},${liveBar.close},${liveBar.volume}${liveBar.oi ? `,${liveBar.oi}` : ''}`

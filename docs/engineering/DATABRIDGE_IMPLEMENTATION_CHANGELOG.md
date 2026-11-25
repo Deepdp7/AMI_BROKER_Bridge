@@ -41,6 +41,50 @@ One entry per stage, newest at the top. An entry is written when its stage is fi
 - No source files were changed.
 - Next: Stage 0 (instrumentation and baseline harness).
 
+## Stage 3: backfill isolation (2026-11-25)
+
+**Findings addressed:** P1 (3a), P6 (3b, 3c), P5 (3d). 3e (database writer thread) not started, see below. Verified against the code at `2130a20` first: all as described.
+**Discrepancies found while verifying and measuring:** five, all in ROOT_CAUSE_ANALYSIS "Discrepancies" (3a, 3b twice, 3d twice, the harness's classes).
+
+**Changes**
+- Engine `db/index.ts` (3a): `upsertBarsToHistory` commits in slices of `HISTORY_SLICE_ROWS` = 2,000 rows, with a turn of the event loop (`setImmediate`) between slices; same return value; an optional `work.syncMs` collects the time held without a break. `historyRangeSec(bars)` gives the oldest and newest bar of a chunk. `BackfillQueue` redefines `backfill.chunk_cpu_ms` as the sum of the synchronous pieces, and emits `bars_gap_filled` with `{ ticker, fromSec, toSec }` after the last slice.
+- Engine `lib/priority.ts` (new) and `lib/RateLimiter.ts` (3b): one queue per class (interactive, refresh, bulk) and one timer; the pacing rules (pause, budget, even spacing, per-second cap, clock-back fix) are kept as they were. After an urgent request had to wait, bulk requests keep to 70% of the minute's budget for a minute. Call sites: `BackfillQueue.fetchChunk` (`interactive` for a symbol AmiBroker is loading or a forced "today" fill, `bulk` otherwise), `AutoRefresh` and the start-up fetch (`refresh`), `DailyHistory` (`bulk`). The setting `historyPriorities` (no screen; on unless set to `false`) turns it off: every request is `refresh`, i.e. first come, first served. New metrics `limiter.wait_ms.<name>.<class>`; the diagnostics page shows `pendingByClass`.
+- Engine `AutoRefresh.ts` (3c): no longer waits for a history download (the early return in `tick` and the stop in `run` are gone); `waitingFor` stays in the status, always `null`.
+- Engine `ipcServer.ts`, `api/routes/feed.ts`, `db/reader.ts` (3d): `SYNC|ticker|from|to` (an entry keeps the oldest start and the newest end; a notice without an end leaves it open); `/api/feed/bars?until=` and the reader's `ts <= until` (inclusive; the live bar is not appended for a range).
+- Plugin `BarMerge.h/.cpp` (3d): `ParseSyncLine`, `SyncRange` (what was announced, as one range, only while every notice had both ends and nothing else was owed), `RetryBackoff` (2 s doubling to 60 s). `DataClient.cpp` / `Plugin.cpp`: a full sync with an announced range fetches `[from - 60, to + 60]` only; the timeouts depend on the size asked for (5,000 minutes or fewer are quick); a failed background catch-up backs off that symbol only, three in a row pause all; `NOTE|PERF` carries `catchup_n` and `catchup_ranged` (at the end of the line).
+- Harness: the fake plugin fetches ranges like the new plugin (`--old-sync` behaves like the old one).
+- Tests: `historySlices` (slices, `historyRangeSec`, `until` in the database and over HTTP), `historyPriorities` (7 tests on the limiter and the context), `syncRange` (the lines on the wire), 26 new plugin checks.
+
+**Checks**
+- `npm run typecheck --prefix apps/server`: pass. `npm test --prefix apps/server`: 402 passed, 2 failed (the same 2: noren, upstoxAngel). 12 new tests; breaking the slice size on purpose was caught.
+- `npm run typecheck --prefix apps/desktop`: pass. `npm test --prefix apps/desktop`: 136 of 136 (not touched).
+- `npm run build:plugin`: built. `npm run test:plugin`: 105 checks, 0 failed (79 before).
+- Harness: integrity 0 mismatches in every run; real DLL against the harness engine: 0 mismatches.
+
+**Before to after** (details in DATABRIDGE_PERFORMANCE_BASELINE.md; `live500_backfill`, 90 s, the "before" run on the same machine in the same sitting, slicing off and the old SYNC behaviour)
+| Metric | Before | After |
+|---|---|---|
+| loop.lag_ms p50 / p95 / p99 / max | 4.0 / 200 / **266** / 317 | 0.87 / 43.4 / **77.0** / 132 (3.5× lower p99; **not under the 10 ms target**) |
+| Bar ready to written on AmiBroker's channel (feed_to_ipc) p99 / max | 0.72 / 7.5 ms | 0.25 / 2.2 ms |
+| Transaction of a history chunk (db.history_tx_ms) p50 / p99 | 22.3 / 93 ms (25,000 rows) | **1.7** / 24.5 ms (2,000 rows; the p99 is the log checkpoints, 4a) |
+| Catch-up bytes per symbol | mean 2.75 MB, max 10.6 MB | **mean 1.22 MB, max 4.17 MB** (2.0×); rows served 34.6 M to 17.8 M |
+| Catch-up answers (http.feed_bars_ms) p95 / p99 | 136 / 292 ms | **58 / 85 ms** |
+| Engine CPU (one core) | 91% | 76% |
+| One slow catch-up | paused every symbol for 15 s | holds back that symbol only (2 s doubling to 60 s) |
+
+**Not done / follow-ups**
+- **3e (database writer thread) not started.** The trigger is met on the numbers (p99 77 ms), but the remaining stalls are the log checkpoints inside COMMIT (4a), the catch-up answers built on the main thread (P14, 6b) and the one unsliced piece of each chunk (repair, validate, `Map`, `learnClosedDays`; estimated 15-25 ms). A writer thread would remove none of the first two. Re-measure after 4a and decide then.
+- The roadmap's expected catch-up saving (2.5-4×) was 2.0× in the harness.
+- `DATABRIDGE_HISTORY_SLICE_ROWS` (a number; default 2000) sets the slice size: a huge value brings back one transaction per chunk, for comparing runs.
+- Refresh against bulk is tested by the unit tests only: the harness marks nearly everything `interactive`. The live checklist shows it: in a market session with a capped plan, non-live symbols should keep refreshing while a big download runs (`auto_refresh` status no longer says "Waiting for history download").
+- AutoRefresh now takes priority over bulk downloads, so during a refresh pass (6 requests in flight, a pass takes minutes with hundreds of symbols) downloads get the rest of the broker's budget. The gap between passes (never shorter than the last pass took) leaves bulk at least half of the time.
+
+**For the user**
+- **Install the rebuilt plugin again** (it has the range fetch and the backoff): close AmiBroker, keep the current `DataBridgePro.dll` as `DataBridgePro.dll.bak`, copy in `plugins\amibroker\DataBridgePro.dll`, start AmiBroker. It works with the older and the newer engine alike.
+- **The engine changes need the rebuilt engine** (`npm run build:server`) or `npm run dev`.
+- On a market day, with a download running: do non-live symbols still refresh, and do open charts fill in without a long pause? Tell me if History looks different (a hole, a repeated block).
+- If the priorities cause trouble, the setting `historyPriorities` = `false` restores first come, first served (PUT `/api/settings`).
+
 ## Stage 2: live tick pipeline (2026-11-25)
 
 **Findings addressed:** P3, P4, P10, D1, and the flush timing (2e). Verified against the code at `4067f86` first: all as described.

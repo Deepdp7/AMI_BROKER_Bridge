@@ -120,17 +120,17 @@ Machine: Intel Core Ultra 9 275HX, 24 threads, 31 GB RAM, Windows 10.0.26300, No
 
 | Metric | p50 | p95 | p99 | max | after 3a | after 3b–3d | after 4a | final |
 |---|---|---|---|---|---|---|---|---|
-| loop.lag_ms | 10.4 | 219 | 266 | 315 | | | | |
-| tick.feed_to_ipc_ms | 1.06 | 35.9 | 242 | 340 | | | | |
-| history.parse_ms | 4.0 | 5.3 | 6.5 | 9.2 | | | | |
-| backfill.chunk_cpu_ms | 35.9 | 52.6 | 63.6 | 70.5 | | | | |
-| db.history_tx_ms | 20.3 | 35.9 | 47.8 | 51.7 | | | | |
-| http.feed_bars_ms (the fake plugin's catch-ups) | 27.0 | 242 | 354 | 375 | | | | |
-| db.wal_bytes max | 8.5 MB | | | | | | | |
-| chunks/min | 597 (906 in 91 s, 21.1 M bars) | | | | | | | |
-| catch-up bytes per symbol | mean 3.4 MB, max 10.6 MB (582 symbols) | | | | | | | |
-| CPU % (engine, of one core) / RSS peak | 111 / 1,944 MB | | | | | | | |
-| integrity mismatches | 0 (1,500 bars, 93,068 updates) | | | | | | | |
+| loop.lag_ms | 10.4 | 219 | 266 | 315 | | 0.87 / 43.4 / 77.0 / 132 | | |
+| tick.feed_to_ipc_ms | 1.06 | 35.9 | 242 | 340 | | 0.050 / 0.157 / 0.253 / 2.18 | | |
+| history.parse_ms | 4.0 | 5.3 | 6.5 | 9.2 | | 4.0 / 7.8 / 10.4 / 13.2 | | |
+| backfill.chunk_cpu_ms | 35.9 | 52.6 | 63.6 | 70.5 | | 43.4 / 70 / 77 / 95 (the sum of the pieces, see 3a: not the same thing as before) | | |
+| db.history_tx_ms | 20.3 | 35.9 | 47.8 | 51.7 | | 1.7 / 3.3 / 24.5 / 42.6 (one slice of 2,000 rows; before: one chunk) | | |
+| http.feed_bars_ms (the fake plugin's catch-ups) | 27.0 | 242 | 354 | 375 | | 24.5 / 57.8 / 84.6 / 152 | | |
+| db.wal_bytes max | 8.5 MB | | | | | 5.2 MB | | |
+| chunks/min | 597 (906 in 91 s, 21.1 M bars) | | | | | 598 (906 in 91 s) | | |
+| catch-up bytes per symbol | mean 3.4 MB, max 10.6 MB (582 symbols) | | | | | mean 1.22 MB, max 4.17 MB (613 symbols) | | |
+| CPU % (engine, of one core) / RSS peak | 111 / 1,944 MB | | | | | 76 / 1,296 MB | | |
+| integrity mismatches | 0 (1,500 bars, 93,068 updates) | | | | | 0 (1,000 bars, 92,998 updates) | | |
 
 **After Stage 1** (a second 91 s run, same scenario): loop.lag_ms p50 / p99 / max 0.60 / 242 / 299 ms; tick.feed_to_ipc_ms 0.49 / 181 / 290 ms; backfill.chunk_cpu_ms 35.9 / 57.8 / 61.2 ms; 906 chunks, 0 failed history requests; integrity 0 mismatches (1,000 bars, 92,998 updates). Stage 1 does not touch this path, so this run differs from the baseline only by run-to-run variation (the two baseline runs of this scenario also differ, p99 lag 242-266 ms). The one number Stage 1 is meant to move: `catchup.state_writes` was 476 and 597 in the two baseline runs and is **205** now (2.3 a second). Since Stage 1 they are background writes, at most one per file every 500 ms, not whole-file writes on the engine's thread at every change.
 
@@ -145,6 +145,26 @@ Machine: Intel Core Ultra 9 275HX, 24 threads, 31 GB RAM, Windows 10.0.26300, No
 | integrity | 0 mismatches | 0 mismatches |
 
 The loop lag is **not** better: the engine's one thread is still busy for 200-300 ms at a time with history chunks (Stage 3 changes that). What changed is that a bar that has been processed is written at once, instead of waiting in line behind the next chunk. A tick that arrives *while* a chunk is being processed still waits for that chunk.
+
+**After Stage 3** (3a to 3d together, 90 s, the same scenario, three runs on the same machine in one sitting: "before" = slicing switched off with `DATABRIDGE_HISTORY_SLICE_ROWS=100000000` and the fake plugin behaving like the plugin of before Stage 3 (`--old-sync`: a SYNC fetch runs from the start to now); "3a only" = slices on, old plugin behaviour; "after" = everything):
+
+| | before p50 / p95 / p99 / max | 3a only | after (3a-3d) |
+|---|---|---|---|
+| loop.lag_ms | 4.0 / 200 / **266** / 317 | 1.70 / 47.8 / **70.0** / 112 | 0.87 / 43.4 / **77.0** / 132 |
+| tick.feed_to_ipc_ms | 0.067 / 0.448 / 0.721 / 7.5 | 0.050 / 0.173 / 0.278 / 0.95 | 0.050 / 0.157 / 0.253 / 2.18 |
+| db.history_tx_ms (a chunk before, a slice after) | 22.3 / 77 / 93 / 124 | 1.7 / 3.3 / 24.5 / 33.8 | 1.7 / 3.3 / 24.5 / 42.6 |
+| http.feed_bars_ms (catch-ups) | 24.5 / 136 / 292 / 391 | 24.5 / 112.7 / 136 / 177 | 24.5 / 57.8 / 84.6 / 152 |
+| catch-up bytes per symbol | mean 2.75 MB, max 10.6 MB | mean 2.46 MB, max 10.6 MB | mean 1.22 MB, max 4.17 MB |
+| rows served to catch-ups | 34.6 M | 34.5 M | 17.8 M |
+| engine CPU, of one core | 91% | 96% | 76% |
+| integrity | 0 mismatches | 0 mismatches | 0 mismatches |
+
+The "before" run agrees with the earlier baseline runs (loop.lag_ms p99 242-266 ms), so this is not run-to-run variation. What each part did:
+
+- **3a (slices) is the part that moves the loop lag**: p99 266 to 70 ms, max 317 to 112 ms, and the time from a bar being ready to its write on AmiBroker's channel (feed_to_ipc) p99 0.72 to 0.28 ms. A transaction is 2,000 rows, 1.7 ms (p50) instead of a chunk's 22 ms; the p99 of a slice (24.5 ms) and its max are checkpoints of the write-ahead log inside COMMIT (P2, Stage 4a).
+- **3d (ranges) halves the catch-up volume** (2.0×, not the 2.5-4× the roadmap expected: a chunk of the harness is 95 days, and the saving is the tail from a chunk to now, so it grows with the length of the download): catch-up answers p95 136 to 58 ms, p99 292 to 85 ms, engine CPU 91% to 76%. It does not change the loop lag p99 (70 to 77 ms is noise between runs).
+- **The loop lag is still not under 10 ms** (p99 77 ms, max 132 ms). A chunk's own work is still 43 ms in several pieces (backfill.chunk_cpu_ms, 39 ms p50 / 77 ms p99): the slices are about 20 ms of that, the rest is one piece, the repair, validate and `Map` of the 25,000 bars before the first slice and `learnClosedDays` after the last one (estimated 15-25 ms). On top of that come the catch-up answers built and re-filtered on the main thread (P14, Stage 6b) and the checkpoints (4a).
+- **The classes in the limiter** (`limiter.wait_ms.sim.interactive` / `.bulk`): 711 of the 906 chunks were `interactive`, because the harness's plugin asks for those symbols over `/api/feed/bars`, which marks them as "a chart is waiting" (`prioritize`), as the real plugin does when AmiBroker loads a symbol. The priority between auto-refresh and bulk downloads is therefore not exercised by this harness (the unit tests cover it: `tests/historyPriorities.test.ts`).
 
 Read it against live500 above: the same 500 symbols and the same updates, and the loop lag goes from p99 0.66 ms to **266 ms**, and the time from a bar being ready to its write on AmiBroker's channel from p99 0.23 ms to **242 ms** (max 340 ms). Each history chunk holds the engine's one thread for 36 ms (median; 64 ms at p99), of which the database save is 20 ms. At 10 chunks a second that is about a third of the thread, in blocks. The loop lag is larger than any single chunk (up to 315 ms) because the catch-up answers are also built on that thread: the plugin asks for "from the announced start up to now", about 3.4 MB per symbol on average (P5), and `/api/feed/bars` re-filters those on the main thread (P14).
 
@@ -228,6 +248,18 @@ With the first version of the new notifier (a plain sleep for the gap) the gaps 
 **A symbol nobody read for 5 minutes** (330 s run: 2 symbols read all the time, one read in the first 20 s and the last 8 s only): it came back with 8 bars, the same as the two that were read all the time, and the plugin log has no "caught up" line for it after its first read; the per-minute reports show catchup_p99 = 0 for the rest of the run. Its missed minutes came from the plugin's memory. 6,531 notices in 330 s, 0 busy, integrity 0 mismatches.
 
 What this does not show: AmiBroker's own cost of taking 20 notices a second (the host answers at once). `sendmsg_p99` and `busy` in the live checklist are where it would show.
+
+**After Stage 3** (the rebuilt DLL, `tests/dll_host.cpp`, the harness engine on the real ports with `live500_backfill`, 100 s, 6 backfilled symbols read):
+
+| | Result |
+|---|---|
+| host: notices, gap between notices | 1,560 (19.5 a second), 50.1 / 50.5 / 51.6 ms (min / p50 / p95) |
+| plugin report | notify p95 52.6 ms, sendmsg p99 1.06 ms, busy 0, catchup_fail 0, gqe_fast p99 9.6 us |
+| background catch-ups in the minute | 7, of which 1 asked for a range only (`catchup_ranged`); the others were the first sync after the connection (owed the last 24 hours, so not narrowed, by design) |
+| a symbol read while its history downloaded | 19,999 bars arrived by catch-up and were merged ("caught up 19999 missed bar(s)") |
+| integrity | 0 mismatches (1,500 bars, 102,997 updates) |
+
+The harness's backfilled symbols have no live feed and their history is fetched while the host reads them, so this run shows that the new DLL and the new engine work together and that a ranged fetch happens on the wire; the number of bytes is measured with the fake plugin above and the range logic by `plugin_tests.cpp` (105 checks).
 
 ## Live baseline checklist (the user runs this)
 

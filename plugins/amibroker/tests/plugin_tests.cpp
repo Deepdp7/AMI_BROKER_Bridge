@@ -113,6 +113,68 @@ static void TestParser() {
     CHECK(!ParseQuoteLine("QUOTE||1|2|3|4|5|6|7|8|9|10|11|12|13", q));
 }
 
+// ---- History announcements and the retry backoff ----
+static void TestSync() {
+    SECTION("SYNC lines");
+    SyncNotice s;
+    CHECK(ParseSyncLine("SYNC|RELIANCE", s) && s.ticker == "RELIANCE" && s.from == 0 && s.to == 0);
+    CHECK(ParseSyncLine("SYNC|RELIANCE|1788000000", s) && s.from == 1788000000.0 && s.to == 0);         // an engine from before the end was sent
+    CHECK(ParseSyncLine("SYNC|M&M|1788000000|1788086400\r", s) && s.ticker == "M&M" && s.from == 1788000000.0 && s.to == 1788086400.0);
+    CHECK(ParseSyncLine("SYNC|TCS|1788000000|1788086400|newer|fields", s) && s.to == 1788086400.0);     // later fields are ignored
+    CHECK(ParseSyncLine("SYNC|TCS|abc|1788086400", s) && s.from == 0 && s.to == 0);                      // an unreadable start: no range
+    CHECK(ParseSyncLine("SYNC|TCS|1788000000|abc", s) && s.from == 1788000000.0 && s.to == 0);
+    CHECK(ParseSyncLine("SYNC|TCS|0|1788086400", s) && s.from == 0 && s.to == 0);                       // an end without a start says nothing
+    CHECK(!ParseSyncLine("SYNC_ALL", s));
+    CHECK(!ParseSyncLine("SYNC|", s));
+    CHECK(!ParseSyncLine("SYNC", s));
+    CHECK(!ParseSyncLine("LIVE_BAR|TCS|1|2|3|4|5|6", s));
+
+    SECTION("What was announced, as one range");
+    {
+        SyncRange r;
+        CHECK(!r.IsRange());
+        r.Add(1000, 2000, false);
+        CHECK(r.IsRange() && r.from == 1000 && r.to == 2000);
+        r.Add(500, 800, false);                          // a chunk further back: the range grows both ways
+        CHECK(r.IsRange() && r.from == 500 && r.to == 2000);
+        r.Add(1500, 3000, false);
+        CHECK(r.IsRange() && r.from == 500 && r.to == 3000);
+        r.Add(0, 0, false);                              // a notice without a range: "recent bars changed", up to now
+        CHECK(!r.IsRange() && r.from == 500);            // the start is kept: the fetch then runs from there to now
+    }
+    {
+        SyncRange r;
+        r.Add(1000, 2000, true);                         // the symbol still owed its last 24 hours
+        CHECK(!r.IsRange() && r.from == 1000);
+    }
+    {
+        SyncRange r;
+        r.Add(1000, 0, false);                           // an engine that sends no end
+        CHECK(!r.IsRange() && r.from == 1000);
+        SyncRange q;
+        q.Add(1000, 2000, false);
+        q.MarkOpen();                                    // the connection was renewed
+        CHECK(!q.IsRange());
+    }
+
+    SECTION("Retry backoff");
+    {
+        RetryBackoff b;
+        CHECK(b.Allowed(0) && b.Allowed(1000000));
+        b.Failed(10000);
+        CHECK(b.DelayMs() == 2000 && !b.Allowed(11999) && b.Allowed(12000));
+        b.Failed(12000);
+        CHECK(b.DelayMs() == 4000 && !b.Allowed(15999) && b.Allowed(16000));
+        for (int i = 0; i < 10; i++) b.Failed(100000);
+        CHECK(b.DelayMs() == 60000);                     // never longer than a minute
+        CHECK(!b.Allowed(159999) && b.Allowed(160000));
+        b.Succeeded();
+        CHECK(b.DelayMs() == 0 && b.Allowed(0));
+        b.Failed(5000);
+        CHECK(b.DelayMs() == 2000);                      // starts again from 2 s
+    }
+}
+
 // ---- RecentBars ----
 static void TestRecent() {
     SECTION("RecentBars: live bar and minute rollover");
@@ -207,6 +269,7 @@ static void TestRecent() {
 int main() {
     TestMerge();
     TestParser();
+    TestSync();
     TestRecent();
     printf("\n%d checks, %d failed\n", g_checks, g_failed);
     return g_failed ? 1 : 0;

@@ -80,23 +80,32 @@ static int DoGetQuotesExImpl(LPCTSTR pszTicker, int nPeriodicity, int nLastValid
         // found nothing (minutes without trades) isn't repeated until AmiBroker's last bar
         // moves on.
         bool liveSkipsMinutes = hasLive && liveMin > sinceMin + 60;
-        bool canCatchUp = nLastValid >= 0 && IsBridgeConnected() && CatchUpAllowed();
+        bool canCatchUp = nLastValid >= 0 && IsBridgeConnected() && CatchUpAllowed() && CatchUpAllowedFor(pszTicker);
         bool fullSync = canCatchUp && NeedsHistorySync(pszTicker);
         bool gapCheck = !fullSync && canCatchUp && liveSkipsMinutes && !covered && GapCheckWorthIt(pszTicker, sinceMin) && TryBeginGapCheck(pszTicker);
         if (fullSync || gapCheck) {
             CatchUpResult want;
-            double announced = BeginHistorySync(pszTicker, want.epoch);
+            SyncRange announced = BeginHistorySync(pszTicker, want.epoch);
             want.fullSync = fullSync;
             want.gapCheck = gapCheck;
             want.sinceMin = sinceMin;
             // Full sync (reconnect / bridge announced new history): re-fetch the last 24h so
             // broker-corrected candles overwrite live-built ones, or from the oldest bar the
             // bridge announced if that is earlier (a downtime hole behind newer live bars).
+            // When everything announced since the last sync had both a start and an end (and
+            // nothing else is owed), only that range is fetched: a year of history arriving in
+            // chunks no longer has each chunk's notice re-download everything up to now.
             // Gap check: just the tail; since-1 so the server also re-sends AmiBroker's last
             // (possibly partial) candle.
             double from = fullSync ? since - 86400 : since - 1;
-            if (fullSync && announced > 0 && announced - 60 < from) from = announced - 60;
-            RequestCatchUp(pszTicker, from > 0 ? from : 0, nSize, want);
+            double until = 0;
+            if (fullSync && announced.IsRange()) {
+                from = announced.from - 60;
+                until = announced.to + 60;
+            } else if (fullSync && announced.from > 0 && announced.from - 60 < from) {
+                from = announced.from - 60;
+            }
+            RequestCatchUp(pszTicker, from > 0 ? from : 0, until, nSize, want);
         }
         if (nLastValid < 0) return 0;
 
@@ -126,7 +135,7 @@ static int DoGetQuotesExImpl(LPCTSTR pszTicker, int nPeriodicity, int nLastValid
     std::vector<Bar> outBars;
     unsigned epoch = 0;
     BeginHistorySync(pszTicker, epoch);
-    int got = FetchBarsFromAPI(pszTicker, nSize, since, outBars);
+    int got = FetchBarsFromAPI(pszTicker, nSize, since, 0, outBars);
     if (got < 0 && IsBridgeConnected()) CatchUpFailed();   // engine running but not answering
     if (got <= 0) return 0;
     MarkHistorySynced(pszTicker, epoch);

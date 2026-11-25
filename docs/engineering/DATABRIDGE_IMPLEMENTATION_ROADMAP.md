@@ -398,6 +398,8 @@ Add `const CORES = Math.max(1, os.availableParallelism())` at module level and u
 
 ## Stage 3: backfill isolation (P1, P5, P6, and P7's interaction)
 
+> **Done (2026-11-25) except 3e, with the differences listed in ROOT_CAUSE_ANALYSIS (3a, 3b, 3d).** 3e (the database writer thread) is **not started**: its trigger (loop.lag_ms p99 above 10 ms after 3a-3d) is met (77 ms), but the numbers say the remaining stalls are the checkpoints (Stage 4a) and the catch-up answers (Stage 6b), which a writer thread would not remove. Decide again after 4a: if p99 is still over 10 ms then, 3e is the next step. New code: `lib/priority.ts`, `db/index.ts` (`HISTORY_SLICE_ROWS`, `historyRangeSec`), `BarMerge.h/.cpp` (`ParseSyncLine`, `SyncRange`, `RetryBackoff`).
+
 ### 3a. P1: commit history in slices (`db/index.ts:419-449`)
 - Keep building `byMinute` as today. Then commit in slices of `HISTORY_SLICE_ROWS = 2000`: `changed += tx(() => { … slice … })`.
 - Between slices: `await new Promise<void>(r => setImmediate(r))`.
