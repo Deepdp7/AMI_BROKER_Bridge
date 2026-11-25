@@ -7,6 +7,8 @@
  * The plugin also reports AmiBroker reloading whole histories again and again (its in-memory
  * cache can't hold the symbols at that many bars each):
  *   NOTE|RELOADS|symbols|numBars   the light turns yellow for a while and says what to change
+ * and, once a minute, how long its own steps took (transit, notice delay, GetQuotesEx...):
+ *   NOTE|PERF|transit_p99=0.4|notify_p95=12|busy=0|...   numbers for /api/diagnostics/perf, nothing is shown
  * The right-click menu sends commands back:
  *   CMD|REPAIR|TICKER          check the symbol's whole history, download what is missing
  *   CMD|TODAY|TICKER           re-download today's bars of one symbol
@@ -20,6 +22,7 @@ import { liveFeed } from '../market/liveFeed'
 import { isMarketSession } from '../market/MarketCalendar'
 import { refreshToday } from '../market/refreshToday'
 import { repairHistory } from '../brokers/BrokerLifecycle'
+import { perf, parsePluginPerf } from '../system/perf'
 
 export interface PluginStatus { level: 0 | 1 | 2; short: string; long: string }
 
@@ -87,9 +90,18 @@ export function currentPluginStatus(nowMs = Date.now()): PluginStatus {
 // The last NOTE|RELOADS, shown on the light for 15 minutes
 let reloadNote: { symbols: number; numBars: number; until: number } | null = null
 
-/** A note from the plugin (NOTE|RELOADS|symbols|numBars) */
+/** A note from the plugin (NOTE|RELOADS|symbols|numBars, NOTE|PERF|key=value|...) */
 export function handlePluginNote(line: string, nowMs = Date.now()) {
   const [, kind, a, b] = line.trim().split('|')
+  if (kind === 'PERF') {
+    const values = parsePluginPerf(line)
+    if (values) {
+      perf.setPlugin(values)
+      // Also as levels, so the minute and since-start views of /api/diagnostics/perf show their last and highest
+      for (const [k, v] of Object.entries(values)) perf.gauge(`plugin.${k}`, v)
+    }
+    return
+  }
   if (kind !== 'RELOADS') return
   const symbols = Number(a) || 0, numBars = Number(b) || 0
   reloadNote = { symbols, numBars, until: nowMs + 15 * 60_000 }

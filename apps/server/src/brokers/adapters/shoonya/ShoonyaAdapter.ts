@@ -16,7 +16,7 @@ import { NorenOAuthAdapter, norenOAuthLoginUrl, downloadNorenSymbolZips, type No
 const API = 'https://api.shoonya.com'
 
 // Shared by every caller: backfill workers, auto-refresh, startup fetches
-const historyLimiter = new RateLimiter(2, 60)
+const historyLimiter = new RateLimiter(2, 60, undefined, 'shoonya')
 
 /** One instrument list for every Shoonya account */
 export const shoonyaMaster = new InstrumentMaster('shoonya', () => downloadNorenSymbolZips(API))

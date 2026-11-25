@@ -30,7 +30,7 @@ const REDIRECT_URI = 'http://127.0.0.1:7890/api/callback/upstox'
 const DAY_MS = 24 * 3600 * 1000
 
 // 2000 requests per 30 minutes is the binding limit: ~66 a minute on average
-const historyLimiter = new RateLimiter(5, 60)
+const historyLimiter = new RateLimiter(5, 60, undefined, 'upstox')
 
 /** Upstox's instrument list (public JSON) reduced to NSE/BSE cash, indices, NSE F&O and MCX */
 export function parseUpstoxInstruments(rows: any[]): MasterRecord[] {

@@ -49,7 +49,8 @@ export class BrokerManager extends EventEmitter {
     const adapter: IBrokerAdapter = def.create()
 
     adapter.on('tick', (tick) => {
-      this.emit('tick', { ...tick, brokerId })
+      // A feed that stamps its own arrival time (Fyers) keeps it; for the others this is the first the engine sees of it
+      this.emit('tick', { ...tick, brokerId, rxAt: tick.rxAt ?? performance.now() })
     })
 
     adapter.on('log_entry', (entry) => {

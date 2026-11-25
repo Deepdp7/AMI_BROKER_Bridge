@@ -15,27 +15,57 @@
  * case, so the budget drops towards what was actually sent (at most halving per refusal), and
  * while lowered, requests are spaced evenly instead of sent in bursts that get refused.
  */
+import { perf } from '../system/perf'
+
+/** Every limiter by name, for the diagnostics page (a name already taken gets a number added) */
+const limiters = new Map<string, RateLimiter>()
+
+export function limiterStats(): Array<{ name: string; pending: number; perMinuteBudget: number }> {
+  return [...limiters.values()].map(l => ({ name: l.name, pending: l.pending, perMinuteBudget: l.perMinuteBudget }))
+}
+perf.probe('limiters', limiterStats)
+
 export class RateLimiter {
   private starts: number[] = []   // request start times within the last minute
   private pausedUntil = 0
   private tail: Promise<void> = Promise.resolve()
   private budget: number          // current per-minute budget
   private lastLimitedAt = 0
+  private waiting = 0             // callers that asked for a slot and haven't got it yet
+  private readonly waitMetric: string
+  readonly name: string
 
+  /** `name` labels the limiter in the performance numbers (limiter.wait_ms.<name>) and the diagnostics page */
   constructor(
     private readonly perSecond: number,
     private readonly perMinute: number,
     private readonly minPerMinute = Math.max(2, Math.ceil(perMinute / 20)),
+    name = 'other',
   ) {
     this.budget = perMinute
+    let unique = name
+    for (let i = 2; limiters.has(unique); i++) unique = `${name}#${i}`
+    this.name = unique
+    limiters.set(unique, this)
+    this.waitMetric = `limiter.wait_ms.${unique}`
   }
 
   /** Resolves when a request may start. Callers are served in arrival order. */
   acquire(): Promise<void> {
+    const askedAt = performance.now()
+    this.waiting++
     const slot = this.tail.then(() => this.waitForSlot())
     this.tail = slot.catch(() => {})
+    // Only watches the slot: callers still get `slot` itself
+    slot.then(
+      () => { this.waiting--; perf.record(this.waitMetric, performance.now() - askedAt) },
+      () => { this.waiting-- },
+    )
     return slot
   }
+
+  /** Callers waiting for a slot right now */
+  get pending() { return this.waiting }
 
   /** Hold all callers for `ms`. */
   pause(ms: number) {

@@ -9,6 +9,7 @@
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
+import { perf } from '../../system/perf'
 
 const DATA_DIR = path.join(os.homedir(), 'AppData', 'Roaming', 'DataBridgePro')
 const STATE_FILE = path.join(DATA_DIR, 'coverage_state.json')
@@ -32,6 +33,7 @@ function saveNow() {
   try {
     if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
     fs.writeFileSync(STATE_FILE, JSON.stringify(Object.fromEntries(verifiedThrough)), 'utf8')
+    perf.count('catchup.state_writes')
   } catch (err) {
     console.error('[CoverageState] Failed to save state:', err)
   }
@@ -87,6 +89,7 @@ export function setHistoryFloorMs(ticker: string, ms: number) {
   try {
     if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
     fs.writeFileSync(FLOOR_FILE, JSON.stringify(Object.fromEntries(historyFloor)), 'utf8')
+    perf.count('catchup.state_writes')
   } catch (err) {
     console.error('[CoverageState] Failed to save history floor:', err)
   }
@@ -95,5 +98,5 @@ export function setHistoryFloorMs(ticker: string, ms: number) {
 function clearHistoryFloor(ticker?: string) {
   if (ticker) historyFloor.delete(ticker)
   else historyFloor.clear()
-  try { fs.writeFileSync(FLOOR_FILE, JSON.stringify(Object.fromEntries(historyFloor)), 'utf8') } catch {}
+  try { fs.writeFileSync(FLOOR_FILE, JSON.stringify(Object.fromEntries(historyFloor)), 'utf8'); perf.count('catchup.state_writes') } catch {}
 }

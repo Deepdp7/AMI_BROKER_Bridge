@@ -14,12 +14,14 @@
 
 #include "DataClient.h"
 #include "Plugin.h"
+#include "PerfHist.h"
 #include <thread>
 #include <mutex>
 #include <map>
 #include <deque>
 #include <chrono>
 #include <cmath>
+#include <algorithm>
 #include <condition_variable>
 #include <set>
 
@@ -50,6 +52,47 @@ static std::map<std::string, unsigned>  g_syncEpoch;
 // Oldest bar time announced (SYNC|ticker|fromSec) since the ticker last synced
 static std::map<std::string, double>    g_syncFrom;
 
+// ---- How long the plugin's own steps take ----
+// Once a minute they go to the engine as one line (NOTE|PERF|key=value|...) for /api/diagnostics/perf and
+// to the plugin log, so a pause in AmiBroker can be told apart: the engine, the transfer, this plugin, or
+// AmiBroker itself (how long it takes to accept a notice, how long GetQuotesEx runs). Times are unix
+// milliseconds from the high-resolution system clock, the same one the engine stamps its lines with.
+// g_perfMutex guards only these numbers; take g_pollerMutex first when both are needed.
+static std::mutex g_perfMutex;
+static PerfHist g_hTransit(0.05);     // engine wrote a LIVE_BAR -> this plugin read it (ms)
+static PerfHist g_hNotify(0.05);      // a change was received -> the notice went to AmiBroker (ms)
+static PerfHist g_hSendMsg(0.05);     // AmiBroker taking the notice: SendMessageTimeout (ms)
+static PerfHist g_hGqeFast(0.5);      // GetQuotesEx with bars in memory (microseconds)
+static PerfHist g_hGqeSlow(0.05);     // GetQuotesEx loading a symbol's history (ms)
+static PerfHist g_hVisible(0.05);     // the newest live update arrived -> AmiBroker first read it (ms)
+static PerfHist g_hStale(0.05);       // the oldest update AmiBroker had not seen yet -> it read it (ms)
+static PerfHist g_hCatchUp(0.05);     // one background history download (ms)
+static unsigned g_perfBusy = 0;       // notices AmiBroker did not take within the wait
+static unsigned g_perfCatchUpFail = 0;
+static unsigned g_perfCatchUpBars = 0;
+static unsigned g_perfLines = 0;      // lines read from the engine
+
+static double NowUnixMs() {
+    // The precise clock is Windows 8 and later. Asked for by name, so that on anything older this plugin
+    // still loads (a missing import would stop AmiBroker from loading it at all) and uses the coarse clock.
+    typedef VOID (WINAPI *PreciseTimeFn)(LPFILETIME);
+    static PreciseTimeFn precise = (PreciseTimeFn)GetProcAddress(GetModuleHandleA("kernel32.dll"), "GetSystemTimePreciseAsFileTime");
+    FILETIME ft;
+    if (precise) precise(&ft); else GetSystemTimeAsFileTime(&ft);
+    ULARGE_INTEGER u; u.LowPart = ft.dwLowDateTime; u.HighPart = ft.dwHighDateTime;
+    return (double)(u.QuadPart - 116444736000000000ULL) / 10000.0;   // 100 ns ticks since 1601 -> ms since 1970
+}
+
+// Newest live update's arrival, and the arrival of the oldest one AmiBroker has not read yet
+// (guarded by g_pollerMutex)
+static std::map<std::string, double> g_lastRecvMs;
+static std::map<std::string, double> g_firstUnseenMs;
+
+void PerfRecordGetQuotes(bool fastPath, double micros) {
+    std::lock_guard<std::mutex> lk(g_perfMutex);
+    if (fastPath) g_hGqeFast.Record(micros); else g_hGqeSlow.Record(micros / 1000.0);
+}
+
 static void LogDebug(const char* msg) {
     FILE* fp;
     if (fopen_s(&fp, "C:\\Users\\Public\\DataBridgePro_plugin.log", "a") == 0) {
@@ -70,8 +113,21 @@ void SetAmiBrokerWindow(HWND hWnd) {
 bool GetCachedLiveBar(const std::string& ticker, Bar& outBar) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
     auto it = g_lastKnownBars.find(ticker);
-    if (it != g_lastKnownBars.end()) { outBar = it->second; return true; }
-    return false;
+    if (it == g_lastKnownBars.end()) return false;
+    outBar = it->second;
+    // AmiBroker is reading this symbol's live bar: if it changed since the last read, how long was it waiting?
+    auto unseen = g_firstUnseenMs.find(ticker);
+    if (unseen != g_firstUnseenMs.end()) {
+        double now = NowUnixMs();
+        auto last = g_lastRecvMs.find(ticker);
+        {
+            std::lock_guard<std::mutex> pk(g_perfMutex);
+            if (last != g_lastRecvMs.end()) g_hVisible.Record(now - last->second);
+            g_hStale.Record(now - unseen->second);
+        }
+        g_firstUnseenMs.erase(unseen);
+    }
+    return true;
 }
 
 int LiveSymbolCount(double sinceSec) {
@@ -146,14 +202,23 @@ bool TryBeginGapCheck(const std::string& ticker) {
 static const DWORD NOTIFY_EVERY_MS = 150;
 static const UINT  NOTIFY_WAIT_MS  = 1000;
 static std::thread g_notifyThread;
-static std::map<std::string, Bar> g_pendingNotify;         // guarded by g_pollerMutex
+// firstRecvMs: when the oldest change still waiting for its notice arrived (for the notice delay)
+struct PendingNotify { Bar bar; double firstRecvMs; };
+static std::map<std::string, PendingNotify> g_pendingNotify;   // guarded by g_pollerMutex
 // One RecentInfo per ticker that stays where it is: if AmiBroker handles a notice after we
 // stopped waiting for it, the pointer it was given is still valid.
 static std::map<std::string, RecentInfo> g_riSlots;         // notifier thread only
 
+// (caller holds g_pollerMutex)
+static void MarkPendingNotify(const std::string& ticker, const Bar& b, double recvMs) {
+    auto it = g_pendingNotify.find(ticker);
+    if (it == g_pendingNotify.end()) g_pendingNotify.emplace(ticker, PendingNotify{ b, recvMs });
+    else it->second.bar = b;      // the newest state; the wait is counted from the first change
+}
+
 static void QueueNotify(const std::string& ticker, const Bar& b) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
-    g_pendingNotify[ticker] = b;
+    MarkPendingNotify(ticker, b, NowUnixMs());
 }
 
 // ---- The Real-time Quote window ----
@@ -252,8 +317,14 @@ static bool NotifyAmiBroker(const std::string& ticker, const Bar& b) {
     if (!FillRecentInfo(ticker, ri)) return true;
 
     DWORD_PTR res = 0;
+    double sentAt = NowUnixMs();
     BOOL taken = SendMessageTimeoutA(hWnd, WM_USER_STREAMING_UPDATE, 0, (LPARAM)&ri,
                                      SMTO_NORMAL | SMTO_ABORTIFHUNG, NOTIFY_WAIT_MS, &res) != 0;
+    {
+        std::lock_guard<std::mutex> pk(g_perfMutex);
+        g_hSendMsg.Record(NowUnixMs() - sentAt);
+        if (!taken) g_perfBusy++;
+    }
 
     static DWORD lastLog2 = 0; DWORD now2 = GetTickCount();
     if (now2 - lastLog2 > 5000) {
@@ -265,6 +336,30 @@ static bool NotifyAmiBroker(const std::string& ticker, const Bar& b) {
     return taken;
 }
 
+// Once a minute: the plugin's own timings as one line to the engine (NOTE|PERF) and to the plugin log,
+// then the numbers start over. Runs on the notifier thread.
+static void ReportPerfIfDue() {
+    static ULONGLONG lastReport = GetTickCount64();     // notifier thread only
+    ULONGLONG now = GetTickCount64();
+    if (now - lastReport < 60000) return;
+    lastReport = now;
+    char line[640];
+    {
+        std::lock_guard<std::mutex> lk(g_perfMutex);
+        sprintf_s(line, "NOTE|PERF|transit_p50=%.3f|transit_p99=%.3f|notify_p95=%.3f|notify_max=%.3f|sendmsg_p99=%.3f|busy=%u|"
+                        "gqe_fast_p99_us=%.1f|gqe_slow_max_ms=%.1f|visible_p95=%.3f|stale_p95=%.3f|catchup_p99=%.1f|catchup_fail=%u|catchup_bars=%u|lines=%u",
+                  g_hTransit.Percentile(50), g_hTransit.Percentile(99), g_hNotify.Percentile(95), g_hNotify.maxValue,
+                  g_hSendMsg.Percentile(99), g_perfBusy, g_hGqeFast.Percentile(99), g_hGqeSlow.maxValue,
+                  g_hVisible.Percentile(95), g_hStale.Percentile(95), g_hCatchUp.Percentile(99), g_perfCatchUpFail,
+                  g_perfCatchUpBars, g_perfLines);
+        g_hTransit.Reset(); g_hNotify.Reset(); g_hSendMsg.Reset(); g_hGqeFast.Reset(); g_hGqeSlow.Reset();
+        g_hVisible.Reset(); g_hStale.Reset(); g_hCatchUp.Reset();
+        g_perfBusy = 0; g_perfCatchUpFail = 0; g_perfCatchUpBars = 0; g_perfLines = 0;
+    }
+    LogDebug(line);
+    SendToBridge(line);
+}
+
 // One notice per round, however many symbols changed: on each notice AmiBroker refreshes its
 // real-time windows and reads every symbol's newest quote itself (GetRecentInfo, GetQuotesEx),
 // as the ADK's own sample plugin does. One notice per symbol meant a few hundred live futures
@@ -272,17 +367,25 @@ static bool NotifyAmiBroker(const std::string& ticker, const Bar& b) {
 static void NotifierThreadProc() {
     while (!g_bShutdown) {
         std::this_thread::sleep_for(std::chrono::milliseconds(NOTIFY_EVERY_MS));
-        std::map<std::string, Bar> batch;
+        ReportPerfIfDue();
+        std::map<std::string, PendingNotify> batch;
         { std::lock_guard<std::mutex> lk(g_pollerMutex); batch.swap(g_pendingNotify); }
         if (batch.empty() || g_bShutdown) continue;
         // The notice carries the newest quote (the rest are read by AmiBroker)
         auto newest = batch.begin();
-        for (auto it = batch.begin(); it != batch.end(); ++it)
-            if (it->second.timestamp > newest->second.timestamp) newest = it;
-        if (NotifyAmiBroker(newest->first, newest->second)) continue;
+        double oldestRecvMs = batch.begin()->second.firstRecvMs;
+        for (auto it = batch.begin(); it != batch.end(); ++it) {
+            if (it->second.bar.timestamp > newest->second.bar.timestamp) newest = it;
+            oldestRecvMs = (std::min)(oldestRecvMs, it->second.firstRecvMs);
+        }
+        { std::lock_guard<std::mutex> pk(g_perfMutex); g_hNotify.Record(NowUnixMs() - oldestRecvMs); }
+        if (NotifyAmiBroker(newest->first, newest->second.bar)) continue;
         // AmiBroker is busy: try again next round (newer bars that came meanwhile win)
         std::lock_guard<std::mutex> lk(g_pollerMutex);
-        for (auto& kv : batch) g_pendingNotify.emplace(kv.first, kv.second);
+        for (auto& kv : batch) {
+            auto put = g_pendingNotify.emplace(kv.first, kv.second);
+            if (!put.second) put.first->second.firstRecvMs = (std::min)(put.first->second.firstRecvMs, kv.second.firstRecvMs);
+        }
     }
 }
 
@@ -419,7 +522,14 @@ static void CatchUpThreadProc() {
             g_catchUpJobs.pop_front();
         }
         std::vector<Bar> bars;
+        double fetchStartedAt = NowUnixMs();
         int got = FetchBarsFromAPI(job.ticker, job.limit, job.from, bars);
+        {
+            std::lock_guard<std::mutex> pk(g_perfMutex);
+            g_hCatchUp.Record(NowUnixMs() - fetchStartedAt);
+            if (got < 0) g_perfCatchUpFail++;
+            else g_perfCatchUpBars += (unsigned)got;
+        }
         if (got < 0) CatchUpFailed();
         Bar live{}; bool hasLive = false;
         {
@@ -572,8 +682,8 @@ void ShowDataBridge() {
 }
 
 // Records a LIVE_BAR: the newest bar of the ticker, and the final state of the minute before it
-// (caller holds g_pollerMutex)
-static void KeepLiveBar(const std::string& ticker, const Bar& b) {
+// (caller holds g_pollerMutex). recvMs: when the line was read, for the timing numbers only.
+static void KeepLiveBar(const std::string& ticker, const Bar& b, double recvMs) {
     double m = floor(b.timestamp / 60.0);
     auto it = g_lastKnownBars.find(ticker);
     if (it != g_lastKnownBars.end()) {
@@ -587,7 +697,9 @@ static void KeepLiveBar(const std::string& ticker, const Bar& b) {
         if (m > cur) g_prevMinuteBars[ticker] = it->second;
     }
     g_lastKnownBars[ticker] = b;
-    g_pendingNotify[ticker] = b;
+    MarkPendingNotify(ticker, b, recvMs);
+    g_lastRecvMs[ticker] = recvMs;
+    g_firstUnseenMs.emplace(ticker, recvMs);   // stays the oldest change until AmiBroker reads the bar
 }
 
 // Background thread: listens on TCP 7891 for LIVE_BAR messages
@@ -628,19 +740,23 @@ static void PollerThreadProc() {
             int n = recv(s, buf, sizeof(buf)-1, 0);
             if (n < 0 && WSAGetLastError() == WSAETIMEDOUT) continue;
             if (n <= 0) break;
+            double recvMs = NowUnixMs();      // when this read returned: the end of the engine -> plugin transit
             buf[n] = '\0'; acc += buf;
 
             size_t p;
+            unsigned linesRead = 0;
             while ((p = acc.find('\n')) != std::string::npos) {
                 std::string line = acc.substr(0, p);
                 acc.erase(0, p+1);
+                linesRead++;
                 if (line.rfind("SYNC", 0) == 0) { HandleSyncMessage(line); continue; }
                 if (line.rfind("STATUS|", 0) == 0) { HandleStatusMessage(line); continue; }
                 if (line.rfind("QUOTE|", 0) == 0) { HandleQuoteMessage(line); continue; }
                 if (line.rfind("LIVE_BAR|", 0) != 0) continue;
 
-                // LIVE_BAR|TICKER|ts|open|high|low|close|volume
-                // Format: 7 pipes total, volume is LAST field (no trailing pipe)
+                // LIVE_BAR|TICKER|ts|open|high|low|close|volume[|oi[|sendMs]]
+                // oi (open interest) comes from newer engines, sendMs (the engine's clock when it wrote the line)
+                // from the newest ones; both are optional, so any engine works with this plugin
                 size_t p1=line.find('|',9);               if(p1==std::string::npos) continue; // after LIVE_BAR|
                 size_t p2=line.find('|',p1+1);            if(p2==std::string::npos) continue; // after ticker
                 size_t p3=line.find('|',p2+1);            if(p3==std::string::npos) continue; // after ts
@@ -649,10 +765,12 @@ static void PollerThreadProc() {
                 size_t p6=line.find('|',p5+1);            if(p6==std::string::npos) continue; // after low
                 // p6+1 to p7 = close, p7+1 to end = volume (no p7 needed)
                 size_t p7=line.find('|',p6+1);            // after volume: open interest follows (newer engines)
+                size_t p8=(p7!=std::string::npos) ? line.find('|',p7+1) : std::string::npos;   // after open interest: sendMs
 
                 std::string ticker = line.substr(9, p1-9);
 
                 Bar b{};
+                double sendMs = 0; bool haveSend = false;
                 try {
                     b.timestamp = std::stod(line.substr(p1+1, p2-p1-1));
                     b.open  = std::stof(line.substr(p2+1, p3-p2-1));
@@ -667,17 +785,27 @@ static void PollerThreadProc() {
                     if (!volStr.empty() && volStr.back()=='\r') volStr.pop_back();
                     b.volume = std::stof(volStr);
                     if (p7 != std::string::npos) {
-                        std::string oiStr = line.substr(p7+1);
+                        std::string oiStr = (p8 != std::string::npos) ? line.substr(p7+1, p8-p7-1) : line.substr(p7+1);
                         if (!oiStr.empty() && oiStr.back()=='\r') oiStr.pop_back();
                         b.oi = oiStr.empty() ? 0.0f : std::stof(oiStr);
                     }
                 } catch(...) { continue; }
 
+                // Only for the timing numbers: a bad one must never cost the bar
+                if (p8 != std::string::npos) {
+                    try { sendMs = std::stod(line.substr(p8+1)); haveSend = sendMs > 0; } catch(...) {}
+                }
+                if (haveSend) {
+                    std::lock_guard<std::mutex> pk(g_perfMutex);
+                    g_hTransit.Record(recvMs - sendMs);
+                }
+
                 {
                     std::lock_guard<std::mutex> lk(g_pollerMutex);
-                    KeepLiveBar(ticker, b);
+                    KeepLiveBar(ticker, b, recvMs);
                 }
             }
+            if (linesRead) { std::lock_guard<std::mutex> pk(g_perfMutex); g_perfLines += linesRead; }
         }
         { std::lock_guard<std::mutex> lk(g_sendMutex); g_ipcSocket = INVALID_SOCKET; }
         closesocket(s);

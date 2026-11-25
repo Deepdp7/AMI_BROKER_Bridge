@@ -1,8 +1,11 @@
 /**
  * TCP line protocol to the AmiBroker plugin (127.0.0.1:7891).
  *
- *   engine → plugin  LIVE_BAR|TICKER|ts|o|h|l|c|v|oi  the in-progress 1-minute bar, on every tick
- *                                                     (oi: open interest, 0 when unknown)
+ *   engine → plugin  LIVE_BAR|TICKER|ts|o|h|l|c|v|oi|sendMs  the in-progress 1-minute bar, on every tick
+ *                                                     (oi: open interest, 0 when unknown; sendMs: the
+ *                                                     engine's clock in unix ms when the line was written,
+ *                                                     for the plugin's transit timing; older plugins stop
+ *                                                     reading at oi and ignore it)
  *                    SYNC|TICKER[|fromSec]           stored history changed: re-fetch it over HTTP
  *                    STATUS|level|short|long         the DataBridge light in AmiBroker's status bar
  *                    QUOTE|TICKER|last|open|high|low|prev|vol|oi|bid|ask|tickSec|bidQty|askQty
@@ -22,6 +25,7 @@ import { backfilledTickers } from '../market/state/backfillState'
 import { liveFeed } from '../market/liveFeed'
 import { noteViewed } from '../market/liveSlots'
 import { setRuntimeProbe } from '../ai/AiAssistant'
+import { perf } from '../system/perf'
 import { startSymbolDetailsSync, schedulePush as pushSymbolDetailsSoon } from './symbolDetails'
 import { currentPluginStatus, statusLine, runPluginCommand, handlePluginNote } from './pluginStatus'
 import { quoteOf, startQuotes } from '../platforms/quotes'
@@ -66,6 +70,8 @@ export function notifyAmiBrokerHistoryChanged(ticker: string, fromSec = 0) {
     syncFlushTimer = null
     const batch = [...pendingSyncFrom]
     pendingSyncFrom.clear()
+    perf.count('sync.notices')
+    perf.count('sync.tickers', batch.length)
     const msg = batch.map(([t, from]) => (from > 0 ? `SYNC|${t}|${from}\n` : `SYNC|${t}\n`)).join('')
     ipcClients.forEach(client => {
       try { client.write(msg) } catch {}
@@ -96,7 +102,9 @@ export function startAmiBrokerIpc() {
   // Live bars go out in one write per event-loop turn (a broker packet carries many ticks), with
   // the newest state of each symbol's minute. Keyed by minute, not only symbol: the last update
   // of a minute that just ended is always sent, before the first one of the next minute.
-  const pendingLive = new Map<string, string>()
+  // `at` is when the oldest unsent update of this minute was ready (performance.now()): the time from
+  // then to the write is how long a live bar waited in the engine (tick.feed_to_ipc_ms)
+  const pendingLive = new Map<string, { line: string; at: number }>()
   // Symbols whose quote changed (price, day volume, previous close...): sent after the bars
   const pendingQuotes = new Set<string>()
   let liveFlushQueued = false
@@ -108,8 +116,18 @@ export function startAmiBrokerIpc() {
   const flushLive = () => {
     liveFlushQueued = false
     if (pendingLive.size === 0 && pendingQuotes.size === 0) return
-    let msg = [...pendingLive.values()].join('')
-    for (const t of pendingQuotes) msg += quoteMessage(t)
+    const now = performance.now()
+    const sendMs = Date.now()
+    let msg = ''
+    for (const e of pendingLive.values()) {
+      msg += `${e.line}|${sendMs}\n`
+      perf.record('tick.feed_to_ipc_ms', now - e.at)
+    }
+    let lines = pendingLive.size
+    for (const t of pendingQuotes) {
+      const q = quoteMessage(t)
+      if (q) { msg += q; lines++ }
+    }
     pendingLive.clear()
     pendingQuotes.clear()
     if (!msg) return
@@ -117,18 +135,36 @@ export function startAmiBrokerIpc() {
       lastLiveBarLogAt = Date.now()
       console.log(`[IPC_LIVE_BAR] Broadcasted: ${msg.slice(0, msg.indexOf('\n'))}`)
     }
-    ipcClients.forEach(client => { try { client.write(msg) } catch {} })
+    ipcClients.forEach(client => {
+      try { client.write(msg) } catch {}
+      perf.count('ipc.writes')
+      perf.count('ipc.lines', lines)
+      perf.count('ipc.bytes', msg.length)
+      perf.gauge('ipc.writable_hwm', client.writableLength)
+    })
   }
 
-  liveFeed.on('live_bar_updated', (data: { ticker: string, bar: any }) => {
+  liveFeed.on('live_bar_updated', (data: { ticker: string, bar: any, at?: number }) => {
     const { ticker, bar } = data
     if (!bar || !(bar.close > 0) || ipcClients.size === 0) return
     const ts = Math.floor(bar.bucketMs / 1000)
     const key = `${ticker}|${ts}`
+    const waiting = pendingLive.get(key)
     pendingLive.delete(key)   // re-inserted last, so the order stays the order of the updates
-    pendingLive.set(key, `LIVE_BAR|${ticker}|${ts}|${bar.open}|${bar.high}|${bar.low}|${bar.close}|${bar.volume}|${bar.oi || 0}\n`)
+    pendingLive.set(key, {
+      line: `LIVE_BAR|${ticker}|${ts}|${bar.open}|${bar.high}|${bar.low}|${bar.close}|${bar.volume}|${bar.oi || 0}`,
+      at: waiting ? waiting.at : (data.at ?? performance.now()),
+    })
     queueFlush()
   })
+
+  // What /api/diagnostics/perf shows about this channel
+  perf.probe('ipc', () => ({
+    clients: ipcClients.size,
+    writableLength: [...ipcClients].map(c => c.writableLength),
+    pendingLive: pendingLive.size,
+    pendingQuotes: pendingQuotes.size,
+  }))
 
   // The feed's status changes come at most 10 times a second (also price-only updates after the
   // close, and a previous close found later): each becomes a QUOTE line

@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import os from 'os'
 import type { LogEntry } from '../../types'
+import { perf } from '../../system/perf'
 
 const router = Router()
 
@@ -64,6 +65,25 @@ router.post('/export', async (_req, res) => {
   } catch (e) {
     res.status(500).json({ error: String(e) })
   }
+})
+
+// GET /api/diagnostics/perf: where live data waited. Latency histograms, counters and levels for the minute
+// in progress, the last finished minute and everything since the engine started; the AmiBroker plugin's own
+// report (NOTE|PERF); and how full each queue is right now. Numbers only, no settings and no secrets.
+router.get('/perf', (_req, res) => {
+  const mem = process.memoryUsage()
+  const plugin = perf.plugin()
+  res.json({
+    ...perf.snapshot(),
+    plugin: plugin ? { ageSec: Math.round((Date.now() - plugin.at) / 1000), values: plugin.values } : null,
+    process: {
+      uptimeSec: Math.round(process.uptime()),
+      rssMb: Math.round(mem.rss / 1048576),
+      heapUsedMb: Math.round(mem.heapUsed / 1048576),
+      cpuMicroseconds: process.cpuUsage(),
+    },
+    queues: perf.probeResults(),
+  })
 })
 
 export default router

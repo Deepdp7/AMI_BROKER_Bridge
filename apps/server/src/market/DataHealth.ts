@@ -12,6 +12,7 @@ import { readDayCounts } from '../db/reader'
 import { backfillQueue, backfillStatusMap } from './BackfillQueue'
 import { getHistoryFloorMs } from './state/coverageState'
 import { isWeekend, isClosedDay, isQuietDay } from './MarketCalendar'
+import { perf } from '../system/perf'
 
 export type HealthStatus = 'complete' | 'missing' | 'downloading' | 'cancelled' | 'empty'
 
@@ -89,12 +90,15 @@ function recompute(): Promise<SymbolHealth[]> {
 
 async function compute(): Promise<SymbolHealth[]> {
   const startedGeneration = generation
+  const computeStartedAt = performance.now()
   const nowMs = Date.now()
   const depthDays = Number((getAllSettings() as any)?.backfillDepthDays) || 365
   const fromMs = nowMs - depthDays * DAY_MS
   const fromDay = Math.floor((fromMs + IST_MS) / DAY_MS)
   const lastDay = lastFinishedDay(nowMs)
+  const scanStartedAt = performance.now()
   const counts = await readDayCounts(Math.floor(fromMs / 1000))
+  perf.record('health.scan_ms', performance.now() - scanStartedAt)
 
   const result: SymbolHealth[] = []
   for (const sym of stmts.getSymbols.all() as any[]) {
@@ -138,6 +142,7 @@ async function compute(): Promise<SymbolHealth[]> {
     })
   }
   if (startedGeneration === generation) cache = { at: Date.now(), result }
+  perf.record('health.compute_ms', performance.now() - computeStartedAt)
   return result
 }
 

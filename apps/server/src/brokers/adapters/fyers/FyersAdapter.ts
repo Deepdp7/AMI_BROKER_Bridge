@@ -8,6 +8,7 @@ import path from 'path'
 import readline from 'readline'
 import { FyersHSMClient } from './FyersHSMClient'
 import { RateLimiter } from '../../../lib/RateLimiter'
+import { perf } from '../../../system/perf'
 import { learnFromFyersMessage, learnFromLiveCap, historyFloorMs, requestsLeftToday, noteRequest, msUntilNewDay } from './fyersPlan'
 import { SEARCH_FILTERS, category, type InstrumentCategory } from '../InstrumentMaster'
 
@@ -38,7 +39,7 @@ export function fyersCategory(exchange: string, code: number, id: string): Instr
 // account. Going over the minute's limit more than 3 times in a day blocks the account for the
 // rest of the day, so this stays well under both (network jitter can bunch requests at Fyers'
 // end). Shared by every caller (backfill workers, auto-refresh, daily history, startup fetches).
-const historyLimiter = new RateLimiter(3, 45)
+const historyLimiter = new RateLimiter(3, 45, undefined, 'fyers')
 let dailyLimitLoggedFor = 0
 
 /**
@@ -692,6 +693,7 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
       clearTimeout(timeout)
       
       const text = await res.text()
+      const parseStartedAt = performance.now()
       let data: any
       try {
         data = JSON.parse(text)
@@ -707,7 +709,7 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
         }
       
       if (data.s === 'ok' && data.candles) {
-        return data.candles.map((c: any) => ({
+        const bars = data.candles.map((c: any) => ({
           ts: c[0] * 1000,
           open: c[1],
           high: c[2],
@@ -716,6 +718,9 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
           volume: c[5],
           openInterest: c[6] > 0 ? c[6] : undefined,
         }))
+        // The engine's one thread was busy this long turning the answer into bars (live ticks waited)
+        perf.record('history.parse_ms', performance.now() - parseStartedAt)
+        return bars
       } else if (data.s === 'no_data') {
         return []
       } else if (isFyersRateLimit(data)) {

@@ -16,6 +16,7 @@ import { EventEmitter } from 'events'
 import os from 'os'
 import { v4 as uuidv4 } from 'uuid'
 import { stmts, insertBarBatch } from '../db'
+import { perf } from '../system/perf'
 import { isWeekend, isClosedDay, getSessionWindowMs } from './MarketCalendar'
 import type {
   SymbolFeedStatus, CoreEngineStats, LogEntry,
@@ -88,6 +89,10 @@ export class LiveFeed extends EventEmitter {
   // Last open interest seen per instrument: carried into every new bar, since NSE only
   // publishes it every few minutes (a bar without an update still has that OI)
   private lastOi = new Map<string, number>()
+  // When each instrument's previous update arrived (performance.now()), and the name of its broker's
+  // inter-arrival metric: how often the provider really sends, apart from anything the engine does
+  private lastArrival = new Map<string, number>()
+  private interarrivalMetric = new Map<string, string>()
   private feedUpdateThrottleTimer: ReturnType<typeof setTimeout> | null = null
   /** Trading-day answer per exchange and IST day: closed day, or the session window */
   private sessionCache = new Map<string, { closed: boolean; openMs: number; closeMs: number } | null>()
@@ -259,7 +264,10 @@ export class LiveFeed extends EventEmitter {
 
   // BUG #5 FIX: processRealTick now handles key mismatch between Fyers resolved format
   // (e.g. "NSE:BPCL-EQ") and instruments Map key (e.g. "fyers-xxx:BPCL")
-  processRealTick(tick: { instrumentId: string, lastPrice: number, volume: number, totalVolume?: number, timestamp: number, openInterest?: number, prevClose?: number, bid?: number, ask?: number, bidQty?: number, askQty?: number }, brokerId: string) {
+  processRealTick(tick: { instrumentId: string, lastPrice: number, volume: number, totalVolume?: number, timestamp: number, openInterest?: number, prevClose?: number, bid?: number, ask?: number, bidQty?: number, askQty?: number, rxAt?: number }, brokerId: string) {
+    // How long the update sat between the feed's socket and here (performance.now() stamp from the feed)
+    if (tick.rxAt !== undefined) perf.record('tick.rx_to_feed_ms', performance.now() - tick.rxAt)
+
     // First try: exact Map lookup using the raw brokerToken (tick.instrumentId)
     let key = `${brokerId}:${tick.instrumentId}`
     let inst = this.instruments.get(key)
@@ -324,6 +332,15 @@ export class LiveFeed extends EventEmitter {
     const bar = this.liveBars.get(key)
     if (!bar) return
 
+    const arrivedAt = performance.now()
+    const prevArrival = this.lastArrival.get(key)
+    if (prevArrival !== undefined) {
+      let metric = this.interarrivalMetric.get(brokerId)
+      if (!metric) this.interarrivalMetric.set(brokerId, metric = `feed.interarrival_ms.${brokerId}`)
+      perf.record(metric, arrivedAt - prevArrival)
+    }
+    this.lastArrival.set(key, arrivedAt)
+
     const newPrice = tick.lastPrice
     if (typeof tick.openInterest === 'number' && tick.openInterest > 0) this.lastOi.set(key, tick.openInterest)
     const oi = this.lastOi.get(key)
@@ -362,7 +379,8 @@ export class LiveFeed extends EventEmitter {
     }
     // The in-progress bar to AmiBroker, the app and the other platforms, at once (also for an
     // update older than the price shown, which still changed the bar's high, low or volume)
-    if (barChanged) this.emit('live_bar_updated', { ticker, bar: { ...this.liveBars.get(key)! } })
+    // `at`: when this update was ready, so the push to AmiBroker can say how long it then waited
+    if (barChanged) this.emit('live_bar_updated', { ticker, bar: { ...this.liveBars.get(key)! }, at: performance.now() })
 
     // Update feed status
     let status = this.feedStatuses.get(ticker)
@@ -393,6 +411,7 @@ export class LiveFeed extends EventEmitter {
     if (ageMs < SNAPSHOT_AGE_MS) {
       this.latencyHistory.push(ageMs)
       if (this.latencyHistory.length > 500) this.latencyHistory.shift()
+      if (tick.timestamp) perf.record('tick.age_ms', ageMs)
     }
 
     this._scheduleFeedBroadcast(status, now)
@@ -693,6 +712,7 @@ export class LiveFeed extends EventEmitter {
     this.feedStatuses.clear()
     this.lastCumVolume.clear()
     this.lastOi.clear()
+    this.lastArrival.clear()
     this.pendingStatusUpdates.clear()
     for (const timer of this._streamingTimers.values()) clearTimeout(timer)
     this._streamingTimers.clear()

@@ -195,7 +195,11 @@ describe('live bars to AmiBroker', () => {
     liveFeed.emit('live_bar_updated', { ticker: 'IPCX', bar: bar(m1, 6) })
     await new Promise(r => setTimeout(r, 100))
 
-    const lines = got.split('\n').filter(l => l.startsWith('LIVE_BAR|IPCX'))
+    const raw = got.split('\n').filter(l => l.startsWith('LIVE_BAR|IPCX'))
+    // The last field is the engine's clock (unix ms) when the line was written: the plugin times its
+    // transit with it. Older plugins stop reading at the open interest before it.
+    for (const l of raw) expect(Math.abs(Number(l.split('|')[9]) - Date.now())).toBeLessThan(5000)
+    const lines = raw.map(l => l.split('|').slice(0, 9).join('|'))
     expect(lines).toEqual([
       `LIVE_BAR|IPCX|${m0 / 1000}|1|4|1|4|1|0`,
       `LIVE_BAR|IPCX|${m1 / 1000}|1|6|1|6|1|0`,

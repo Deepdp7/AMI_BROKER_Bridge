@@ -17,7 +17,7 @@ import { NorenOAuthAdapter, norenOAuthLoginUrl, downloadNorenSymbolZips, type No
 
 const HOST = 'https://go.mynt.in'
 
-const historyLimiter = new RateLimiter(4, 90)
+const historyLimiter = new RateLimiter(4, 90, undefined, 'zebu')
 
 /** One instrument list for every Zebu account */
 export const zebuMaster = new InstrumentMaster('zebu', () => downloadNorenSymbolZips(HOST))

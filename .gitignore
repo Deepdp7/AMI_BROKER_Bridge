@@ -34,3 +34,7 @@ Thumbs.db
 .vscode/*
 !.vscode/settings.json
 .idea/
+
+# Performance harness output (apps/server/tests/perf)
+apps/server/tests/perf/results/
+apps/server/tests/perf/cache/

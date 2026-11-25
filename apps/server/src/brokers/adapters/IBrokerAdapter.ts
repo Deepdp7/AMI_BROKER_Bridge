@@ -42,6 +42,8 @@ export interface NormalizedTick {
   volume: number
   timestamp: number
   openInterest?: number
+  /** When the engine first held this update (performance.now(), ms): for the delay measurements only */
+  rxAt?: number
 }
 
 export interface BrokerCredentials {

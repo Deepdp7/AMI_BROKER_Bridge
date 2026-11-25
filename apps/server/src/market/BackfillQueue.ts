@@ -31,6 +31,7 @@ import { backfilledTickers } from './state/backfillState'
 import { getVerifiedThroughMs, setVerifiedThroughMs, getHistoryFloorMs, setHistoryFloorMs } from './state/coverageState'
 import { detectGaps, formatGapSummary } from './GapDetector'
 import { learnClosedDays } from './MarketCalendar'
+import { perf } from '../system/perf'
 import type { BackfillStatus, BackfillJobStatus } from '../types'
 import path from 'path'
 import fs from 'fs'
@@ -516,6 +517,11 @@ class BackfillQueueService extends EventEmitter {
     return this.queue.length
   }
 
+  /** Chunk downloads in progress right now */
+  public getRunningWorkers(): number {
+    return this.workers
+  }
+
   /** Tickers with downloads waiting (one per queued task, so a ticker can repeat) */
   public queuedTickers(): string[] {
     return this.queue.map(t => t.ticker)
@@ -793,6 +799,9 @@ class BackfillQueueService extends EventEmitter {
       // A helper broker couldn't serve this chunk: it stays queued, unchanged, for the symbol's own broker
       if (fetched === null) return true
       this.chunkDoneAt.push(Date.now())
+      // From here to learnClosedDays the engine's one thread is busy with this chunk (backfill.chunk_cpu_ms);
+      // the save is a single transaction for now, so the await below gives nothing else a turn
+      const chunkWorkStartedAt = performance.now()
       const bars = fetched.map(repairBar)
 
       if (bars && bars.length > 0) {
@@ -809,6 +818,7 @@ class BackfillQueueService extends EventEmitter {
         if (good.length > 0) {
           const changed = await upsertBarsToHistory(task.ticker, good)
           learnClosedDays(exchangeOf(task.ticker), task.ticker, chunkFrom.getTime(), currentTo.getTime(), good)
+          perf.record('backfill.chunk_cpu_ms', performance.now() - chunkWorkStartedAt)
 
           // Tell AmiBroker after every chunk (not only when the whole task ends), with the
           // oldest bar stored, so an open chart shows each piece of history as it lands. Only
@@ -1074,3 +1084,9 @@ class BackfillQueueService extends EventEmitter {
 }
 
 export const backfillQueue = new BackfillQueueService()
+
+perf.probe('backfill', () => ({
+  queued: backfillQueue.getQueueLength(),
+  running: backfillQueue.getRunningWorkers(),
+  paused: backfillQueue.isPaused(),
+}))

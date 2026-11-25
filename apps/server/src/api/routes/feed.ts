@@ -8,6 +8,7 @@ import { backfillQueue } from '../../market/BackfillQueue'
 import { backfilledTickers } from '../../market/state/backfillState'
 import { liveFeed } from '../../market/liveFeed'
 import { noteViewed } from '../../market/liveSlots'
+import { perf } from '../../system/perf'
 
 const router = Router()
 
@@ -42,6 +43,17 @@ router.get('/daily', async (req, res) => {
 // Returns CSV: timestamp_unix_sec,open,high,low,close,volume
 // This endpoint is called directly by the DataBridgePro.dll C++ plugin
 router.get('/bars', async (req, res) => {
+  const askedAt = performance.now()
+  // Answers the plugin and records how long the engine took (request in → answer written) and how many bars went out
+  const reply = (body: string) => {
+    const ms = performance.now() - askedAt
+    res.type('text/plain').send(body)
+    if (!perf.enabled) return
+    perf.record('http.feed_bars_ms', ms)
+    let rows = 0
+    for (let i = body.indexOf('\n'); i !== -1; i = body.indexOf('\n', i + 1)) rows++
+    perf.count('http.feed_bars_rows', rows)
+  }
   // Never serve a half-imported database (first start after the PostgreSQL → SQLite move)
   await syncCachesPromise
   let ticker = String(req.query.ticker || '')
@@ -73,7 +85,7 @@ router.get('/bars', async (req, res) => {
   const cacheKey = `${ticker}:${limit}:${since}`
   const cached = feedResponseCache.get(cacheKey)
   if (cached && (Date.now() - cached.ts < 50)) {
-    return res.type('text/plain').send(cached.data)
+    return reply(cached.data)
   }
 
   // Strip comma suffix (e.g. RELIANCE,NSE,EQ -> RELIANCE) if user mistakenly imported CSV directly in AmiBroker
@@ -101,7 +113,7 @@ router.get('/bars', async (req, res) => {
     if (!csv) console.log(`[API] AmiBroker requested unknown symbol ${ticker}, ignoring. Please add it via the UI.`)
     csv = csv ? csv + '\nEND' : 'END\n'
     feedResponseCache.set(cacheKey, { ts: Date.now(), data: csv })
-    return res.type('text/plain').send(csv)
+    return reply(csv)
   }
   brokerId = symRecord.brokerId || symRecord.broker_id
   // AmiBroker is loading this symbol: its pending downloads go first
@@ -139,7 +151,7 @@ router.get('/bars', async (req, res) => {
   }
 
     feedResponseCache.set(cacheKey, { ts: Date.now(), data: csv })
-  return res.type('text/plain').send(csv)
+  return reply(csv)
 })
 
 export default router

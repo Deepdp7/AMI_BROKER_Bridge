@@ -29,7 +29,7 @@ const DAY_MS = 24 * 3600 * 1000
 const DHAN_V1_EPOCHS_SEC = [315_532_800, 315_513_000]
 
 // Dhan Data APIs: 5 requests/second, 100,000 a day. Shared by every caller.
-const historyLimiter = new RateLimiter(4, 240)
+const historyLimiter = new RateLimiter(4, 240, undefined, 'dhan')
 
 const SEGMENTS: Record<string, string> = {
   'NSE|E': 'NSE_EQ', 'BSE|E': 'BSE_EQ', 'NSE|D': 'NSE_FNO', 'MCX|M': 'MCX_COMM', 'NSE|I': 'IDX_I', 'BSE|I': 'IDX_I',

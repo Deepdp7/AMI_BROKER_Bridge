@@ -17,7 +17,7 @@ import { NorenOAuthAdapter, norenOAuthLoginUrl, downloadNorenSymbolZips, type No
 
 const HOST = 'https://v2api.tradesmartonline.in'
 
-const historyLimiter = new RateLimiter(5, 100)
+const historyLimiter = new RateLimiter(5, 100, undefined, 'tradesmart')
 
 /** One instrument list for every TradeSmart account */
 export const tradesmartMaster = new InstrumentMaster('tradesmart', () => downloadNorenSymbolZips(HOST))

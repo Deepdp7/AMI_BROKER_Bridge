@@ -25,6 +25,7 @@ import { readBarsCsv, setReaderDbFile } from './reader'
 import { importFromPostgresIfNeeded } from './pgImport'
 import { applyPendingRestore } from './restore'
 import { isSealed, open, seal, secretsEncrypted } from '../lib/secretBox'
+import { perf } from '../system/perf'
 
 // ===== Env Resolution =====
 // When running as an installed SEA/Tauri binary, process.cwd() is the install
@@ -379,21 +380,40 @@ function flushLiveBars() {
   if (pendingBarsAppends.size === 0) return
   const batch = new Map(pendingBarsAppends)
   pendingBarsAppends.clear()
+  const startedAt = performance.now()
+  let rows = 0
   try {
     tx(() => {
       for (const [ticker, bars] of batch) {
         const tid = tickerId(ticker)
         for (const b of bars) {
           q.insertLiveBar.run(tid, Math.floor(b.ts_utc_ms / 1000), px(b.open), px(b.high), px(b.low), px(b.close), Math.round(b.volume || 0), b.open_interest == null ? null : Math.round(b.open_interest))
+          rows++
         }
       }
     })
+    perf.record('db.live_flush_ms', performance.now() - startedAt)
+    perf.count('db.live_flush_rows', rows)
   } catch (err) {
     console.error('[DB] Failed to write live bars (will retry):', err)
     for (const [ticker, bars] of batch) pendingBarsAppends.set(ticker, [...bars, ...(pendingBarsAppends.get(ticker) || [])])
   }
 }
 setInterval(flushLiveBars, 2000).unref()
+
+// Levels for /api/diagnostics/perf: how big the write-ahead log is and how many live bars wait to be committed
+const pendingLiveBars = () => { let n = 0; for (const bars of pendingBarsAppends.values()) n += bars.length; return n }
+if (perf.enabled) {
+  setInterval(() => {
+    perf.gauge('db.pending_live_bars', pendingLiveBars())
+    fs.promises.stat(DB_FILE + '-wal').then(s => perf.gauge('db.wal_bytes', s.size), () => { /* no log file yet */ })
+  }, 5000).unref()
+}
+perf.probe('db', () => {
+  let walBytes = 0
+  try { walBytes = fs.statSync(DB_FILE + '-wal').size } catch { /* no log file yet */ }
+  return { walBytes, pendingLiveBars: pendingLiveBars() }
+})
 
 export function insertBarBatch(barsToInsert: any[]) {
   for (const bar of barsToInsert) {
@@ -437,7 +457,8 @@ export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<H
   }
   if (byMinute.size === 0) return 0
 
-  return tx(() => {
+  const startedAt = performance.now()
+  const changed = tx(() => {
     const tid = tickerId(amibrokerTicker)
     let changed = 0
     for (const [tsSec, b] of byMinute) {
@@ -446,6 +467,10 @@ export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<H
     }
     return changed
   })
+  perf.record('db.history_tx_ms', performance.now() - startedAt)
+  perf.count('db.history_rows', byMinute.size)
+  perf.count('db.history_changed', changed)
+  return changed
 }
 
 // ===== Daily bars (years before the 1-minute history) =====

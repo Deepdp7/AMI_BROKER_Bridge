@@ -21,7 +21,7 @@ const SCRIP_MASTER = 'https://flattrade.s3.ap-south-1.amazonaws.com/scripmaster'
 const FILES = ['NSE_Equity', 'BSE_Equity', 'Nfo_Equity_Derivatives', 'Nfo_Index_Derivatives', 'Commodity']
 
 // Shared by every caller: backfill workers, auto-refresh, startup fetches
-const historyLimiter = new RateLimiter(5, 100)
+const historyLimiter = new RateLimiter(5, 100, undefined, 'flattrade')
 
 async function downloadFlattradeInstruments(): Promise<MasterRecord[]> {
   const files = await Promise.all(FILES.map(async name => {

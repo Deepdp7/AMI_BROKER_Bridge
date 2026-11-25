@@ -6,6 +6,7 @@
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
+import { perf } from '../../system/perf'
 
 const DATA_DIR = path.join(os.homedir(), 'AppData', 'Roaming', 'DataBridgePro')
 const STATE_FILE = path.join(DATA_DIR, 'backfill_state.json')
@@ -51,6 +52,7 @@ class PersistedSet extends Set<string> {
     try {
       if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
       fs.writeFileSync(STATE_FILE, JSON.stringify(Array.from(this)), 'utf8')
+      perf.count('catchup.state_writes')
     } catch (err) {
       console.error('[BackfillState] Failed to save state:', err)
     }

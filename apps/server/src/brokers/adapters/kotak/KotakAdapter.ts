@@ -346,7 +346,7 @@ let limiter: RateLimiter | null = null
 export function createKotakAdapter(): KotakAdapter {
   master ??= new InstrumentMaster('kotak', () => downloadKotakInstruments())
   // Sustained rate Kotak keeps up with: about one request a second
-  limiter ??= new RateLimiter(1, 50)
+  limiter ??= new RateLimiter(1, 50, undefined, 'kotak')
   return new KotakAdapter(master, limiter)
 }
 

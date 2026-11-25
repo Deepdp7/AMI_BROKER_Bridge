@@ -10,6 +10,7 @@
  * packaged .exe, where there is no separate script file to point a Worker at.
  */
 import { Worker } from 'worker_threads'
+import { perf } from '../system/perf'
 
 const WORKER_SOURCE = String.raw`
 const { parentPort, workerData } = require('worker_threads')
@@ -111,17 +112,24 @@ const ops = {
   },
 }
 
+// startedAt / endedAt (unix ms; process.timeOrigin is shared, so every thread reads the same clock) say
+// how long a request waited behind others and how long it ran
 parentPort.on('message', ({ id, op, args }) => {
+  const startedAt = performance.timeOrigin + performance.now()
   try {
-    parentPort.postMessage({ id, result: ops[op](args) })
+    const result = ops[op](args)
+    parentPort.postMessage({ id, result, startedAt, endedAt: performance.timeOrigin + performance.now() })
   } catch (err) {
-    parentPort.postMessage({ id, error: String((err && err.message) || err) })
+    parentPort.postMessage({ id, error: String((err && err.message) || err), startedAt, endedAt: performance.timeOrigin + performance.now() })
   }
 })
 `
 
 type Op = 'csv' | 'gaps' | 'candles' | 'hiLo' | 'dayCounts' | 'backupTo'
-interface Reader { worker: Worker; pending: Map<number, { resolve: (v: any) => void; reject: (e: Error) => void }> }
+interface Pending { resolve: (v: any) => void; reject: (e: Error) => void; op: Op; sentAt: number }
+interface Reader { worker: Worker; pending: Map<number, Pending> }
+
+const epochNow = () => performance.timeOrigin + performance.now()
 
 const READERS = 2
 const readers: (Reader | null)[] = new Array(READERS).fill(null)
@@ -143,10 +151,12 @@ function startReader(slot: number): Reader {
     for (const p of reader.pending.values()) p.reject(err)
     reader.pending.clear()
   }
-  worker.on('message', ({ id, result, error }) => {
+  worker.on('message', ({ id, result, error, startedAt, endedAt }) => {
     const p = reader.pending.get(id)
     if (!p) return
     reader.pending.delete(id)
+    perf.record(`reader.wait_ms.${p.op}`, Math.max(0, startedAt - p.sentAt))
+    perf.record(`reader.exec_ms.${p.op}`, Math.max(0, endedAt - startedAt))
     error ? p.reject(new Error(error)) : p.resolve(result)
   })
   worker.on('error', fail)
@@ -161,7 +171,7 @@ function call<T>(op: Op, args: object): Promise<T> {
   const reader = readers[slot] || startReader(slot)
   const id = nextId++
   return new Promise<T>((resolve, reject) => {
-    reader.pending.set(id, { resolve, reject })
+    reader.pending.set(id, { resolve, reject, op, sentAt: epochNow() })
     reader.worker.postMessage({ id, op, args })
   })
 }

@@ -44,6 +44,10 @@ extern bool SendToBridge(const std::string& line);
 extern void ShowDataBridge();
 extern void CloseHttpSession();
 
+// ---- How long the plugin's own steps take (reported to the engine once a minute: NOTE|PERF) ----
+// One GetQuotesEx call: fastPath = AmiBroker had bars already (live update), otherwise a symbol load
+extern void PerfRecordGetQuotes(bool fastPath, double micros);
+
 // ---- Keeping AmiBroker from waiting on DataBridge ----
 // Catch-up fetches pause for a while after one failed or timed out (engine busy or gone)
 extern bool CatchUpAllowed();

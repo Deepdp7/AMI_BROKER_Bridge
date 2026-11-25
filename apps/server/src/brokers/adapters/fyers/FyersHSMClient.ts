@@ -16,6 +16,7 @@ function isMarketOpen() {
 
 import WebSocket from 'ws'
 import { EventEmitter } from 'events'
+import { perf } from '../../../system/perf'
 
 /**
  * Fyers' answer to the live-feed login (message type 1):
@@ -50,6 +51,8 @@ export interface HSMMappedTick {
   askQty?: number
   /** Open interest (F&O), a plain count */
   openInterest?: number
+  /** When the frame carrying this update arrived (performance.now()): for the delay measurements only */
+  rxAt?: number
   updateType: 'snapshot' | 'live'
 }
 
@@ -110,6 +113,15 @@ export class FyersHSMClient extends EventEmitter {
 
   private lastMessageTime = 0
   private watchdogTimer: NodeJS.Timeout | null = null
+  /** performance.now() of the frame being decoded: every update it carries is stamped with it */
+  private frameRxAt = 0
+
+  // Does Fyers' feed server answer WebSocket pings? Only logged and counted for now, nothing acts on it
+  private pingTimer: NodeJS.Timeout | null = null
+  private pingsWithoutPong = 0
+  private lastPingAt = 0
+  private pongSeen = false
+  private noPongLogged = false
 
   private tickQueue: HSMMappedTick[] = []
   private isProcessingQueue = false
@@ -217,13 +229,17 @@ export class FyersHSMClient extends EventEmitter {
     })
 
     this.ws.on('message', (data: Buffer) => {
+      this.frameRxAt = performance.now()
       this.lastMessageTime = Date.now()
       this.parseBinaryMessage(data)
     })
 
+    this.ws.on('pong', () => this.onPong())
+
     this.ws.on('close', (code: number, reason: Buffer) => {
       this.isConnecting = false
       this.authenticated = false
+      this.stopPingProbe()
       // Into the stored log too: only printing it hid why the feed kept dropping
       this.emitLog('warn', `[FYERS_HSM_CONNECT] Disconnected (code ${code}${reason?.length ? `, "${reason.toString()}"` : ''}). Reconnecting...`)
       
@@ -491,6 +507,7 @@ export class FyersHSMClient extends EventEmitter {
       this.emitLog('info', '[FYERS_HSM_AUTH] Auth successful.')
       this.emitLog('info', '[FYERS_HSM_STATUS] authenticated')
       this.authenticated = true
+      this.startPingProbe()
       this.emit('connected')
       if (this.pendingSubscriptions.size > 0) {
         const toSub = Array.from(this.pendingSubscriptions)
@@ -718,6 +735,7 @@ export class FyersHSMClient extends EventEmitter {
       bidQty: rawData.bid_size > 0 ? rawData.bid_size : undefined,
       askQty: rawData.ask_size > 0 ? rawData.ask_size : undefined,
       openInterest: rawData.OI > 0 ? rawData.OI : undefined,
+      rxAt: this.frameRxAt,
       updateType
     }
     
@@ -782,5 +800,39 @@ export class FyersHSMClient extends EventEmitter {
   private stopWatchdog() {
     if (this.watchdogTimer) clearInterval(this.watchdogTimer)
     this.watchdogTimer = null
+    this.stopPingProbe()
+  }
+
+  /** Once logged in: a ping every 15 s, to learn whether (and how fast) Fyers answers */
+  private startPingProbe() {
+    this.stopPingProbe()
+    this.pingsWithoutPong = 0
+    this.pingTimer = setInterval(() => {
+      const ws = this.ws
+      if (!ws || ws.readyState !== WebSocket.OPEN) return
+      if (!this.pongSeen && !this.noPongLogged && this.pingsWithoutPong >= 3) {
+        this.noPongLogged = true
+        this.emitLog('info', '[FYERS_HSM] no pong after 3 pings')
+      }
+      this.pingsWithoutPong++
+      this.lastPingAt = performance.now()
+      try { ws.ping() } catch { /* the socket is closing */ }
+    }, 15_000)
+    this.pingTimer.unref()
+  }
+
+  private stopPingProbe() {
+    if (this.pingTimer) clearInterval(this.pingTimer)
+    this.pingTimer = null
+  }
+
+  private onPong() {
+    this.pingsWithoutPong = 0
+    perf.count('fyers.pongs')
+    perf.record('fyers.pong_rtt_ms', performance.now() - this.lastPingAt)
+    if (!this.pongSeen) {
+      this.pongSeen = true
+      this.emitLog('info', '[FYERS_HSM] server answers pings')
+    }
   }
 }

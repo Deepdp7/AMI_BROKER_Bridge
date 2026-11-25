@@ -21,7 +21,7 @@ const API = 'https://api.kite.trade'
 
 // Kite Connect historical candles: 3 requests/second (no per-minute figure published).
 // Shared by every caller: backfill workers, auto-refresh, startup fetches.
-const historyLimiter = new RateLimiter(3, 170)
+const historyLimiter = new RateLimiter(3, 170, undefined, 'kite')
 
 /** Kite's instruments dump (public, no login needed) reduced to NSE/BSE cash, indices, NFO and MCX */
 export function parseKiteInstruments(csv: string): MasterRecord[] {

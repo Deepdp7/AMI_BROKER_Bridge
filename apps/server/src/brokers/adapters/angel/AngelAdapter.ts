@@ -25,7 +25,7 @@ import {
 const API = 'https://apiconnect.angelone.in'
 
 // getCandleData: 3 requests/second (the per-minute figure isn't published)
-const historyLimiter = new RateLimiter(3, 150)
+const historyLimiter = new RateLimiter(3, 150, undefined, 'angel')
 
 const EXCHANGE_TYPE_NAMES = Object.fromEntries(Object.entries(ANGEL_EXCHANGE_TYPES).map(([k, v]) => [v, k]))
 

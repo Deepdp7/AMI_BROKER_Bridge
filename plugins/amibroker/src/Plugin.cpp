@@ -182,7 +182,7 @@ static int MergeBars(struct Quotation* pQ, int count, int nSize, const std::vect
     return k + (int)tail.size();
 }
 
-static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, int nSize, struct Quotation* pQuotes) {
+static int DoGetQuotesExImpl(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, int nSize, struct Quotation* pQuotes) {
     if (!pszTicker || !pQuotes || nSize <= 0) return 0;
     UpdateActiveSymbol(pszTicker);
 
@@ -316,6 +316,17 @@ static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, in
     LogPlugin(logBuf);
 
     return count;
+}
+
+// Times each call: how long AmiBroker's own thread spends in this plugin (the numbers go to the engine once a minute)
+static int DoGetQuotesEx(LPCTSTR pszTicker, int nPeriodicity, int nLastValid, int nSize, struct Quotation* pQuotes) {
+    static LARGE_INTEGER freq = [] { LARGE_INTEGER f; QueryPerformanceFrequency(&f); return f; }();
+    LARGE_INTEGER t0, t1;
+    QueryPerformanceCounter(&t0);
+    int result = DoGetQuotesExImpl(pszTicker, nPeriodicity, nLastValid, nSize, pQuotes);
+    QueryPerformanceCounter(&t1);
+    PerfRecordGetQuotes(nLastValid >= 0, (double)(t1.QuadPart - t0.QuadPart) * 1e6 / (double)freq.QuadPart);
+    return result;
 }
 
 extern "C" {

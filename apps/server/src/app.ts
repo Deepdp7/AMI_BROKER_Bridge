@@ -45,7 +45,8 @@ app.use((err: Error & { type?: string }, _req: express.Request, res: express.Res
 app.use((req, _res, next) => {
   // Polled every second or faster (AmiBroker's plugin, Excel's live prices): not logged
   // (a card asks for its company's logo, a screenful of them at a time: not logged either)
-  if (req.path !== '/api/feed/bars' && req.path !== '/api/feed/daily' && req.path !== '/api/platforms/quotes' && req.path !== '/api/platforms/bars' && !req.path.startsWith('/api/symbols/logo/')) {
+  // (the performance numbers are read by hand or by a script: not logged, so reading them leaves no trace)
+  if (req.path !== '/api/feed/bars' && req.path !== '/api/feed/daily' && req.path !== '/api/platforms/quotes' && req.path !== '/api/platforms/bars' && req.path !== '/api/diagnostics/perf' && !req.path.startsWith('/api/symbols/logo/')) {
     console.log(JSON.stringify({
       ts: new Date().toISOString(),
       method: req.method,

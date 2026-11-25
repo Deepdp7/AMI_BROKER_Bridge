@@ -295,7 +295,7 @@ export function createXtsAdapter(type: string): XtsAdapter {
   const site = XTS_SITES.find(s => s.type === type)
   if (!site) throw new Error(`Unknown XTS broker ${type}`)
   if (!masters.has(type)) masters.set(type, new InstrumentMaster(type, () => downloadXtsInstruments(site.marketData)))
-  if (!limiters.has(type)) limiters.set(type, new RateLimiter(2, 60))
+  if (!limiters.has(type)) limiters.set(type, new RateLimiter(2, 60, undefined, `xts-${type}`))
   return new XtsAdapter(site, masters.get(type)!, limiters.get(type)!)
 }
 
