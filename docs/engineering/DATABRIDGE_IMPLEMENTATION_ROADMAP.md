@@ -652,6 +652,8 @@ Keep the per-symbol error logging and the `{ added, total }` result.
 
 ## Stage 7: resources (only where measured)
 
+> **Done (2026-11-25): measured, and almost nothing needed changing.** P11 (per-tick allocations): not done, GC takes 0.08% of the time with a longest pause of 3.5 ms at twice the expected rate. Log volume: one change, the `[IPC_LIVE_BAR]` sample line once a minute (it was 30 of the 31 lines an idle session wrote a minute); the per-chunk summary and the Fyers `[System Status]` change were not made (see ROOT_CAUSE_ANALYSIS). `backend.log` rotation while running: not done (only if the user wants it). Also in this stage: a regression of Stage 5 found and fixed (the Activity page's "Added X" rule), and the QUOTE counter.
+
 - **P11, per-tick allocations:** only if a profile at the soak rate (`node --cpu-prof`, or `--trace-gc` in the harness) shows GC pauses over 5 ms. Candidates: `BrokerManager` `{...tick}` (mutate and add `brokerId`), `{...bar}` in the `live_bar_updated` payload (listeners must not keep references), and the de-duplication string in `FyersHSMClient`.
 - **Log volume:**
   - BackfillQueue's per-chunk "Fetching…"/"Saved…" lines become one summary a minute (chunks, bars, tickers, errors); keep errors and warnings immediate;

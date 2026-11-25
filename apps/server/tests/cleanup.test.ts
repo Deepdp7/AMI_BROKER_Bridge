@@ -137,6 +137,7 @@ describe('the channel to the plugin', () => {
   }
 
   it('a symbol\'s QUOTE goes out at most every 250 ms, with its newest figures, and LIVE_BAR is not held back', async () => {
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {})
     const { server, client, received } = await connect()
     feed.addSymbolByTicker('QT1', 'cl-1', 'NSE', 'EQ', 'QT1')
     const status = feed.getFeedStatus('QT1')
@@ -158,6 +159,11 @@ describe('the channel to the plugin', () => {
     }
     expect(quotes().map(lastOf)).toEqual([100])                     // held back
     expect(received.filter(l => l.startsWith('LIVE_BAR|QT1|')).length).toBe(4)
+    // the four updates that arrived while one was waiting took its place (they are counted as merged, not as many waiting)
+    const { perf } = await import('../src/system/perf')
+    expect(perf.snapshot().sinceStart.counters['ipc.quotes_coalesced']).toBeGreaterThanOrEqual(3)
+    // and the sample line of the live bars is written once a minute, not at every flush
+    expect(log.mock.calls.filter(c => String(c[0]).startsWith('[IPC_LIVE_BAR]')).length).toBeLessThanOrEqual(1)
 
     await sleep(250)                                                // its time comes: one quote, the newest figures
     expect(quotes().map(lastOf)).toEqual([100, 104])

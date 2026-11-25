@@ -144,6 +144,19 @@ describe('Activity: engine lines in plain language', () => {
     expect(events[0].title).toBe('Added 3 symbols')
   })
 
+  it('shows symbols added in one batch (the line the engine writes for any number of symbols)', () => {
+    const [one] = buildActivity([line('[ADD_SYMBOL] 1 symbol(s) added to fyers-1 ("ACC" → "NSE:ACC-EQ"): subscribed to the live feed, 365 days of history queued.')])
+    expect(one.title).toBe('Added ACC')
+    const [many] = buildActivity([line('[ADD_SYMBOL] 500 symbol(s) added to fyers-1: subscribed to the live feed, 365 days of history queued.')])
+    expect(many.title).toBe('Added 500 symbols')
+    const merged = buildActivity([
+      line('[ADD_SYMBOL] 12 symbol(s) added to fyers-1: subscribed to the live feed, 365 days of history queued.', 0),
+      line('[ADD_SYMBOL] "ACE" backfill queued (365 days).', 1),
+    ])
+    expect(merged).toHaveLength(1)
+    expect(merged[0].title).toBe('Added 13 symbols')
+  })
+
   it('catch-up lists what it found and what you cancelled', () => {
     const [e] = buildActivity([line('[CatchUp] fyers-1: 3 symbol(s) with missing bars queued, 2 full download(s), 70 up to date, 432 cancelled by the user (0.0s)')])
     expect(e.title).toBe('Checked your history')

@@ -41,6 +41,43 @@ One entry per stage, newest at the top. An entry is written when its stage is fi
 - No source files were changed.
 - Next: Stage 0 (instrumentation and baseline harness).
 
+## Stage 7: resources (2026-11-25)
+
+**Findings addressed:** P11 and the log volume, measured first as the roadmap says; nothing else. Verified against the code at `f6e8a16`.
+**Result:** P11 is **not changed** (not needed). One log line made rarer. A regression from Stage 5 found and fixed. Five rows in ROOT_CAUSE_ANALYSIS "Discrepancies".
+
+**Measurements** (details in DATABRIDGE_PERFORMANCE_BASELINE.md, "Resources at the soak rate")
+- GC at 2,000 ticks a second (twice the expected rate): 0.08% of the time, longest pause 3.5 ms; at 1,000 ticks a second longest 5.3 ms once in 60 s. CPU 3.8-5.6% of one core, RSS 168-215 MB, loop lag p99 1.1-1.4 ms.
+- Log: an idle live session wrote 31 lines a minute, 30 of them `[IPC_LIVE_BAR] Broadcasted` (every 2 s). One line costs about 2.6 microseconds.
+
+**Changes**
+- Engine `amibroker/ipcServer.ts`: the `[IPC_LIVE_BAR]` sample line is written once a minute (was every 2 s): 31 lines a minute became 2. `ipc.quotes_deferred` (which counted every held-back symbol at every flush) is replaced by `ipc.quotes_coalesced` (an update that took the place of one already waiting).
+- Desktop `lib/activity.ts`: the "Added X" rule reads the batch line `[ADD_SYMBOL] N symbol(s) added to ...` that Stage 5 introduced (and still the per-symbol one). **This was a regression of Stage 5**: after it, adding symbols did not show in the Activity page. A server test now pins the line's form (`symbolManagement`), and a desktop test the rule (`activity.test.ts`).
+- Tests: +1 desktop (the batch line, alone and merged with the old one), assertions in `symbolManagement` and `cleanup` (the line's form, the coalesced counter, the sample line once).
+
+**Checks**
+- `npm run typecheck --prefix apps/server`: pass. `npm test --prefix apps/server`: 434 passed, 2 failed (the same 2: noren, upstoxAngel).
+- `npm run typecheck --prefix apps/desktop`: pass. `npm test --prefix apps/desktop`: 138 of 138 (one new).
+- The plugin is **not changed** in this stage (no new DLL). Harness: integrity 0 mismatches.
+
+**Before to after**
+| Metric | Before | After |
+|---|---|---|
+| Log lines of an idle live session, per minute | 31 | **2** |
+| GC at twice the tick rate | (not measured) | 0.08% of the time, longest pause 3.5 ms: no change needed |
+
+**Not done / follow-ups**
+- **P11 (per-tick allocations): not needed**, see above.
+- **BackfillQueue's per-chunk lines and Fyers' `[System Status]` / `[Warning] No Live Data`: left as they are.** They cost nothing measurable, and the Activity page builds its "Downloaded history" and "Some symbols aren't getting live prices" cards from them, so printing them less often would change what the app shows.
+- **`backend.log` rotation while running: not done** (needs the engine to own its log file). The real file is 6.7 MB after four weeks and is cut at 20 MB when the engine starts. Worth doing only for an always-on engine.
+- The Activity page's rule for `[IPC_CONNECT] AmiBroker connected` matches nothing (the engine stopped printing that line before this work). Adding the line back would make "AmiBroker connected" appear in Activity again: a small separate change, if you want it.
+- **Lesson**: the add log line is read by the app. Any engine line the app parses needs a test on both sides; the other lines the app parses were checked against everything changed in Stages 3-7 and match.
+
+**For the user**
+- **No new DLL. The engine changes need the rebuilt engine** (`npm run build:server`) or `npm run dev`. **The Stage 2/3 DLL is still not installed on your PC** (the one in AmiBroker's Plugins folder is from 18 Nov).
+- After adding symbols, the Activity page should show "Added N symbols" again.
+- The Live Console shows an `[IPC_LIVE_BAR]` line once a minute instead of every 2 s: that is intended.
+
 ## Stage 6: front-end, back-end and IPC cleanup (2026-11-25)
 
 **Findings addressed:** P14 (6b), P15 (6a), P16 (6e), the QUOTE rate (6d); 6c was done in Stage 4c. Verified against the code at `40b9d0e` first: as described.

@@ -131,9 +131,13 @@ const RULES: Rule[] = [
     data: m => Number(m[1]), view: n => ({ title: 'History downloads turned back on', detail: `${plural(n, 'symbol')} will download their history.` }) },
 
   // ----- symbols -----
-  { match: /^\[ADD_SYMBOL\] "([^"]+)" backfill queued|^\[IPC_AUTO_REG\] "([^"]+)" .* registered, subscribed/, key: 'added', tone: 'good', icon: 'plus', hideCount: true, window: 10 * MIN,
-    data: m => new Set([m[1] || m[2]]), merge: (a, b) => new Set([...a, ...b]),
-    view: s => ({ title: s.size === 1 ? `Added ${[...s][0]}` : `Added ${plural(s.size, 'symbol')}`, detail: 'Its history downloads in the background.' }) },
+  // One line per symbol (older engines) or one for the whole batch ("12 symbol(s) added to fyers-1 ...", with the names when there are only a few)
+  { match: /^\[ADD_SYMBOL\] "([^"]+)" backfill queued|^\[IPC_AUTO_REG\] "([^"]+)" .* registered, subscribed|^\[ADD_SYMBOL\] (\d+) symbol\(s\) added to /, key: 'added', tone: 'good', icon: 'plus', hideCount: true, window: 10 * MIN,
+    data: (m, l) => m[3]
+      ? { n: Number(m[3]), names: new Set([...l.text.matchAll(/"([^"]+)" →/g)].map(x => x[1])) }
+      : { n: 1, names: new Set([m[1] || m[2]]) },
+    merge: (a, b) => ({ n: a.n + b.n, names: new Set([...a.names, ...b.names]) }),
+    view: d => ({ title: d.n === 1 && d.names.size === 1 ? `Added ${[...d.names][0]}` : `Added ${plural(d.n, 'symbol')}`, detail: 'Its history downloads in the background.' }) },
   { match: /^\[Init\] Invalid symbol \(expired\?\): (\S+)/, key: 'invalid', tone: 'warn', icon: 'alert', hideCount: true, window: 10 * MIN,
     data: m => new Set([m[1]]), merge: (a, b) => new Set([...a, ...b]),
     view: s => ({ title: 'Some symbols are no longer valid', detail: `For example ${sample(s)}. Expired contracts can be removed in Symbol Setup.` }) },

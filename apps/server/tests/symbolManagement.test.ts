@@ -76,6 +76,10 @@ describe('adding many symbols', () => {
     expect(single).not.toHaveBeenCalled()
     // One line for all of them (it used to be several for each symbol)
     expect(log.mock.calls.length).toBeLessThanOrEqual(3)
+    // The app's Activity page (apps/desktop/src/lib/activity.ts, rule 'added') reads this line: keep its form
+    const said = log.mock.calls.map(c => String(c[0])).filter(l => l.startsWith('[ADD_SYMBOL]'))
+    expect(said).toHaveLength(1)
+    expect(said[0]).toMatch(/^\[ADD_SYMBOL\] 40 symbol\(s\) added to bulk-1: subscribed to the live feed, \d+ days of history queued\.$/)
   })
 
   it('a symbol that cannot be resolved is skipped and reported; the others are added', async () => {

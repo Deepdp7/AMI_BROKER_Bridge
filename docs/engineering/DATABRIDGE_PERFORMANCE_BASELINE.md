@@ -243,6 +243,24 @@ What the engine does for an import is small, as the baseline said: this measures
 
 **P12 (the push into AmiBroker) was not measured on this PC.** It means driving the real AmiBroker's objects, and a measurement would write into the user's AmiBroker database; the harness never does that. What can be said from the script (`amibroker/symbolDetails.ts`): for each symbol it reads up to five properties of AmiBroker's object (the stock, FullName, RoundLotSize, TickSize, PointValue), so a push of 438 symbols is about 2,200 calls into AmiBroker, each served by AmiBroker's own interface thread. After Stage 5c a push on connect sends only the lines that changed since the last one (usually none: no call at all). The duration of every push is now logged ("... in 3.2 s") and recorded (`symbols.push_ms`, `symbols.pushed`): the live checklist below asks for it, and for the plugin's `busy` count around it (R5).
 
+### Resources at the soak rate (Stage 7)
+
+`node --trace-gc` on `live500`, 60 s each, the engine's main thread (the two reader workers and the checkpoint worker are other isolates and collect a few times a minute at under 3 ms):
+
+| | 500 symbols x 2 updates/s (1,000 ticks/s, 1,974 lines/s to the plugin) | 500 symbols x 4 updates/s (2,000 ticks/s, 3,893 lines/s) |
+|---|---|---|
+| collections in 60 s | 66 (54 scavenges, 12 mark-compacts) | 43 (31 scavenges, 12 mark-compacts) |
+| pause p50 / p99 / max | 0.58 / 5.3 / 5.3 ms | 1.01 / 3.5 / 3.5 ms |
+| all pauses together | 52 ms = 0.08% of the time | 53 ms = 0.08% |
+| over 5 ms | 1 (a mark-compact) | 0 |
+| loop lag p50 / p99 / max | 0.17 / 1.06 / 4.0 ms | 0.34 / 1.4 / 2.9 ms |
+| engine CPU, of one core / RSS peak | 3.8% / 168 MB | 5.6% / 215 MB |
+| integrity | 0 mismatches | 0 mismatches |
+
+The roadmap's bar for touching the per-tick allocations (P11) was GC pauses over 5 ms. At twice the expected tick rate the longest is 3.5 ms and the collector takes under a tenth of one percent of the time, so nothing is changed there.
+
+**Log volume**: an idle live session wrote 31 lines in 60 s; 30 of them were the `[IPC_LIVE_BAR] Broadcasted` sample line (every 2 s). After Stage 7 it writes 2. A line costs the engine's thread about 2.6 microseconds when stdout is a file (a loop of 20,000 `console.log` calls; the engine's console capture for the Live Console adds a ring buffer and an event), so at the 30 lines a second a backfill at the harness's pace makes, the log costs under 0.01% of the thread. What the lines cost is disk, not time: the real `backend.log` on this PC is 6.7 MB after four weeks of use, and is cut at 20 MB each time the engine starts.
+
 ### Instrumentation overhead
 
 The first way to measure it, a full `live500` run with metrics on and off, is too noisy to show anything: identical runs differ by up to 2x in CPU per update (on: 21.6, 47.5, 60.5 us; off: 43.9, 37.5 us). So the pieces are timed directly (`npx tsx tests/perf/overhead.ts`):

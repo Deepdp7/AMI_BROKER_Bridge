@@ -190,7 +190,6 @@ export function startAmiBrokerIpc() {
         const due = (lastQuoteAt.get(t) ?? 0) + QUOTE_EVERY_MS
         if (due > sendMs) {   // sent a moment ago: it stays queued and goes out, with its newest figures, when due
           nextQuoteDue = Math.min(nextQuoteDue, due)
-          perf.count('ipc.quotes_deferred')
           continue
         }
         let q = quotes.get(t)
@@ -200,7 +199,8 @@ export function startAmiBrokerIpc() {
       }
       c.pendingLive.clear()
       if (!msg) continue
-      if (Date.now() - lastLiveBarLogAt > 2000) {
+      // A sample line once a minute: it said "the feed reaches AmiBroker" every 2 s, which was 30 of the 31 lines a minute an idle session wrote
+      if (Date.now() - lastLiveBarLogAt > 60_000) {
         lastLiveBarLogAt = Date.now()
         console.log(`[IPC_LIVE_BAR] Broadcasted: ${msg.slice(0, msg.indexOf('\n'))}`)
       }
@@ -248,7 +248,13 @@ export function startAmiBrokerIpc() {
   // close, and a previous close found later): each becomes a QUOTE line
   liveFeed.on('feed_update', ({ symbols }: { symbols: Array<{ ticker: string }> }) => {
     if (liveClients.size === 0 || !symbols?.length) return
-    for (const c of liveClients.values()) for (const sym of symbols) c.pendingQuotes.add(sym.ticker)
+    for (const c of liveClients.values()) {
+      for (const sym of symbols) {
+        // A quote that was already waiting (held back by its 250 ms, or not sent yet) takes this newer state: one line instead of two
+        if (c.pendingQuotes.has(sym.ticker)) perf.count('ipc.quotes_coalesced')
+        else c.pendingQuotes.add(sym.ticker)
+      }
+    }
     queueFlush()
   })
 
