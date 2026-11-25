@@ -124,6 +124,9 @@ export class DhanFeed extends EventEmitter {
   /** Connections in a row Dhan dropped right after opening, before sending anything */
   private quickDrops = 0
 
+  /** 'disconnected' goes out once per outage, not again for each failed attempt to get the feed back (the lifecycle only needs the first, and each one is a status write, a log line and a broadcast) */
+  private reportedDown = false
+
   constructor(private readonly accessToken: string, private readonly clientId: string) {
     super()
   }
@@ -145,6 +148,7 @@ export class DhanFeed extends EventEmitter {
       openedAt = Date.now()
       this.lastMessageAt = Date.now()
       console.log(`[DhanFeed] Connected (${this.instruments.size} instruments)`)
+      this.reportedDown = false
       this.emit('connected')
       this.send([...this.instruments.values()], 17)
       this.startWatchdog()
@@ -183,7 +187,7 @@ export class DhanFeed extends EventEmitter {
     ws.on('close', () => {
       this.stopWatchdog()
       if (this.ws === ws) this.ws = null
-      this.emit('disconnected')
+      if (!this.reportedDown) { this.reportedDown = true; this.emit('disconnected') }
       if (authRefused) {
         this.stopped = true
         this.emit('auth_failed')

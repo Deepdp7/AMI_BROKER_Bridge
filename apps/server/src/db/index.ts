@@ -398,8 +398,45 @@ export function invalidateDiskBarsCache(_safeTicker: string) {
 // Live bars are buffered and committed together every 2 s
 const pendingBarsAppends = new Map<string, any[]>() // key: amibroker_ticker, value: bar objects
 
-function flushLiveBars() {
+/**
+ * When the database does not take writes (disk full, file locked by something else, a damaged file) the bars wait in
+ * memory and are tried again, less and less often. From PENDING_WARN bars waiting it says so; from PENDING_LIMIT on,
+ * the oldest are given up so memory does not grow without end, and each ticker's "verified through" mark is moved back
+ * to them (barWrites 'lost'): the next gap pass finds those minutes missing and fetches them from the broker.
+ */
+const PENDING_WARN = 50_000
+const PENDING_LIMIT = 500_000
+/** After giving up, this share of the limit is kept (so it does not happen again at the next try) */
+const PENDING_KEEP = 0.9
+const FAILURE_LOG_EVERY_MS = 60_000
+let liveFlushFailures = 0
+let liveFlushRetryAt = 0
+let lastFailureLogAt = 0
+let warnedPending = false
+
+/** Gives up the oldest waiting bars (about the same share of each ticker's) down to PENDING_KEEP of the limit; returns how many */
+function giveUpOldestLiveBars(waiting: number): number {
+  const excess = waiting - Math.floor(PENDING_LIMIT * PENDING_KEEP)
+  const share = excess / waiting
+  let dropped = 0
+  for (const [ticker, bars] of pendingBarsAppends) {
+    const k = Math.min(bars.length, Math.ceil(bars.length * share))
+    if (k <= 0) continue
+    const gone = bars.splice(0, k)
+    dropped += k
+    if (!bars.length) pendingBarsAppends.delete(ticker)
+    let lo = Infinity, hi = 0
+    for (const b of gone) { const ts = Math.floor(b.ts_utc_ms / 1000); if (ts < lo) lo = ts; if (ts > hi) hi = ts }
+    barWrites.emit('lost', ticker, lo, hi)
+  }
+  perf.count('db.live_bars_dropped', dropped)
+  return dropped
+}
+
+function flushLiveBars(force = false) {
   if (pendingBarsAppends.size === 0) return
+  // The last try failed: not again at every call (a long backlog costs the engine's thread a lot to try)
+  if (!force && Date.now() < liveFlushRetryAt) return
   const batch = new Map(pendingBarsAppends)
   pendingBarsAppends.clear()
   const startedAt = performance.now()
@@ -423,9 +460,27 @@ function flushLiveBars() {
     for (const [ticker, lo, hi] of ranges) barWrites.emit('changed', ticker, lo, hi)
     perf.record('db.live_flush_ms', performance.now() - startedAt)
     perf.count('db.live_flush_rows', rows)
+    if (liveFlushFailures > 0) {
+      console.log(`[DB] Live bars are being saved again, after ${liveFlushFailures} failed attempt(s) (${rows} bars written)`)
+      liveFlushFailures = 0; liveFlushRetryAt = 0; warnedPending = false
+    }
   } catch (err) {
-    console.error('[DB] Failed to write live bars (will retry):', err)
+    liveFlushFailures++
+    perf.count('db.live_flush_failures')
+    liveFlushRetryAt = Date.now() + Math.min(2000 * 2 ** liveFlushFailures, 30_000)   // 4 s, 8 s, 16 s, then every 30 s
     for (const [ticker, bars] of batch) pendingBarsAppends.set(ticker, [...bars, ...(pendingBarsAppends.get(ticker) || [])])
+    const waiting = pendingLiveBars()
+    const dropped = waiting > PENDING_LIMIT ? giveUpOldestLiveBars(waiting) : 0
+    if (waiting > PENDING_WARN && !warnedPending) {
+      warnedPending = true
+      console.warn(`[DB] ${waiting} live bars are waiting for the database (more than ${PENDING_WARN}): it is not taking writes. Check the disk space and that nothing else holds the file.`)
+    }
+    // Giving bars up is always said (it is rare: at most once per try); the failure itself once a minute
+    if (dropped) console.error(`[DB] ${dropped} of the oldest waiting live bars were given up (more than ${PENDING_LIMIT} waiting): their minutes are fetched from the broker again once the database takes writes.`)
+    if (Date.now() - lastFailureLogAt >= FAILURE_LOG_EVERY_MS) {
+      lastFailureLogAt = Date.now()
+      console.error(`[DB] Failed to write live bars (attempt ${liveFlushFailures}, ${pendingLiveBars()} waiting in memory, trying again in ${Math.round((liveFlushRetryAt - Date.now()) / 1000)} s):`, err)
+    }
   }
 }
 setInterval(flushLiveBars, 2000).unref()
@@ -954,8 +1009,8 @@ export function deduplicateAndCompactDiskBars(_ticker: string) {
 }
 
 /** Writes buffered live bars and logs now (normally every 1–2 s). */
-export function flushPendingBars() {
-  flushLiveBars()
+export function flushPendingBars(force = false) {
+  flushLiveBars(force)
   flushLogs()
 }
 
@@ -977,7 +1032,7 @@ let closed = false
 function closeDb() {
   if (closed) return
   closed = true
-  try { flushPendingBars() } catch {}
+  try { flushPendingBars(true) } catch {}   // one last try, however recent the last one was
   // Copy what the log holds into the database file if nothing is reading (never waits: PASSIVE), so the
   // next start does not have to replay a log of up to 80 MB
   if (MAINTENANCE_ENABLED) { try { sqlite.exec('PRAGMA wal_checkpoint(PASSIVE)') } catch {} }

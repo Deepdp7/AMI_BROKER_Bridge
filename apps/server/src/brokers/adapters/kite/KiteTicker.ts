@@ -112,6 +112,9 @@ export class KiteTicker extends EventEmitter {
   private lastMessageAt = 0
   private stopped = false
 
+  /** 'disconnected' goes out once per outage, not again for each failed attempt to get the feed back (the lifecycle only needs the first, and each one is a status write, a log line and a broadcast) */
+  private reportedDown = false
+
   constructor(private readonly apiKey: string, private readonly accessToken: string) {
     super()
   }
@@ -129,6 +132,7 @@ export class KiteTicker extends EventEmitter {
       this.attempts = 0
       this.lastMessageAt = Date.now()
       console.log(`[KiteTicker] Connected (${this.tokens.size} instruments)`)
+      this.reportedDown = false
       this.emit('connected')
       this.send([...this.tokens], 'subscribe')
       this.startWatchdog()
@@ -163,7 +167,7 @@ export class KiteTicker extends EventEmitter {
     ws.on('close', () => {
       this.stopWatchdog()
       if (this.ws === ws) this.ws = null
-      this.emit('disconnected')
+      if (!this.reportedDown) { this.reportedDown = true; this.emit('disconnected') }
       if (refusedStatus === 400 || refusedStatus === 401 || refusedStatus === 403) {
         this.stopped = true
         this.emit('auth_failed')

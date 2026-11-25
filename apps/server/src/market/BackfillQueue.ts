@@ -26,17 +26,26 @@ import {
   getAllSettings,
   getOldestBarTimestampSec,
   upsertSettings,
+  barWrites,
 } from '../db'
 import { brokerManager } from '../brokers/BrokerManager'
 import { withPriority } from '../lib/priority'
 import { backfilledTickers } from './state/backfillState'
-import { getVerifiedThroughMs, setVerifiedThroughMs, getHistoryFloorMs, setHistoryFloorMs } from './state/coverageState'
+import { getVerifiedThroughMs, setVerifiedThroughMs, getHistoryFloorMs, setHistoryFloorMs, lowerVerifiedThroughMs } from './state/coverageState'
 import { detectGaps, formatGapSummary } from './GapDetector'
 import { learnClosedDays } from './MarketCalendar'
 import { perf } from '../system/perf'
 import type { BackfillStatus, BackfillJobStatus } from '../types'
 import path from 'path'
 import fs from 'fs'
+
+// Live bars that could not be written and were given up (the database was not taking writes for too long): the
+// ticker's history is no longer known to be complete from there on, so the next gap pass looks again from the minute
+// before the first of them, and fetches what is missing from the broker
+barWrites.on('lost', (ticker: string, fromSec: number) => {
+  lowerVerifiedThroughMs(ticker, fromSec * 1000 - 60_000)
+  backfilledTickers.delete(ticker)
+})
 
 /** Exchange of a tracked symbol (NSE when unknown) */
 function exchangeOf(ticker: string): string {

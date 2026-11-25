@@ -61,6 +61,9 @@ export class AngelFeed extends EventEmitter {
   private reconnectTimer: NodeJS.Timeout | null = null
   private heartbeat: NodeJS.Timeout | null = null
 
+  /** 'disconnected' goes out once per outage, not again for each failed attempt to get the feed back (the lifecycle only needs the first, and each one is a status write, a log line and a broadcast) */
+  private reportedDown = false
+
   constructor(private readonly auth: AngelFeedAuth) {
     super()
   }
@@ -84,6 +87,7 @@ export class AngelFeed extends EventEmitter {
       this.attempts = 0
       this.lastMessageAt = Date.now()
       console.log(`[AngelFeed] Connected (${this.keys.size} instruments)`)
+      this.reportedDown = false
       this.emit('connected')
       this.send(1, [...this.keys])
       this.startHeartbeat()
@@ -110,7 +114,7 @@ export class AngelFeed extends EventEmitter {
     ws.on('close', () => {
       this.stopHeartbeat()
       if (this.ws === ws) this.ws = null
-      this.emit('disconnected')
+      if (!this.reportedDown) { this.reportedDown = true; this.emit('disconnected') }
       if (refusedStatus === 401 || refusedStatus === 403) {
         this.stopped = true
         this.emit('auth_failed')

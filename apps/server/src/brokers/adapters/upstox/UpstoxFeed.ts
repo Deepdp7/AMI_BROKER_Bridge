@@ -126,6 +126,9 @@ export class UpstoxFeed extends EventEmitter {
   private reconnectTimer: NodeJS.Timeout | null = null
   private watchdog: NodeJS.Timeout | null = null
 
+  /** 'disconnected' goes out once per outage, not again for each failed attempt to get the feed back (the lifecycle only needs the first, and each one is a status write, a log line and a broadcast) */
+  private reportedDown = false
+
   constructor(private readonly accessToken: string) {
     super()
   }
@@ -166,6 +169,7 @@ export class UpstoxFeed extends EventEmitter {
       this.attempts = 0
       this.lastMessageAt = Date.now()
       console.log(`[UpstoxFeed] Connected (${this.keys.size} instruments)`)
+      this.reportedDown = false
       this.emit('connected')
       this.send('sub', [...this.keys])
       this.startWatchdog()
@@ -188,7 +192,7 @@ export class UpstoxFeed extends EventEmitter {
     ws.on('close', () => {
       this.stopWatchdog()
       if (this.ws === ws) this.ws = null
-      this.emit('disconnected')
+      if (!this.reportedDown) { this.reportedDown = true; this.emit('disconnected') }
       if (!this.stopped) this.scheduleReconnect()
     })
   }

@@ -664,6 +664,8 @@ Keep the per-symbol error logging and the `{ added, total }` result.
 
 ## Stage 8: reliability and recovery
 
+> **Done (2026-11-25), with the differences listed in ROOT_CAUSE_ANALYSIS (8a-8e).** Engine only (no new DLL). 8a: every feed already reported; four of them repeated the report, now once per outage (+ a contract test per feed). 8b: measured in the harness, no change needed. 8c: implemented as specified, plus a retry backoff. 8d: tested, and a duplicate `auth_required` fixed. 8e: automated part done with the real DLL; the status light is the manual part (checklist in the changelog).
+
 - **8a. Every feed reports its drops.**
   - Check each adapter and feed (Kite, Dhan, Upstox, Angel, Noren, XTS, Kotak) for `connection_state` `DISCONNECTED` on a drop and `CONNECTED` on recovery, as in B3.
   - Fix any that don't report, so the 150 s catch-up works for every broker.

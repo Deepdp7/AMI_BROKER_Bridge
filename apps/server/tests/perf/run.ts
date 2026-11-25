@@ -5,7 +5,7 @@
  * docs/engineering/DATABRIDGE_PERFORMANCE_BASELINE.md.
  *
  *   npm run perf --prefix apps/server -- --scenario live500 --seconds 180
- *   scenarios: idle live100 live500 live500_backfill live500_health live500_backpressure import500 explain
+ *   scenarios: idle live100 live500 live500_backfill live500_health live500_backpressure restart_storm import500 explain
  *   options:   --seconds N  --symbols N  --rate R (updates per symbol per second)  --dup P  --swap P
  *   DATABRIDGE_PERF=0 runs with the metrics off (to measure what they cost)
  *
@@ -45,6 +45,8 @@ interface Scenario {
   synthetic?: boolean
   importCount?: number
   explain?: boolean
+  /** After an engine restart the plugin asks for the last 24 hours of every symbol AmiBroker shows, one after the other (3 passes over the synthetic symbols) */
+  storm?: boolean
 }
 
 const SCENARIOS: Record<string, Scenario> = {
@@ -54,6 +56,7 @@ const SCENARIOS: Record<string, Scenario> = {
   live500_backfill: { symbols: 500, rate: 2, seconds: 180, backfill: 50, catchUps: true },
   live500_health: { symbols: 500, rate: 2, seconds: 120, health: true, catchUps: true, synthetic: true },
   live500_backpressure: { symbols: 500, rate: 2, seconds: 60, backpressure: { afterS: 15, forS: 10 } },
+  restart_storm: { symbols: 500, rate: 2, seconds: 40, storm: true, synthetic: true },
   import500: { symbols: 0, rate: 0, seconds: 0, importCount: 500 },
   explain: { symbols: 0, rate: 0, seconds: 0, explain: true },
 }
@@ -249,6 +252,23 @@ async function main() {
   if (sc.catchUps) {
     const catchUpTickers = sc.synthetic ? Array.from({ length: SYNTH.tickers }, (_, i) => synthTicker(i)) : tickers
     plugin.startPollingCatchUps(catchUpTickers, 200)
+  }
+  if (sc.storm) {
+    void (async () => {
+      const list = Array.from({ length: SYNTH.tickers }, (_, i) => synthTicker(i))
+      const startedAt = performance.now()
+      let requests = 0
+      for (let pass = 0; pass < 3 && running; pass++) {
+        for (const t of list) {
+          if (!running) break
+          // What AmiBroker has: bars up to the last stored one; the plugin asks for the day before that on, as it does for a connection it has not synced yet
+          const newest = Number((await db.stmts.getBarsCsvByTickerAsync.get(t, 1)).split(',')[0])
+          await plugin.fetchBars(t, newest - 86_400)
+          requests++
+        }
+      }
+      extra['restartStorm'] = { requests, seconds: +((performance.now() - startedAt) / 1000).toFixed(2), msPerRequest: +((performance.now() - startedAt) / Math.max(1, requests)).toFixed(2) }
+    })()
   }
   if (sc.health) {
     void (async () => {

@@ -261,6 +261,12 @@ The roadmap's bar for touching the per-tick allocations (P11) was GC pauses over
 
 **Log volume**: an idle live session wrote 31 lines in 60 s; 30 of them were the `[IPC_LIVE_BAR] Broadcasted` sample line (every 2 s). After Stage 7 it writes 2. A line costs the engine's thread about 2.6 microseconds when stdout is a file (a loop of 20,000 `console.log` calls; the engine's console capture for the Live Console adds a ring buffer and an event), so at the 30 lines a second a backfill at the harness's pace makes, the log costs under 0.01% of the thread. What the lines cost is disk, not time: the real `backend.log` on this PC is 6.7 MB after four weeks of use, and is cut at 20 MB each time the engine starts.
 
+### The engine restarts (Stage 8b, 8e)
+
+**`restart_storm`** (500 symbols updating twice a second; the fake plugin asks for the last 24 hours of each of 100 symbols one after the other, three passes, as the plugin's one catch-up thread does after a reconnection): 300 requests in 0.28 s, **0.95 ms each** (p99 1.9 ms, max 8.8 ms), 47 KB each. Loop lag p99 1.7 ms, max 10.8 ms; the live feed to the plugin is not held (feed_to_ipc p99 0.25 ms). 438 symbols is about 0.4 s of the engine's time. The roadmap's trigger for changing the plugin's sync window (an overloaded engine) is not met. What this does not show is AmiBroker's own cost of merging 438 answers: the plugin's `NOTE|PERF` of the minute after a restart (`catchup_n`, `catchup_p99`, `busy`) is the live check.
+
+**The real DLL across an engine restart** (stand-in AmiBroker running 105 s with 3 symbols; the harness engine on the real ports for 22 s, stopped for 14 s, started again for 30 s): the plugin logged `Disconnected, reconnecting...`, `Connected to 7891` and, for each of the three symbols, `caught up 1 missed bar(s)` after each connection; all three symbols went on updating (79-88 updates each); the notices stopped for the 14 s the engine was down and came back at 50 ms apart; `busy` 0. Integrity: 0 mismatches in both engine runs. The status light and AmiBroker's own screens are not in this stand-in: they are the manual part of 8e.
+
 ### Instrumentation overhead
 
 The first way to measure it, a full `live500` run with metrics on and off, is too noisy to show anything: identical runs differ by up to 2x in CPU per update (on: 21.6, 47.5, 60.5 us; off: 43.9, 37.5 us). So the pieces are timed directly (`npx tsx tests/perf/overhead.ts`):

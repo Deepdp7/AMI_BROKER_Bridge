@@ -41,6 +41,36 @@ One entry per stage, newest at the top. An entry is written when its stage is fi
 - No source files were changed.
 - Next: Stage 0 (instrumentation and baseline harness).
 
+## Stage 8: reliability and recovery (2026-11-25)
+
+**Findings addressed:** 8a, 8b, 8c, 8d, 8e (no B/P/D numbers: the stage is the roadmap's own). Verified against the code at `4b04423` first: as described, except where the Discrepancies say otherwise (five rows).
+
+**Changes**
+- Engine, four feeds (`DhanFeed`, `KiteTicker`, `AngelFeed`, `UpstoxFeed`) (8a): `disconnected` is reported once per outage, not for each failed attempt to get back; `connected` starts a new outage account. All seven feeds already reported drops and recoveries.
+- Engine `db/index.ts` (8c): when the database does not take writes, the live bars wait in memory and are tried again after 4, 8, 16 s and then every 30 s (before: every 2 s, and at every read); a warning at 50,000 waiting; above 500,000 the oldest are given up down to 450,000, said in the log each time and announced to `barWrites` as `lost`; one error line a minute while it lasts; one line when saving works again. `BackfillQueue` moves each lost ticker's verified-through mark back to the minute before its first lost bar (`lowerVerifiedThroughMs` in `coverageState`), so the next gap pass fetches those minutes from the broker. The exit flush ignores the wait.
+- Engine `brokers/BrokerManager.ts` (8d): the first `auth_failed` of an adapter is handled; later ones from the same adapter are ignored (two reports of one dead token used to announce `auth_required` twice).
+- Harness: scenario `restart_storm`.
+- Tests: `feedDrops` (8: each of the four feeds twice), `liveWriteFailure` (3), `tokenExpiry` (3: the chain, a late report, the daily re-login). Each was checked against the code it guards (the unguarded Dhan feed, a lifted limit, and the double announcement, which the new test found).
+
+**Checks**
+- `npm run typecheck --prefix apps/server`: pass. `npm test --prefix apps/server`: 448 passed, 2 failed (the same 2: noren, upstoxAngel).
+- `npm run typecheck --prefix apps/desktop`: pass. `npm test --prefix apps/desktop`: 138 of 138 (not touched).
+- The plugin is **not changed** in this stage (no new DLL).
+
+**Measured**
+- Restart storm: 300 serial 24-hour catch-ups in 0.28 s (0.95 ms each); loop lag p99 1.7 ms. No change needed.
+- The real DLL across an engine stop and start: reconnected, re-synced the 3 viewed symbols, kept updating, `busy` 0.
+
+**Not done / follow-ups**
+- **The live part of 8b and 8e** is yours (below).
+- The Noren, XTS and Kotak "once per outage" guards were read, not driven by a test (their `connected` follows a protocol reply).
+- The daily re-login fires only if the engine is running at exactly 08:50 IST (it checks for that minute): an engine started at 08:51 does not catch up. The 06:00 expiry report and the saved-token login at start cover it; changing it is a separate decision.
+
+**For the user**
+- **No new DLL. The engine changes need the rebuilt engine** (`npm run build:server`) or `npm run dev`. **The Stage 2/3 DLL is still not installed** (yours is the 18 Nov build).
+- **Live check of an engine restart (8b, 8e)**, in a market session with AmiBroker open on a few charts and a watch list: close DataBridge Pro, wait 30 s, start it again, then (a) the DataBridge light in AmiBroker's status bar goes grey or red and then green by itself; (b) the charts fill in the minutes of the gap within a minute or two, without a block of bars appearing late for symbols you were not looking at; (c) in `C:\Users\Public\DataBridgePro_plugin.log` the next `NOTE|PERF` line shows `catchup_n` (how many symbols re-synced), `catchup_p99` and `busy`: please send me those three numbers.
+- If the disk ever fills up, the engine log shows `[DB] Failed to write live bars ... waiting in memory` once a minute, and when space is back `[DB] Live bars are being saved again`.
+
 ## Stage 7: resources (2026-11-25)
 
 **Findings addressed:** P11 and the log volume, measured first as the roadmap says; nothing else. Verified against the code at `f6e8a16`.

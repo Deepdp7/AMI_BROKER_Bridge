@@ -57,8 +57,13 @@ export class BrokerManager extends EventEmitter {
       this._emitLog(entry.level, entry.component, entry.message)
     })
 
+    let authFailureHandled = false
     adapter.on('auth_failed', () => {
       if (this.activeAdapters.get(brokerId) !== adapter) return // not live (connect itself fails instead)
+      // The expiry timer and the live feed's own refusal can both report the same dead token in the same moment
+      // (the adapter is removed only after its disconnect finishes): one drop, one announcement
+      if (authFailureHandled) return
+      authFailureHandled = true
       // Token is dead: drop the adapter so downloads wait for the next login instead of failing,
       // and the app shows "Auth Required" rather than a stale "Connected"
       this.disconnectBroker(brokerId)

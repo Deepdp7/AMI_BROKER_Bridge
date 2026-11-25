@@ -40,6 +40,19 @@ export function setVerifiedThroughMs(ticker: string, ms: number) {
   verifiedFile.schedule()
 }
 
+/**
+ * Moves the watermark back to `ms` when it is later (bars after it are not trusted any more: they could not be
+ * written). The next gap pass then scans from there. Unlike clearVerifiedThrough it keeps the history floor, so
+ * nothing older is asked for again.
+ */
+export function lowerVerifiedThroughMs(ticker: string, ms: number) {
+  const current = verifiedThrough.get(ticker)
+  if (current === undefined || current <= ms) return
+  if (ms > 0) verifiedThrough.set(ticker, ms)
+  else verifiedThrough.delete(ticker)
+  verifiedFile.schedule()
+}
+
 /** Forget the watermark (symbol deleted, or user forces a full re-download). */
 export function clearVerifiedThrough(ticker?: string) {
   if (ticker) verifiedThrough.delete(ticker)
