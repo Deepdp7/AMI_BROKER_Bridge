@@ -6,7 +6,7 @@
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
-import { perf } from '../../system/perf'
+import { DebouncedFile } from '../../lib/DebouncedFile'
 
 const DATA_DIR = path.join(os.homedir(), 'AppData', 'Roaming', 'DataBridgePro')
 const STATE_FILE = path.join(DATA_DIR, 'backfill_state.json')
@@ -48,14 +48,12 @@ class PersistedSet extends Set<string> {
     }
   }
 
+  // Saved in the background, 500 ms after the last change (see DebouncedFile): a catch-up or an
+  // import changes this once per symbol, and each change used to rewrite the whole file on the spot
+  private file = new DebouncedFile(STATE_FILE, () => JSON.stringify(Array.from(this)), 'BackfillState')
+
   private save() {
-    try {
-      if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
-      fs.writeFileSync(STATE_FILE, JSON.stringify(Array.from(this)), 'utf8')
-      perf.count('catchup.state_writes')
-    } catch (err) {
-      console.error('[BackfillState] Failed to save state:', err)
-    }
+    this.file.schedule()
   }
 }
 

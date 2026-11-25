@@ -9,13 +9,12 @@
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
-import { perf } from '../../system/perf'
+import { DebouncedFile } from '../../lib/DebouncedFile'
 
 const DATA_DIR = path.join(os.homedir(), 'AppData', 'Roaming', 'DataBridgePro')
 const STATE_FILE = path.join(DATA_DIR, 'coverage_state.json')
 
 const verifiedThrough = new Map<string, number>()
-let saveTimer: NodeJS.Timeout | null = null
 
 try {
   if (fs.existsSync(STATE_FILE)) {
@@ -28,22 +27,8 @@ try {
   console.error('[CoverageState] Failed to load state:', err)
 }
 
-function saveNow() {
-  if (saveTimer) { clearTimeout(saveTimer); saveTimer = null }
-  try {
-    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
-    fs.writeFileSync(STATE_FILE, JSON.stringify(Object.fromEntries(verifiedThrough)), 'utf8')
-    perf.count('catchup.state_writes')
-  } catch (err) {
-    console.error('[CoverageState] Failed to save state:', err)
-  }
-}
-
-// Debounced: a startup pass can advance hundreds of tickers within a second
-function scheduleSave() {
-  if (saveTimer) return
-  saveTimer = setTimeout(saveNow, 1000)
-}
+// Saved in the background (see DebouncedFile): a startup pass can advance hundreds of tickers within a second
+const verifiedFile = new DebouncedFile(STATE_FILE, () => JSON.stringify(Object.fromEntries(verifiedThrough)), 'CoverageState')
 
 export function getVerifiedThroughMs(ticker: string): number | undefined {
   return verifiedThrough.get(ticker)
@@ -52,14 +37,14 @@ export function getVerifiedThroughMs(ticker: string): number | undefined {
 export function setVerifiedThroughMs(ticker: string, ms: number) {
   if ((verifiedThrough.get(ticker) ?? 0) >= ms) return
   verifiedThrough.set(ticker, ms)
-  scheduleSave()
+  verifiedFile.schedule()
 }
 
 /** Forget the watermark (symbol deleted, or user forces a full re-download). */
 export function clearVerifiedThrough(ticker?: string) {
   if (ticker) verifiedThrough.delete(ticker)
   else verifiedThrough.clear()
-  saveNow()
+  verifiedFile.schedule()
   clearHistoryFloor(ticker)
 }
 
@@ -83,20 +68,16 @@ export function getHistoryFloorMs(ticker: string): number | undefined {
   return historyFloor.get(ticker)
 }
 
+const floorFile = new DebouncedFile(FLOOR_FILE, () => JSON.stringify(Object.fromEntries(historyFloor)), 'CoverageState')
+
 export function setHistoryFloorMs(ticker: string, ms: number) {
   if ((historyFloor.get(ticker) ?? Infinity) <= ms) return
   historyFloor.set(ticker, ms)
-  try {
-    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
-    fs.writeFileSync(FLOOR_FILE, JSON.stringify(Object.fromEntries(historyFloor)), 'utf8')
-    perf.count('catchup.state_writes')
-  } catch (err) {
-    console.error('[CoverageState] Failed to save history floor:', err)
-  }
+  floorFile.schedule()
 }
 
 function clearHistoryFloor(ticker?: string) {
   if (ticker) historyFloor.delete(ticker)
   else historyFloor.clear()
-  try { fs.writeFileSync(FLOOR_FILE, JSON.stringify(Object.fromEntries(historyFloor)), 'utf8'); perf.count('catchup.state_writes') } catch {}
+  floorFile.schedule()
 }

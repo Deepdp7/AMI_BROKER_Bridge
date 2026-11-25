@@ -41,6 +41,8 @@ export function fyersCategory(exchange: string, code: number, id: string): Instr
 // end). Shared by every caller (backfill workers, auto-refresh, daily history, startup fetches).
 const historyLimiter = new RateLimiter(3, 45, undefined, 'fyers')
 let dailyLimitLoggedFor = 0
+/** One history request, from sending it to the last byte of the answer */
+const HISTORY_REQUEST_TIMEOUT_MS = 60_000
 
 /**
  * Waits for a data request's turn: the per-second and per-minute pacing and, on the Standard
@@ -681,18 +683,24 @@ export class FyersAdapter extends EventEmitter implements IBrokerAdapter {
 
     try {
       const controller = new AbortController()
-      // 100-day 1-minute chunks are ~25k candles; give them time to arrive
-      const timeout = setTimeout(() => controller.abort(), 30000)
+      // 100-day 1-minute chunks are ~25k candles (1-2 MB) and may take a while to arrive. The
+      // deadline covers the whole answer, body included: it used to be cleared once the headers came,
+      // and a body that stalled after that held a download slot for minutes
+      const timeout = setTimeout(() => controller.abort(), HISTORY_REQUEST_TIMEOUT_MS)
 
-      const res = await fetch(url, {
-        headers: {
-          'Authorization': `${this.appId}:${this.accessToken}`
-        },
-        signal: controller.signal
-      })
-      clearTimeout(timeout)
-      
-      const text = await res.text()
+      let res: Response
+      let text: string
+      try {
+        res = await fetch(url, {
+          headers: {
+            'Authorization': `${this.appId}:${this.accessToken}`
+          },
+          signal: controller.signal
+        })
+        text = await res.text()
+      } finally {
+        clearTimeout(timeout)
+      }
       const parseStartedAt = performance.now()
       let data: any
       try {

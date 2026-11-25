@@ -106,15 +106,15 @@ Machine: Intel Core Ultra 9 275HX, 24 threads, 31 GB RAM, Windows 10.0.26300, No
 
 | Metric | p50 | p95 | p99 | max | after Stage 1 | after Stage 2 | after Stage 3 | after Stage 4 | final |
 |---|---|---|---|---|---|---|---|---|---|
-| loop.lag_ms | 0.143 | 0.306 | 0.655 | 2.00 | | | | | |
-| tick.rx_to_feed_ms | 0.05 (floor) | 0.05 | 0.05 | 0.16 | | | | | |
-| tick.feed_to_ipc_ms | 0.055 | 0.143 | 0.230 | 2.50 | | | | | |
-| fake-plugin transit ms (1 ms clock) | 0.05 | - | 1.06 | 2.0 | | | | | |
-| ipc.writes/s | 62 (1,979 lines/s) | | | | | | | | |
-| db.live_flush_ms (every 2 s) | 0.87 | 1.8 | 1.8 | 1.8 | | | | | |
-| CPU % (engine, of one core) | 2.2 | | | | | | | | |
-| RSS peak MB | 184 | | | | | | | | |
-| integrity mismatches | 0 (1,500 bars, 78,007 updates) | | | | | | | | |
+| loop.lag_ms | 0.143 | 0.306 | 0.655 | 2.00 | 0.118 / 0.448 / 1.83 | | | | |
+| tick.rx_to_feed_ms | 0.05 (floor) | 0.05 | 0.05 | 0.16 | 0.05 / 0.05 / 0.14 | | | | |
+| tick.feed_to_ipc_ms | 0.055 | 0.143 | 0.230 | 2.50 | 0.067 / 0.278 / 2.32 | | | | |
+| fake-plugin transit ms (1 ms clock) | 0.05 | - | 1.06 | 2.0 | 0.05 / 1.06 / 2.0 | | | | |
+| ipc.writes/s | 62 (1,979 lines/s) | | | | 63 (1,975 lines/s) | | | | |
+| db.live_flush_ms (every 2 s) | 0.87 | 1.8 | 1.8 | 1.8 | 1.6 (one sample: 60 s run) | | | | |
+| CPU % (engine, of one core) | 2.2 | | | | 3.4 (a 60 s run: start-up counts for more than in 180 s) | | | | |
+| RSS peak MB | 184 | | | | 184 | | | | |
+| integrity mismatches | 0 (1,500 bars, 78,007 updates) | | | | 0 (1,000 bars, 63,000 updates) | | | | |
 
 ### `live500_backfill` (plus 50 symbols × 365 days)
 
@@ -131,6 +131,8 @@ Machine: Intel Core Ultra 9 275HX, 24 threads, 31 GB RAM, Windows 10.0.26300, No
 | catch-up bytes per symbol | mean 3.4 MB, max 10.6 MB (582 symbols) | | | | | | | |
 | CPU % (engine, of one core) / RSS peak | 111 / 1,944 MB | | | | | | | |
 | integrity mismatches | 0 (1,500 bars, 93,068 updates) | | | | | | | |
+
+**After Stage 1** (a second 91 s run, same scenario): loop.lag_ms p50 / p99 / max 0.60 / 242 / 299 ms; tick.feed_to_ipc_ms 0.49 / 181 / 290 ms; backfill.chunk_cpu_ms 35.9 / 57.8 / 61.2 ms; 906 chunks, 0 failed history requests; integrity 0 mismatches (1,000 bars, 92,998 updates). Stage 1 does not touch this path, so this run differs from the baseline only by run-to-run variation (the two baseline runs of this scenario also differ, p99 lag 242-266 ms). The one number Stage 1 is meant to move: `catchup.state_writes` was 476 and 597 in the two baseline runs and is **205** now (2.3 a second). Since Stage 1 they are background writes, at most one per file every 500 ms, not whole-file writes on the engine's thread at every change.
 
 Read it against live500 above: the same 500 symbols and the same updates, and the loop lag goes from p99 0.66 ms to **266 ms**, and the time from a bar being ready to its write on AmiBroker's channel from p99 0.23 ms to **242 ms** (max 340 ms). Each history chunk holds the engine's one thread for 36 ms (median; 64 ms at p99), of which the database save is 20 ms. At 10 chunks a second that is about a third of the thread, in blocks. The loop lag is larger than any single chunk (up to 315 ms) because the catch-up answers are also built on that thread: the plugin asks for "from the announced start up to now", about 3.4 MB per symbol on average (P5), and `/api/feed/bars` re-filters those on the main thread (P14).
 

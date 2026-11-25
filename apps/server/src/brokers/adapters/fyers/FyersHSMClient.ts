@@ -17,6 +17,29 @@ function isMarketOpen() {
 import WebSocket from 'ws'
 import { EventEmitter } from 'events'
 import { perf } from '../../../system/perf'
+import { isMarketSession } from '../../../market/MarketCalendar'
+
+/**
+ * Wait before reconnect attempt `attempt` (1 = the first): 5 s growing by half each time, never
+ * more than 30 s, spread +-20% so clients that lost the same network don't all return at once.
+ * There is no last attempt: a feed that stops reconnecting after a few minutes of network trouble
+ * stays dead until someone restarts the app.
+ */
+export function reconnectDelayMs(attempt: number, random = Math.random()): number {
+  return Math.min(5000 * Math.pow(1.5, attempt - 1), 30_000) * (0.8 + 0.4 * random)
+}
+
+/**
+ * How long the live socket may stay silent before it is declared dead. Once Fyers has answered a
+ * ping, an answer or any message within 30 s proves it is alive (it is asked every 15 s). If it
+ * never answers pings, only data can prove it: during the session a minute without any is too long
+ * (other brokers' feeds give up after 30-70 s); outside it the market is simply quiet, so wait 5 min.
+ */
+export function silenceLimitMs(pongsAnswered: boolean, sessionOpen: boolean): number {
+  return pongsAnswered ? 30_000 : sessionOpen ? 60_000 : 300_000
+}
+
+const WATCHDOG_EVERY_MS = 15_000
 
 /**
  * Fyers' answer to the live-feed login (message type 1):
@@ -121,6 +144,7 @@ export class FyersHSMClient extends EventEmitter {
   private pingsWithoutPong = 0
   private lastPingAt = 0
   private pongSeen = false
+  private lastPongAt = 0
   private noPongLogged = false
 
   private tickQueue: HSMMappedTick[] = []
@@ -138,10 +162,14 @@ export class FyersHSMClient extends EventEmitter {
   private reconnectAttempts = 0
   /** Logins Fyers refused in a row (see onAuthRefused) */
   private authRefusals = 0
+  /** True until a login is taken, and again after each drop is reported: 'disconnected' goes out once per drop, and only for a feed that was up */
+  private dropReported = true
 
-  constructor(accessToken: string) {
+  /** `opts.url` points the client at another server (tests) */
+  constructor(accessToken: string, opts: { url?: string } = {}) {
     super()
     this.accessToken = accessToken
+    if (opts.url) this.hsmUrl = opts.url
 
             this.statsTimer = setInterval(() => {
       if (!this.authenticated) return
@@ -222,7 +250,6 @@ export class FyersHSMClient extends EventEmitter {
 
     this.ws.on('open', () => {
       this.isConnecting = false
-      this.reconnectAttempts = 0
       this.emitLog('info', '[FYERS_HSM_CONNECT] Connected.')
       this.emitLog('info', '[FYERS_HSM_STATUS] connected')
       this.authenticate()
@@ -240,6 +267,7 @@ export class FyersHSMClient extends EventEmitter {
       this.isConnecting = false
       this.authenticated = false
       this.stopPingProbe()
+      this.reportDrop()
       // Into the stored log too: only printing it hid why the feed kept dropping
       this.emitLog('warn', `[FYERS_HSM_CONNECT] Disconnected (code ${code}${reason?.length ? `, "${reason.toString()}"` : ''}). Reconnecting...`)
       
@@ -289,11 +317,7 @@ export class FyersHSMClient extends EventEmitter {
       this.reconnectTimer = null
     }
     this.reconnectAttempts++
-    if (this.reconnectAttempts > 10) {
-      this.emitLog('error', 'Max reconnect attempts reached.')
-      return
-    }
-    const delay = Math.min(5000 * Math.pow(1.5, this.reconnectAttempts - 1), 60000)
+    const delay = reconnectDelayMs(this.reconnectAttempts)
     this.reconnectTimer = setTimeout(() => {
       this.reconnectTimer = null
       this.connect()
@@ -348,7 +372,7 @@ export class FyersHSMClient extends EventEmitter {
       this.emitLog('info', `[FYERS_HSM_STATUS] queued ${dbTickers.length} symbols pending auth.`)
       
       // Auto-connect if socket was halted due to 0 subscriptions
-      if (!this.isConnecting && !this.ws) {
+      if (!this.isConnecting && !this.reconnectTimer && (!this.ws || this.ws.readyState !== WebSocket.OPEN)) {
         this.connect()
       }
       return
@@ -504,10 +528,12 @@ export class FyersHSMClient extends EventEmitter {
         return
       }
       this.authRefusals = 0
+      this.reconnectAttempts = 0   // a taken login, not just an open socket, ends the backoff
       this.emitLog('info', '[FYERS_HSM_AUTH] Auth successful.')
       this.emitLog('info', '[FYERS_HSM_STATUS] authenticated')
       this.authenticated = true
       this.startPingProbe()
+      this.dropReported = false
       this.emit('connected')
       if (this.pendingSubscriptions.size > 0) {
         const toSub = Array.from(this.pendingSubscriptions)
@@ -536,6 +562,7 @@ export class FyersHSMClient extends EventEmitter {
     this.isConnecting = false
     if (ws) { ws.removeAllListeners(); try { ws.close() } catch { /* already closed */ } }
     this.activeSubscriptions.forEach(t => this.pendingSubscriptions.add(t))
+    this.reportDrop()
     if (this.authRefusals >= 2) {
       this.stopWatchdog()
       this.emitLog('error', '[FYERS_HSM_AUTH] Live prices stopped: log in to Fyers again in Broker Connection (history downloads use the same login).')
@@ -777,24 +804,43 @@ export class FyersHSMClient extends EventEmitter {
   private startWatchdog() {
     if (this.watchdogTimer) clearInterval(this.watchdogTimer)
     this.lastMessageTime = Date.now()
-    this.watchdogTimer = setInterval(() => {
-      const inactive = Date.now() - this.lastMessageTime
-      if (this.authenticated && inactive > 300000) { // 5 minutes
-        console.log('[FYERS_HSM_CONNECT] No data for 5 minutes (Market is likely closed), forcing socket close for reconnect...')
-        this.authenticated = false
-        this.isConnecting = false
-        if (this.ws) {
-          this.ws.removeAllListeners()
-          const oldWs = this.ws
-          this.ws = null
-          try { oldWs.terminate() } catch {}
-          
-          // Re-queue active subscriptions manually since we removed listeners
-          this.activeSubscriptions.forEach(t => this.pendingSubscriptions.add(t))
-        }
-        this.triggerReconnect()
-      }
-    }, 60000) // check every 60 seconds
+    this.watchdogTimer = setInterval(() => this.checkSocketAlive(), WATCHDOG_EVERY_MS)
+  }
+
+  /**
+   * A half-open connection (Wi-Fi switch, sleep and wake, a NAT dropping the mapping) gives no
+   * error, only silence. Declares the socket dead once it has been silent for silenceLimitMs and
+   * reconnects. Returns true when it did.
+   */
+  private checkSocketAlive(now = Date.now()): boolean {
+    if (!this.authenticated) return false
+    const heardAt = this.pongSeen ? Math.max(this.lastMessageTime, this.lastPongAt) : this.lastMessageTime
+    const sessionOpen = isMarketSession(now, 'NSE') || isMarketSession(now, 'MCX')
+    const silentMs = now - heardAt
+    if (silentMs <= silenceLimitMs(this.pongSeen, sessionOpen)) return false
+
+    this.emitLog('warn', `[FYERS_HSM_CONNECT] Nothing heard for ${Math.round(silentMs / 1000)} s${this.pongSeen ? ' (pings unanswered too)' : ''}${sessionOpen ? '' : ' (the market is likely closed)'}: closing the socket to reconnect...`)
+    this.authenticated = false
+    this.isConnecting = false
+    if (this.ws) {
+      this.ws.removeAllListeners()
+      const oldWs = this.ws
+      this.ws = null
+      try { oldWs.terminate() } catch {}
+
+      // Re-queue active subscriptions manually since we removed listeners
+      this.activeSubscriptions.forEach(t => this.pendingSubscriptions.add(t))
+    }
+    this.reportDrop()
+    this.triggerReconnect()
+    return true
+  }
+
+  /** Tells the adapter the live feed went down, once per drop (it then notes the time, so the minutes missed get fetched after the feed is back) */
+  private reportDrop() {
+    if (this.dropReported) return
+    this.dropReported = true
+    this.emit('disconnected')
   }
 
   private stopWatchdog() {
@@ -828,6 +874,7 @@ export class FyersHSMClient extends EventEmitter {
 
   private onPong() {
     this.pingsWithoutPong = 0
+    this.lastPongAt = Date.now()
     perf.count('fyers.pongs')
     perf.record('fyers.pong_rtt_ms', performance.now() - this.lastPingAt)
     if (!this.pongSeen) {

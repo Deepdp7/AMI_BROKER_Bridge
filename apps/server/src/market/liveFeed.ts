@@ -66,6 +66,8 @@ const CLOCK_SAMPLES = 300
 /** The PC clock this far off the exchange's is worth a line in the log */
 const CLOCK_WARN_MS = 30_000
 const IST_MS = 19_800_000
+/** os.cpus() reads every CPU's details from Windows (the stats ask once a second): the count never changes */
+const CORES = Math.max(1, os.availableParallelism())
 const DAY_MS = 86_400_000
 /** Exchanges on NSE's fixed 09:15-15:30 day. MCX and CDS are left alone: their evening close moves with US daylight saving */
 const FIXED_SESSION = new Set(['NSE', 'BSE', 'NFO', 'BFO'])
@@ -604,8 +606,7 @@ export class LiveFeed extends EventEmitter {
     const now = Date.now()
     if (now - this.cpuMark.at >= 900) {
       const used = process.cpuUsage(this.cpuMark.usage)   // microseconds since the mark
-      const cores = Math.max(1, os.cpus().length)
-      this.lastCpu = ((used.user + used.system) / 1000) / ((now - this.cpuMark.at) * cores) * 100
+      this.lastCpu = ((used.user + used.system) / 1000) / ((now - this.cpuMark.at) * CORES) * 100
       this.lastRate = (this.msgCount - this.rateMark.count) / ((now - this.rateMark.at) / 1000)
       this.cpuMark = { at: now, usage: process.cpuUsage() }
       this.rateMark = { at: now, count: this.msgCount }

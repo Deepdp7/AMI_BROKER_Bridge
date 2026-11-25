@@ -41,6 +41,52 @@ One entry per stage, newest at the top. An entry is written when its stage is fi
 - No source files were changed.
 - Next: Stage 0 (instrumentation and baseline harness).
 
+## Stage 1: critical bug fixes (2026-11-25)
+
+**Findings addressed:** B1, B2, B3, B4, P8, P9 (verified against the code at `6a3c451` first: all as described, only line numbers had moved).
+**Discrepancies found while verifying:** none. Two small implementation choices, below.
+
+**Changes**
+- `FyersHSMClient.ts`:
+  - B1: no limit on reconnect attempts. The wait is 5 s growing by half each time, never over 30 s, spread +-20% (`reconnectDelayMs`). A symbol added while the socket is closed now starts a connection (it only did when no socket object existed at all, which is never after a drop).
+  - B2: the silence check runs every 15 s (was 60 s). Limit: 30 s once Fyers has answered a ping (an answer or a message counts), otherwise 60 s during the NSE or MCX session and 5 min outside it (`silenceLimitMs`, `checkSocketAlive`).
+  - B3: emits `disconnected` once per drop (socket closed, login refused, silence), and only for a feed that had logged in, so `BrokerLifecycle` queues the catch-up 150 s after it returns. The adapter already mapped the event; nothing emitted it.
+  - Constructor takes `{ url }` (tests).
+- `FyersAdapter.getHistoricalBars` (B4): the abort timer is now 60 s and stays armed until the whole body has been read (it was 30 s and cleared when the headers arrived). `history.parse_ms` kept. No other adapter has the pattern: all use `AbortSignal.timeout`, which covers the body.
+- `lib/DebouncedFile.ts` (new), `market/state/backfillState.ts`, `market/state/coverageState.ts` (P8): the three state files are saved in the background, 500 ms after the last change, through a .part file renamed over the real one (written in place if the rename is refused); anything pending is written when the engine exits. `catchup.state_writes` counts real writes.
+- `liveFeed.ts` (P9): the CPU count is read once (`os.availableParallelism()`), not by `os.cpus()` every second.
+
+**Two choices the roadmap left open**
+- The reconnect backoff resets when a login is taken, not when the socket opens. Resetting on open meant a server that accepts the socket and then drops it (the 2026-10-29 loop) was retried every 5 s for ever.
+- `disconnected` is not sent for a feed that never logged in: its first failure is not a "drop", and the catch-up after it would only repeat the one `activateBroker` already queued.
+
+**Checks**
+- `npm run typecheck --prefix apps/server`: pass.
+- `npm test --prefix apps/server`: 383 passed, 2 failed (the same 2 as before: noren and upstoxAngel). 17 new tests in `tests/fyersResilience.test.ts` and `tests/stateFiles.test.ts`; the existing Fyers, backfill and live feed tests pass unchanged.
+- `npm run typecheck --prefix apps/desktop`: pass. `npm test --prefix apps/desktop`: 136 of 136 passed (not touched).
+- Plugin: not changed, not rebuilt.
+- The two behaviour tests (no reconnect limit, body deadline) were run against the old code and fail there.
+- Harness: integrity 0 mismatches in live500 and live500_backfill.
+
+**Before to after**
+| Metric | Before | After |
+|---|---|---|
+| Fyers reconnect | stops after 10 attempts (~6 min) | never stops (30 s ceiling) |
+| Dead Fyers socket noticed | 5-6 min | 30-60 s in the session (unit test; needs a market day to see on the live feed) |
+| Catch-up after a Fyers drop | never started (no event) | 150 s after the feed returns (test of the whole chain) |
+| Stalled history body | held a slot ~5 min | given up at 60 s |
+| `catchup.state_writes` in live500_backfill (91 s) | 476 and 597 whole-file writes on the engine's thread | 205 background writes |
+| live500 and live500_backfill tick delay, loop lag | see baseline | the same within run-to-run variation (not a target of this stage) |
+
+**Not done / follow-ups**
+- **R7 is still open** (does Fyers answer pings?). It needs a market day: with the Stage 0 build, look for `[FYERS_HSM] server answers pings` or `no pong after 3 pings` in the log. Until then B2 works either way: 30 s if it answers, otherwise 60 s of silence in the session. If it does not answer and a client tracks few, quiet symbols, a 60 s silence in the session would reconnect needlessly (about every minute, harmless but noisy); the log line says why.
+- The Fyers login request (`validate-authcode`, `FyersAdapter.ts:229`) has no timeout. Not part of this stage.
+- The harness does not exercise the state files (import500 never calls them: baseline 0 writes); the stage's evidence for P8 is the unit test (500 changes, 1 write) and the counter in live500_backfill.
+
+**For the user**
+- Nothing to install: the plugin is unchanged. The engine fixes need the rebuilt engine (`npm run build:server`) or `npm run dev`.
+- On the next market day, check the log for the two ping lines above and tell me which appears.
+
 ## Stage 0: instrumentation and baseline (2026-11-25)
 
 **Findings addressed:** C2 and R1-R7 (measurement only; no behaviour changed).
