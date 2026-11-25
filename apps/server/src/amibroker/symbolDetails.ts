@@ -12,12 +12,20 @@
  * have yet, only while AmiBroker runs with the plugin connected, because COM would otherwise
  * start a hidden AmiBroker. That is when AmiBroker connects, when symbols are added, and once a
  * day after the new lists are out. Only values that differ are written.
+ *
+ * Every call into AmiBroker's objects is served by AmiBroker's own interface thread: reading the
+ * five values of 438 symbols is about 2,000 of them, each time AmiBroker connects. So what was sent
+ * last is kept (symbol-details.last.json), and a push on connect or after symbols were added sends
+ * only the lines that differ from it, usually none. The daily push sends everything (it also covers
+ * an AmiBroker database that was switched or emptied), and waits for the market to be closed.
  */
 import fs from 'fs'
 import path from 'path'
 import { execFile } from 'child_process'
 import { stmts, DATA_DIR } from '../db'
 import { brokerManager } from '../brokers/BrokerManager'
+import { isMarketSession } from '../market/MarketCalendar'
+import { perf } from '../system/perf'
 import { BROKERS } from '../brokers/brokerAuth'
 import type { IBrokerAdapter, InstrumentDetails } from '../brokers/adapters/IBrokerAdapter'
 
@@ -135,36 +143,83 @@ foreach ($line in [System.IO.File]::ReadAllLines($Path, [System.Text.Encoding]::
 "DONE $total $added $changed $failed"
 `
 
+/** Why a push happens: AmiBroker connected, symbols were added, or the daily one (everything, before the market) */
+export type PushReason = 'connect' | 'added' | 'daily'
+
 let isAmiBrokerConnected: () => boolean = () => false
 let pushTimer: NodeJS.Timeout | null = null
+let pendingReason: PushReason = 'connect'
 let running: Promise<void> | null = null
-let again = false
-let lastPushMs = 0
+let again: PushReason | null = null
 
-/** Writes the details of every tracked symbol into the running AmiBroker */
-export async function pushSymbolDetails(): Promise<void> {
-  if (running) { again = true; return running }
+/** What was sent last: each ticker's line, and when everything was last sent */
+interface LastPush { fullAt: number; lines: Record<string, string> }
+const lastFile = () => path.join(DATA_DIR, 'amibroker', 'symbol-details.last.json')
+
+async function readLastPush(): Promise<LastPush | null> {
+  try {
+    const v = JSON.parse(await fs.promises.readFile(lastFile(), 'utf8'))
+    if (v && typeof v.fullAt === 'number' && v.lines && typeof v.lines === 'object') return v
+  } catch { /* none yet, or not readable: everything is sent */ }
+  return null
+}
+
+/** ticker -> its line, as sent */
+export function lineByTicker(rows: SymbolDetails[]): Map<string, string> {
+  return new Map(rows.map(r => [r.ticker, symbolDetailsLines([r])]))
+}
+
+/**
+ * The lines to send: all of them for the daily push (or when nothing was sent before, or DATABRIDGE_SYMBOL_PUSH=full),
+ * otherwise those that are new or differ from what was sent last
+ */
+export function linesToPush(now: Map<string, string>, last: LastPush | null, reason: PushReason): { lines: string[]; full: boolean } {
+  const full = reason === 'daily' || !last || process.env.DATABRIDGE_SYMBOL_PUSH === 'full'
+  const lines = [...now].filter(([t, line]) => full || last!.lines[t] !== line).map(([, line]) => line)
+  return { lines, full }
+}
+
+/** Writes the details of the tracked symbols into the running AmiBroker (all of them for 'daily', else only what changed) */
+export async function pushSymbolDetails(reason: PushReason = 'connect'): Promise<void> {
+  if (running) { again = again === 'daily' || reason === 'daily' ? 'daily' : reason; return running }
   running = (async () => {
     try {
       if (!isAmiBrokerConnected()) return
       cache = null // lists may be newer (the daily push), symbols just added
       const rows = await symbolDetailsCached()
       if (!rows.length) return
+      const now = lineByTicker(rows)
+      const last = await readLastPush()
+      const { lines, full } = linesToPush(now, last, reason)
+      if (!lines.length) {
+        console.log(`[SymbolDetails] AmiBroker's symbol list is up to date (${now.size} symbols unchanged since the last time), nothing sent`)
+        return
+      }
       const dir = path.join(DATA_DIR, 'amibroker')
       await fs.promises.mkdir(dir, { recursive: true })
       const script = path.join(dir, 'symbol-details.ps1')
       const data = path.join(dir, 'symbol-details.tsv')
       await fs.promises.writeFile(script, PS_SCRIPT)
-      await fs.promises.writeFile(data, symbolDetailsLines(rows))
+      await fs.promises.writeFile(data, lines.join('\n'))
+      const startedAt = performance.now()
       const result = await new Promise<string>(resolve => {
         execFile('powershell.exe', ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', script, data],
           { windowsHide: true, timeout: 120_000 }, (err, stdout) => resolve(err ? `ERROR ${err.message}` : String(stdout).trim()))
       })
-      lastPushMs = Date.now()
+      const ms = performance.now() - startedAt
       const done = result.match(/DONE (\d+) (\d+) (\d+) (\d+)/)
       if (done) {
         const [, total, added, changed, failed] = done
-        console.log(`[SymbolDetails] Lot size, tick size and name sent to AmiBroker: ${total} symbols, ${added} added, ${changed} updated${failed !== '0' ? `, ${failed} failed` : ''}`)
+        perf.record('symbols.push_ms', ms)
+        perf.count('symbols.pushed', Number(total))
+        console.log(`[SymbolDetails] Lot size, tick size and name sent to AmiBroker (${reason}): ${total} of ${now.size} symbols${full ? '' : ' (the rest unchanged)'}, ${added} added, ${changed} updated${failed !== '0' ? `, ${failed} failed` : ''}, in ${(ms / 1000).toFixed(1)} s`)
+        if (failed === '0') {
+          // What AmiBroker holds now: every line (those that differed went in, the others were already equal)
+          await fs.promises.writeFile(lastFile(), JSON.stringify({ fullAt: full ? Date.now() : (last?.fullAt ?? 0), lines: Object.fromEntries(now) }))
+        } else {
+          // Some lines did not go in: forgotten, so the next push sends everything again
+          await fs.promises.rm(lastFile(), { force: true })
+        }
       } else if (result.startsWith('NOT_RUNNING')) {
         // Closed in the meantime: sent again when it connects
       } else {
@@ -175,15 +230,16 @@ export async function pushSymbolDetails(): Promise<void> {
     }
   })().finally(() => {
     running = null
-    if (again) { again = false; schedulePush(0) }
+    if (again) { const r = again; again = null; schedulePush(0, r) }
   })
   return running
 }
 
-/** Pushes after `delayMs` (calls in the meantime are folded into one push) */
-export function schedulePush(delayMs = 3000) {
+/** Pushes after `delayMs` (calls in the meantime are folded into one push; a daily one is not downgraded) */
+export function schedulePush(delayMs = 3000, reason: PushReason = 'connect') {
   if (pushTimer) clearTimeout(pushTimer)
-  pushTimer = setTimeout(() => { pushTimer = null; void pushSymbolDetails() }, delayMs)
+  pendingReason = pendingReason === 'daily' || reason === 'daily' ? 'daily' : reason
+  pushTimer = setTimeout(() => { pushTimer = null; const r = pendingReason; pendingReason = 'connect'; void pushSymbolDetails(r) }, delayMs)
   pushTimer.unref?.()
 }
 
@@ -194,10 +250,17 @@ export function dailyPushDue(lastMs: number, nowMs = Date.now()): boolean {
   return nowMs >= todayAt && lastMs < todayAt
 }
 
+/** The exchanges' sessions: the daily push (some thousand calls into AmiBroker) is not made while one is open */
+const marketOpen = (nowMs: number) => isMarketSession(nowMs, 'NSE') || isMarketSession(nowMs, 'MCX')
+
 /** Starts the daily refresh; `connected` says whether AmiBroker's plugin is connected now */
 export function startSymbolDetailsSync(connected: () => boolean) {
   isAmiBrokerConnected = connected
-  setInterval(() => {
-    if (connected() && lastPushMs && dailyPushDue(lastPushMs)) schedulePush(0)
+  setInterval(async () => {
+    try {
+      if (!connected() || marketOpen(Date.now())) return
+      const last = await readLastPush()
+      if (dailyPushDue(last?.fullAt ?? 0)) schedulePush(0, 'daily')
+    } catch { /* tried again in 15 minutes */ }
   }, 15 * 60_000).unref()
 }

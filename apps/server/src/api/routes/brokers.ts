@@ -9,7 +9,7 @@ import { backfilledTickers } from '../../market/state/backfillState'
 import { clearVerifiedThrough } from '../../market/state/coverageState'
 import { backfillQueue } from '../../market/BackfillQueue'
 import { pendingLogins, activateBroker, loginDirect } from '../../brokers/BrokerLifecycle'
-import { addSymbolsToBroker } from '../../brokers/addSymbols'
+import { addSymbolsToBroker, type NewSymbol } from '../../brokers/addSymbols'
 import { brokerLoginUrl, LOGIN_BROKERS, BROKERS, isDirectLogin } from '../../brokers/brokerAuth'
 import type { BrokerAccount } from '../../types'
 import { forgetDailyFloor } from '../../market/DailyHistory'
@@ -487,7 +487,7 @@ router.get('/:id/master/status', (req, res) => {
 const UNSAFE_TICKER = /['"`;$|<>(){}\\%\r\n]/
 
 // POST /api/brokers/:id/symbols/import — Bulk import symbols from CSV text
-router.post('/:id/symbols/import', (req, res) => {
+router.post('/:id/symbols/import', async (req, res) => {
   try {
     const { id } = req.params
     const { csv } = req.body as { csv: string }
@@ -497,10 +497,8 @@ router.post('/:id/symbols/import', (req, res) => {
     if (!broker) return res.status(404).json({ error: 'Broker not found' })
 
     const lines = csv.split('\n').map((l: string) => l.trim()).filter((l: string) => l && !l.startsWith('ticker') && !l.startsWith('#'))
-    const now = Date.now()
-    let added = 0
     const errors: string[] = []
-    const addedTickers: string[] = []
+    const accepted: NewSymbol[] = []
 
     for (const line of lines) {
       try {
@@ -508,7 +506,7 @@ router.post('/:id/symbols/import', (req, res) => {
         const ticker = (parts[0] || '').trim().toUpperCase()
         const exchange = (parts[1] || 'NSE').trim().toUpperCase()
         const instrumentType = (parts[2] || 'EQ').trim().toUpperCase()
-        
+
         // Reject garbage symbols from AmiBroker AFLs and comments
         if (!ticker || ticker.length < 2) continue
         if (ticker === 'NAME' || ticker === 'TICKER' || ticker.startsWith('//')) continue
@@ -518,32 +516,16 @@ router.post('/:id/symbols/import', (req, res) => {
           errors.push(`Skipped "${ticker.slice(0, 30)}": it has characters that are not allowed in a symbol`)
           continue
         }
-
-        stmts.insertSymbol.run({
-          broker_id: id,
-          instrument_id: ticker,
-          amibroker_ticker: ticker,
-          exchange,
-          instrument_type: instrumentType,
-          raw_symbol: ticker,
-          created_at: now,
-        })
-        liveFeed.addSymbolByTicker(ticker, id, exchange, instrumentType, ticker)
-        brokerManager.subscribe(id, [ticker])
-        const settings = getAllSettings() as any
-        const backfillDepth = Number(settings?.backfillDepthDays) || 365
-        backfillQueue.allowHistory([ticker]) // added again after a cancel
-        backfillQueue.enqueue(ticker, id, ticker, backfillDepth)
-        backfilledTickers.delete(ticker) // ensure fresh fetch
-        addedTickers.push(ticker)
-        added++
+        accepted.push({ ticker, instrumentId: ticker, exchange, instrumentType })
       } catch (e: any) {
         errors.push(e.message)
       }
     }
 
-    // Into AmiBroker's symbol list, with lot size, tick size and name (when it is running)
-    if (addedTickers.length > 0) pushSymbolDetailsSoon()
+    // Saved, subscribed, history queued and sent to AmiBroker in one pass. The file has no broker names: the
+    // ticker is stored as the name, as before (nothing is looked up)
+    const { added } = await addSymbolsToBroker(id, accepted, { resolve: false })
+    for (const s of accepted) backfilledTickers.delete(s.ticker) // ensure fresh fetch
 
     res.json({ added, total: lines.length, errors })
   } catch (e) {

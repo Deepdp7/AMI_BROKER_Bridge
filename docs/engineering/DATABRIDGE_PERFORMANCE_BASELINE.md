@@ -214,13 +214,19 @@ The 9.4 M-row database is about one fifth the size of a client's (500 symbols x 
 
 | Metric | Baseline | after 5a |
 |---|---|---|
-| total time s | 0.06 (500 symbols, downloads held back) | |
-| loop.lag_ms max during import | 25 | |
-| state-file writes | 0 | |
-| subscribe calls | 500 | |
-| log lines | 2,001 | |
+| total time s | 0.06 (500 symbols, downloads held back) | 0.04 |
+| loop.lag_ms max during import | 25 | 15 (p99 11) |
+| state-file writes | 0 | 0 |
+| subscribe calls | 500 | **1** (500 symbols in it) |
+| log lines | 2,001 | **4** |
 
 **This baseline contradicts P13's premise.** With a subscribe that returns at once, the engine adds 500 symbols in 60 ms of its own work (0.12 ms a symbol), so there is nothing here to make "5 times faster". With the downloads allowed to start (`--with-downloads`) the first six chunks arrive together and the loop lags 241 ms. What makes a real import slow is what it sets going: 500 symbols x a year of history at a broker's request limit (Fyers: 45 a minute, so about 45 minutes for the downloads), the first load of the broker's symbol list, and the symbol push into AmiBroker (P12). See the Discrepancies table in ROOT_CAUSE_ANALYSIS and Stage 5a in the roadmap.
+
+**After Stage 5a** (two runs of `import500`, 500 symbols into an account whose broker is the harness's fake one): 1 subscribe call carrying all 500 names (500 before), 4 log lines (2,001), 40 ms in all (60 ms), the loop lag at most 15 ms (25 ms). With the downloads allowed to start (`--with-downloads`) the first chunks arrive together and the loop lag peaks at **63 ms (241 ms before Stage 3's slices)**, 22 log lines in all, 86 slice transactions of at most 2 ms.
+
+What the engine does for an import is small, as the baseline said: this measures what the batching removes (calls and log lines), not a speed-up. What a client feels as "slow" is outside it: the downloads at the broker's request limit, the first load of the broker's symbol list, and the symbol push into AmiBroker (P12), see below.
+
+**P12 (the push into AmiBroker) was not measured on this PC.** It means driving the real AmiBroker's objects, and a measurement would write into the user's AmiBroker database; the harness never does that. What can be said from the script (`amibroker/symbolDetails.ts`): for each symbol it reads up to five properties of AmiBroker's object (the stock, FullName, RoundLotSize, TickSize, PointValue), so a push of 438 symbols is about 2,200 calls into AmiBroker, each served by AmiBroker's own interface thread. After Stage 5c a push on connect sends only the lines that changed since the last one (usually none: no call at all). The duration of every push is now logged ("... in 3.2 s") and recorded (`symbols.push_ms`, `symbols.pushed`): the live checklist below asks for it, and for the plugin's `busy` count around it (R5).
 
 ### Instrumentation overhead
 
@@ -283,6 +289,9 @@ What this does not show: AmiBroker's own cost of taking 20 notices a second (the
 The harness's backfilled symbols have no live feed and their history is fetched while the host reads them, so this run shows that the new DLL and the new engine work together and that a ranged fetch happens on the wire; the number of bytes is measured with the fake plugin above and the range logic by `plugin_tests.cpp` (105 checks).
 
 ## Live baseline checklist (the user runs this)
+
+**Added in Stage 5:** after starting AmiBroker with DataBridge Pro running, find the line `[SymbolDetails] ... sent to AmiBroker (connect)` or `... symbol list is up to date ... nothing sent` in the engine log (Activity page, or `backend.log`). Note "in N s" for a full push (delete `symbol-details.last.json` in `%APPDATA%\DataBridgePro\amibroker` first to force one), and whether AmiBroker stutters while it runs: that is R5.
+
 
 Use a market day, ideally with the usual client symbol list (or as many symbols as possible), on the **instrumented build from Stage 0**.
 

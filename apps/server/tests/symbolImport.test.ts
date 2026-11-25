@@ -81,6 +81,22 @@ describe('the ready-made symbol lists', () => {
   })
 })
 
+describe('the whole file in one pass', () => {
+  it('subscribes once for all the lines, queues their history together and answers with the same counts', async () => {
+    const { brokerManager } = await import('../src/brokers/BrokerManager')
+    const { backfillQueue } = await import('../src/market/BackfillQueue')
+    const subscribe = brokerManager.subscribe as unknown as ReturnType<typeof vi.fn>
+    const enqueue = backfillQueue.enqueue as unknown as ReturnType<typeof vi.fn>
+    subscribe.mockClear(); enqueue.mockClear()
+    const res = await importCsv(['IMPA1,NSE,EQ', 'IMPA2,NSE,EQ', 'IMPA3,BSE,EQ', '# a comment', 'ticker,exchange,type', 'X,NSE,EQ'].join('\n'))
+    expect(res.body).toMatchObject({ added: 3, total: 4, errors: [] })     // 'X' is too short: skipped, as before
+    expect(subscribe).toHaveBeenCalledTimes(1)
+    expect(subscribe.mock.calls[0][1]).toEqual(['IMPA1', 'IMPA2', 'IMPA3'])  // the ticker is the broker's name for an import
+    expect(enqueue).toHaveBeenCalledTimes(3)
+    expect(stored().find(s => s.amiBrokerTicker === 'IMPA3')).toMatchObject({ exchange: 'BSE', rawSymbol: 'IMPA3' })
+  })
+})
+
 describe('a hostile CSV', () => {
   it('cannot put commands into a PowerShell line: tickers never go into one', async () => {
     execMock.mockClear()

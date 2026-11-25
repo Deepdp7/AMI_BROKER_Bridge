@@ -3,10 +3,23 @@
  * AmiBroker's Symbol Information. Fyers rows are real lines from the public lists; the Kite
  * records are the shape every listed broker shares. Runs in a temp home folder.
  */
-import { describe, it, expect, beforeAll, afterAll } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
+
+// AmiBroker is told through PowerShell: never started here. `answer` is what the script would print.
+const ps = vi.hoisted(() => ({ calls: [] as string[][], answer: (_lines: number): string => '', sent: [] as string[][] }))
+vi.mock('child_process', async orig => ({
+  ...(await orig<typeof import('child_process')>()),
+  execFile: (_file: string, args: string[], _opts: any, cb: (err: Error | null, out: string) => void) => {
+    const data = require('fs').readFileSync(args[args.length - 1], 'utf8') as string
+    const lines = data ? data.split('\n') : []
+    ps.calls.push(args)
+    ps.sent.push(lines)
+    cb(null, ps.answer(lines.length))
+  },
+}))
 
 const tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), 'dbp-symdetails-'))
 process.env.USERPROFILE = tmpHome
@@ -123,5 +136,95 @@ describe('what AmiBroker is sent', () => {
     sd.startSymbolDetailsSync(() => false)
     await sd.pushSymbolDetails()
     expect(fs.existsSync(path.join(db.DATA_DIR, 'amibroker', 'symbol-details.tsv'))).toBe(false)
+  })
+})
+
+describe('what is sent when AmiBroker connects, when symbols are added, and each day', () => {
+  const lastFile = () => path.join(db.DATA_DIR, 'amibroker', 'symbol-details.last.json')
+  const done = (total: number, failed = 0) => `DONE ${total} 0 0 ${failed}`
+  const tickers = (lines: string[]) => lines.map(l => l.split('	')[0]).sort()
+
+  it('the first push sends everything and remembers it; a push after that with nothing new calls nothing', async () => {
+    sd.startSymbolDetailsSync(() => true)
+    fs.rmSync(lastFile(), { force: true })
+    ps.calls.length = 0; ps.sent.length = 0
+    ps.answer = n => done(n)
+    await sd.pushSymbolDetails('connect')
+    expect(ps.calls.length).toBe(1)
+    expect(tickers(ps.sent[0])).toEqual(['CRUDEOIL26NOVFUT', 'GONE26JANFUT', 'NIFTY', 'RELIANCE', 'RELIANCE26OCTFUT', 'TATAELXSI', 'TATAELXSI26NOVFUT'])
+    const saved = JSON.parse(fs.readFileSync(lastFile(), 'utf8'))
+    expect(Object.keys(saved.lines).length).toBe(7)
+    expect(saved.fullAt).toBeGreaterThan(0)
+
+    // AmiBroker connects again: nothing differs, so nothing is asked of it (a thousand calls into it spared)
+    await sd.pushSymbolDetails('connect')
+    expect(ps.calls.length).toBe(1)
+  })
+
+  it('symbols added later, and a changed lot size, are the only lines sent', async () => {
+    ps.calls.length = 0; ps.sent.length = 0
+    addSymbol('fy1', 'NEWONE', 'NSE:NEWONE-EQ')
+    await sd.pushSymbolDetails('added')
+    expect(ps.calls.length).toBe(1)
+    expect(tickers(ps.sent[0])).toEqual(['NEWONE'])
+
+    // The broker's list changed a symbol's lot size since: that line alone goes
+    const saved = JSON.parse(fs.readFileSync(lastFile(), 'utf8'))
+    saved.lines['RELIANCE26OCTFUT'] = 'RELIANCE26OCTFUT	RELIANCE 27 Oct 26 FUT	250	0.1	'
+    fs.writeFileSync(lastFile(), JSON.stringify(saved))
+    ps.calls.length = 0; ps.sent.length = 0
+    await sd.pushSymbolDetails('connect')
+    expect(tickers(ps.sent[0])).toEqual(['RELIANCE26OCTFUT'])
+    expect(ps.sent[0][0]).toBe('RELIANCE26OCTFUT	RELIANCE 27 Oct 26 FUT	500	0.1	')
+  })
+
+  it('the daily push sends everything again, and keeps the day it was made', async () => {
+    ps.calls.length = 0; ps.sent.length = 0
+    const before = JSON.parse(fs.readFileSync(lastFile(), 'utf8')).fullAt
+    await new Promise(r => setTimeout(r, 5))
+    await sd.pushSymbolDetails('daily')
+    expect(ps.sent[0].length).toBe(8)
+    expect(JSON.parse(fs.readFileSync(lastFile(), 'utf8')).fullAt).toBeGreaterThan(before)
+    // A push for new symbols leaves the time of the last full one as it was
+    const full = JSON.parse(fs.readFileSync(lastFile(), 'utf8')).fullAt
+    addSymbol('fy1', 'NEWTWO', 'NSE:NEWTWO-EQ')
+    await sd.pushSymbolDetails('added')
+    expect(JSON.parse(fs.readFileSync(lastFile(), 'utf8')).fullAt).toBe(full)
+  })
+
+  it('lines that did not go in are not remembered: the next push sends everything', async () => {
+    ps.answer = n => done(n, 1)
+    addSymbol('fy1', 'NEWTHREE', 'NSE:NEWTHREE-EQ')
+    await sd.pushSymbolDetails('added')
+    expect(fs.existsSync(lastFile())).toBe(false)
+    ps.calls.length = 0; ps.sent.length = 0
+    ps.answer = n => done(n)
+    await sd.pushSymbolDetails('connect')
+    expect(ps.sent[0].length).toBe(10)           // all of them again
+    expect(fs.existsSync(lastFile())).toBe(true)
+  })
+
+  it('AmiBroker closed meanwhile: nothing is remembered', async () => {
+    fs.rmSync(lastFile(), { force: true })
+    ps.answer = () => 'NOT_RUNNING'
+    await sd.pushSymbolDetails('connect')
+    expect(fs.existsSync(lastFile())).toBe(false)
+    ps.answer = n => done(n)
+  })
+
+  it('DATABRIDGE_SYMBOL_PUSH=full sends everything every time', async () => {
+    await sd.pushSymbolDetails('connect')        // remembered
+    ps.calls.length = 0
+    process.env.DATABRIDGE_SYMBOL_PUSH = 'full'
+    try { await sd.pushSymbolDetails('connect') } finally { delete process.env.DATABRIDGE_SYMBOL_PUSH }
+    expect(ps.calls.length).toBe(1)
+  })
+
+  it('a daily push waits for a request that is already running, and is not downgraded to a diff', async () => {
+    ps.calls.length = 0; ps.sent.length = 0
+    const first = sd.pushSymbolDetails('connect')
+    const second = sd.pushSymbolDetails('daily')   // folded into the next run
+    await Promise.all([first, second])
+    await vi.waitFor(() => expect(ps.sent.some(l => l.length === 10)).toBe(true), { timeout: 3000 })
   })
 })

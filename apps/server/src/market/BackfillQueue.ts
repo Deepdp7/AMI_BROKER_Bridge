@@ -144,7 +144,7 @@ class BackfillQueueService extends EventEmitter {
     return true
   }
 
-  public enqueue(ticker: string, brokerId: string, brokerToken: string | number = '', depthDays: number = 365) {
+  public enqueue(ticker: string, brokerId: string, brokerToken: string | number = '', depthDays: number = 365, quiet = false) {
     if (!ticker) {
       console.warn(`[BackfillQueue] Skipping invalid ticker: "${ticker}"`)
       return
@@ -205,7 +205,7 @@ class BackfillQueueService extends EventEmitter {
           retryCount: 0,
         })
 
-        console.log(`[Backfill] ${ticker} : Queued for backfill (${depthDays} days)`)
+        if (!quiet) console.log(`[Backfill] ${ticker} : Queued for backfill (${depthDays} days)`)
         this.emit('backfill_progress', { ticker, ...backfillStatusMap.get(ticker) })
         this.processNext()
       } catch (err) {
@@ -389,10 +389,13 @@ class BackfillQueueService extends EventEmitter {
     }
   }
 
+  /** Queues the history of many symbols; one log line for all of them instead of one each */
   public enqueueBatch(items: { ticker: string; brokerId: string; brokerToken?: string; depthDays?: number }[]) {
+    const before = this.activeTickers.size
     for (const item of items) {
-      this.enqueue(item.ticker, item.brokerId, item.brokerToken || '', item.depthDays ?? 365)
+      this.enqueue(item.ticker, item.brokerId, item.brokerToken || '', item.depthDays ?? 365, true)
     }
+    if (items.length) console.log(`[Backfill] History queued for ${this.activeTickers.size - before} of ${items.length} symbol(s) (${items[0].depthDays ?? 365} days; the others have it or were cancelled)`)
   }
 
   /**

@@ -246,7 +246,7 @@ export function startAmiBrokerIpc() {
     // Bars stored while AmiBroker was closed: the plugin re-syncs every symbol on each new
     // connection by itself (connection generation in DataClient.cpp)
     // Lot size, tick size and name of every tracked symbol into AmiBroker's Symbol Information
-    pushSymbolDetailsSoon(5000)
+    pushSymbolDetailsSoon(5000, 'connect')
 
     // The status light right away, not only at the next change
     try { socket.write(statusLine(currentPluginStatus())) } catch {}

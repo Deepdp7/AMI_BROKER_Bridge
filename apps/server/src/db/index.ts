@@ -798,6 +798,32 @@ export const stmts = {
       else symbolsCache.push(obj)
     }
   },
+  /**
+   * Saves many symbols in one transaction (an import of hundreds is one commit, not one each) and updates the
+   * cache through an index, so it stays linear. Same result as insertSymbol.run for each. A failure of the
+   * batch (one bad row) falls back to one at a time, so the good rows are still saved.
+   */
+  insertSymbols: {
+    run: (rows: Array<{ broker_id: string; instrument_id: string; amibroker_ticker: string; exchange: string; instrument_type: string; raw_symbol: string; created_at: number }>) => {
+      if (!rows.length) return
+      try {
+        tx(() => { for (const s of rows) q.upsertSymbol.run(s.broker_id, n(s.instrument_id), s.amibroker_ticker, n(s.exchange), n(s.instrument_type), n(s.raw_symbol), n(s.created_at)) })
+      } catch (err) {
+        console.error('[DB] Could not save the symbols in one go, saving them one at a time:', err)
+        for (const s of rows) stmts.insertSymbol.run(s)
+        return
+      }
+      const at = new Map<string, number>()
+      symbolsCache.forEach((sym, i) => at.set(`${sym.brokerId}\u0000${sym.amiBrokerTicker}`, i))
+      for (const s of rows) {
+        const key = `${s.broker_id}\u0000${s.amibroker_ticker}`
+        const obj = { brokerId: s.broker_id, instrumentId: s.instrument_id, amiBrokerTicker: s.amibroker_ticker, exchange: s.exchange, instrumentType: s.instrument_type, rawSymbol: s.raw_symbol, createdAt: s.created_at }
+        const idx = at.get(key)
+        if (idx !== undefined) symbolsCache[idx] = { ...obj, instrumentId: symbolsCache[idx].instrumentId }
+        else at.set(key, symbolsCache.push(obj) - 1)
+      }
+    }
+  },
   deleteSymbol: {
     run: (brokerId: string, ticker: string) => {
       const idx = symbolsCache.findIndex(sym => sym.brokerId === brokerId && sym.amiBrokerTicker === ticker)

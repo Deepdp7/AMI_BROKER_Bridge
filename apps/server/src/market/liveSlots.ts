@@ -4,11 +4,13 @@
  * history refresh reached them).
  *
  * The places go to what is on screen in AmiBroker: the plugin reports every symbol AmiBroker
- * asks it for (VIEW|TICKER, at most every 15 s per symbol), charts every few seconds. A symbol
- * looked at in the last 90 s that has no place takes one from a symbol nobody has looked at for
- * 5 minutes, at most 10 a round, every 10 s. The symbol getting a place has today's bars
- * downloaded once (the minutes it had no live feed); the one giving it up is kept up to date by
- * the history refresh, like every other symbol without a place.
+ * asks it for (VIEW|TICKER, at most every 15 s per symbol). A chart asks again and again, a scan
+ * asks once per symbol, and a scan over hundreds of symbols must not swap the places of the
+ * charts away: a symbol wants a place when it was asked for at least twice, 10 s or more apart,
+ * within the last minute. It then takes one from a symbol nobody has looked at for 5 minutes, at
+ * most 5 a round, every 10 s. The symbol getting a place has today's bars downloaded once (the
+ * minutes it had no live feed); the one giving it up is kept up to date by the history refresh,
+ * like every other symbol without a place.
  */
 import { stmts } from '../db'
 import { brokerManager } from '../brokers/BrokerManager'
@@ -16,15 +18,19 @@ import { liveFeed } from './liveFeed'
 import { backfillQueue } from './BackfillQueue'
 import { midnightIstMs } from './refreshToday'
 
-/** Looked at within this long: wants a live place */
-const WANT_MS = 90_000
+/** A symbol wants a live place when it was asked for at least twice, MIN_VIEW_GAP_MS or more apart, within this long */
+const WANT_WINDOW_MS = 60_000
+const MIN_VIEW_GAP_MS = 10_000
 /** Looked at within this long: keeps its place */
 const KEEP_MS = 5 * 60_000
-const MAX_SWAPS_PER_ROUND = 10
+const MAX_SWAPS_PER_ROUND = 5
 const ROUND_MS = 10_000
+/** Reports this close together are one look (a chart load asks for the history and reports the symbol at once) */
+const SAME_LOOK_MS = 1_000
+const VIEWS_KEPT = 3
 
-/** ticker → when AmiBroker last asked for it */
-const viewedAt = new Map<string, number>()
+/** ticker → the last few times AmiBroker asked for it, oldest first */
+const views = new Map<string, number[]>()
 
 /** Per broker: names as subscribed (raw symbols) that stream, and those waiting for a place */
 interface Places { live: Set<string>; waiting: Set<string> }
@@ -32,7 +38,20 @@ const places = new Map<string, Places>()
 
 /** AmiBroker asked for this symbol (a chart, the quote window, a scan) */
 export function noteViewed(ticker: string, nowMs = Date.now()) {
-  if (ticker) viewedAt.set(ticker, nowMs)
+  if (!ticker) return
+  const v = views.get(ticker)
+  if (!v) { views.set(ticker, [nowMs]); return }
+  const same = v.findIndex(t => Math.abs(t - nowMs) < SAME_LOOK_MS)
+  if (same >= 0) { v[same] = Math.max(v[same], nowMs); return }
+  v.push(nowMs)
+  v.sort((a, b) => a - b)
+  if (v.length > VIEWS_KEPT) v.shift()
+}
+
+/** Asked for repeatedly (not just once, as a scan does): a chart or a window that stays open */
+function wantsPlace(ticker: string, nowMs: number): boolean {
+  const recent = (views.get(ticker) ?? []).filter(t => nowMs - t < WANT_WINDOW_MS)
+  return recent.length >= 2 && recent[recent.length - 1] - recent[0] >= MIN_VIEW_GAP_MS
 }
 
 /** raw symbol → ticker, for one broker's symbols */
@@ -73,7 +92,8 @@ export function waitingTickers(): Set<string> {
 
 /** When AmiBroker last asked for a symbol (0: not since the engine started) */
 export function lastViewedAt(ticker: string): number {
-  return viewedAt.get(ticker) ?? 0
+  const v = views.get(ticker)
+  return v ? v[v.length - 1] : 0
 }
 
 let rounding = false
@@ -89,8 +109,8 @@ export async function rebalance(nowMs = Date.now()) {
       // Symbols removed since: no longer part of it
       for (const raw of p.waiting) if (!names.has(raw)) p.waiting.delete(raw)
       for (const raw of p.live) if (!names.has(raw)) p.live.delete(raw)
-      const seen = (raw: string) => viewedAt.get(names.get(raw) ?? raw) ?? 0
-      const wanted = [...p.waiting].filter(r => nowMs - seen(r) < WANT_MS).sort((a, b) => seen(b) - seen(a))
+      const seen = (raw: string) => lastViewedAt(names.get(raw) ?? raw)
+      const wanted = [...p.waiting].filter(r => wantsPlace(names.get(r) ?? r, nowMs)).sort((a, b) => seen(b) - seen(a))
       if (!wanted.length) continue
       const spare = [...p.live].filter(r => nowMs - seen(r) >= KEEP_MS).sort((a, b) => seen(a) - seen(b))
       const n = Math.min(wanted.length, spare.length, MAX_SWAPS_PER_ROUND)
@@ -135,6 +155,6 @@ export function startLiveSlots() {
 
 /** Forget everything (tests) */
 export function resetLiveSlots() {
-  viewedAt.clear()
+  views.clear()
   places.clear()
 }

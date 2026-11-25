@@ -566,6 +566,8 @@ Emit from `db` only; `db` must not import `market` (no cycle).
 
 ## Stage 5: symbol management (P13, P7, P12)
 
+> **Done (2026-11-25), with the differences listed in ROOT_CAUSE_ANALYSIS (5a, 5b, 5c).** Engine only (no new DLL). New: `stmts.insertSymbols`, `liveFeed.addSymbolsByTicker`, batch `addSymbolsToBroker(..., { resolve })` used by the add route, the platform lists and Import CSV; `liveSlots` wants a place only after two looks 10 s or more apart within a minute, 5 swaps a round; `symbolDetails` remembers what it sent (`symbol-details.last.json`) and pushes only differences on connect and on add, everything once a day outside the sessions. The P12 duration could not be measured on a PC where that would write into the real AmiBroker: the engine now logs it for the live checklist.
+
 ### 5a. P13: bulk add and import
 
 > **Corrected after the Stage 0 baseline (see the Discrepancies table in ROOT_CAUSE_ANALYSIS).** The harness's `import500` takes 60 ms of engine time for 500 symbols, so "at least 5 times faster" is not a meaningful target. Keep the batching below (one transaction, one subscribe call, one log line, one `enqueueBatch`) and measure these instead: the number of subscribe calls (500 → 1), log lines (2,001 → a few), and the loop lag with `--with-downloads`. Before changing anything else here, time a real import in a live session (the user runs it): the first load of the broker's symbol list, the history downloads at the broker's request limit, and the symbol push into AmiBroker; those are the candidates for what clients feel as slow.

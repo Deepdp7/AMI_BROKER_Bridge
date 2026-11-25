@@ -41,6 +41,44 @@ One entry per stage, newest at the top. An entry is written when its stage is fi
 - No source files were changed.
 - Next: Stage 0 (instrumentation and baseline harness).
 
+## Stage 5: symbol management (2026-11-25)
+
+**Findings addressed:** P13 (5a), P7 (5b), P12 (5c). Verified against the code at `3e15e07` first: as described (P13 already reduced by the Stage 0 baseline: the engine's own work is small; the per-symbol subscribe calls, log lines and transactions are what the batching removes).
+**Discrepancies found while verifying:** ten, in ROOT_CAUSE_ANALYSIS "Discrepancies" (5a, 5b, 5c).
+
+**Changes**
+- Engine `db/index.ts`, `market/liveFeed.ts`, `market/BackfillQueue.ts`, `brokers/addSymbols.ts`, `api/routes/brokers.ts` (5a): `stmts.insertSymbols` saves many symbols in one transaction and updates the symbol cache through an index (linear, not a search per symbol; a failed batch falls back to one at a time); `liveFeed.addSymbolsByTicker` does what `addSymbolByTicker` does with one log line; `enqueueBatch` queues history with one log line. `addSymbolsToBroker(brokerId, symbols, { resolve })` looks the broker's names up 8 at a time, saves, adds to the feed, makes **one** subscribe call, queues history together, writes one summary line, asks for the AmiBroker push. Import CSV (`POST /symbols/import`) keeps its parsing and checks and calls it with `resolve: false`; it waits for the subscribe now.
+- Engine `market/liveSlots.ts` (5b): the last 3 looks of each symbol are kept (reports less than 1 s apart count as one); a symbol wants a live place when it was asked for at least twice, 10 s or more apart, within 60 s (a chart reports every 15 s, a scan touches a symbol once); keeping a place is unchanged (a look in the last 5 minutes); at most 5 swaps a round (10 before). Its today gap-fill was already `interactive` (Stage 3b).
+- Engine `amibroker/symbolDetails.ts` (5c): what was sent last is kept in `%APPDATA%/DataBridgePro/amibroker/symbol-details.last.json`; a push on connect (`'connect'`) or after symbols were added (`'added'`) sends only the new or changed lines, and nothing at all (no PowerShell, no call into AmiBroker) when none differ; the daily push (`'daily'`) sends everything and waits for the NSE and MCX sessions to be closed; after a push with failures the memory is dropped so the next one sends everything. Each push logs its time (`symbols.push_ms`, `symbols.pushed`). `DATABRIDGE_SYMBOL_PUSH=full` sends everything every time (the old behaviour).
+- Tests: `symbolManagement` (10: batch add, resolve concurrency, one subscribe, skipped symbol, import without lookups, re-adding, one log line, liveSlots rules and the cap of 5), `symbolDetails` (+7: first push full, nothing new = no call, only new or changed lines, daily full, failures forgotten, AmiBroker closed, forced full), `symbolImport` (+1: one subscribe for the file), `planLimits` (the existing liveSlots test now looks twice).
+
+**Checks**
+- `npm run typecheck --prefix apps/server`: pass. `npm test --prefix apps/server`: 428 passed, 2 failed (the same 2: noren, upstoxAngel). 18 new tests; changing the swap cap back and the two-look rule off on purpose made 4 of them fail.
+- `npm run typecheck --prefix apps/desktop`: pass. `npm test --prefix apps/desktop`: 137 of 137 (not touched).
+- The plugin is **not changed** in this stage (no new DLL).
+
+**Before to after** (`import500`, details in DATABRIDGE_PERFORMANCE_BASELINE.md)
+| Metric | Before | After |
+|---|---|---|
+| Subscribe calls for 500 symbols | 500 | **1** |
+| Log lines | 2,001 | **4** (22 with downloads running) |
+| Engine time for the import | 60 ms | 40 ms |
+| Loop lag, worst, no downloads | 25 ms | 15 ms |
+| Loop lag, worst, downloads started with the import | 241 ms | **63 ms** (Stage 3's slices) |
+| Calls into AmiBroker when it connects and nothing changed (438 symbols) | about 2,200 | **0** |
+
+**Not done / follow-ups**
+- **P12's real cost (R5) is unmeasured.** Measuring it writes into the user's AmiBroker database. The push now logs how long it takes ("in N s"), for the live checklist.
+- **A switched or emptied AmiBroker database** is not noticed on connect any more: its symbol details arrive with the next daily push (after 08:45 IST, outside the sessions), or immediately if `symbol-details.last.json` is deleted. If that turns out to matter, the plugin can tell the engine which database it loaded (a small DLL change).
+- A chart newly opened on a symbol without a live place waits for its second look (up to 15 s, then the 10 s round) before it gets one. Until then the auto-refresh keeps it current.
+- Each imported symbol still sends its own `backfill_progress` event to the app (the download card shows each); only the log lines were batched.
+
+**For the user**
+- **No new DLL.** The plugin is the one from Stage 3. **The engine changes need the rebuilt engine** (`npm run build:server`) or `npm run dev`.
+- Import a list (Import CSV, or a Chartink scan): it should be added at once, with a single line in the log.
+- Open AmiBroker with DataBridge Pro running and look in the engine log for `[SymbolDetails]`: on the first start after this update it sends everything once ("in N s": please tell me N, and whether AmiBroker stuttered), and after that "up to date, nothing sent".
+- If a symbol's name, lot size or tick size is not what the broker's list says in AmiBroker, delete `%APPDATA%/DataBridgePro/amibroker/symbol-details.last.json` and restart AmiBroker: everything is sent again.
+
 ## Stage 4: SQLite (2026-11-25)
 
 **Findings addressed:** P2 (4a), B5 (4b, 4c), C1 (A/B, not kept), 4d (plans). Verified against the code at `542159a` first: all as described (checkpoints inside COMMIT with default settings; the health query is the only table scan; reads round-robin over two workers).

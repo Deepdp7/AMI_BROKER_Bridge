@@ -684,6 +684,27 @@ export class LiveFeed extends EventEmitter {
     this._emitLog('info', 'LiveFeed', `Symbol added: ${ticker} (${inst.exchange})`)
   }
 
+  /** addSymbolByTicker for many symbols (an import): the same state for each, one log line */
+  addSymbolsByTicker(list: Array<{ ticker: string; brokerId: string; exchange?: string; instrumentType?: string; brokerToken: string }>) {
+    const now = Date.now()
+    for (const s of list) {
+      this.addInstrument({
+        ticker: s.ticker, exchange: (s.exchange || 'NSE') as any, instrumentType: (s.instrumentType || 'EQ') as any,
+        basePrice: 0, volatility: 0, avgVolume: 0, brokerId: s.brokerId, brokerToken: s.brokerToken,
+      })
+      const status = this.feedStatuses.get(s.ticker)
+      if (status) {
+        status.lastPrice = 0
+        status.prevClose = 0
+        status.barsPerMin = 0
+        status.internalLatencyMs = 0
+        status.status = 'SUBSCRIBED' as any
+        this._scheduleFeedBroadcast(status, now)
+      }
+    }
+    if (list.length) this._emitLog('info', 'LiveFeed', `${list.length} symbols added${list.length <= 5 ? `: ${list.map(s => s.ticker).join(', ')}` : ` (${list[0].ticker} ... ${list[list.length - 1].ticker})`}`)
+  }
+
   /** Called by the IPC server whenever AmiBroker sends GET_QUOTES for this ticker. */
   private _streamingTimers: Map<string, ReturnType<typeof setTimeout>> = new Map()
 

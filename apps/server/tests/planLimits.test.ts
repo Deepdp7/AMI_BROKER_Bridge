@@ -206,7 +206,8 @@ describe('live places go to what AmiBroker shows', () => {
 
     const now = Date.now()
     slots.noteViewed('LV1', now - 60_000)        // LV1 on screen a minute ago: keeps its place
-    slots.noteViewed('WT1', now - 5_000)         // WT1 just opened in AmiBroker
+    slots.noteViewed('WT1', now - 20_000)        // WT1 just opened in AmiBroker: a chart asks again every 15 s
+    slots.noteViewed('WT1', now - 5_000)
     await slots.rebalance(now)
     expect(calls).toEqual(['-NSE:LV2-EQ', '+NSE:WT1-EQ'])
     expect(liveFeed.getFeedStatus('WT1')?.status).toBe('SUBSCRIBED')
