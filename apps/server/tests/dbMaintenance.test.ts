@@ -56,6 +56,36 @@ describe('the checkpoint worker', () => {
   }, 20_000)
 })
 
+describe('a long read while the log is idle', () => {
+  it('never makes the writer wait (the truncating checkpoint does not sit on the write lock)', async () => {
+    const { DatabaseSync } = (await import('../src/db')).loadSqlite()
+    const { startMaintenance } = await import('../src/db/maintenance')
+    const file = path.join(tmpHome, 'busy.db')
+    const writer = new DatabaseSync(file)
+    writer.exec('PRAGMA journal_mode = WAL; PRAGMA busy_timeout = 5000; CREATE TABLE t (a INTEGER PRIMARY KEY)')
+    writer.exec('INSERT INTO t (a) VALUES (1)')
+    // A backup or a gap scan: a read that stays open
+    const reader = new DatabaseSync(file, { readOnly: true })
+    reader.exec('BEGIN')
+    reader.prepare('SELECT COUNT(*) FROM t').get()
+    writer.exec('INSERT INTO t (a) VALUES (2)')          // the reader still needs the older state
+    startMaintenance(file, { pollMs: 50, bigWalBytes: 1e9, everyMs: 3_600_000, idleMs: 300 })
+    let worst = 0
+    for (let i = 0; i < 5; i++) {
+      await new Promise(r => setTimeout(r, 700))         // idle long enough for it to try
+      const startedAt = performance.now()
+      writer.prepare('INSERT INTO t (a) VALUES (?)').run(10 + i)
+      worst = Math.max(worst, performance.now() - startedAt)
+    }
+    expect(worst).toBeLessThan(500)                      // it waited up to 5 s for the lock
+    reader.exec('COMMIT')
+    reader.close()
+    // Once nobody reads, the log is emptied as before
+    await vi.waitFor(() => expect(fs.statSync(file + '-wal').size).toBe(0), { timeout: 6000, interval: 100 })
+    writer.close()
+  }, 30_000)
+})
+
 describe('reader lanes', () => {
   it('a plugin request goes to its own worker while bulk work is spread over two others', async () => {
     const db = await import('../src/db')

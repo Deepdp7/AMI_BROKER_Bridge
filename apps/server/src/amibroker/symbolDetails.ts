@@ -16,8 +16,9 @@
  * Every call into AmiBroker's objects is served by AmiBroker's own interface thread: reading the
  * five values of 438 symbols is about 2,000 of them, each time AmiBroker connects. So what was sent
  * last is kept (symbol-details.last.json), and a push on connect or after symbols were added sends
- * only the lines that differ from it, usually none. The daily push sends everything (it also covers
- * an AmiBroker database that was switched or emptied), and waits for the market to be closed.
+ * only the lines that differ from it, usually none. Once a day everything is sent (it also covers
+ * an AmiBroker database that was switched or emptied): while the market is closed or, on a PC that
+ * is on only during the session (MCX trades until 23:30), when AmiBroker first connects that day.
  */
 import fs from 'fs'
 import path from 'path'
@@ -190,7 +191,7 @@ export async function pushSymbolDetails(reason: PushReason = 'connect'): Promise
       if (!rows.length) return
       const now = lineByTicker(rows)
       const last = await readLastPush()
-      const { lines, full } = linesToPush(now, last, reason)
+      const { lines, full } = linesToPush(now, last, reason === 'connect' && dailyPushDue(last?.fullAt ?? 0) ? 'daily' : reason)
       if (!lines.length) {
         console.log(`[SymbolDetails] AmiBroker's symbol list is up to date (${now.size} symbols unchanged since the last time), nothing sent`)
         return

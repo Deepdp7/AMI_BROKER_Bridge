@@ -116,6 +116,20 @@ describe('Data health', () => {
     expect(full.missingDays).toBe(0) // the bars skip every weekend and holiday in the range
   })
 
+  it('a symbol removed while others are being counted: what they were still owed is counted at the next look', async () => {
+    addSymbol('HRACE'); addSymbol('HGONE')
+    await addBars('HRACE', tradingDays.slice(0, 5))
+    await addBars('HGONE', tradingDays.slice(0, 5))
+    await health.computeHealth(true)
+    await addBars('HRACE', tradingDays.slice(5, 8))      // to be counted at the next look ...
+    const look = health.computeHealth(true)
+    await new Promise(r => setImmediate(r))
+    for (let i = 0; i < 3; i++) db.stmts.deleteSymbol.run('fyers-h', 'HGONE')   // ... which this interrupts
+    await look
+    expect((await health.computeHealth(true)).find(h => h.ticker === 'HRACE')?.bars).toBe(8)
+    db.stmts.deleteSymbol.run('fyers-h', 'HRACE')
+  })
+
   it("a day the broker has no trades for in that symbol is not missing (illiquid futures)", async () => {
     addSymbol('HQUIET')
     const quietDay = tradingDays[10]

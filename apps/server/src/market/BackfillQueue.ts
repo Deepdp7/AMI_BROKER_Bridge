@@ -699,8 +699,11 @@ class BackfillQueueService extends EventEmitter {
    */
   private async fetchChunk(task: BackfillTask, route: ChunkRoute, from: Date, to: Date): Promise<any[] | null> {
     // The slot was taken by pickRoute; it is given back here
-    // The broker's rate limiter serves a symbol a chart is waiting for (or a manual refresh) before a bulk download
-    const priority = task.interactive || this.priorityTickers.has(task.ticker) ? 'interactive' : 'bulk'
+    // The broker's rate limiter serves a manual refresh, and the newest chunk of a symbol a chart is waiting for, before
+    // a bulk download. Not the chunks behind it: a scan makes every symbol one AmiBroker is waiting for, and their years
+    // of history would then keep the auto-refresh from its turn for as long as they download
+    const newest = task.cursorTo === undefined
+    const priority = task.interactive || (newest && this.priorityTickers.has(task.ticker)) ? 'interactive' : 'bulk'
     try {
       if (!route.helper) return (await withPriority<any[]>(priority, () => route.adapter.getHistoricalBars(route.token, '1m', from, to))) || []
       const key = `${route.id}:${task.ticker}`

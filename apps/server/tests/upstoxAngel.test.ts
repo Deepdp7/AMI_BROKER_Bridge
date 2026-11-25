@@ -68,11 +68,15 @@ describe('instrument lists', () => {
   })
 
   it('resolves names stored by other brokers', () => {
+    // The day of the lists above: their contracts have expired since, and an expired one is not resolved
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-10-26T10:00:00+05:30'))
     upstoxMaster.setRecords(upstox)
     expect(upstoxMaster.resolve('NSE:TCS-EQ', 'NSE', 'EQ')?.ref).toBe('NSE_EQ|INE467B01029')  // Fyers
     expect(upstoxMaster.resolve('NIFTY 50', 'NSE')?.ref).toBe('NSE_INDEX|Nifty 50')            // Kite
     angelMaster.setRecords(angel)
     expect(angelMaster.resolve('CRUDEOIL', 'MCX', 'COMM')?.key).toBe('MCX:CRUDEOIL26NOVFUT')  // nearest future
+    vi.useRealTimers()
   })
 })
 

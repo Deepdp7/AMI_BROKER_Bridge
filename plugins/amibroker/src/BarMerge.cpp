@@ -257,6 +257,19 @@ void SyncRange::Add(double fromSec, double toSec, bool owesFullSync) {
     if (owesFullSync) open = true;
 }
 
+void SyncRange::FetchWindow(double sinceSec, bool hole, double& fetchFrom, double& fetchUntil) const {
+    fetchUntil = 0;
+    if (IsRange()) {
+        fetchFrom = from - 60;
+        if (hole) fetchFrom = (std::min)(fetchFrom, sinceSec - 1);
+        else fetchUntil = to + 60;
+    } else {
+        fetchFrom = sinceSec - 86400;
+        if (from > 0) fetchFrom = (std::min)(fetchFrom, from - 60);
+    }
+    if (fetchFrom < 0) fetchFrom = 0;
+}
+
 // ---------------------------------------------------------------------------------------------
 // RecentBars
 // ---------------------------------------------------------------------------------------------

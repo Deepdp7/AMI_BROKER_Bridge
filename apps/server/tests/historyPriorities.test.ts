@@ -124,3 +124,21 @@ describe('the priority follows a request through its awaits', () => {
     expect(currentPriority()).toBe('refresh')
   })
 })
+
+describe('what the download queue asks with', () => {
+  it('a chart goes first with its newest chunk; the years behind it are bulk, or a scan would hold up the auto-refresh', async () => {
+    const { backfillQueue } = await import('../src/market/BackfillQueue')
+    const q = backfillQueue as any
+    const seen: Priority[] = []
+    const route = { id: 'b', helper: false, token: 't', release() {}, adapter: { getHistoricalBars: async () => { seen.push(currentPriority()); return [] } } }
+    const fetch = (task: object) => q.fetchChunk({ brokerId: 'b', retryCount: 0, ...task }, route, new Date(0), new Date(1))
+    q.priorityTickers.add('CHART')
+    try {
+      await fetch({ ticker: 'CHART' })
+      await fetch({ ticker: 'CHART', cursorTo: new Date(0) })
+      await fetch({ ticker: 'OTHER' })
+      await fetch({ ticker: 'OTHER', interactive: true, cursorTo: new Date(0) })   // a manual refresh, all of it
+    } finally { q.priorityTickers.delete('CHART') }
+    expect(seen).toEqual(['interactive', 'bulk', 'bulk', 'interactive'])
+  })
+})

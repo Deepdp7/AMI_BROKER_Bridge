@@ -64,6 +64,23 @@ describe('history upserts in slices', () => {
     expect(turns).toBeGreaterThanOrEqual(17)
   })
 
+  it('a later slice that fails: the saved ones are still announced (a second try changes nothing in them)', async () => {
+    const rows = db.HISTORY_SLICE_ROWS * 2
+    const seen: Array<[string, number, number]> = []
+    const note = (t: string, from: number, to: number) => { if (t === 'HALF') seen.push([t, from, to]) }
+    db.barWrites.on('changed', note)
+    const real = db.sqlite.exec
+    let begins = 0
+    ;(db.sqlite as any).exec = (sql: string) => {
+      if (sql === 'BEGIN' && ++begins === 2) throw new Error('disk I/O error')
+      return real.call(db.sqlite, sql)
+    }
+    try {
+      await expect(db.upsertBarsToHistory('HALF', Array.from({ length: rows }, (_, i) => bar(i)))).rejects.toThrow('disk I/O error')
+    } finally { (db.sqlite as any).exec = real; db.barWrites.off('changed', note) }
+    expect(seen).toEqual([['HALF', T, T + (db.HISTORY_SLICE_ROWS - 1) * 60]])
+  })
+
   it('historyRangeSec: the oldest and the newest bar, in seconds', () => {
     expect(db.historyRangeSec([bar(5), bar(2), bar(9), bar(3)])).toEqual({ fromSec: T + 2 * 60, toSec: T + 9 * 60 })
     expect(db.historyRangeSec([])).toEqual({ fromSec: 0, toSec: 0 })

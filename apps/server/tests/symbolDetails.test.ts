@@ -192,6 +192,23 @@ describe('what is sent when AmiBroker connects, when symbols are added, and each
     expect(JSON.parse(fs.readFileSync(lastFile(), 'utf8')).fullAt).toBe(full)
   })
 
+  it('a connect sends everything when that has not been done today (a PC on only during the session has no other time)', async () => {
+    const saved = JSON.parse(fs.readFileSync(lastFile(), 'utf8'))
+    fs.writeFileSync(lastFile(), JSON.stringify({ ...saved, fullAt: Date.now() - 2 * 86_400_000 }))
+    ps.calls.length = 0; ps.sent.length = 0
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-12-02T11:00:00+05:30'))    // in the session
+    try {
+      await sd.pushSymbolDetails('connect')
+      expect(ps.sent[0].length).toBe(9)                         // all of them, nothing had changed
+      await sd.pushSymbolDetails('connect')
+      expect(ps.calls.length).toBe(1)                           // once a day
+    } finally {
+      vi.useRealTimers()
+      fs.writeFileSync(lastFile(), JSON.stringify(saved))
+    }
+  })
+
   it('lines that did not go in are not remembered: the next push sends everything', async () => {
     ps.answer = n => done(n, 1)
     addSymbol('fy1', 'NEWTHREE', 'NSE:NEWTHREE-EQ')

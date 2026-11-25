@@ -129,6 +129,35 @@ static void TestSync() {
     CHECK(!ParseSyncLine("SYNC", s));
     CHECK(!ParseSyncLine("LIVE_BAR|TCS|1|2|3|4|5|6", s));
 
+    SECTION("What a sync fetches");
+    {
+        const double day = 86400, since = 10 * day;
+        double from, until;
+        SyncRange r;
+        r.FetchWindow(since, false, from, until);                             // nothing announced (a new connection): the last 24 hours
+        CHECK(from == since - day && until == 0);
+        r.Add(since - 3 * day, since - 2 * day, false);
+        r.FetchWindow(since, false, from, until);                             // a range: that only
+        CHECK(from == since - 3 * day - 60 && until == since - 2 * day + 60);
+        r.FetchWindow(since, true, from, until);                              // minutes missing before the live bar: up to now as well
+        CHECK(from == since - 3 * day - 60 && until == 0);
+        SyncRange later;
+        later.Add(since + 7200, since + 7500, false);                         // corrections two hours after AmiBroker's last bar
+        later.FetchWindow(since, true, from, until);
+        CHECK(from == since - 1 && until == 0);                               // the minutes in between too, not only the range
+        later.FetchWindow(since, false, from, until);
+        CHECK(from == since + 7140 && until == since + 7560);                 // none missing: the range only
+        SyncRange open;
+        open.Add(since - 5 * day, 0, false);
+        open.FetchWindow(since, false, from, until);                          // a start only: from there to now
+        CHECK(from == since - 5 * day - 60 && until == 0);
+        SyncRange owed;
+        owed.MarkOpen();
+        owed.Add(since - 60, since, false);                                   // a range announced while 24 hours are owed
+        owed.FetchWindow(since, false, from, until);
+        CHECK(from == since - day && until == 0);
+    }
+
     SECTION("What was announced, as one range");
     {
         SyncRange r;

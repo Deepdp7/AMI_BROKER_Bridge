@@ -71,6 +71,10 @@ struct SyncRange {
     void Add(double fromSec, double toSec, bool owesFullSync);
     void MarkOpen() { open = true; }
     bool IsRange() const { return any && !open && from > 0 && to >= from; }
+    // What to fetch: bars after `fetchFrom` and, when `fetchUntil` > 0, up to it. `sinceSec` is AmiBroker's last
+    // bar; `hole`: minutes between it and the live bar were not kept here. They were built live, so no notice
+    // names them: a range is then fetched from AmiBroker's last bar on, up to now.
+    void FetchWindow(double sinceSec, bool hole, double& fetchFrom, double& fetchUntil) const;
 };
 
 // How long to leave a symbol alone after a catch-up for it failed: 2 s, doubling to 60 s, until one succeeds.

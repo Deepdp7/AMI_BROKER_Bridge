@@ -211,16 +211,23 @@ barWrites.setMaxListeners(50)
 
 /** Runs `fn` in one transaction (one disk commit for many rows). Not re-entrant. */
 function tx<T>(fn: () => T): T {
+  newTickers.length = 0
   sqlite.exec('BEGIN')
   try {
     const result = fn()
     sqlite.exec('COMMIT')
     return result
   } catch (err) {
-    sqlite.exec('ROLLBACK')
+    // Ids given out in here are undone with the rest: kept in the cache, the next new symbol would get the
+    // same id and the bars of two symbols would end up under one
+    for (const name of newTickers) tickerIds.delete(name)
+    // A full disk makes SQLite roll back by itself; the second one then fails and would hide the reason
+    try { sqlite.exec('ROLLBACK') } catch { /* already rolled back */ }
     throw err
   }
 }
+/** Tickers that got their id in the transaction in progress (see tx) */
+const newTickers: string[] = []
 
 /** node:sqlite rejects `undefined` parameters */
 const n = (v: unknown) => (v === undefined ? null : v) as any
@@ -387,6 +394,7 @@ function tickerId(name: string): number {
     q.insertTicker.run(name)
     id = Number((q.getTickerId.get(name) as any).id)
     tickerIds.set(name, id)
+    newTickers.push(name)
   }
   return id
 }
@@ -581,32 +589,34 @@ export async function upsertBarsToHistory(amibrokerTicker: string, bars: Array<H
 
   const rows = [...byMinute]
   let changed = 0
-  for (let from = 0; from < rows.length; from += HISTORY_SLICE_ROWS) {
-    endSyncPart()
-    await takeSliceTurn()   // live ticks, timers and requests get their turns in between
-    syncStartedAt = performance.now()
-    const startedAt = performance.now()
-    changed += tx(() => {
-      const tid = tickerId(amibrokerTicker)
-      let sliceChanged = 0
+  let lo = Infinity, hi = 0   // what has been committed so far
+  try {
+    for (let from = 0; from < rows.length; from += HISTORY_SLICE_ROWS) {
+      endSyncPart()
+      await takeSliceTurn()   // live ticks, timers and requests get their turns in between
+      syncStartedAt = performance.now()
+      const startedAt = performance.now()
       const end = Math.min(rows.length, from + HISTORY_SLICE_ROWS)
-      for (let i = from; i < end; i++) {
-        const [tsSec, b] = rows[i]
-        const oi = Number(b.openInterest)
-        sliceChanged += Number(q.upsertHistoryBar.run(tid, tsSec, px(b.open), px(b.high), px(b.low), px(b.close), Math.round(Number(b.volume) || 0), oi > 0 ? Math.round(oi) : null).changes)
-      }
-      return sliceChanged
-    })
-    perf.record('db.history_tx_ms', performance.now() - startedAt)
+      changed += tx(() => {
+        const tid = tickerId(amibrokerTicker)
+        let sliceChanged = 0
+        for (let i = from; i < end; i++) {
+          const [tsSec, b] = rows[i]
+          const oi = Number(b.openInterest)
+          sliceChanged += Number(q.upsertHistoryBar.run(tid, tsSec, px(b.open), px(b.high), px(b.low), px(b.close), Math.round(Number(b.volume) || 0), oi > 0 ? Math.round(oi) : null).changes)
+        }
+        return sliceChanged
+      })
+      for (let i = from; i < end; i++) { const tsSec = rows[i][0]; if (tsSec < lo) lo = tsSec; if (tsSec > hi) hi = tsSec }
+      perf.record('db.history_tx_ms', performance.now() - startedAt)
+    }
+  } finally {
+    // Also when a later slice failed: run again, the slices that were saved change nothing and would not be announced
+    if (changed > 0) barWrites.emit('changed', amibrokerTicker, lo, hi)
   }
   endSyncPart()
   perf.count('db.history_rows', rows.length)
   perf.count('db.history_changed', changed)
-  if (changed > 0) {
-    let lo = Infinity, hi = 0
-    for (const [tsSec] of rows) { if (tsSec < lo) lo = tsSec; if (tsSec > hi) hi = tsSec }
-    barWrites.emit('changed', amibrokerTicker, lo, hi)
-  }
   return changed
 }
 

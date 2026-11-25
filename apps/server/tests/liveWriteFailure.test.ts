@@ -80,6 +80,30 @@ describe('when the database does not take writes', () => {
     error.mockRestore(); log.mockRestore()
   })
 
+  // SQLite rolls back by itself for some failures (a full disk) and not for others
+  it.each([[false], [true]])('a new symbol whose first save failed does not share its id with the next new one (rolled back by SQLite: %s)', async (byItself) => {
+    const [A, B] = byItself ? ['WFNEW3', 'WFNEW4'] : ['WFNEW1', 'WFNEW2']
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {})
+    db.flushPendingBars(true)
+    const real = db.sqlite.exec
+    const spied = real.bind(db.sqlite)
+    ;(db.sqlite as any).exec = (sql: string) => {
+      if (sql === 'COMMIT') { if (byItself) spied('ROLLBACK'); throw new Error('database or disk is full') }
+      return spied(sql)
+    }
+    try {
+      await expect(db.upsertBarsToHistory(A, [{ ts: MINUTE0, open: 1, high: 1, low: 1, close: 1, volume: 1 }])).rejects.toThrow('database or disk is full')
+    } finally { (db.sqlite as any).exec = real }
+    const one = { ts: MINUTE0, high: 900, low: 1, volume: 1 }
+    await db.upsertBarsToHistory(B, [{ ...one, open: 200, close: 200 }])
+    await db.upsertBarsToHistory(A, [{ ...one, open: 100, close: 100 }])
+    const close = async (t: string) => Number((await db.stmts.getBarsCsvByTickerAsync.get(t, 10)).split(',')[4])
+    expect(await close(B)).toBe(200)                        // not overwritten by the other symbol's bar
+    expect(await close(A)).toBe(100)
+    error.mockRestore(); log.mockRestore()
+  })
+
   it('says so when more than 50,000 bars are waiting, once', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const error = vi.spyOn(console, 'error').mockImplementation(() => {})

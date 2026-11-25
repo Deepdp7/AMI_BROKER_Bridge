@@ -8,7 +8,10 @@
  * does it instead, so those waits happen on this thread:
  *
  *   - PASSIVE checkpoint (never blocks the writer) when the log passes 16 MB, or a minute after the last one;
- *   - TRUNCATE (log file back to zero bytes) once nothing has been written for 30 s.
+ *   - TRUNCATE (log file back to zero bytes) once nothing has been written for 30 s. It holds the write
+ *     lock, so it never waits: PASSIVE copies the log first, and while a reader is busy (a backup, a long
+ *     gap scan) it gives up at once and is tried again half a minute later. Waiting for the reader with the
+ *     lock held would make the engine's next write, and so its one thread, wait too.
  *
  * The engine's own connection keeps an automatic checkpoint at 20,000 pages (about 80 MB) as a last resort,
  * so a dead worker only brings the old behaviour back. DATABRIDGE_MAINTENANCE=0 turns all of this off
@@ -41,6 +44,7 @@ const BIG_WAL_BYTES = workerData.bigWalBytes
 const EVERY_MS = workerData.everyMs
 const IDLE_MS = workerData.idleMs
 let lastCheckpointAt = Date.now()
+let truncateFrom = 0   // not before this time (the last one found a reader busy)
 
 function checkpoint(mode) {
   const startedAt = performance.now()
@@ -49,10 +53,20 @@ function checkpoint(mode) {
     r = db.prepare('PRAGMA wal_checkpoint(' + mode + ')').get()
   } catch (err) {
     parentPort.postMessage({ mode, error: String((err && err.message) || err) })
-    return
+    return null
   }
   lastCheckpointAt = Date.now()
   parentPort.postMessage({ mode, ms: performance.now() - startedAt, busy: Number(r.busy), log: Number(r.log), checkpointed: Number(r.checkpointed) })
+  return r
+}
+
+function truncate(now) {
+  if (now < truncateFrom) return
+  checkpoint('PASSIVE')
+  db.exec('PRAGMA busy_timeout = 0')
+  const r = checkpoint('TRUNCATE')
+  db.exec('PRAGMA busy_timeout = 5000')
+  if (!r || Number(r.busy)) truncateFrom = now + IDLE_MS
 }
 
 setInterval(() => {
@@ -60,7 +74,7 @@ setInterval(() => {
   try { st = fs.statSync(walFile) } catch { return }   // no log file yet
   if (st.size === 0) return
   const now = Date.now()
-  if (now - st.mtimeMs >= IDLE_MS) checkpoint('TRUNCATE')              // nothing written for a while
+  if (now - st.mtimeMs >= IDLE_MS) truncate(now)   // nothing written for a while
   else if (st.size >= BIG_WAL_BYTES || now - lastCheckpointAt >= EVERY_MS) checkpoint('PASSIVE')
 }, workerData.pollMs)
 `

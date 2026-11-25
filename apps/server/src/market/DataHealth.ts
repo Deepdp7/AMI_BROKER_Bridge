@@ -155,6 +155,8 @@ async function refreshCounts(fromDay: number, todayDay: number, tickers: string[
   }
   if (cur.length) batches.push(cur)
 
+  const waiting = new Set(work)   // not counted yet: whatever stops this pass, these days are still to be counted
+
   // Two requests at a time: the bulk lane has two workers
   let next = 0
   let failed: unknown = null
@@ -164,15 +166,15 @@ async function refreshCounts(fromDay: number, todayDay: number, tickers: string[
       try {
         const { rows } = await countRanges(batch)
         if (epoch !== started) return
-        batch.forEach((t, i) => applyCounts(t, rows[i]))
+        batch.forEach((t, i) => { applyCounts(t, rows[i]); waiting.delete(t) })
       } catch (err) {
         failed = err
-        // Counted again at the next look: forget what was not applied
-        for (const t of batch) { if (t.whole) counts.delete(t.ticker); else markDirtyDays(t.ticker, t.fromDay, t.toDay) }
       }
     }
   }
   await Promise.all([lane(), lane()])
+  // Counted again at the next look (a read failed, or a symbol was removed while the others were being counted)
+  for (const t of waiting) { if (t.whole) counts.delete(t.ticker); else markDirtyDays(t.ticker, t.fromDay, t.toDay) }
   if (failed) throw failed
   return epoch === started
 }

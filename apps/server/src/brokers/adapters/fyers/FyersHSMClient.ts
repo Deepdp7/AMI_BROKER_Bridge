@@ -40,6 +40,8 @@ export function silenceLimitMs(pongsAnswered: boolean, sessionOpen: boolean): nu
 }
 
 const WATCHDOG_EVERY_MS = 15_000
+/** Connecting and logging in take a second or two: an attempt that got no answer by now never will */
+const LOGIN_TIMEOUT_MS = 30_000
 
 /**
  * Fyers' answer to the live-feed login (message type 1):
@@ -135,6 +137,8 @@ export class FyersHSMClient extends EventEmitter {
   private lastTickState = new Map<string, { ltp: number, time: number, vol?: number, oi?: number, bidAsk?: string }>()
 
   private lastMessageTime = 0
+  /** When the current connection attempt began (0: none), until its login is taken */
+  private connectStartedAt = 0
   private watchdogTimer: NodeJS.Timeout | null = null
   /** performance.now() of the frame being decoded: every update it carries is stamped with it */
   private frameRxAt = 0
@@ -242,6 +246,7 @@ export class FyersHSMClient extends EventEmitter {
     }
 
     this.isConnecting = true
+    this.connectStartedAt = Date.now()
     this.emitLog('info', '[FYERS_HSM_STATUS] starting')
     this.emitLog('info', `[FYERS_HSM_CONNECT] Connecting to ${this.hsmUrl}...`)
     
@@ -300,6 +305,7 @@ export class FyersHSMClient extends EventEmitter {
     this.reconnectTimer = null
     if (this.ws) {
       this.ws.removeAllListeners()
+      if (this.ws.readyState === WebSocket.CONNECTING) this.ws.on('error', () => {}) // closing mid-handshake emits an error
       this.ws.close()
       this.ws = null
     }
@@ -528,6 +534,7 @@ export class FyersHSMClient extends EventEmitter {
         return
       }
       this.authRefusals = 0
+      this.connectStartedAt = 0
       this.reconnectAttempts = 0   // a taken login, not just an open socket, ends the backoff
       this.emitLog('info', '[FYERS_HSM_AUTH] Auth successful.')
       this.emitLog('info', '[FYERS_HSM_STATUS] authenticated')
@@ -813,7 +820,10 @@ export class FyersHSMClient extends EventEmitter {
    * reconnects. Returns true when it did.
    */
   private checkSocketAlive(now = Date.now()): boolean {
-    if (!this.authenticated) return false
+    if (!this.authenticated) {
+      this.checkLoginAnswered(now)
+      return false
+    }
     const heardAt = this.pongSeen ? Math.max(this.lastMessageTime, this.lastPongAt) : this.lastMessageTime
     const sessionOpen = isMarketSession(now, 'NSE') || isMarketSession(now, 'MCX')
     const silentMs = now - heardAt
@@ -834,6 +844,19 @@ export class FyersHSMClient extends EventEmitter {
     this.reportDrop()
     this.triggerReconnect()
     return true
+  }
+
+  /**
+   * A connection that never finishes its handshake, or whose login is never answered, gives no error
+   * either: while it hangs nothing else starts one, so live prices would stay away until a restart.
+   * Its 'close' handler schedules the next attempt.
+   */
+  private checkLoginAnswered(now: number) {
+    const open = this.ws?.readyState === WebSocket.OPEN || this.ws?.readyState === WebSocket.CONNECTING
+    if (!open || this.connectStartedAt === 0 || now - this.connectStartedAt <= LOGIN_TIMEOUT_MS) return
+    this.connectStartedAt = 0
+    this.emitLog('warn', `[FYERS_HSM_CONNECT] No answer to the login within ${LOGIN_TIMEOUT_MS / 1000} s: closing the socket to try again...`)
+    this.ws!.terminate()
   }
 
   /** Tells the adapter the live feed went down, once per drop (it then notes the time, so the minutes missed get fetched after the feed is back) */

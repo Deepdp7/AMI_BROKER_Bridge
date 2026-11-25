@@ -49,7 +49,10 @@ static int DoGetQuotesExImpl(LPCTSTR pszTicker, int nPeriodicity, int nLastValid
         // runs on the plugin's own thread (RequestCatchUp); what it brought is merged here, in a
         // later call. AmiBroker never waits for the engine here.
         CatchUpResult done;
-        if (TakeCatchUpResult(pszTicker, done) && done.got >= 0) {
+        bool arrived = TakeCatchUpResult(pszTicker, done);
+        // A failed gap check: AmiBroker's last bar has moved past the hole, only a full sync still finds it
+        if (arrived && done.got < 0 && done.gapCheck) OweHistorySync(pszTicker);
+        if (arrived && done.got >= 0) {
             if (done.fullSync) MarkHistorySynced(pszTicker, done.epoch);
             int count = MergeBars(pQuotes, nLastValid + 1, nSize, done.bars);
             if (done.gapCheck) GapCheckResult(pszTicker, done.sinceMin, count != nLastValid + 1);
@@ -79,10 +82,11 @@ static int DoGetQuotesExImpl(LPCTSTR pszTicker, int nPeriodicity, int nLastValid
         // None of this while DataBridge isn't answering (CatchUpAllowed). A gap check that
         // found nothing (minutes without trades) isn't repeated until AmiBroker's last bar
         // moves on.
-        bool liveSkipsMinutes = hasLive && liveMin > sinceMin + 60;
+        bool hole = hasLive && liveMin > sinceMin + 60 && !covered;
         bool canCatchUp = nLastValid >= 0 && IsBridgeConnected() && CatchUpAllowed() && CatchUpAllowedFor(pszTicker);
         bool fullSync = canCatchUp && NeedsHistorySync(pszTicker);
-        bool gapCheck = !fullSync && canCatchUp && liveSkipsMinutes && !covered && GapCheckWorthIt(pszTicker, sinceMin) && TryBeginGapCheck(pszTicker);
+        bool gapCheck = !fullSync && canCatchUp && hole && GapCheckWorthIt(pszTicker, sinceMin) && TryBeginGapCheck(pszTicker);
+        bool asked = false;
         if (fullSync || gapCheck) {
             CatchUpResult want;
             SyncRange announced = BeginHistorySync(pszTicker, want.epoch);
@@ -94,19 +98,18 @@ static int DoGetQuotesExImpl(LPCTSTR pszTicker, int nPeriodicity, int nLastValid
             // bridge announced if that is earlier (a downtime hole behind newer live bars).
             // When everything announced since the last sync had both a start and an end (and
             // nothing else is owed), only that range is fetched: a year of history arriving in
-            // chunks no longer has each chunk's notice re-download everything up to now.
+            // chunks no longer has each chunk's notice re-download everything up to now. Minutes
+            // missing in front of the live bar are fetched along with it.
             // Gap check: just the tail; since-1 so the server also re-sends AmiBroker's last
             // (possibly partial) candle.
-            double from = fullSync ? since - 86400 : since - 1;
+            double from = since - 1;
             double until = 0;
-            if (fullSync && announced.IsRange()) {
-                from = announced.from - 60;
-                until = announced.to + 60;
-            } else if (fullSync && announced.from > 0 && announced.from - 60 < from) {
-                from = announced.from - 60;
-            }
-            RequestCatchUp(pszTicker, from > 0 ? from : 0, until, nSize, want);
+            if (fullSync) announced.FetchWindow(since, hole, from, until);
+            asked = RequestCatchUp(pszTicker, from > 0 ? from : 0, until, nSize, want);
         }
+        // The hole could not be asked for now (another fetch of this symbol is on its way, or a pause after a
+        // failure). The live bar below moves AmiBroker's last bar past it, so it is left to the next sync.
+        if (hole && !asked && GapCheckWorthIt(pszTicker, sinceMin)) OweHistorySync(pszTicker);
         if (nLastValid < 0) return 0;
 
         if (hasLive) {

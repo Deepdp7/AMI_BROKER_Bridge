@@ -193,6 +193,13 @@ void MarkHistorySynced(const std::string& ticker, unsigned epoch) {
     g_syncRange.erase(ticker);
 }
 
+void OweHistorySync(const std::string& ticker) {
+    std::lock_guard<std::mutex> lk(g_pollerMutex);
+    g_syncedGeneration.erase(ticker);
+    ++g_syncEpoch[ticker];
+    g_syncRange[ticker].MarkOpen();
+}
+
 bool TryBeginGapCheck(const std::string& ticker) {
     std::lock_guard<std::mutex> lk(g_pollerMutex);
     ULONGLONG now = GetTickCount64();
@@ -619,6 +626,7 @@ static void HandleSyncMessage(const std::string& line) {
     if (line.rfind("SYNC_ALL", 0) == 0) {
         std::lock_guard<std::mutex> lk(g_pollerMutex);
         g_syncedGeneration.clear();
+        for (auto& kv : g_syncRange) kv.second.MarkOpen();
         LogDebug("[SYNC] all tickers marked for history re-sync");
         return;
     }

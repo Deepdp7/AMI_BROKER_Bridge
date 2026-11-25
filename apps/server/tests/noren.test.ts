@@ -122,11 +122,15 @@ describe('Noren instrument lists', () => {
   })
 
   it('resolves names stored by other brokers', () => {
+    // The day of the lists above: their contracts have expired since, and an expired one is not resolved
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-10-26T10:00:00+05:30'))
     flattradeMaster.setRecords(flattrade)
     expect(flattradeMaster.resolve('NSE:TCS-EQ', 'NSE', 'EQ')?.ref).toBe('NSE|11536')    // Fyers
     expect(flattradeMaster.resolve('NIFTY 50', 'NSE')?.ref).toBe('NSE|26000')            // Kite
     expect(flattradeMaster.resolve('NSE:TATAELXSI26NOVFUT', 'NFO', 'FUT')?.ref).toBe('NFO|61721')
     expect(flattradeMaster.resolve('TATAELXSI-FUT', 'NFO', 'FUT')?.key).toMatch(/^NFO:TATAELXSI26(OCT|NOV)FUT$/)
+    vi.useRealTimers()
   })
 })
 

@@ -139,7 +139,7 @@ class AutoRefreshService extends EventEmitter {
     if (this.status.waitingFor !== null) { this.status.waitingFor = null; this.publish() }
     if (closePass) this.closePassDoneFor = date
     this.run(closePass).then(finished => {
-      // A close pass cut short by a download runs again (until 16:00)
+      // A close pass cut short (auto-refresh turned off meanwhile) runs again (until 16:00)
       if (closePass && !finished) this.closePassDoneFor = ''
     }).catch(err => {
       this.status.lastError = err?.message || String(err)
@@ -148,7 +148,7 @@ class AutoRefreshService extends EventEmitter {
     })
   }
 
-  /** One pass over every symbol; false when it stopped early for a history download */
+  /** One pass over every symbol; false when it stopped early (auto-refresh turned off) */
   private async run(fullDay: boolean): Promise<boolean> {
     this.status.running = true
     this.status.lastError = null

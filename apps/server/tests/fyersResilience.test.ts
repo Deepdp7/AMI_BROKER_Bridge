@@ -159,6 +159,50 @@ describe('a silent socket', () => {
   })
 })
 
+describe('a login that is never answered', () => {
+  it('the socket is closed after 30 s and the next attempt is scheduled (it used to hang until a restart)', async () => {
+    const server = new WebSocketServer({ port: 0 })                        // opens the socket, answers nothing
+    await new Promise<void>(r => server.once('listening', () => r()))
+    const client = await newClient({ url: `ws://127.0.0.1:${(server.address() as any).port}` })
+    client.setSymbolMapping('TCS', 'sf|nse_cm|11536')
+    client.activeSubscriptions.add('TCS')
+    client.connect()
+    await vi.waitFor(() => expect(client.ws?.readyState).toBe(1), { timeout: 3000 })
+
+    client.checkSocketAlive(Date.now() + 29_000)
+    expect(client.ws.readyState).toBe(1)                                   // still has time
+    client.checkSocketAlive(Date.now() + 31_000)
+    await vi.waitFor(() => expect(client.reconnectTimer).not.toBeNull(), { timeout: 3000 })
+    expect(client.isConnecting).toBe(false)                                // the next connect() is not refused
+    client.disconnect()
+    for (const ws of server.clients) ws.terminate()
+    await new Promise<void>(r => server.close(() => r()))
+  })
+
+  it('a handshake that hangs is given up the same way, without an unhandled error', async () => {
+    const net = await import('net')
+    const held: any[] = []
+    const server = net.createServer(s => { held.push(s); s.on('error', () => {}) })   // takes the connection, never upgrades it
+    await new Promise<void>(r => server.listen(0, '127.0.0.1', () => r()))
+    const client = await newClient({ url: `ws://127.0.0.1:${(server.address() as any).port}` })
+    client.activeSubscriptions.add('TCS')
+    client.connect()
+    await vi.waitFor(() => expect(held.length).toBe(1), { timeout: 3000 })
+    expect(client.ws.readyState).toBe(0)
+    client.checkSocketAlive(Date.now() + 31_000)
+    await vi.waitFor(() => expect(client.reconnectTimer).not.toBeNull(), { timeout: 3000 })
+    expect(client.isConnecting).toBe(false)
+
+    // Logging out in the middle of a handshake leaves no error behind either
+    clearTimeout(client.reconnectTimer); client.reconnectTimer = null
+    client.connect()
+    client.disconnect()
+    await new Promise(r => setTimeout(r, 50))
+    for (const s of held) s.destroy()
+    await new Promise<void>(r => server.close(() => r()))
+  })
+})
+
 describe("reporting the drop (the catch-up for the missed minutes depends on it)", () => {
   it('a real socket: connected, then disconnected exactly once when the server goes away', async () => {
     const server = new WebSocketServer({ port: 0 })

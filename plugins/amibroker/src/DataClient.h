@@ -74,6 +74,9 @@ extern bool NeedsHistorySync(const std::string& ticker);
 extern SyncRange BeginHistorySync(const std::string& ticker, unsigned& epoch);
 // Marks the ticker synced, unless the bridge announced more history after BeginHistorySync.
 extern void MarkHistorySynced(const std::string& ticker, unsigned epoch);
+// The ticker's last 24 hours are to be fetched again (minutes are missing and could not be fetched now). A fetch
+// already on its way does not count as that.
+extern void OweHistorySync(const std::string& ticker);
 // Rate limiter for opportunistic gap checks (live bar skipped minutes). True at most once per 30s per ticker.
 extern bool TryBeginGapCheck(const std::string& ticker);
 

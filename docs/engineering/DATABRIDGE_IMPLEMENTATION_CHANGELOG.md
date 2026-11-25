@@ -41,6 +41,28 @@ One entry per stage, newest at the top. An entry is written when its stage is fi
 - No source files were changed.
 - Next: Stage 0 (instrumentation and baseline harness).
 
+## Review of Stages 0-8 (2026-11-25)
+
+Every commit of the branch re-read against the roadmap. Not a stage: defects found in the review and fixed, each with a test that fails on the code before it.
+
+**Changes**
+- `db/index.ts`: a transaction that failed kept the ticker ids given out in it, so the next new symbol got the same id and **two symbols' bars ended up under one** (older than this branch; Stage 8c made it reachable again and again). The ids are now forgotten with the rollback. A rollback SQLite had already done itself no longer hides the real error. A chunk whose later slice failed announces the slices that were saved.
+- `db/maintenance.ts`: the truncating checkpoint waited up to 5 s for a busy reader (a backup, a long gap scan) with the write lock held, and again every second: the engine's next write, and so its thread, waited with it. It now never waits (PASSIVE first, then TRUNCATE without a busy timeout, 30 s before another try).
+- `market/DataHealth.ts`: days still to be counted were forgotten when a symbol was removed, or a read failed, during a count: the page showed old numbers until that day was written again.
+- `brokers/adapters/fyers/FyersHSMClient.ts`: a handshake that never finishes, or a login that is never answered, hung until a restart (the watchdog looked only after a login). Closed after 30 s, then the usual reconnect. No unhandled error when disconnecting in the middle of a handshake.
+- `market/BackfillQueue.ts`: of a symbol AmiBroker loads, only the newest chunk is `interactive` (711 of 906 chunks were in the Stage 3 run): after a scan the years of history of every symbol went before the auto-refresh for as long as they downloaded.
+- `amibroker/symbolDetails.ts`: the daily full push waited for both markets to be closed, which never happens on a PC that is on from 9:00 to 23:30. AmiBroker's first connect after 08:45 now makes it if it has not been made that day.
+- Plugin (`SyncRange::FetchWindow`, `OweHistorySync`): an announced range was fetched alone although minutes were missing in front of the live bar (a symbol not viewed for over two hours, its ring evicted): those minutes **never came back**. Likewise when a gap check failed or could not be started. Both are fetched now. `SYNC_ALL` is no longer narrowed to a range.
+- Tests: `noren` and `upstoxAngel` pin the day of their lists (their contracts expired on 19 and 23 November).
+
+**Checks**
+- apps/server: typecheck pass, 459 passed, 0 failed. apps/desktop: typecheck pass, 138 passed.
+- build:plugin, test:plugin: 112 checks, 0 failed. Old and new DLL against a scripted engine (`dll_host`): the old one asked only for the range and gave up after the failed gap check, the new one asked for both holes.
+- The perf harness was not run again: the Stage 9 soak was using the machine, on the code before these changes.
+
+**For the user**
+- The rebuilt DLL replaces the Stage 2/3 one that was still to be installed.
+
 ## Stage 8: reliability and recovery (2026-11-25)
 
 **Findings addressed:** 8a, 8b, 8c, 8d, 8e (no B/P/D numbers: the stage is the roadmap's own). Verified against the code at `4b04423` first: as described, except where the Discrepancies say otherwise (five rows).
